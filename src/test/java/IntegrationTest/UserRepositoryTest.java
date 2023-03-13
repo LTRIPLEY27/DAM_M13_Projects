@@ -28,7 +28,7 @@ class UserRepositoryTest {
 
     @Test
     @DisplayName("Insert a new object into table")
-    void insertTOtABLE(){
+    void insertToTable_OK(){
         var user = new User();
         user.setNombre("Josh");
         user.setApellido("Peres");
