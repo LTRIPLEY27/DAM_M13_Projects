@@ -49,5 +49,5 @@ public class Tarea {
     @JsonIgnore
     @OneToMany
     @JoinColumn(name = "id")
-    private List<Mensaje_Tecnico_Tarea> mensaje;
+    private List<Mensaje> mensaje;
 }

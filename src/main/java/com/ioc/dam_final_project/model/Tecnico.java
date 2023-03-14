@@ -26,6 +26,6 @@ public class Tecnico extends User{
     @JsonIgnore
     @OneToMany
     @JoinColumn(name = "id")
-    private List <Mensaje_Tecnico_Tarea> mensaje;
+    private List <Mensaje> mensaje;
 
 }
