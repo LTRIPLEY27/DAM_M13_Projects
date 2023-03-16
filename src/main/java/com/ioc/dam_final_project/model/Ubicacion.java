@@ -23,7 +23,7 @@ public class Ubicacion {
     private Double zoom;
     @JsonIgnore
     @OneToMany(mappedBy = "ubicacion", fetch = FetchType.LAZY)
-    private List<Coordenadas> mapa;
+    private List<Coordenada> mapa;
 
     @OneToOne(mappedBy = "ubicacion")
     private Tarea tarea;

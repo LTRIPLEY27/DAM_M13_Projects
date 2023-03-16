@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-@Qualifier("ubicacion")
+@Qualifier(value = "ubicacion")
 public class UbicacionServiceImpl implements UbicacionService {
+
 }
