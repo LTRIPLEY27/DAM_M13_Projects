@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ioc.dam_final_project.model.Enums.Rol;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Admin extends User{
 
+    @JsonIgnore
     @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY)
     private List <Tarea> tareaList;
 

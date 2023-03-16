@@ -28,4 +28,10 @@ public class Ubicacion {
     @OneToOne(mappedBy = "ubicacion")
     private Tarea tarea;
 
+    public Ubicacion(Double centro, Double zoom, List<Coordenada> mapa, Tarea tarea) {
+        this.centro = centro;
+        this.zoom = zoom;
+        this.mapa = mapa;
+        this.tarea = tarea;
+    }
 }

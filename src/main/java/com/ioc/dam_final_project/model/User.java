@@ -30,8 +30,6 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     protected Rol rol;
-    /*@OneToMany(mappedBy = "user")
-    protected List<Token> tokenList;*/
 
     public User(String user, String password, String nombre, String apellido, String email, String telefono, Rol rol) {
         this.user = user;

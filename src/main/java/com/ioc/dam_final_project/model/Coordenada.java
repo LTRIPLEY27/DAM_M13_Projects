@@ -24,4 +24,9 @@ public class Coordenada {
     @JoinColumn(name = "ubicacion")
     private Ubicacion ubicacion;
 
+    public Coordenada(Double latitud, Double longitud, Ubicacion ubicacion) {
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.ubicacion = ubicacion;
+    }
 }

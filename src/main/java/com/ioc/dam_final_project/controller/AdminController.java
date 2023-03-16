@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.controller;
 
+import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.repository.UserRepository;
 import com.ioc.dam_final_project.security.authentication.AuthenticationRequest;
@@ -7,6 +8,7 @@ import com.ioc.dam_final_project.security.authentication.AuthenticationResponse;
 import com.ioc.dam_final_project.security.authentication.AuthenticationService;
 import com.ioc.dam_final_project.security.authentication.RegisterRequest;
 import com.ioc.dam_final_project.serviceImpl.AdminServiceImpl;
+import com.ioc.dam_final_project.serviceImpl.TareaServiceImpl;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 
@@ -23,12 +25,14 @@ public class AdminController {
     @Qualifier("admin")
     private final AdminServiceImpl serviceAdmin;
     private final UserRepository userRepository;
+    private final TareaServiceImpl tareaService;
     private final AuthenticationService serviceAuth;
 
 
-    public AdminController(AdminServiceImpl serviceAdmin, UserRepository userRepository, AuthenticationService serviceAuth) {
+    public AdminController(AdminServiceImpl serviceAdmin, UserRepository userRepository, TareaServiceImpl tareaService, AuthenticationService serviceAuth) {
         this.serviceAdmin = serviceAdmin;
         this.userRepository = userRepository;
+        this.tareaService = tareaService;
         this.serviceAuth = serviceAuth;
 
     }
@@ -43,21 +47,23 @@ public class AdminController {
      * ***********************************************************/
 
     @PostMapping(value = "/register")
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(serviceAuth.register(request));
     }
 
     @PostMapping(value ="/authenticate")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(serviceAuth.authenticate(request));
     }
 
-    @PostMapping(path = "/add-new-tecnic")
+    /*@PostMapping(path = "/add-new-tecnic")
     @ResponseStatus(HttpStatus.CREATED)
     public Tecnico newObject(@RequestBody Tecnico tecnico) {
         return serviceAdmin.create(tecnico);
     }
-
+*/
     /*************************************************************
      *                   GETTING RESPONSE FROM DATABASE
      * ***********************************************************/
@@ -68,6 +74,13 @@ public class AdminController {
         return  serviceAdmin.getAll();
     }
 
+
+    @GetMapping(path = "/tareas")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Tarea> totalTarea(){
+        return tareaService.total();
+    }
+
     /*************************************************************
      *                  UPDATE VALUES FROM DATABASE
      * ***********************************************************/
@@ -76,4 +89,13 @@ public class AdminController {
     public Tecnico update(@PathVariable Long id, @RequestBody Tecnico tecnico){
         return serviceAdmin.update(id, tecnico);
     }*/
+
+    /*************************************************************
+     *                  CREATING TASK IN THE DATABASE
+     * ***********************************************************/
+    @PostMapping(path = "/task")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Tarea newObject(@RequestBody Tarea tarea) {
+        return tareaService.saveObject(tarea);
+    }
 }

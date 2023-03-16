@@ -29,4 +29,11 @@ public class Mensaje {
     @ManyToOne
     @JoinColumn(name = "id_tecnico")
     private Tecnico tecnico;
+
+    public Mensaje(String descripcion, Date fecha, Tarea tarea, Tecnico tecnico) {
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+        this.tarea = tarea;
+        this.tecnico = tecnico;
+    }
 }
