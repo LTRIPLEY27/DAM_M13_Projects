@@ -1,6 +1,7 @@
 package com.ioc.dam_final_project.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ioc.dam_final_project.model.Enums.Rol;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -28,4 +29,9 @@ public class Tecnico extends User{
     @JoinColumn(name = "id")
     private List <Mensaje> mensaje;
 
+    public Tecnico(String user, String password, String nombre, String apellido, String email, String telefono, Rol rol, List<Tarea> tareas, List<Mensaje> mensaje) {
+        super(user, password, nombre, apellido, email, telefono, rol);
+        this.tareas = tareas;
+        this.mensaje = mensaje;
+    }
 }
