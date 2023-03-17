@@ -1,6 +1,7 @@
 package com.ioc.dam_final_project.serviceImpl;
 
 import com.ioc.dam_final_project.model.Tarea;
+import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.repository.AdminRepository;
 import com.ioc.dam_final_project.repository.TareaRepository;
 import com.ioc.dam_final_project.repository.TecnicoRepository;
@@ -40,6 +41,14 @@ public class TareaServiceImpl implements TareaService {
     @Override
     public List<Tarea> total() {
         return tareaRepository.findAll();
+    }
+
+    @Override
+    public List<Tarea> getTareaTec(Tecnico tecnico) {
+
+        var tarea = tareaRepository.findTareaByTecnico(tecnico);
+        System.out.println(tarea.get(0).getTecnico().getNombre());
+        return tareaRepository.findTareaByTecnico(tecnico);
     }
 
 

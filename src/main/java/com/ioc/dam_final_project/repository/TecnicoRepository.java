@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface TecnicoRepository extends JpaRepository <Tecnico, Long> {
 
     Optional <Tecnico> findTecnicoByEmail(String email);
+    //Optional <Tecnico> findTecnicoByUser(String username);
 }

@@ -12,4 +12,6 @@ public interface TecnicoService {
 
     Tecnico updateObject(Long id,Tecnico tecnico) throws Exception;
 
+    Tecnico getByEmail(String user);
+
 }

@@ -38,4 +38,9 @@ public class TecnicoServiceimpl implements TecnicoService {
         }
         return null;
     }
+
+    @Override
+    public Tecnico getByEmail(String user) {
+        return tecnicoRepository.findTecnicoByEmail(user).orElseThrow();
+    }
 }

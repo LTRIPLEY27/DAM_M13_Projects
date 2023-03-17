@@ -63,11 +63,6 @@ public class AdminController {
         return ResponseEntity.ok(serviceAuth.register(request));
     }
 
-    @PostMapping(value ="/authenticate")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        return ResponseEntity.ok(serviceAuth.authenticate(request));
-    }
 
     /*@PostMapping(path = "/add-new-tecnic")
     @ResponseStatus(HttpStatus.CREATED)
