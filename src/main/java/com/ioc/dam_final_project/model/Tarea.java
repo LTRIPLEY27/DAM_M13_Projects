@@ -25,11 +25,11 @@ public class Tarea {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    //@JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fecha_creacion;
-    //@JsonFormat(pattern = "yyyy-MM-dd")
-    private Date fecha_culminacion;
-    //@JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fecha_creacion = LocalDate.now();
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date fecha_culminacion= new Date();
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date fecha_asignacion = new Date();
     @Enumerated(EnumType.STRING)
     private Tipo_Tarea tarea;
@@ -64,9 +64,9 @@ public class Tarea {
         this.admin = admin;
         this.ubicacion = ubicacion;
         this.mensaje = mensaje;
-        this.fecha_creacion = LocalDate.now();
-        this.fecha_culminacion = new Date();
-        this.fecha_asignacion = new Date();
+       // this.fecha_creacion = LocalDate.now();
+        //this.fecha_culminacion = new Date();
+        //this.fecha_asignacion = new Date();
     }
 
 }

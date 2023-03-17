@@ -26,7 +26,7 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request){
         var jwt = "";
         String encodedPass = new BCryptPasswordEncoder().encode(request.getPassword());
-        switch (request.rol){
+        switch (request.getRol()){
             case ADMIN -> {
                 var savedUser = adminRepository.save(new Admin(request.getUser(), encodedPass,  request.getNombre(), request.getApellido(), request.getEmail(), request.getTelefono(), request.getRol(), null));
                 jwt = jwtService.generateToken(savedUser);

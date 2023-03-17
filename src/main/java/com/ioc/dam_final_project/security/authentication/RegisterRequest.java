@@ -9,12 +9,11 @@ import java.util.List;
 @Getter
 @Setter
 public class RegisterRequest {
-
-    public  String user;
-    public   String password;
-    public  String nombre;
-    public  String apellido;
-    public    String email;
-    public    String telefono;
-    public  Rol rol;
+    private String user;
+    private String password;
+    private String nombre;
+    private String apellido;
+    private String email;
+    private String telefono;
+    private Rol rol;
 }

@@ -15,7 +15,6 @@ public class Coordenada {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Double latitud;
     private Double longitud;
 
@@ -29,4 +28,5 @@ public class Coordenada {
         this.longitud = longitud;
         this.ubicacion = ubicacion;
     }
+
 }
