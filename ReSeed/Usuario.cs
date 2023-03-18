@@ -57,7 +57,7 @@ namespace ReSeed
             set { numeroTelefono = value; }
 
         }
-
+        //
         public String Mail//Propiedad mail
         {
             get { return mail; }
