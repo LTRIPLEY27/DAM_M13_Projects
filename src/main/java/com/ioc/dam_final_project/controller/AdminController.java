@@ -1,5 +1,9 @@
 package com.ioc.dam_final_project.controller;
 
+import com.ioc.dam_final_project.dto.CoordenadaDTO;
+import com.ioc.dam_final_project.dto.TareaDTO;
+import com.ioc.dam_final_project.dto.TecnicoDTO;
+import com.ioc.dam_final_project.dto.UbicacionDTO;
 import com.ioc.dam_final_project.model.Coordenada;
 import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
@@ -48,7 +52,7 @@ public class AdminController {
 
     @GetMapping(path = "/ubicacion/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Ubicacion getValue(@PathVariable Long id){
+    public UbicacionDTO getValue(@PathVariable Long id){
 
         return ubicacionService.findById(id);
     }
@@ -76,26 +80,26 @@ public class AdminController {
 
     @GetMapping(path = "/tecnicos")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public List<Tecnico> getAll(){
-        return  serviceAdmin.getAll();
+    public List<TecnicoDTO> getAll(){
+        return  serviceAdmin.all();
     }
 
 
     @GetMapping(path = "/tareas")
     @ResponseStatus(HttpStatus.OK)
-    public List<Tarea> totalTarea(){
+    public List<TareaDTO> totalTarea(){
         return tareaService.total();
     }
 
     @GetMapping(path = "/ubicaciones")
     @ResponseStatus(HttpStatus.OK)
-    public List<Ubicacion> totalUbicaciones(){
+    public List<UbicacionDTO> totalUbicaciones(){
         return ubicacionService.getAll();
     }
 
     @GetMapping(path = "/coordenadas")
     @ResponseStatus(HttpStatus.OK)
-    public List<Coordenada> totalCoordenas(){
+    public List<CoordenadaDTO> totalCoordenas(){
         return coordenadaService.coordenas();
     }
 

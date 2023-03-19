@@ -2,6 +2,7 @@ package com.ioc.dam_final_project.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.model.Enums.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Tarea {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -66,16 +66,8 @@ public class Tarea {
         this.mensaje = mensaje;
     }
 
-
-    /*public void setMensaje(List <Mensaje> mensaje){
-        this.mensaje = mensaje;
+    public static Tarea byDTO(TareaDTO tareaDTO){
+        return new Tarea(tareaDTO.getName(), tareaDTO.getTarea(), tareaDTO.getEstatus(), null, null, null, null);
     }
-    public void addMensaje(Mensaje mensajes){
-        // verificación de no repetición de elementos
-        if(mensaje.contains(mensaje)){
-            System.out.println("Éste mensaje ya se encuentra almacenado");
-            return;
-        }
-        mensaje.add(mensajes);
-    }*/
+
 }
