@@ -3,6 +3,7 @@ package com.example.reseed;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,12 +12,16 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.reseed.model.ModelLoginAuth;
+import com.example.reseed.util.VolleyResponseListener;
+import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,10 +31,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView userTextView, passwordTextView;
 
     private String responseLogin,ip;
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,65 +57,40 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                sendRequest();
-                /*if(sendLogin(userTextView.getText().toString(), passwordTextView.getText().toString())){
-
-                    Context context = getApplicationContext();
-                    CharSequence text = responseLogin;
-
-                    Toast toast = Toast.makeText(context,text,Toast.LENGTH_LONG);
-                    toast.show();
-
-                }*/
-                //openNewActivity();
+                sendLogin(userTextView.getText().toString(), passwordTextView.getText().toString());
             }
         });
     }
 
-    private boolean sendLogin(String email, String password){
+    private void sendLogin(String email, String password){
 
-        /*ModelLoginAuth login = new ModelLoginAuth(email, password,getApplicationContext());
-        if(login.sendRequest()){
-            setResponseLogin(login.getIp());
-            return true;
-        }else {
-            return false;
-        }*/
+        ModelLoginAuth login = new ModelLoginAuth(email, password,getApplicationContext());
 
-
-
-
-        return false;
-    }
-
-
-    public void sendRequest(){
-
-        //String urlGet = "https://httpbin.org/ip";
-        String urlGetChuck = "https://api.chucknorris.io/jokes/random?category=dev";
-
-        StringRequest getRequest = new StringRequest(Request.Method.GET, urlGetChuck, new Response.Listener<String>() {
+        login.sendRequest(new VolleyResponseListener() {
             @Override
-            public void onResponse(String response) {
+            public void onError(String message) {
 
+            }
+
+            @Override
+            public void onResponse(Object response) {
+
+                JSONObject jsResponse = (JSONObject)response;
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    setIp(jsonObject.getString("value"));
-                    Log.i("Info login:", getIp());
+                    setResponseLogin(jsResponse.getString("value"));
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Error login", error.getMessage());
 
+                Context context = getApplicationContext();
+
+
+                Toast toast = Toast.makeText(context,responseLogin,Toast.LENGTH_LONG);
+                toast.show();
+
+                //openNewActivity();
             }
         });
-
-        Volley.newRequestQueue(this).add(getRequest);
-        //return true if ip have info.
     }
 
     private void openNewActivity(){

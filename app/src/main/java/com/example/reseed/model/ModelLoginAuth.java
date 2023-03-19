@@ -4,14 +4,18 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.reseed.util.VolleyResponseListener;
 
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.CacheRequest;
 
 public class ModelLoginAuth {
 
@@ -20,6 +24,7 @@ public class ModelLoginAuth {
 
     private Context context;
     private String ip;
+    private RequestQueue requestQueue;
 
     /**
      * Constructor empty.
@@ -36,36 +41,43 @@ public class ModelLoginAuth {
         this.setEmail(email);
         this.setPassword(password);
         this.setContext(context);
+        requestQueue = Volley.newRequestQueue(getContext());
     }
 
 
-    public boolean sendRequest(){
+    public void sendRequest(final VolleyResponseListener listener){
+
+
+
 
         //String urlGet = "https://httpbin.org/ip";
         String urlGetChuck = "https://api.chucknorris.io/jokes/random?category=dev";
 
-        StringRequest getRequest = new StringRequest(Request.Method.GET, urlGetChuck, new Response.Listener<String>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, urlGetChuck, null, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(JSONObject response) {
 
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    setIp(jsonObject.getString("value"));
+                    Log.i("Response login: ", response.get("value").toString());
+                    listener.onResponse(response);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                listener.onError(error.getMessage());
                 Log.e("Error login", error.getMessage());
 
             }
         });
 
-        Volley.newRequestQueue(getContext()).add(getRequest);
-        //return true if ip have info.
-        return !ip.isEmpty();
+        requestQueue.add(jsonObjectRequest);
+
+
     }
 
     public String getEmail() {
