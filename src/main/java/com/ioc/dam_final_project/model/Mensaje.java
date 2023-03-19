@@ -1,11 +1,13 @@
 package com.ioc.dam_final_project.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -20,7 +22,8 @@ public class Mensaje {
     private  Long id;
 
     private String descripcion;
-    private Date fecha;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fecha = LocalDate.now();
 
     @ManyToOne
     @JoinColumn(name = "id_tarea")
@@ -30,9 +33,8 @@ public class Mensaje {
     @JoinColumn(name = "id_tecnico")
     private Tecnico tecnico;
 
-    public Mensaje(String descripcion, Date fecha, Tarea tarea, Tecnico tecnico) {
+    public Mensaje(String descripcion, Tarea tarea, Tecnico tecnico) {
         this.descripcion = descripcion;
-        this.fecha = fecha;
         this.tarea = tarea;
         this.tecnico = tecnico;
     }

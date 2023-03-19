@@ -2,8 +2,7 @@ package com.ioc.dam_final_project.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ioc.dam_final_project.model.Enums.Estatus;
-import com.ioc.dam_final_project.model.Enums.Tipo_Tarea;
+import com.ioc.dam_final_project.model.Enums.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +10,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -52,11 +53,10 @@ public class Tarea {
     private Ubicacion ubicacion;
 
     @JsonIgnore
-    @OneToMany
-    @JoinColumn(name = "id")
-    private List<Mensaje> mensaje;
+    @OneToMany(mappedBy = "tarea")
+    private Set <Mensaje> mensaje;
 
-    public Tarea(String name, Tipo_Tarea tarea, Estatus estatus, Tecnico tecnico, Admin admin, Ubicacion ubicacion, List<Mensaje> mensaje) {
+    public Tarea(String name, Tipo_Tarea tarea, Estatus estatus, Tecnico tecnico, Admin admin, Ubicacion ubicacion, Set<Mensaje> mensaje) {
         this.name = name;
         this.tarea = tarea;
         this.estatus = estatus;
@@ -64,9 +64,18 @@ public class Tarea {
         this.admin = admin;
         this.ubicacion = ubicacion;
         this.mensaje = mensaje;
-       // this.fecha_creacion = LocalDate.now();
-        //this.fecha_culminacion = new Date();
-        //this.fecha_asignacion = new Date();
     }
 
+
+    /*public void setMensaje(List <Mensaje> mensaje){
+        this.mensaje = mensaje;
+    }
+    public void addMensaje(Mensaje mensajes){
+        // verificación de no repetición de elementos
+        if(mensaje.contains(mensaje)){
+            System.out.println("Éste mensaje ya se encuentra almacenado");
+            return;
+        }
+        mensaje.add(mensajes);
+    }*/
 }

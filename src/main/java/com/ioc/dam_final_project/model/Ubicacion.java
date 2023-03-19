@@ -22,8 +22,7 @@ public class Ubicacion {
     private Double centro;
     private Double zoom;
     @JsonIgnore
-    //@OneToMany(mappedBy = "ubicacion", fetch = FetchType.LAZY)
-    @OneToMany(mappedBy = "ubicacion", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ubicacion", fetch = FetchType.LAZY)
     private List<Coordenada> mapa;
 
     @JsonIgnore

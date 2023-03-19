@@ -59,28 +59,4 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().token(jwt).build();
     }
 
-    /*private void saveUserToken(User user, String jwt) {
-        var token = Token.builder()
-                .user(user)
-                .token(jwt)
-                .type(TokenType.BEARER)
-                .expired(false)
-                .revoked(false)
-                .build();
-
-        tokenRepository.save(token);
-    }*/
-
-    /*private void revokeAllUserToken(User user){
-        var validToken = tokenRepository.findAllTokens(user.getId());
-
-        if(validToken.isEmpty())
-            return;
-
-        validToken.forEach(token -> {
-            token.setExpired(true);
-            token.setRevoked(true);
-        });
-        tokenRepository.saveAll(validToken);
-    }*/
 }
