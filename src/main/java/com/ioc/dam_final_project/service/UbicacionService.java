@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.service;
 
+import com.ioc.dam_final_project.dto.UbicacionDTO;
 import com.ioc.dam_final_project.model.Ubicacion;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface UbicacionService {
 
    Ubicacion addObject(Ubicacion ubicacion);
 
-   List<Ubicacion> getAll();
+   List<UbicacionDTO> getAll();
 
-   Ubicacion findById(Long id);
+   UbicacionDTO findById(Long id);
 }

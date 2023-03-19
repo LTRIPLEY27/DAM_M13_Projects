@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.serviceImpl;
 
+import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.model.Mensaje;
 import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -41,16 +43,24 @@ public class TareaServiceImpl implements TareaService {
     }
 
     @Override
-    public List<Tarea> total() {
-        return tareaRepository.findAll();
+    public List<TareaDTO> total() {
+        var object = new ArrayList<TareaDTO>();
+        for (var i : tareaRepository.findAll()){
+            object.add(TareaDTO.byModel(i));
+        }
+        return object;
     }
 
     @Override
-    public List<Tarea> getTareaTec(Tecnico tecnico) {
+    public List<TareaDTO> getTareaTec(Tecnico tecnico) {
 
-        var tarea = tareaRepository.findTareaByTecnico(tecnico);
-        System.out.println(tarea.get(0).getTecnico().getNombre());
-        return tareaRepository.findTareaByTecnico(tecnico);
+        var object = new ArrayList<TareaDTO>();
+        for (var i : tareaRepository.findTareaByTecnico(tecnico)){
+            object.add(TareaDTO.byModel(i));
+        }
+        //var tarea = tareaRepository.findTareaByTecnico(tecnico);
+        //System.out.println(tarea.get(0).getTecnico().getNombre());
+        return object;
     }
 
 

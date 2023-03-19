@@ -11,4 +11,6 @@ import java.util.List;
 public interface TareaRepository extends JpaRepository <Tarea, Long> {
 
     List <Tarea> findTareaByTecnico(Tecnico tecnico);
+
+    Tarea findTareaByTecnicoAndName(Tecnico tecnico, String name);
 }

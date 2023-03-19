@@ -1,6 +1,7 @@
 package com.ioc.dam_final_project.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ioc.dam_final_project.dto.UbicacionDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,8 @@ public class Ubicacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Double centro;
+    private Double centroLatitud;
+    private Double centroLongitud;
     private Double zoom;
     @JsonIgnore
     @OneToMany(mappedBy = "ubicacion", fetch = FetchType.LAZY)
@@ -29,11 +31,16 @@ public class Ubicacion {
     @OneToOne(mappedBy = "ubicacion")
     private Tarea tarea;
 
-    public Ubicacion(Double centro, Double zoom,  Tarea tarea) {
-        this.centro = centro;
+    public Ubicacion(Double centroLatitud, Double centroLongitud, Double zoom, Tarea tarea) {
+        this.centroLatitud = centroLatitud;
+        this.centroLongitud = centroLongitud;
         this.zoom = zoom;
         this.tarea = tarea;
         setMapa(new ArrayList<>());
+    }
+
+    public static Ubicacion byDTO(UbicacionDTO ubicacionDTO){
+        return new Ubicacion(ubicacionDTO.getCentroLatitud(), ubicacionDTO.getCentroLongitud(), ubicacionDTO.getZoom(), null);
     }
 
     // inicializamos el valor de la coordenada para que almacene de 1 a muchos valores

@@ -30,6 +30,7 @@ public class SecurityConfiguration  {
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                //.requestMatchers("/admin/**").permitAll() // --to restart users
                 .anyRequest()
                 .authenticated()
                 .and()

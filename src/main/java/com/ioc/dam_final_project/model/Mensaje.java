@@ -1,6 +1,7 @@
 package com.ioc.dam_final_project.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ioc.dam_final_project.dto.MensajeDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,5 +38,9 @@ public class Mensaje {
         this.descripcion = descripcion;
         this.tarea = tarea;
         this.tecnico = tecnico;
+    }
+
+    public static Mensaje byDTO(MensajeDTO mensajeDTO){
+        return new Mensaje(mensajeDTO.getDescripcion(), null, null);
     }
 }

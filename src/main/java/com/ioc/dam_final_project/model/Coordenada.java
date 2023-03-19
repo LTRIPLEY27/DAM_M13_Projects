@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.model;
 
+import com.ioc.dam_final_project.dto.CoordenadaDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,4 +30,7 @@ public class Coordenada {
         this.ubicacion = ubicacion;
     }
 
+    public static Coordenada byDTO(CoordenadaDTO coordenadaDTO){
+        return new Coordenada(coordenadaDTO.getLatitud(), coordenadaDTO.getLongitud(), null);
+    }
 }

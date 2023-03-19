@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.serviceImpl;
 
+import com.ioc.dam_final_project.dto.MensajeDTO;
 import com.ioc.dam_final_project.model.Mensaje;
 import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
@@ -53,20 +54,19 @@ public class TecnicoServiceimpl implements TecnicoService {
         return tecnicoRepository.findTecnicoByEmail(user).orElseThrow();
     }
 
-    public Mensaje posting(Mensaje mensaje) {
+    public MensajeDTO posting(MensajeDTO mensaje) {
+        var tecnico = tecnicoRepository.findTecnicoByUser(mensaje.getTecnico()).orElseThrow();
+        var tarea = tareaRepository.findTareaByTecnicoAndName(tecnico, mensaje.getDescripcion()); //name must be unique
 
-        var tarea = tareaRepository.findById(1L).orElseThrow();
-        var tecnico = tecnicoRepository.findById(2L).orElseThrow();
+        var byModel = new Mensaje(mensaje.getDescripcion(), tarea, tecnico);
 
-        mensaje.setTecnico(tecnico);
-        mensaje.setTarea(tarea);
-
-        tarea.getMensaje().add(mensaje);
-        tecnico.getMensaje().add(mensaje);
-
+        tarea.getMensaje().add(byModel);
+        tecnico.getMensaje().add(byModel);
         tecnicoRepository.save(tecnico);
         tareaRepository.save(tarea);
+        mensajeRepository.save(byModel);
 
-        return mensajeRepository.save(mensaje);
+        var dto = MensajeDTO.byModel(byModel);
+        return dto;
     }
 }
