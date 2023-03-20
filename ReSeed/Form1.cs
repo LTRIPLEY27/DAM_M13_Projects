@@ -66,11 +66,12 @@ namespace ReSeed
 
             //@response,es la ejecución de la orden que damos al cliente HTTP de la BD--> del metodo RestResponse de RestSharp
             RestResponse response = client.Execute(request);
+           
 
 
             if (response != null)  //si el resultado de response no es nulo, significa que el usuario y pass son correctos     
             {
-                MessageBox.Show("El usuario ha iniciado sesión correctamente.", "LOGUEADO CORRECTAMENTE");//mostramos mensaje
+                MessageBox.Show(response.Content.ToString());//mostramos mensaje-->contenido json de prueba
                 Form3 form3 = new Form3();//declaramos el formulario del administrador
                 form3.Show();//mostramos formulario
 

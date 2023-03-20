@@ -151,9 +151,24 @@ namespace ReSeed
         private void btn_eliminarCoordenada_Click(object sender, EventArgs e)
         {
 
-            registroCoordenadas.Rows.RemoveAt(registroCoordenadas.CurrentRow.Index);
-            capaMarcado.Clear();
+            if (registroCoordenadas.Rows.Count == 1)//si hay solo una fila, NO ELIMINAMOS (por defecto ponemos una fila vacia)
+            {
+                MessageBox.Show("No hay coordenadas que eliminar.");//Nostramos mensaje
 
+            } else//si por el contrario hay mas de una fila...
+            {
+                registroCoordenadas.Rows.RemoveAt(registroCoordenadas.CurrentRow.Index);//elimiamos la fila que selecciona el usuario
+                capaMarcado.Clear();//borramos capa de dibujo poligono
+            }
+
+        }
+        /*
+         * Metodo que elimina todas las coordenadas del mapa y desdibuja
+         */
+        private void btn_eliminarTodasLasCoordenadas_Click(object sender, EventArgs e)
+        {
+            registroCoordenadas.Rows.Clear();//borramos todas las coordenadas del datagrid
+            capaMarcado.Clear();//eliminamos la capa poligono que dibujamos en el mapa
         }
     }
 }

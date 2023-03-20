@@ -235,6 +235,7 @@
             btn_eliminarTodasLasCoordenadas.TabIndex = 10;
             btn_eliminarTodasLasCoordenadas.Text = "ELIMINAR TODAS LAS COORDENADAS";
             btn_eliminarTodasLasCoordenadas.UseVisualStyleBackColor = false;
+            btn_eliminarTodasLasCoordenadas.Click += btn_eliminarTodasLasCoordenadas_Click;
             // 
             // btn_eliminarCoordenada
             // 
