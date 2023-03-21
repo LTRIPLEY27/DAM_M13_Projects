@@ -10,6 +10,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+/********************************************************************************************************
+*                                      *****   CLASE USER   *****
+*********************************************************************************************************
+* SERÁ UNA CLASE PADRE CON 2 HEREDEROS : ADMIN Y TÉCNICO.
+*
+*   Notaciones :
+* *****************
+ *  - He declarado a la clase como 'Entity' para su mappeo en la base de datos.
+*   - He usado las notaciones propias de SpringBoot, en combinación a Java 17 y Loombook, para potenciar al máximo la codificación.
+*
+*   Atributos :
+* * *************
+* - He declarado los atributos propios de la clase básica 'Usuario', que serán heredados por ADMIN/USER.
+* - He declarado los atributos : Protected, ya que serán heredados.
+* - Motivado a la aplicación de la capa de seguridad, he implentado la Interface ' UserDetails' , con los métodos inherentes, para
+*   proporcionar los métodos definidos en 'security' tomando valores de los atributos.
+*
+*
+* */
+
 @Entity
 @Getter
 @Setter
@@ -27,7 +47,6 @@ public class User implements UserDetails {
     protected String apellido;
     protected  String email;
     protected  String telefono;
-
     @Enumerated(EnumType.STRING)
     protected Rol rol;
 

@@ -16,6 +16,26 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/********************************************************************************************************
+ *                                      *****   CLASE JwtAuthenticationFilter   *****
+ *********************************************************************************************************
+ * SERÁ UNA CLASE QUE HEREDARÁ DE 'OncePerRequestFilter', PARA ASEGURAR EN CADA REQUEST LA APLICACIÓN DE DICHOS FILTROS.
+ *
+ *   Notaciones :
+ * ****************
+ *   - He declarado a la clase como con las notaciones '@Component' ,para indicar que podrá ser referenciada.
+ *
+ *   - He usado las notaciones propias de SpringBoot, en combinación a Java 17 y Loombook, para potenciar al máximo la codificación.
+ *
+ *   Atributos :
+ * * *************
+ * - He declarado los atributos : Private final, ya que serán 2 Services alternos que necesitaré instanciar y con ello me aseguro de tal necesidad.
+ * -
+ *
+ *   Métodos :
+ * * *************
+ * - He declarado los métodos de acceso como protected, ya que así lo proporciona la clase a heredar.
+ * */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
