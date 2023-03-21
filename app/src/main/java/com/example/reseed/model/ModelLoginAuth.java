@@ -23,14 +23,7 @@ public class ModelLoginAuth {
     private String password;
 
     private Context context;
-    private String ip;
     private RequestQueue requestQueue;
-
-    /**
-     * Constructor empty.
-     */
-    public ModelLoginAuth(){
-    }
 
     /**
      * Constructor of the class.
@@ -44,24 +37,30 @@ public class ModelLoginAuth {
         requestQueue = Volley.newRequestQueue(getContext());
     }
 
-
     public void sendRequest(final VolleyResponseListener listener){
 
-
-
-
         //String urlGet = "https://httpbin.org/ip";
-        String urlGetChuck = "https://api.chucknorris.io/jokes/random?category=dev";
+        //String urlGetChuck = "https://api.chucknorris.io/jokes/random?category=dev";
+
+        String urlPostLogin = "http://restapi.adequateshop.com/api/authaccount/login";
+
+        JSONObject jsonCallObject = new JSONObject();
+        try {
+            jsonCallObject.put("email",getEmail());
+            jsonCallObject.put("password",getPassword());
+        }catch (Exception e){
+            Log.e("Error login request: ", e.getMessage());
+        }
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, urlGetChuck, null, new Response.Listener<JSONObject>() {
+                (Request.Method.POST, urlPostLogin, jsonCallObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 
                 try {
-                    Log.i("Response login: ", response.get("value").toString());
+                    //Log.i("Response login: ", response.toString());
                     listener.onResponse(response);
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
 
@@ -69,15 +68,12 @@ public class ModelLoginAuth {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                listener.onError(error.getMessage());
-                Log.e("Error login", error.getMessage());
-
+                listener.onError(Integer.toString(error.networkResponse.statusCode));
+                //Log.e("Error login", error.getMessage());
             }
         });
 
         requestQueue.add(jsonObjectRequest);
-
-
     }
 
     public String getEmail() {
@@ -96,13 +92,6 @@ public class ModelLoginAuth {
         this.password = password;
     }
 
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
     public Context getContext() {
         return context;
     }

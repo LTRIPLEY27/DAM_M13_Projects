@@ -37,8 +37,8 @@ public class AppActivity extends AppCompatActivity {
 
         for (int i = 0; i < 10; i++) {
             animalNames.add(new TaskObj(
-                    "Tarea " + Integer.toString(i),
-                    "Description de la tarea " + Integer.toString(i),
+                    "Tarea " + i,
+                    "Description de la tarea " + i,
                     1,
                     Calendar.getInstance().getTimeInMillis(),
                     Calendar.getInstance().getTimeInMillis()

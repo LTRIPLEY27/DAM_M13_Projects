@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -57,9 +58,25 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                sendLogin(userTextView.getText().toString(), passwordTextView.getText().toString());
+                if(isValidEmail(userTextView.getText().toString())){
+                    sendLogin(userTextView.getText().toString(), passwordTextView.getText().toString());
+                }else{
+                    Log.e("Error email: ","format email incorrect.");
+
+                    Toast toast = Toast.makeText(getApplicationContext(),"Direccion de correo incorrecta.",Toast.LENGTH_LONG);
+                    toast.show();
+                }
+
             }
         });
+    }
+
+    public final static boolean isValidEmail(CharSequence target) {
+        if (TextUtils.isEmpty(target)) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
     }
 
     private void sendLogin(String email, String password){
@@ -70,22 +87,28 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onError(String message) {
 
+                Log.e("Error login: ",message);
+
             }
 
             @Override
             public void onResponse(Object response) {
 
+                //TODO Adapt to our login service.
+
                 JSONObject jsResponse = (JSONObject)response;
                 try {
-                    setResponseLogin(jsResponse.getString("value"));
+                    if(jsResponse.getString("data") == "null"){
+                        setResponseLogin(jsResponse.getString("message"));
+                    }else{
+                        setResponseLogin(jsResponse.getJSONObject("data").getString("Token"));
+                    }
+
                 } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                    Log.e("jsResponse error: ", e.getMessage());
                 }
 
-                Context context = getApplicationContext();
-
-
-                Toast toast = Toast.makeText(context,responseLogin,Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(getApplicationContext(),responseLogin,Toast.LENGTH_LONG);
                 toast.show();
 
                 //openNewActivity();
