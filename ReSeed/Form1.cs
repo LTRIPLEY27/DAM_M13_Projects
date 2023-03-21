@@ -1,13 +1,24 @@
+using Newtonsoft.Json.Linq;
 using RestSharp;
-using System.Net.Http.Headers;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Text.Json.Nodes;
 
 namespace ReSeed
 {
+
     public partial class Form1 : Form
     {
+        //VARIABLES DE USUARIO
+        private String nombreUsuario;
+        private String passwordUsuario;
+        //VARIABLES DE CONEXION **PRUEBAS**
+        private String url = "https://jsonplaceholder.typicode.com/posts/1";
+        private String url2 = "https://jsonplaceholder.typicode.com/posts";
+        private String loginURL = "http://restapi.adequateshop.com/api/authaccount/login";
+
         public Form1()
         {
             InitializeComponent();
@@ -27,6 +38,7 @@ namespace ReSeed
         private void btn_salir_Click(object sender, EventArgs e)
         {
 
+            //Se cjerra el programa
             this.Close();//cerramos form actual
 
         }
@@ -48,40 +60,24 @@ namespace ReSeed
 
         private async void btn_conectar_Click(object sender, EventArgs e)
         {
-            //Datos que introduce el usuario
-            String nombreUsuario = textBox_usuario.Text;
-            String passwordUsuario = textBox_password.Text;
+            //Añadimos a los datos que introduce el usuario una comilla simple delante y detrás de la cadena
+            //Hacemos esto para que el forma JSon de @parametros sea el adecuado y no de errores
+            nombreUsuario = "'" + textBox_usuario.Text.ToString() + "'";
+            passwordUsuario = "'" + textBox_password.Text.ToString() + "'";
+            
+            //HTTPCLIENT --> Hacer un POST**Petición API a la cual le enviamos datos y esperamos respuesta
+            HttpClient client = new HttpClient();//objeto de HttpClient
+            String parametros = "{'email':"+nombreUsuario+",'password':"+passwordUsuario+"}";//String @parametros 
+            //client.DefaultRequestHeaders.Add("Authorization", "_TOKEN_");
+            dynamic jsonString = JObject.Parse(parametros);//convertimos @parametros a formato JSon
 
-            //URL de API server
-            String url = "https://api.chucknorris.io/jokes/hvj9bov5qoscyakmzylsag";//URL de APIrest server
+            var httpContent = new StringContent(jsonString.ToString(),Encoding.UTF8,"application/json");//Agregamos contendio a la http, para ello,pasamos el JSon creado anteriormante a strin, lo codificamos a UTF8 y aplicamos el parametro applicarion/json
+            var response = client.PostAsync(loginURL, httpContent).Result;//@response- utilizaremos el metodo PostAsync pasandole por parametro la url y el contendio
+            var res = response.Content.ReadAsStringAsync().Result;//@res-> lleemos el contenido
+            dynamic json = JObject.Parse(res);//transformamos ese contenido @res a JSOn
 
-            //@client objeto RestClient al que le pasamos la URL a consultar
-            RestClient client = new RestClient(url);
-
-            //almacenamos en la variable content los parametros que deseamos buscar jutno con la codificación UTF8 y añadiendo que buscaremos en json
-            //var content = new StringContent ("{\"usuario\":"+nombreUsuario+",\"password\":"+passwordUsuario+"}", System.Text.Encoding.UTF8,"application/json");
-
-            //@request, variable a la cual le pasamos la URL y el método correspondiente para tratar con la BD
-            RestRequest request = new RestRequest(url, Method.Get);
-
-            //@response,es la ejecución de la orden que damos al cliente HTTP de la BD--> del metodo RestResponse de RestSharp
-            RestResponse response = client.Execute(request);
-           
-
-
-            if (response != null)  //si el resultado de response no es nulo, significa que el usuario y pass son correctos     
-            {
-                MessageBox.Show(response.Content.ToString());//mostramos mensaje-->contenido json de prueba
-                Form3 form3 = new Form3();//declaramos el formulario del administrador
-                form3.Show();//mostramos formulario
-
-                this.Hide();//ocultamos formulario en curso
-            }
-            else
-            {
-                MessageBox.Show("Usuario inexistente o contraseña incorrecta", "ERROR LOGIN");//si la respuesta es nula significa que el usuario y password no se han encontrado, es que el usuario o la contraseña no estan en BD
-            }
-
+            MessageBox.Show(json.ToString());//Mostramos por pantalla
+       
         }
     }
 }
