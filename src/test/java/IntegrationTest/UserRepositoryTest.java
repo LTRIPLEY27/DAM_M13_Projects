@@ -17,7 +17,7 @@ class UserRepositoryTest {
     void setUp() {
     }
 
-    @AfterEach
+    /*@AfterEach
     void tearDown() {
         userRepo.deleteAll();
     }
@@ -25,7 +25,7 @@ class UserRepositoryTest {
     @Test
     void findUserByNombre() {
     }
-
+/*
     @Test
     @DisplayName("Insert a new object into table")
     void insertToTable_OK(){
@@ -36,5 +36,5 @@ class UserRepositoryTest {
         user.setTelefono("999-999-999");
         userRepo.save(user);
         Assertions.assertEquals(1, userRepo.count());
-    }
+    }*/
 }

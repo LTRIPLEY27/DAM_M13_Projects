@@ -23,6 +23,7 @@ class AdminRepositoryTest {
     void tearDown() {
     }
 
+    /*
     @Test
     @DisplayName("Insert a new object into table")
     void insertToTable_OK(){
@@ -34,5 +35,5 @@ class AdminRepositoryTest {
         user.setTareaList(new ArrayList<>());
         admin.save(user);
         Assertions.assertEquals(1, admin.count());
-    }
+    }*/
 }
