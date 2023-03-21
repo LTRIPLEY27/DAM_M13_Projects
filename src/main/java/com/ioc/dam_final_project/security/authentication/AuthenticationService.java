@@ -44,7 +44,6 @@ public class AuthenticationService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getEmail(),
                 request.getPassword()
-
         ));
 
         var jwt = "";
