@@ -53,5 +53,6 @@ Si opteu per fer un projecte de control d’algun tipus de dispositiu o altra me
 • Trobareu els barems a les dues pàgines següents:
 
 
-
+<div align = "center">
 ![img.png](img.png)
+</div>    
