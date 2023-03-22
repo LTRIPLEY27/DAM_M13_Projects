@@ -117,7 +117,6 @@
             label2.Size = new Size(90, 17);
             label2.TabIndex = 4;
             label2.Text = "PASSWORD";
-            label2.Click += label2_Click;
             // 
             // label1
             // 

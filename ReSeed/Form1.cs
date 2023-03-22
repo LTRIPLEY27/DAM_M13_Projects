@@ -27,11 +27,6 @@ namespace ReSeed
 
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
         //BOTÓN SALIR método btn_salir_Clic  --> CIERRA PROGRAMA
         private void btn_salir_Click(object sender, EventArgs e)
         {
@@ -76,8 +71,7 @@ namespace ReSeed
          *5-En una variable @response almacenaremos la respuesta obtenida de la api. Usaremos el objeto @client de la clase HTTPCLIENT llamando
          *a su método PostAsync (puesto que enviaremos datos a la API i esperaremos recibir una respuesta), pasandole la URL y el contenido.
          *6-En la variable @res almacenamos la respuesta @response.
-         *7-En @json, objeto de clase dynamic, almaceno la respuesta @res (nuevamente en formato json).
-         *8- Con un if, comprobamos si la respuesta de la api es valaida o no.
+         *7- Con un if, comprobamos si la respuesta de la api es valaida o no.
          *            -Mostramos mensaje por pantalla donde indicamos que el LOGIN es correcto.
          *            -Con otro if, verificamos si se trata de un rol administrador o tecnico para poder deribarlo a su menú principal 
          *            correspondiente.
@@ -90,28 +84,46 @@ namespace ReSeed
             //Hacemos esto para que el forma JSon de @parametros sea el adecuado y no de errores
             nombreUsuario = "'" + textBox_usuario.Text.ToString() + "'";
             passwordUsuario = "'" + textBox_password.Text.ToString() + "'";
-            
+
             //HTTPCLIENT --> Hacer un POST**Petición API a la cual le enviamos datos y esperamos respuesta
             HttpClient client = new HttpClient();//objeto de HttpClient
-            String parametros = "{'email':"+nombreUsuario+",'password':"+passwordUsuario+"}";//String @parametros 
-            client.DefaultRequestHeaders.Add("Authorization", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlZHVhcmRAZmFudGFzeW1haWwuY29tIiwiaWF0IjoxNjc5NDgyODIzLCJleHAiOjE2Nzk0ODQyNjN9.DKknWcdtRdOmKgTbPv_zx2HgTfVUYvald5RjZ04FCWU");
+            String parametros = "{'email':" + nombreUsuario + ",'password':" + passwordUsuario + "}";//String @parametros 
+            //client.DefaultRequestHeaders.Add("Authorization", "_TOKEN_");
             dynamic jsonString = JObject.Parse(parametros);//convertimos @parametros a formato JSon
 
-            var httpContent = new StringContent(jsonString.ToString(),Encoding.UTF8,"application/json");//enviamos datos a http
+            var httpContent = new StringContent(jsonString.ToString(), Encoding.UTF8, "application/json");//enviamos datos a http
             var response = client.PostAsync(loginURL, httpContent).Result;//@response- utilizaremos el metodo PostAsync pasandole por parametro la url y el contendio
             var res = response.Content.ReadAsStringAsync().Result;//@res-> lleemos el contenido
-            dynamic json = JObject.Parse(res);//transformamos ese contenido @res a JSOn
+            String TOKEN = res.ToString();//@TOKEN_almacena TOKEN inicio sesion usuario
+            //dynamic json = JObject.Parse(res);//transformamos ese contenido @res a JSOn
 
-            if (response.IsSuccessStatusCode)//si la respuesta es que existe el usuario y la contraseña introducida por el suario...
+            if (response.IsSuccessStatusCode)//si la respuesta es que existe el usuario y la contraseña introducida por el usuario...
             {
-                MessageBox.Show("Sesión iniciada correctamente.","INFORMACIÓN",MessageBoxButtons.OK,MessageBoxIcon.Information);//Mensaje sesión validada
-                Form3 form3 = new Form3();//Declaramos objeto form3
-                form3.Show();//mostramos el form3
-                this.Hide();//ocultamos el form actual
+                if (nombreUsuario.Equals("'eduard@fantasymail.com'")) {
 
-            } else//sino...
+                    MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
+                    //MessageBox.Show("TOKEN :" + TOKEN);
+                    Form3 form3 = new Form3();
+                    form3.Show();
+                    this.Hide();
+
+                } else
+                {
+
+                    MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
+                    //MessageBox.Show("TOKEN :" + TOKEN);
+                    Form4 form4 = new Form4();
+                    form4.Show();
+                    this.Hide();
+
+                }
+
+            } 
+
+            else//sino...
             {
-                MessageBox.Show("Usuario o contraseña incorrectos.","INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Warning);//Mensaje erro LOGIN
+                MessageBox.Show("Usuario o contraseña incorrectos.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Warning);//Mensaje erro LOGIN
+                //MessageBox.Show("TOKEN :" + TOKEN);
             }
 
         }

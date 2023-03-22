@@ -16,5 +16,14 @@ namespace ReSeed
         {
             InitializeComponent();
         }
+
+        /*
+         * Botón salir:
+         * Sale del programa y la sesión finaliza
+         */
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

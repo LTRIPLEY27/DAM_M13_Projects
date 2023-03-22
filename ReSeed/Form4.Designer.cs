@@ -31,33 +31,33 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form4));
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
-            tabPage3 = new TabPage();
+            button2 = new Button();
+            button1 = new Button();
+            textBox3 = new TextBox();
+            label4 = new Label();
+            label3 = new Label();
+            checkedListBox1 = new CheckedListBox();
+            textBox2 = new TextBox();
+            label1 = new Label();
+            label2 = new Label();
+            textBox1 = new TextBox();
             panel1 = new Panel();
             gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
-            label2 = new Label();
-            label1 = new Label();
-            textBox2 = new TextBox();
-            textBox1 = new TextBox();
-            checkedListBox1 = new CheckedListBox();
-            label3 = new Label();
-            label4 = new Label();
-            textBox3 = new TextBox();
-            button1 = new Button();
-            button2 = new Button();
+            tabPage3 = new TabPage();
             panel2 = new Panel();
-            label5 = new Label();
-            label6 = new Label();
-            label7 = new Label();
-            textBox4 = new TextBox();
-            textBox5 = new TextBox();
-            textBox6 = new TextBox();
+            button3 = new Button();
             panel3 = new Panel();
             label8 = new Label();
-            button3 = new Button();
+            textBox6 = new TextBox();
+            textBox5 = new TextBox();
+            textBox4 = new TextBox();
+            label7 = new Label();
+            label6 = new Label();
+            label5 = new Label();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
-            tabPage3.SuspendLayout();
             panel1.SuspendLayout();
+            tabPage3.SuspendLayout();
             panel2.SuspendLayout();
             panel3.SuspendLayout();
             SuspendLayout();
@@ -99,15 +99,94 @@
             tabPage1.TabIndex = 0;
             tabPage1.Text = "TAREAS";
             // 
-            // tabPage3
+            // button2
             // 
-            tabPage3.Controls.Add(panel2);
-            tabPage3.Location = new Point(4, 54);
-            tabPage3.Name = "tabPage3";
-            tabPage3.Size = new Size(1137, 647);
-            tabPage3.TabIndex = 2;
-            tabPage3.Text = "MODIFICACIÓN DATOS USUARIO";
-            tabPage3.UseVisualStyleBackColor = true;
+            button2.Location = new Point(20, 603);
+            button2.Name = "button2";
+            button2.Size = new Size(95, 23);
+            button2.TabIndex = 10;
+            button2.Text = "SALIR";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(766, 603);
+            button1.Name = "button1";
+            button1.Size = new Size(255, 23);
+            button1.TabIndex = 9;
+            button1.Text = "ENVIAR";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // textBox3
+            // 
+            textBox3.Location = new Point(766, 467);
+            textBox3.Multiline = true;
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(255, 116);
+            textBox3.TabIndex = 8;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(766, 449);
+            label4.Name = "label4";
+            label4.Size = new Size(134, 15);
+            label4.TabIndex = 7;
+            label4.Text = "DEJA TU COMENTARIO";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(766, 360);
+            label3.Name = "label3";
+            label3.Size = new Size(187, 15);
+            label3.TabIndex = 6;
+            label3.Text = "MARCAR TAREA/S REALIZADA/S";
+            // 
+            // checkedListBox1
+            // 
+            checkedListBox1.FormattingEnabled = true;
+            checkedListBox1.Items.AddRange(new object[] { "REPLANTAR", "DESBROZAR", "LIMPIEZA" });
+            checkedListBox1.Location = new Point(766, 378);
+            checkedListBox1.Name = "checkedListBox1";
+            checkedListBox1.Size = new Size(255, 58);
+            checkedListBox1.TabIndex = 5;
+            // 
+            // textBox2
+            // 
+            textBox2.Location = new Point(766, 201);
+            textBox2.Multiline = true;
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(255, 108);
+            textBox2.TabIndex = 4;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(766, 183);
+            label1.Name = "label1";
+            label1.Size = new Size(195, 15);
+            label1.TabIndex = 3;
+            label1.Text = "COMENTARIOS ADMINISTRADOR";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.BackColor = Color.Transparent;
+            label2.Location = new Point(766, 32);
+            label2.Name = "label2";
+            label2.Size = new Size(122, 15);
+            label2.TabIndex = 1;
+            label2.Text = "TAREAS A REALIZAR:";
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(766, 50);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(255, 108);
+            textBox1.TabIndex = 2;
             // 
             // panel1
             // 
@@ -144,93 +223,15 @@
             gMapControl1.TabIndex = 0;
             gMapControl1.Zoom = 0D;
             // 
-            // label2
+            // tabPage3
             // 
-            label2.AutoSize = true;
-            label2.BackColor = Color.Transparent;
-            label2.Location = new Point(766, 32);
-            label2.Name = "label2";
-            label2.Size = new Size(122, 15);
-            label2.TabIndex = 1;
-            label2.Text = "TAREAS A REALIZAR:";
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(766, 183);
-            label1.Name = "label1";
-            label1.Size = new Size(195, 15);
-            label1.TabIndex = 3;
-            label1.Text = "COMENTARIOS ADMINISTRADOR";
-            // 
-            // textBox2
-            // 
-            textBox2.Location = new Point(766, 201);
-            textBox2.Multiline = true;
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(255, 108);
-            textBox2.TabIndex = 4;
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(766, 50);
-            textBox1.Multiline = true;
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(255, 108);
-            textBox1.TabIndex = 2;
-            // 
-            // checkedListBox1
-            // 
-            checkedListBox1.FormattingEnabled = true;
-            checkedListBox1.Items.AddRange(new object[] { "REPLANTAR", "DESBROZAR", "LIMPIEZA" });
-            checkedListBox1.Location = new Point(766, 378);
-            checkedListBox1.Name = "checkedListBox1";
-            checkedListBox1.Size = new Size(255, 58);
-            checkedListBox1.TabIndex = 5;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(766, 360);
-            label3.Name = "label3";
-            label3.Size = new Size(187, 15);
-            label3.TabIndex = 6;
-            label3.Text = "MARCAR TAREA/S REALIZADA/S";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(766, 449);
-            label4.Name = "label4";
-            label4.Size = new Size(134, 15);
-            label4.TabIndex = 7;
-            label4.Text = "DEJA TU COMENTARIO";
-            // 
-            // textBox3
-            // 
-            textBox3.Location = new Point(766, 467);
-            textBox3.Multiline = true;
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(255, 116);
-            textBox3.TabIndex = 8;
-            // 
-            // button1
-            // 
-            button1.Location = new Point(766, 603);
-            button1.Name = "button1";
-            button1.Size = new Size(255, 23);
-            button1.TabIndex = 9;
-            button1.Text = "ENVIAR";
-            button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            button2.Location = new Point(20, 603);
-            button2.Name = "button2";
-            button2.Size = new Size(95, 23);
-            button2.TabIndex = 10;
-            button2.Text = "SALIR";
-            button2.UseVisualStyleBackColor = true;
+            tabPage3.Controls.Add(panel2);
+            tabPage3.Location = new Point(4, 54);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Size = new Size(1137, 647);
+            tabPage3.TabIndex = 2;
+            tabPage3.Text = "MODIFICACIÓN DATOS USUARIO";
+            tabPage3.UseVisualStyleBackColor = true;
             // 
             // panel2
             // 
@@ -248,53 +249,14 @@
             panel2.Size = new Size(375, 291);
             panel2.TabIndex = 0;
             // 
-            // label5
+            // button3
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(37, 111);
-            label5.Name = "label5";
-            label5.Size = new Size(64, 15);
-            label5.TabIndex = 0;
-            label5.Text = "TELÉFONO";
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(37, 142);
-            label6.Name = "label6";
-            label6.Size = new Size(68, 15);
-            label6.TabIndex = 1;
-            label6.Text = "PASSWORD";
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(37, 171);
-            label7.Name = "label7";
-            label7.Size = new Size(132, 15);
-            label7.TabIndex = 2;
-            label7.Text = "CONFIRMA PASSWORD";
-            // 
-            // textBox4
-            // 
-            textBox4.Location = new Point(172, 108);
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(163, 23);
-            textBox4.TabIndex = 3;
-            // 
-            // textBox5
-            // 
-            textBox5.Location = new Point(172, 139);
-            textBox5.Name = "textBox5";
-            textBox5.Size = new Size(163, 23);
-            textBox5.TabIndex = 4;
-            // 
-            // textBox6
-            // 
-            textBox6.Location = new Point(172, 168);
-            textBox6.Name = "textBox6";
-            textBox6.Size = new Size(163, 23);
-            textBox6.TabIndex = 5;
+            button3.Location = new Point(234, 217);
+            button3.Name = "button3";
+            button3.Size = new Size(101, 57);
+            button3.TabIndex = 7;
+            button3.Text = "MODIFICA";
+            button3.UseVisualStyleBackColor = true;
             // 
             // panel3
             // 
@@ -315,14 +277,53 @@
             label8.TabIndex = 0;
             label8.Text = "Nombre Usuario";
             // 
-            // button3
+            // textBox6
             // 
-            button3.Location = new Point(234, 217);
-            button3.Name = "button3";
-            button3.Size = new Size(101, 57);
-            button3.TabIndex = 7;
-            button3.Text = "MODIFICA";
-            button3.UseVisualStyleBackColor = true;
+            textBox6.Location = new Point(172, 168);
+            textBox6.Name = "textBox6";
+            textBox6.Size = new Size(163, 23);
+            textBox6.TabIndex = 5;
+            // 
+            // textBox5
+            // 
+            textBox5.Location = new Point(172, 139);
+            textBox5.Name = "textBox5";
+            textBox5.Size = new Size(163, 23);
+            textBox5.TabIndex = 4;
+            // 
+            // textBox4
+            // 
+            textBox4.Location = new Point(172, 108);
+            textBox4.Name = "textBox4";
+            textBox4.Size = new Size(163, 23);
+            textBox4.TabIndex = 3;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(37, 171);
+            label7.Name = "label7";
+            label7.Size = new Size(132, 15);
+            label7.TabIndex = 2;
+            label7.Text = "CONFIRMA PASSWORD";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(37, 142);
+            label6.Name = "label6";
+            label6.Size = new Size(68, 15);
+            label6.TabIndex = 1;
+            label6.Text = "PASSWORD";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(37, 111);
+            label5.Name = "label5";
+            label5.Size = new Size(64, 15);
+            label5.TabIndex = 0;
+            label5.Text = "TELÉFONO";
             // 
             // Form4
             // 
@@ -335,8 +336,8 @@
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
-            tabPage3.ResumeLayout(false);
             panel1.ResumeLayout(false);
+            tabPage3.ResumeLayout(false);
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             panel3.ResumeLayout(false);
