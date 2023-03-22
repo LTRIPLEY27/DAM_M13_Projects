@@ -39,13 +39,13 @@
 
 <br />
 <div align="center">
-  <a href="https://github.com/LTRIPLEY27/DAM_M13_Projects/new/main/DEFINITION.md">
+  <a href="https://github.com/LTRIPLEY27/DAM_M13_Projects/blob/main/DEFINITION.md">
     <img src="src/img/readMe.png" alt="Logo" width="80" height="80">
   </a>
   <p align="center">
     IOC Requisites of Project
     <br />
-    <a href="https://github.com/LTRIPLEY27/DAM_M13_Projects/new/main/DEFINITION.md"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/LTRIPLEY27/DAM_M13_Projects/blob/main/DEFINITION.md"><strong>Explore the docs »</strong></a>
 </div>
 
 
