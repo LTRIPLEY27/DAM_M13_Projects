@@ -47,6 +47,6 @@ public class Admin extends User{
     }
 
     public static Admin byDTO(AdminDTO admin){
-        return new Admin(admin.getUser(), "", admin.getNombre(), admin.getApellido(), admin.getEmail(), admin.getTelefono(), admin.getRol(), admin.getTarea());
+        return new Admin(admin.getUser(), "", admin.getNombre(), admin.getApellido(), admin.getEmail(), admin.getTelefono(), admin.getRol(), null);
     }
 }

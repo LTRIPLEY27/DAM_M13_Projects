@@ -26,8 +26,6 @@ public class Ubicacion {
     @JsonIgnore
     @OneToMany(mappedBy = "ubicacion", fetch = FetchType.LAZY)
     private List<Coordenada> mapa;
-
-    @JsonIgnore
     @OneToOne(mappedBy = "ubicacion")
     private Tarea tarea;
 

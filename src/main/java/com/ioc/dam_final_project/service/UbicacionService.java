@@ -13,4 +13,5 @@ public interface UbicacionService {
    List<UbicacionDTO> getAll();
 
    UbicacionDTO findById(Long id);
+   void deleteEntity(Long id);
 }

@@ -52,4 +52,9 @@ public class UbicacionServiceImpl implements UbicacionService {
 
         return ubicacionDTO;
     }
+
+    @Override
+    public void deleteEntity(Long id) {
+        ubicacionRepository.deleteById(id);
+    }
 }

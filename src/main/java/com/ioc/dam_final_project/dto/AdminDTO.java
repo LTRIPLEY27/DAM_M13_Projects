@@ -26,11 +26,15 @@ public class AdminDTO {
     private  String email;
     private  String telefono;
     private Rol rol;
-
-    private List<Tarea> tarea;
+    private List<TareaDTO> tarea;
 
     // SETTING VALUES FROM OBJETC FOR THE VALUES WE WANT SHOW ON JSON
     public static AdminDTO byModel(Admin admin){
-        return  new AdminDTO(admin.getUser(),  admin.getNombre(), admin.getApellido(), admin.getEmail(), admin.getTelefono(), admin.getRol(), admin.getTareaList());
+        var tadeaDTO = new ArrayList<TareaDTO>();
+        for(var i : admin.getTareaList()){
+            tadeaDTO.add(TareaDTO.byModel(i));
+        }
+
+        return  new AdminDTO(admin.getUser(),  admin.getNombre(), admin.getApellido(), admin.getEmail(), admin.getTelefono(), admin.getRol(), tadeaDTO);
     }
 }

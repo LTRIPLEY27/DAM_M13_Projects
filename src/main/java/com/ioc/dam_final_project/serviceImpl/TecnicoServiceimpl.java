@@ -1,6 +1,7 @@
 package com.ioc.dam_final_project.serviceImpl;
 
 import com.ioc.dam_final_project.dto.MensajeDTO;
+import com.ioc.dam_final_project.dto.TecnicoDTO;
 import com.ioc.dam_final_project.model.Mensaje;
 import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
@@ -52,6 +53,11 @@ public class TecnicoServiceimpl implements TecnicoService {
     @Override
     public Tecnico getByEmail(String user) {
         return tecnicoRepository.findTecnicoByEmail(user).orElseThrow();
+    }
+
+    @Override
+    public TecnicoDTO myProfile(String tecnico) {
+        return TecnicoDTO.byModel(tecnicoRepository.findTecnicoByEmail(tecnico).orElseThrow());
     }
 
     public MensajeDTO posting(MensajeDTO mensaje) {

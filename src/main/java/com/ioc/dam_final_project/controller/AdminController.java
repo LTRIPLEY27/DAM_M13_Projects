@@ -1,27 +1,20 @@
 package com.ioc.dam_final_project.controller;
 
-import com.ioc.dam_final_project.dto.CoordenadaDTO;
-import com.ioc.dam_final_project.dto.TareaDTO;
-import com.ioc.dam_final_project.dto.TecnicoDTO;
-import com.ioc.dam_final_project.dto.UbicacionDTO;
+import com.ioc.dam_final_project.dto.*;
 import com.ioc.dam_final_project.model.Coordenada;
 import com.ioc.dam_final_project.model.Tarea;
-import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.model.Ubicacion;
-import com.ioc.dam_final_project.security.authentication.AuthenticationRequest;
 import com.ioc.dam_final_project.security.authentication.AuthenticationResponse;
 import com.ioc.dam_final_project.security.authentication.AuthenticationService;
 import com.ioc.dam_final_project.security.authentication.RegisterRequest;
-import com.ioc.dam_final_project.serviceImpl.AdminServiceImpl;
-import com.ioc.dam_final_project.serviceImpl.CoordenadaServiceImpl;
-import com.ioc.dam_final_project.serviceImpl.TareaServiceImpl;
-import com.ioc.dam_final_project.serviceImpl.UbicacionServiceImpl;
+import com.ioc.dam_final_project.serviceImpl.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -35,15 +28,17 @@ public class AdminController {
     private final AuthenticationService serviceAuth;
     private final UbicacionServiceImpl ubicacionService;
     private final CoordenadaServiceImpl coordenadaService;
+    private final MensajeServiceImpl mensajeService;
 
 
-    public AdminController(AdminServiceImpl serviceAdmin, TareaServiceImpl tareaService, AuthenticationService serviceAuth, UbicacionServiceImpl ubicacionService, CoordenadaServiceImpl coordenadaService) {
+    public AdminController(AdminServiceImpl serviceAdmin, TareaServiceImpl tareaService, AuthenticationService serviceAuth, UbicacionServiceImpl ubicacionService, CoordenadaServiceImpl coordenadaService, MensajeServiceImpl mensajeService) {
         this.serviceAdmin = serviceAdmin;
         this.ubicacionService = ubicacionService;
         this.tareaService = tareaService;
         this.serviceAuth = serviceAuth;
 
         this.coordenadaService = coordenadaService;
+        this.mensajeService = mensajeService;
     }
 
     /*************************************************************
@@ -84,6 +79,12 @@ public class AdminController {
         return  serviceAdmin.all();
     }
 
+    /*@GetMapping(path = "/perfil")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<AdminDTO> showMyProfile(Principal principal){
+        return ResponseEntity.ok(serviceAdmin.profile(principal.getName()));
+    }*/
+
 
     @GetMapping(path = "/tareas")
     @ResponseStatus(HttpStatus.OK)
@@ -123,15 +124,43 @@ public class AdminController {
     }
 
 
-    @PostMapping(path = "/ubicacion")
+    /*@PostMapping(path = "/ubicacion")
     @ResponseStatus(HttpStatus.CREATED)
     public Ubicacion newObject(@RequestBody Ubicacion ubicacion) {
         return ubicacionService.addObject(ubicacion);
-    }
+    }*/
 
     @PostMapping(path = "/coordenada")
     @ResponseStatus(HttpStatus.CREATED)
     public void newCoordenada(@RequestBody Coordenada coordenada){
         coordenadaService.addCoordenada(coordenada);
     }
+
+    /*************************************************************
+     *                  DELETE VALUES FROMY DATABASE
+     * ***********************************************************/
+
+    @DeleteMapping("/tarea/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteEntity(@PathVariable (name = "id") Long id){
+        tareaService.deleteEntity(id);
+    }
+
+    @DeleteMapping("/mensaje/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteEntityMesa(@PathVariable (name = "id") Long id){
+        mensajeService.deleteEntity(id);
+    }
+
+    @DeleteMapping("/coordenada/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteEntityCoor(@PathVariable (name = "id") Long id){
+        coordenadaService.deleteEntity(id);
+    }
+
+    /*@DeleteMapping("/ubicacion/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteEntityUbi(@PathVariable (name = "id") Long id){
+        ubicacionService.deleteEntity(id);
+    }*/
 }

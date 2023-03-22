@@ -57,4 +57,9 @@ public class CoordenadaServiceImpl implements CoordenadaService  {
         }
         return object;
     }
+
+    @Override
+    public void deleteEntity(Long id) {
+        coordenadaRepository.deleteAll();
+    }
 }

@@ -14,4 +14,5 @@ public interface TareaService {
     List<TareaDTO> total();
     List<TareaDTO> getTareaTec(Tecnico tecnico);
 
+    void deleteEntity(Long id);
 }

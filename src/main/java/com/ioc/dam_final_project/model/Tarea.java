@@ -48,12 +48,15 @@ public class Tarea {
     private Admin admin;
 
     // RELATIONSHIP 1 TO 1 WITH COORDENADAS
-    @OneToOne(cascade = CascadeType.ALL)
+    //@OneToOne(fetch = FetchType.LAZY, optional = true)
+    //@JoinColumn(name = "ubicacion_id", referencedColumnName = "id")
+    // RELATIONSHIP 1 TO 1 WITH COORDENADAS
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "ubicacion_id", referencedColumnName = "id")
     private Ubicacion ubicacion;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "tarea")
+    @OneToMany(mappedBy = "tarea", cascade = CascadeType.REMOVE)
     private Set <Mensaje> mensaje;
 
     public Tarea(String name, Tipo_Tarea tarea, Estatus estatus, Tecnico tecnico, Admin admin, Ubicacion ubicacion, Set<Mensaje> mensaje) {

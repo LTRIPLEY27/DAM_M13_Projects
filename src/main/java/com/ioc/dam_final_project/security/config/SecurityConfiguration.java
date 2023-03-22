@@ -49,8 +49,9 @@ public class SecurityConfiguration  {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                //.requestMatchers("/admin/**").permitAll() // --to restart users
+                //.requestMatchers("/admin/r**").hasAuthority("ADMIN")
+                //.requestMatchers("/tecnico/**").hasAuthority("TECNICO")
+                .requestMatchers("/admin/**").permitAll() // --to restart users
                 .anyRequest()
                 .authenticated()
                 .and()

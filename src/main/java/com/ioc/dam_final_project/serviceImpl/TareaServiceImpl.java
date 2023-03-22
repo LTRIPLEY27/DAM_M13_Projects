@@ -63,5 +63,10 @@ public class TareaServiceImpl implements TareaService {
         return object;
     }
 
+    @Override
+    public void deleteEntity(Long id) {
+        tareaRepository.delete(tareaRepository.findById(id).orElseThrow());
+    }
+
 
 }
