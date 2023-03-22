@@ -10,8 +10,8 @@
 
   <ItemGroup>
     <PackageReference Include="GMap.NET.WinForms" Version="2.1.7" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="RestSharp" Version="109.0.1" />
   </ItemGroup>
 
   <ItemGroup>

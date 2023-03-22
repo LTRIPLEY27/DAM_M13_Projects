@@ -36,4 +36,4 @@ C:\Users\Usuario\source\repos\ReSeed\ReSeed\bin\Debug\net6.0-windows\runtimes\un
 C:\Users\Usuario\source\repos\ReSeed\ReSeed\bin\Debug\net6.0-windows\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\Usuario\source\repos\ReSeed\ReSeed\obj\Debug\net6.0-windows\ReSeed.Form3.resources
 C:\Users\Usuario\source\repos\ReSeed\ReSeed\obj\Debug\net6.0-windows\ReSeed.csproj.CopyComplete
-C:\Users\Usuario\source\repos\ReSeed\ReSeed\bin\Debug\net6.0-windows\RestSharp.dll
+C:\Users\Usuario\source\repos\ReSeed\ReSeed\bin\Debug\net6.0-windows\Microsoft.AspNet.Identity.Core.dll

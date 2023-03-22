@@ -217,7 +217,7 @@
             // 
             btn_dibujarpoligono.BackColor = Color.OliveDrab;
             btn_dibujarpoligono.ImageAlign = ContentAlignment.MiddleLeft;
-            btn_dibujarpoligono.Location = new Point(962, 69);
+            btn_dibujarpoligono.Location = new Point(961, 104);
             btn_dibujarpoligono.Name = "btn_dibujarpoligono";
             btn_dibujarpoligono.Size = new Size(124, 70);
             btn_dibujarpoligono.TabIndex = 11;
@@ -229,7 +229,7 @@
             // btn_eliminarTodasLasCoordenadas
             // 
             btn_eliminarTodasLasCoordenadas.BackColor = Color.OliveDrab;
-            btn_eliminarTodasLasCoordenadas.Location = new Point(962, 244);
+            btn_eliminarTodasLasCoordenadas.Location = new Point(961, 277);
             btn_eliminarTodasLasCoordenadas.Name = "btn_eliminarTodasLasCoordenadas";
             btn_eliminarTodasLasCoordenadas.Size = new Size(124, 65);
             btn_eliminarTodasLasCoordenadas.TabIndex = 10;
@@ -240,7 +240,7 @@
             // btn_eliminarCoordenada
             // 
             btn_eliminarCoordenada.BackColor = Color.OliveDrab;
-            btn_eliminarCoordenada.Location = new Point(962, 156);
+            btn_eliminarCoordenada.Location = new Point(962, 193);
             btn_eliminarCoordenada.Name = "btn_eliminarCoordenada";
             btn_eliminarCoordenada.Size = new Size(124, 68);
             btn_eliminarCoordenada.TabIndex = 9;
@@ -251,7 +251,7 @@
             // calendario
             // 
             calendario.ImeMode = ImeMode.NoControl;
-            calendario.Location = new Point(712, 25);
+            calendario.Location = new Point(711, 59);
             calendario.Name = "calendario";
             calendario.Size = new Size(374, 23);
             calendario.TabIndex = 8;
@@ -262,7 +262,7 @@
             registroCoordenadas.BackgroundColor = SystemColors.ActiveCaption;
             registroCoordenadas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             registroCoordenadas.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2 });
-            registroCoordenadas.Location = new Point(713, 69);
+            registroCoordenadas.Location = new Point(712, 102);
             registroCoordenadas.Name = "registroCoordenadas";
             registroCoordenadas.RowTemplate.Height = 25;
             registroCoordenadas.Size = new Size(243, 240);
@@ -348,7 +348,7 @@
             panel3.Controls.Add(label6);
             panel3.Controls.Add(comboBox_tareas);
             panel3.Controls.Add(label4);
-            panel3.Location = new Point(712, 331);
+            panel3.Location = new Point(712, 348);
             panel3.Name = "panel3";
             panel3.Size = new Size(374, 94);
             panel3.TabIndex = 2;
@@ -422,10 +422,10 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1095, 790);
+            ClientSize = new Size(1115, 790);
             Controls.Add(ConfigMapa);
             Name = "Form3";
-            Text = "Form3";
+            Text = "ADMINISTRADOR";
             panel1.ResumeLayout(false);
             panel2.ResumeLayout(false);
             panel2.PerformLayout();

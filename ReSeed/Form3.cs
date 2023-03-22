@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GMap.NET.WindowsForms;
+using System.Net;
 
 namespace ReSeed
 {
@@ -50,8 +51,8 @@ namespace ReSeed
          */
         private void btn_principal_Click(object sender, EventArgs e)
         {
-
-            this.Close();
+            MessageBox.Show("Gracias por utilizar nuestro Programa. Esperamos verte pronto!", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Application.Exit();
 
         }
         /*
@@ -155,7 +156,8 @@ namespace ReSeed
             {
                 MessageBox.Show("No hay coordenadas que eliminar.");//Nostramos mensaje
 
-            } else//si por el contrario hay mas de una fila...
+            }
+            else//si por el contrario hay mas de una fila...
             {
                 registroCoordenadas.Rows.RemoveAt(registroCoordenadas.CurrentRow.Index);//elimiamos la fila que selecciona el usuario
                 capaMarcado.Clear();//borramos capa de dibujo poligono
