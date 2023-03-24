@@ -1,7 +1,6 @@
 package com.ioc.dam_final_project.dto;
 
 import com.ioc.dam_final_project.model.Enums.Rol;
-import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

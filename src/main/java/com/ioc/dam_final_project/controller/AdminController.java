@@ -3,6 +3,7 @@ package com.ioc.dam_final_project.controller;
 import com.ioc.dam_final_project.dto.*;
 import com.ioc.dam_final_project.model.Coordenada;
 import com.ioc.dam_final_project.model.Tarea;
+import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.model.Ubicacion;
 import com.ioc.dam_final_project.security.authentication.AuthenticationResponse;
 import com.ioc.dam_final_project.security.authentication.AuthenticationService;
@@ -29,21 +30,23 @@ public class AdminController {
     private final UbicacionServiceImpl ubicacionService;
     private final CoordenadaServiceImpl coordenadaService;
     private final MensajeServiceImpl mensajeService;
+    private final UserServiceImpl userService;
 
 
-    public AdminController(AdminServiceImpl serviceAdmin, TareaServiceImpl tareaService, AuthenticationService serviceAuth, UbicacionServiceImpl ubicacionService, CoordenadaServiceImpl coordenadaService, MensajeServiceImpl mensajeService) {
+    public AdminController(AdminServiceImpl serviceAdmin, TareaServiceImpl tareaService, AuthenticationService serviceAuth, UbicacionServiceImpl ubicacionService, CoordenadaServiceImpl coordenadaService, MensajeServiceImpl mensajeService, UserServiceImpl userService) {
         this.serviceAdmin = serviceAdmin;
         this.ubicacionService = ubicacionService;
         this.tareaService = tareaService;
         this.serviceAuth = serviceAuth;
-
         this.coordenadaService = coordenadaService;
         this.mensajeService = mensajeService;
+        this.userService = userService;
     }
 
     /*************************************************************
     *                   GETTING BY ID
     * ***********************************************************/
+
 
     @GetMapping(path = "/ubicacion/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -56,35 +59,32 @@ public class AdminController {
      *                   GTTING VALIDATION WITH JWT
      * ***********************************************************/
 
-    @PostMapping(value = "/register")
+
+    @PostMapping(value = "register")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(serviceAuth.register(request));
     }
 
 
-    /*@PostMapping(path = "/add-new-tecnic")
+    @PostMapping(path = "/add-new-tecnic")
     @ResponseStatus(HttpStatus.CREATED)
     public Tecnico newObject(@RequestBody Tecnico tecnico) {
         return serviceAdmin.create(tecnico);
     }
-*/
+
+
+
     /*************************************************************
      *                   GETTING RESPONSE FROM DATABASE
      * ***********************************************************/
+
 
     @GetMapping(path = "/tecnicos")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public List<TecnicoDTO> getAll(){
         return  serviceAdmin.all();
     }
-
-    /*@GetMapping(path = "/perfil")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<AdminDTO> showMyProfile(Principal principal){
-        return ResponseEntity.ok(serviceAdmin.profile(principal.getName()));
-    }*/
-
 
     @GetMapping(path = "/tareas")
     @ResponseStatus(HttpStatus.OK)
@@ -108,7 +108,7 @@ public class AdminController {
     /*************************************************************
      *                  UPDATE VALUES FROM DATABASE
      * ***********************************************************/
-    /*@PutMapping(path = "/update/id/{id}")
+   /* @PutMapping(path = "/update/id/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Tecnico update(@PathVariable Long id, @RequestBody Tecnico tecnico){
         return serviceAdmin.update(id, tecnico);
@@ -117,6 +117,8 @@ public class AdminController {
     /*************************************************************
      *                  CREATING TASK IN THE DATABASE
      * ***********************************************************/
+
+
     @PostMapping(path = "/tarea")
     @ResponseStatus(HttpStatus.CREATED)
     public Tarea newObject(@RequestBody Tarea tarea) {
@@ -124,11 +126,11 @@ public class AdminController {
     }
 
 
-    /*@PostMapping(path = "/ubicacion")
+    @PostMapping(path = "/ubicacion")
     @ResponseStatus(HttpStatus.CREATED)
     public Ubicacion newObject(@RequestBody Ubicacion ubicacion) {
         return ubicacionService.addObject(ubicacion);
-    }*/
+    }
 
     @PostMapping(path = "/coordenada")
     @ResponseStatus(HttpStatus.CREATED)
@@ -137,7 +139,7 @@ public class AdminController {
     }
 
     /*************************************************************
-     *                  DELETE VALUES FROMY DATABASE
+     *                  DELETE VALUES FROM DATABASE
      * ***********************************************************/
 
     @DeleteMapping("/tarea/{id}")
@@ -158,9 +160,10 @@ public class AdminController {
         coordenadaService.deleteEntity(id);
     }
 
-    /*@DeleteMapping("/ubicacion/{id}")
+    @DeleteMapping("/ubicacion/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteEntityUbi(@PathVariable (name = "id") Long id){
         ubicacionService.deleteEntity(id);
-    }*/
+    }
+
 }

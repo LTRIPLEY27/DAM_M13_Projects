@@ -3,7 +3,6 @@ package com.ioc.dam_final_project.serviceImpl;
 import com.ioc.dam_final_project.dto.MensajeDTO;
 import com.ioc.dam_final_project.dto.TecnicoDTO;
 import com.ioc.dam_final_project.model.Mensaje;
-import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.repository.MensajeRepository;
 import com.ioc.dam_final_project.repository.TareaRepository;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Qualifier(value = "tecnico")

@@ -2,11 +2,9 @@ package com.ioc.dam_final_project.security.authentication;
 
 import com.ioc.dam_final_project.model.Admin;
 import com.ioc.dam_final_project.model.Tecnico;
-import com.ioc.dam_final_project.model.User;
 import com.ioc.dam_final_project.repository.AdminRepository;
 import com.ioc.dam_final_project.repository.TecnicoRepository;
 import com.ioc.dam_final_project.security.config.*;
-import com.ioc.dam_final_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

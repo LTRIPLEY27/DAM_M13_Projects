@@ -1,6 +1,5 @@
 package IntegrationTest;
 
-import com.ioc.dam_final_project.model.User;
 import com.ioc.dam_final_project.DamFinalProjectApplication;
 import com.ioc.dam_final_project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

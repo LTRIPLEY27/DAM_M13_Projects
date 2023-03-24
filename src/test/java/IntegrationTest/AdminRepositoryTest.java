@@ -1,13 +1,10 @@
 package IntegrationTest;
 
 import com.ioc.dam_final_project.DamFinalProjectApplication;
-import com.ioc.dam_final_project.model.Admin;
 import com.ioc.dam_final_project.repository.AdminRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.ArrayList;
 
 @SpringBootTest(classes = DamFinalProjectApplication.class)
 class AdminRepositoryTest {

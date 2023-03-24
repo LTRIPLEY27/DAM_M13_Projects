@@ -11,9 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -47,9 +45,6 @@ public class Tarea {
     @JoinColumn(name = "admin")
     private Admin admin;
 
-    // RELATIONSHIP 1 TO 1 WITH COORDENADAS
-    //@OneToOne(fetch = FetchType.LAZY, optional = true)
-    //@JoinColumn(name = "ubicacion_id", referencedColumnName = "id")
     // RELATIONSHIP 1 TO 1 WITH COORDENADAS
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "ubicacion_id", referencedColumnName = "id")

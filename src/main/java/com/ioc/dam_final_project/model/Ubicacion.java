@@ -46,9 +46,9 @@ public class Ubicacion {
         this.mapa = coordenadas;
     }
     public void addCoordenate(Coordenada coordenada){
-        // verificación de no repetición de elementos
+        // verificacion de no repeticion de elementos
         if(mapa.contains(coordenada)){
-            System.out.println("Ésta coordenada ya se encuentra almacenada");
+            System.out.println("Esta coordenada ya se encuentra almacenada");
             return;
         }
         mapa.add(coordenada);

@@ -40,11 +40,6 @@ public class TecnicoController {
         return ResponseEntity.ok(tareaService.getTareaTec(user));
     }
 
-    @GetMapping("/profile")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> showMyProfile(Principal principal){
-        return ResponseEntity.ok(tecnicoServiceimpl.myProfile(principal.getName()));
-    }
 
     /*************************************************************
      *                   POSTING MESSAGE

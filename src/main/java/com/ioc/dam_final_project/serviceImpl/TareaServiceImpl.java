@@ -1,7 +1,6 @@
 package com.ioc.dam_final_project.serviceImpl;
 
 import com.ioc.dam_final_project.dto.TareaDTO;
-import com.ioc.dam_final_project.model.Mensaje;
 import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.repository.AdminRepository;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Qualifier(value = "tarea")

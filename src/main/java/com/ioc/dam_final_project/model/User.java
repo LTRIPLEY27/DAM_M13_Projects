@@ -11,23 +11,25 @@ import java.util.Collection;
 import java.util.List;
 
 /********************************************************************************************************
-*                                      *****   CLASE USER   *****
+* CLASE USER
 *********************************************************************************************************
-* SERÁ UNA CLASE PADRE CON 2 HEREDEROS : ADMIN Y TÉCNICO.
+* SERA UNA CLASE PADRE CON 2 HEREDEROS : ADMIN Y TECNICO.
 *
 *   Notaciones :
 * *****************
  *  - He declarado a la clase como 'Entity' para su mappeo en la base de datos.
-*   - He usado las notaciones propias de SpringBoot, en combinación a Java 17 y Loombook, para potenciar al máximo la codificación.
+*   - He usado las notaciones propias de SpringBoot, en combinacion a Java 17 y Loombook, para potenciar al maximo la codificacion.
 *
 *   Atributos :
 * * *************
-* - He declarado los atributos propios de la clase básica 'Usuario', que serán heredados por ADMIN/USER.
-* - He declarado los atributos : Protected, ya que serán heredados.
-* - Motivado a la aplicación de la capa de seguridad, he implentado la Interface ' UserDetails' , con los métodos inherentes, para
-*   proporcionar los métodos definidos en 'security' tomando valores de los atributos.
+* - He declarado los atributos propios de la clase basica 'Usuario', que seran heredados por ADMIN/USER.
+* - He declarado los atributos : Protected, ya que seran heredados.
+* - Motivado a la aplicacion de la capa de seguridad, he implentado la Interface ' UserDetails' , con los metodos inherentes, para
+*   proporcionar los metodos definidos en 'security' tomando valores de los atributos.
 *
-*
+*   @author Isabel Calzadilla
+ *  @version 1.0
+ *  @see  UserDetails para la implementacion del session storage y validacion / autnticacion de Usuario
 * */
 
 @Entity
@@ -38,18 +40,60 @@ import java.util.List;
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User implements UserDetails {
+    /**
+     * Id del usuario
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
+
+    /**
+     * Username del usuario
+     */
     protected String user;
+
+    /**
+     * Password del usuario
+     */
     protected String password;
+
+    /**
+     * Nombre del usuario
+     */
     protected String nombre;
+
+    /**
+     * Apellido del usuario
+     */
     protected String apellido;
+
+    /**
+     * Email del usuario
+     */
+    @Column(unique = true)
     protected  String email;
+
+    /**
+     * Telefono del usuario
+     */
     protected  String telefono;
+
+    /**
+     * Rol del usuario
+     */
     @Enumerated(EnumType.STRING)
     protected Rol rol;
 
+    /**
+     * Constructor con 7 parametros
+     * @param user nombre del usuario
+     * @param password nombre del usuario
+     * @param nombre edad del usuario
+     * @param apellido del usuario
+     * @param email del usuario
+     * @param telefono del usuario
+     * @param rol del usuario
+     */
     public User(String user, String password, String nombre, String apellido, String email, String telefono, Rol rol) {
         this.user = user;
         this.password = password;
@@ -60,6 +104,12 @@ public class User implements UserDetails {
         this.rol = rol;
     }
 
+    /**
+     * Atributos implementados de la Interfaces UserDetails
+     * @return <ul>
+     *  <li>SimpleGrantedAuthority: Devuelve una nueva instancia SimpleGrantedAuthority con el parametro del rol a delegar para autenticar</li>
+     *  </ul>
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(rol.name()));

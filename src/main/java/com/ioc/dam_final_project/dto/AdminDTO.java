@@ -2,9 +2,6 @@ package com.ioc.dam_final_project.dto;
 
 import com.ioc.dam_final_project.model.Admin;
 import com.ioc.dam_final_project.model.Enums.Rol;
-import com.ioc.dam_final_project.model.Tarea;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
