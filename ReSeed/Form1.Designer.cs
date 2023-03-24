@@ -39,19 +39,10 @@
             pictureBox4 = new PictureBox();
             pictureBox2 = new PictureBox();
             pictureBox3 = new PictureBox();
-            pictureBox1 = new PictureBox();
-            panel2 = new Panel();
-            panel3 = new Panel();
-            btn_registrar = new Button();
-            label4 = new Label();
-            label3 = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            panel2.SuspendLayout();
-            panel3.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
@@ -146,7 +137,7 @@
             pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
             pictureBox2.Location = new Point(-11, 0);
             pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(477, 534);
+            pictureBox2.Size = new Size(496, 551);
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox2.TabIndex = 0;
             pictureBox2.TabStop = false;
@@ -159,74 +150,12 @@
             pictureBox3.TabIndex = 1;
             pictureBox3.TabStop = false;
             // 
-            // pictureBox1
-            // 
-            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(-9, -204);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(2000, 1333);
-            pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
-            pictureBox1.TabIndex = 1;
-            pictureBox1.TabStop = false;
-            // 
-            // panel2
-            // 
-            panel2.Controls.Add(panel3);
-            panel2.Controls.Add(pictureBox1);
-            panel2.Location = new Point(472, 0);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(510, 522);
-            panel2.TabIndex = 1;
-            // 
-            // panel3
-            // 
-            panel3.BorderStyle = BorderStyle.FixedSingle;
-            panel3.Controls.Add(btn_registrar);
-            panel3.Controls.Add(label4);
-            panel3.Controls.Add(label3);
-            panel3.Location = new Point(138, 187);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(235, 134);
-            panel3.TabIndex = 2;
-            // 
-            // btn_registrar
-            // 
-            btn_registrar.Font = new Font("Tahoma", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            btn_registrar.Location = new Point(17, 73);
-            btn_registrar.Name = "btn_registrar";
-            btn_registrar.Size = new Size(205, 41);
-            btn_registrar.TabIndex = 2;
-            btn_registrar.Text = "REGÍSTRATE";
-            btn_registrar.UseVisualStyleBackColor = true;
-            btn_registrar.Click += btn_registrar_Click;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Tahoma", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            label4.Location = new Point(17, 40);
-            label4.Name = "label4";
-            label4.Size = new Size(131, 17);
-            label4.TabIndex = 1;
-            label4.Text = "¡¿A que esperas?!";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Tahoma", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.Location = new Point(17, 17);
-            label3.Name = "label3";
-            label3.Size = new Size(205, 17);
-            label3.TabIndex = 0;
-            label3.Text = "¡¿Aún no te has registrado?!";
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(954, 520);
-            Controls.Add(panel2);
+            ClientSize = new Size(467, 520);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.None;
             MaximizeBox = false;
@@ -240,19 +169,12 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            panel2.ResumeLayout(false);
-            panel2.PerformLayout();
-            panel3.ResumeLayout(false);
-            panel3.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
         private Panel panel1;
-        private PictureBox pictureBox1;
-        private Panel panel2;
         private PictureBox pictureBox2;
         private PictureBox pictureBox3;
         private PictureBox pictureBox4;
@@ -261,10 +183,10 @@
         private Label label2;
         private Label label1;
         private Button btn_salir;
-        private Button btn_conectar;
         private Panel panel3;
         private Button btn_registrar;
         private Label label4;
         private Label label3;
+        public Button btn_conectar;
     }
 }

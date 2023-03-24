@@ -70,13 +70,14 @@ namespace ReSeed
          * lo codificamos a UTF8 y aplicamos el parametro applicarion/json
          *5-En una variable @response almacenaremos la respuesta obtenida de la api. Usaremos el objeto @client de la clase HTTPCLIENT llamando
          *a su método PostAsync (puesto que enviaremos datos a la API i esperaremos recibir una respuesta), pasandole la URL y el contenido.
-         *6-En la variable @res almacenamos la respuesta @response.
-         *7- Con un if, comprobamos si la respuesta de la api es valaida o no.
-         *            -Mostramos mensaje por pantalla donde indicamos que el LOGIN es correcto.
-         *            -Con otro if, verificamos si se trata de un rol administrador o tecnico para poder deribarlo a su menú principal 
-         *            correspondiente.
-         *                 -Si por el contrario la respuesta de la api nos devuelve no valido, mostraremos un mensaje al usuario donde
-         *                 se le indica que el usuario introducido o la contraseña no son correctos.
+         *6-En la variable @res almacenamos la respuesta @response.--> TOKEN
+         *7- Con un if, comprobamos si la respuesta de la api TRUE O FALSE.
+         *Si la respuesta es TRUE
+         *     ---> Si el usuario es 'eduard@fantasymail.com'
+         *          -Mostramos mensaje de inicio de sesión correcta y somos redirigidos al menu principal ADMINISTRADOR
+         *     ---> SiNo,cualquier otro registrado será redirigido al menú principal TECNICO.     
+         *Sino la respuesta es FALSE
+         *     ---> Se muestra mensaje ERROR. Usuario o password incorrecto.
          */
         private async void btn_conectar_Click(object sender, EventArgs e)
         {
@@ -99,7 +100,8 @@ namespace ReSeed
 
             if (response.IsSuccessStatusCode)//si la respuesta es que existe el usuario y la contraseña introducida por el usuario...
             {
-                if (nombreUsuario.Equals("'eduard@fantasymail.com'")) {
+                if (nombreUsuario.Equals("'eduard@fantasymail.com'"))
+                {
 
                     MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
                     //MessageBox.Show("TOKEN :" + TOKEN);
@@ -107,7 +109,8 @@ namespace ReSeed
                     form3.Show();
                     this.Hide();
 
-                } else
+                }
+                else
                 {
 
                     MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
@@ -118,14 +121,13 @@ namespace ReSeed
 
                 }
 
-            } 
+            }
 
             else//sino...
             {
                 MessageBox.Show("Usuario o contraseña incorrectos.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Warning);//Mensaje erro LOGIN
                 //MessageBox.Show("TOKEN :" + TOKEN);
             }
-
         }
     }
 }

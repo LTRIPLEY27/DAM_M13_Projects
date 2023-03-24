@@ -51,6 +51,7 @@ namespace ReSeed
          */
         private void btn_principal_Click(object sender, EventArgs e)
         {
+
             MessageBox.Show("Gracias por utilizar nuestro Programa. Esperamos verte pronto!", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Application.Exit();
 
