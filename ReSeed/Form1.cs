@@ -38,23 +38,6 @@ namespace ReSeed
         }
 
         /*
-         * MÉTODO btn_registrar_Click
-         * - Una vez se presione este botón, llevará al usuasiro a un nuevo form donde podrá introducir sus datos
-         * para registrarse el la base de datos de nuestra aplicación.
-         * Al redirigirnos al form de registro, el form actual se ocultará
-         * */
-        private void btn_registrar_Click(object sender, EventArgs e)
-        {
-
-            Form2 registro = new Form2();//Instanciamos el form2
-
-            registro.Show();//mostramos form2
-
-            this.Hide();//ocultamos form1
-
-        }
-
-        /*
          * MÉTODO ASYNCRON btn_conectar_Click
          * ___________________________________
          * 
