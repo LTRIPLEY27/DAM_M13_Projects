@@ -2,6 +2,7 @@ package com.ioc.dam_final_project.controller;
 
 import com.ioc.dam_final_project.dto.TecnicoDTO;
 import com.ioc.dam_final_project.model.Tecnico;
+import com.ioc.dam_final_project.dto.MensajeDTO;
 import com.ioc.dam_final_project.security.authentication.AuthenticationService;
 import com.ioc.dam_final_project.security.authentication.RegisterRequest;
 import com.ioc.dam_final_project.serviceImpl.UserServiceImpl;
@@ -103,5 +104,16 @@ public class UserController {
         var userOnSession = principal.getName();
         userService.deleteRegister(userOnSession, typus, id);
         return ResponseEntity.ok("Elemento borrado");
+    }
+
+    /*************************************************************
+     *                   POST VALUES FROM A OBJET IN DATABASE
+     * ***********************************************************/
+
+    @PostMapping("/post-mensaje")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MensajeDTO> postMessage(Principal principal, @RequestBody MensajeDTO mensaje){
+        var userOnSession = principal.getName();
+        return ResponseEntity.ok(userService.postingMessage(userOnSession, mensaje));
     }
 }

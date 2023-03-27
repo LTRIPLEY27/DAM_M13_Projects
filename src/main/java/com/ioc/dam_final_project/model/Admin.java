@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
+
 /** ******************************************************************************************************
  * CLASE Admin
  *********************************************************************************************************
@@ -46,6 +48,13 @@ public class Admin extends User{
     @JsonIgnore
     @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY)
     private List <Tarea> tareaList;
+
+    /**
+     *  Set de Mensajes relacionadas al Tecnico
+     */
+    @JsonIgnore
+    @OneToMany(mappedBy = "admin")
+    private Set<Mensaje> mensaje;
 
     /**
      * Constructor con 8 parametros

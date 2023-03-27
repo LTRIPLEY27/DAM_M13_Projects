@@ -45,11 +45,11 @@ public class TecnicoController {
      *                   POSTING MESSAGE
      * ***********************************************************/
 
-    @PostMapping("/post-mensaje")
+    /*@PostMapping("/post-mensaje")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensajeDTO> postMessage(@RequestBody MensajeDTO mensaje){
         System.out.println(mensaje.getTarea());
         var user = repo.findTecnicoByUser(mensaje.getTecnico());
         return ResponseEntity.ok(tecnicoServiceimpl.posting(mensaje));
-    }
+    }*/
 }

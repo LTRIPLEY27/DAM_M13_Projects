@@ -101,8 +101,6 @@ public class AdminController {
         return ResponseEntity.ok(tareaService.saveObject(userOnSession, tecnico, tarea));
     }
 
-
-
     @PostMapping(path = "/ubicacion/tarea/{tarea}")
     @ResponseStatus(HttpStatus.CREATED)
     public Ubicacion newObject(@RequestBody Ubicacion ubicacion, @PathVariable Long tarea) {
@@ -111,7 +109,7 @@ public class AdminController {
 
     @PostMapping(path = "/coordenada/ubicacion/{ubicacion}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> newCoordenada(@RequestBody Coordenada coordenada, @PathVariable int ubicacion){
+    public ResponseEntity<String> newCoordenada(@RequestBody Coordenada coordenada, @PathVariable Long ubicacion){
         coordenadaService.addCoordenada(coordenada, ubicacion);
         return ResponseEntity.ok("Coordenada adherida a la ubicacion " + ubicacion);
     }

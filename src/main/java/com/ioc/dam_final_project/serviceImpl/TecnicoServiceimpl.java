@@ -101,9 +101,9 @@ public class TecnicoServiceimpl implements TecnicoService {
     }
 
 
-    public MensajeDTO posting(MensajeDTO mensaje) {
+    /*public MensajeDTO posting(MensajeDTO mensaje) {
         var tecnico = tecnicoRepository.findTecnicoByUser(mensaje.getTecnico()).orElseThrow();
-        var tarea = tareaRepository.findTareaByTecnicoAndName(tecnico, mensaje.getDescripcion()); //name must be unique
+        var tarea = tareaRepository.findTareaByTecnicoAndName(tecnico, mensaje.getTarea()); //name must be unique
 
         var byModel = new Mensaje(mensaje.getDescripcion(), tarea, tecnico);
 
@@ -115,5 +115,5 @@ public class TecnicoServiceimpl implements TecnicoService {
 
         var dto = MensajeDTO.byModel(byModel);
         return dto;
-    }
+    }*/
 }

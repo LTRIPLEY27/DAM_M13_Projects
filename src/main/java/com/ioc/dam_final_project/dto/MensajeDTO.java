@@ -17,8 +17,9 @@ public class MensajeDTO {
     private LocalDate fecha;
     private String tarea;
     private String tecnico;
+    private String admin;
 
     public static MensajeDTO byModel(Mensaje mensaje){
-        return new MensajeDTO(mensaje.getDescripcion(), mensaje.getFecha(), mensaje.getTarea().getName(), mensaje.getTecnico().getUser());
+        return new MensajeDTO(mensaje.getDescripcion(), mensaje.getFecha(), mensaje.getTarea().getName(), mensaje.getTecnico().getUser(), mensaje.getAdmin().getUser());
     }
 }

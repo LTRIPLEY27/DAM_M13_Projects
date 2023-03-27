@@ -48,6 +48,7 @@ public class Tarea {
 
     // RELATIONSHIP 1 TO 1 WITH COORDENADAS
     //
+    @JsonIgnore
     @OneToOne(mappedBy = "tarea", cascade = CascadeType.ALL)
     private Ubicacion ubicacion;
 

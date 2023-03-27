@@ -1,5 +1,7 @@
 package com.ioc.dam_final_project.service;
 
+import com.ioc.dam_final_project.dto.MensajeDTO;
+
 import java.util.List;
 
 public interface UserService {
@@ -18,4 +20,5 @@ public interface UserService {
 
     void deleteRegister(String rol, String typus, Long id);
 
+    MensajeDTO postingMessage(String user, MensajeDTO mensajeDTO);
 }

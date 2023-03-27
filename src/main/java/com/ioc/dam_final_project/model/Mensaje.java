@@ -33,13 +33,18 @@ public class Mensaje {
     @JoinColumn(name = "id_tecnico")
     private Tecnico tecnico;
 
-    public Mensaje(String descripcion, Tarea tarea, Tecnico tecnico) {
+    @ManyToOne
+    @JoinColumn(name = "id_admin")
+    private Admin admin;
+
+    public Mensaje(String descripcion, Tarea tarea, Tecnico tecnico, Admin admin) {
         this.descripcion = descripcion;
         this.tarea = tarea;
         this.tecnico = tecnico;
+        this.admin = admin;
     }
 
     public static Mensaje byDTO(MensajeDTO mensajeDTO){
-        return new Mensaje(mensajeDTO.getDescripcion(), null, null);
+        return new Mensaje(mensajeDTO.getDescripcion(), null, null, null);
     }
 }

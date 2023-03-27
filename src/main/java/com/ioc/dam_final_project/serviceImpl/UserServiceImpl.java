@@ -1,8 +1,11 @@
 package com.ioc.dam_final_project.serviceImpl;
 
+import com.ioc.dam_final_project.dto.MensajeDTO;
+import com.ioc.dam_final_project.model.Admin;
 import com.ioc.dam_final_project.model.Enums.Rol;
+import com.ioc.dam_final_project.model.Mensaje;
 import com.ioc.dam_final_project.model.Tecnico;
-import com.ioc.dam_final_project.repository.UserRepository;
+import com.ioc.dam_final_project.repository.*;
 import com.ioc.dam_final_project.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +23,13 @@ public class UserServiceImpl implements UserService {
     //private final UserServiceImpl userService;
     private final UbicacionServiceImpl ubicacionService;
     private final UserRepository userRepository;
+    private final TareaRepository repository;
+    private final AdminRepository adminRepository;
+    private  final TecnicoRepository tecnicoRepository;
+    private final MensajeRepository mensajeRepository;
 
 
-    public UserServiceImpl(TecnicoServiceimpl tecnicoServiceimpl, AdminServiceImpl adminService, TareaServiceImpl tareaService, CoordenadaServiceImpl coordenadaService, MensajeServiceImpl mensajeService, /*UserServiceImpl userService,*/ UbicacionServiceImpl ubicacionService, UserRepository userRepository) {
+    public UserServiceImpl(TecnicoServiceimpl tecnicoServiceimpl, AdminServiceImpl adminService, TareaServiceImpl tareaService, CoordenadaServiceImpl coordenadaService, MensajeServiceImpl mensajeService, /*UserServiceImpl userService,*/ UbicacionServiceImpl ubicacionService, UserRepository userRepository, TareaRepository repository, AdminRepository adminRepository, TecnicoRepository tecnicoRepository, MensajeRepository mensajeRepository) {
         this.tecnicoServiceimpl = tecnicoServiceimpl;
         this.adminService = adminService;
         this.tareaService = tareaService;
@@ -31,6 +38,10 @@ public class UserServiceImpl implements UserService {
         //this.userService = userService;
         this.ubicacionService = ubicacionService;
         this.userRepository = userRepository;
+        this.repository = repository;
+        this.adminRepository = adminRepository;
+        this.tecnicoRepository = tecnicoRepository;
+        this.mensajeRepository = mensajeRepository;
     }
 
 
@@ -136,6 +147,45 @@ public class UserServiceImpl implements UserService {
         else {
             mensajeService.deleteEntity(id);
         }
+    }
+
+    @Override
+    public MensajeDTO postingMessage(String username, MensajeDTO mensaje) {
+
+        var user = userRepository.findUserByEmail(username).orElseThrow();
+
+        switch (user.getRol()){
+            case ADMIN -> {
+                var object = (Tecnico) userRepository.findUserByUser(mensaje.getTecnico()).orElseThrow();
+                var tarea = repository.findTareaByAdminAndName((Admin) user, mensaje.getTarea()); //name must be unique
+                var byModel = new Mensaje(mensaje.getDescripcion(), tarea, object,(Admin) user);
+                tarea.getMensaje().add(byModel);
+                object.getMensaje().add(byModel);
+                tecnicoRepository.save(object);
+                adminRepository.save((Admin) user);
+                repository.save(tarea);
+                mensajeRepository.save(byModel);
+
+                var dto = MensajeDTO.byModel(byModel);
+                return dto;
+            }
+            case TECNIC -> {
+                var object = (Admin) userRepository.findUserByUser(mensaje.getAdmin()).orElseThrow();
+                var tarea = repository.findTareaByTecnicoAndName((Tecnico) user, mensaje.getTarea()); //name must be unique
+                var byModel = new Mensaje(mensaje.getDescripcion(), tarea, (Tecnico) user, object);
+                tarea.getMensaje().add(byModel);
+                object.getMensaje().add(byModel);
+                adminRepository.save(object);
+                tecnicoRepository.save((Tecnico) user);
+                repository.save(tarea);
+                mensajeRepository.save(byModel);
+
+                var dto = MensajeDTO.byModel(byModel);
+                return dto;
+            }
+        }
+
+        return null;
     }
 
 }

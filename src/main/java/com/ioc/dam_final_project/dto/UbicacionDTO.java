@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,11 +24,15 @@ public class UbicacionDTO {
     private Double centroLatitud;
     private Double centroLongitud;
     private Double zoom;
-    private List<Coordenada> mapa;
+    private List<CoordenadaDTO> mapa;
     private String tarea;
 
     public static UbicacionDTO byModel(Ubicacion ubicacion){
-        return new UbicacionDTO(ubicacion.getCentroLatitud(), ubicacion.getCentroLongitud(), ubicacion.getZoom(), ubicacion.getMapa(), ubicacion.getTarea().getName());
+        var mapas = new ArrayList<CoordenadaDTO>();
+        for (var i : ubicacion.getMapa()){
+            mapas.add(CoordenadaDTO.byModel(i));
+        }
+        return new UbicacionDTO(ubicacion.getCentroLatitud(), ubicacion.getCentroLongitud(), ubicacion.getZoom(), mapas, ubicacion.getTarea().getName());
     }
 
 }

@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.repository;
 
+import com.ioc.dam_final_project.model.Admin;
 import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.model.Ubicacion;
@@ -16,4 +17,5 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
     Tarea findTareaByTecnicoAndName(Tecnico tecnico, String name);
 
     Tarea findTareaByUbicacion(Ubicacion ubicacion);
+    Tarea findTareaByAdminAndName(Admin admin, String name);
 }
