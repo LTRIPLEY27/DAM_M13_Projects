@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
         var user = userRepository.findUserByEmail(username).orElseThrow();
 
-        switch (user.getRol()){
+        switch (user.getRol()) {
             case ADMIN -> {
                 return adminService.profile(username);
             }
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     public List<Object> registers(String username, String value) {
         var user = userRepository.findUserByEmail(username).orElseThrow();
 
-        if(user.getRol() == Rol.ADMIN){
+        if (user.getRol() == Rol.ADMIN) {
             switch (value) {
                 case "TAREA" -> {
                     return Collections.singletonList(tareaService.total());
@@ -72,11 +72,70 @@ public class UserServiceImpl implements UserService {
                     return Collections.singletonList(tecnicoServiceimpl.getAll());
                 }
             }
-        }
-        else {
+        } else {
             return Collections.singletonList(tareaService.getTareaTec((Tecnico) user)); // to implementade tarea
         }
 
         return null;
     }
+
+    // podria reutilizarse con admin
+    @Override
+    public Object update(String username, Object object) throws Exception {
+        var user = userRepository.findUserByEmail(username).orElseThrow();
+
+        /*if(user.getRol() == Rol.ADMIN){
+            switch (value) {
+                case "TAREA" -> {
+                    return user;
+                }
+                case "UBICACION" -> {
+                    return user;
+                }
+                case "COORDENADA" -> {
+                    return user;
+                }
+                case "MENSAJE" -> {
+                    return user; // to implementade on message services
+                }
+                case "TECNICO" -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
+                    return user;
+                }
+            }
+        }
+        else {*/
+        return tecnicoServiceimpl.update(user.getId(), object); // to implementade tarea
+        //}
+
+        //return null;
+    }
+
+    @Override
+    public void deleteRegister(String rol, String typus, Long id) {
+        var user = userRepository.findUserByEmail(rol).orElseThrow();
+
+        if (user.getRol() == Rol.ADMIN) {
+            switch (typus) {
+                case "TAREA" -> {
+                    tareaService.deleteEntity(id);
+                }
+                case "UBICACION" -> {
+                    ubicacionService.deleteEntity(id);
+                }
+                case "COORDENADA" -> {
+                    coordenadaService.deleteEntity(id);
+                }
+                case "MENSAJE" -> {
+                    mensajeService.deleteEntity(id);
+                }
+                case "TECNICO" -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
+                    tecnicoServiceimpl.deleteEntity(id);
+                }
+            }
+        }
+        else {
+            mensajeService.deleteEntity(id);
+        }
+    }
+
 }

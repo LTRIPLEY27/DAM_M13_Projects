@@ -27,10 +27,9 @@ public class UbicacionServiceImpl implements UbicacionService {
     }
 
     @Override
-    public Ubicacion addObject(Ubicacion ubicacion) {
-        var tarea = tareaRepository.findById(1L).orElseThrow();
+    public Ubicacion addObject(Ubicacion ubicacion, Long tareaId) {
+        var tarea = tareaRepository.findById(tareaId).orElseThrow();
         tarea.setUbicacion(ubicacion);
-        tareaRepository.save(tarea);
         ubicacion.setTarea(tarea);
 
         return ubicacionRepository.save(ubicacion);
@@ -55,6 +54,8 @@ public class UbicacionServiceImpl implements UbicacionService {
 
     @Override
     public void deleteEntity(Long id) {
+        var tarea = tareaRepository.findTareaByUbicacion(ubicacionRepository.findById(id).orElseThrow());
+        tarea.setUbicacion(null);
         ubicacionRepository.deleteById(id);
     }
 }

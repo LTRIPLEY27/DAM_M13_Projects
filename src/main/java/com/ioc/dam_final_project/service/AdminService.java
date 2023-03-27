@@ -10,4 +10,6 @@ public interface AdminService {
     List<TecnicoDTO> all();
 
     AdminDTO profile(String email);
+
+    //AdminDTO update(Strin);
 }

@@ -23,7 +23,7 @@ public class TecnicoDTO {
     private  String email;
     private  String telefono;
     private Rol rol;
-    private List<TareaDTO> tarea;
+    private List<TareaDTO> tarea; // POR VERIFIAR SI SOLO SE MUESTRA EL NOMBRE EN EL PERFIL O EL DETALLE DE TAREA
 
     public static TecnicoDTO byModel(Tecnico tecnico){
         List<TareaDTO> tareaDTOS = new ArrayList<>();

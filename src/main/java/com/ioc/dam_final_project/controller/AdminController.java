@@ -80,31 +80,6 @@ public class AdminController {
      * ***********************************************************/
 
 
-    @GetMapping(path = "/tecnicos")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public List<TecnicoDTO> getAll(){
-        return  serviceAdmin.all();
-    }
-
-    @GetMapping(path = "/tareas")
-    @ResponseStatus(HttpStatus.OK)
-    public List<TareaDTO> totalTarea(){
-        return tareaService.total();
-    }
-
-    @GetMapping(path = "/ubicaciones")
-    @ResponseStatus(HttpStatus.OK)
-    public List<UbicacionDTO> totalUbicaciones(){
-        return ubicacionService.getAll();
-    }
-
-    @GetMapping(path = "/coordenadas")
-    @ResponseStatus(HttpStatus.OK)
-    public List<CoordenadaDTO> totalCoordenas(){
-        return coordenadaService.coordenas();
-    }
-
-
     /*************************************************************
      *                  UPDATE VALUES FROM DATABASE
      * ***********************************************************/
@@ -119,23 +94,26 @@ public class AdminController {
      * ***********************************************************/
 
 
-    @PostMapping(path = "/tarea")
+    @PostMapping(path = "/tarea/tecnico/{tecnico}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Tarea newObject(@RequestBody Tarea tarea) {
-        return tareaService.saveObject(tarea);
+    public ResponseEntity<Object> newObject(Principal principal, @PathVariable int tecnico, @RequestBody Tarea tarea) {
+        var userOnSession = principal.getName();
+        return ResponseEntity.ok(tareaService.saveObject(userOnSession, tecnico, tarea));
     }
 
 
-    @PostMapping(path = "/ubicacion")
+
+    @PostMapping(path = "/ubicacion/tarea/{tarea}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Ubicacion newObject(@RequestBody Ubicacion ubicacion) {
-        return ubicacionService.addObject(ubicacion);
+    public Ubicacion newObject(@RequestBody Ubicacion ubicacion, @PathVariable Long tarea) {
+        return ubicacionService.addObject(ubicacion, tarea);
     }
 
-    @PostMapping(path = "/coordenada")
+    @PostMapping(path = "/coordenada/ubicacion/{ubicacion}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void newCoordenada(@RequestBody Coordenada coordenada){
-        coordenadaService.addCoordenada(coordenada);
+    public ResponseEntity<String> newCoordenada(@RequestBody Coordenada coordenada, @PathVariable int ubicacion){
+        coordenadaService.addCoordenada(coordenada, ubicacion);
+        return ResponseEntity.ok("Coordenada adherida a la ubicacion " + ubicacion);
     }
 
     /*************************************************************

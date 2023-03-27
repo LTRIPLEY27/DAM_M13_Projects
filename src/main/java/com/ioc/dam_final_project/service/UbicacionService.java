@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface UbicacionService {
 
-   Ubicacion addObject(Ubicacion ubicacion);
+   Ubicacion addObject(Ubicacion ubicacion, Long id);
 
    List<UbicacionDTO> getAll();
 

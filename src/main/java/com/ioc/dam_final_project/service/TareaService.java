@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface TareaService {
 
-    Tarea saveObject(Tarea tarea);
+    Tarea saveObject(String username, int id, Object object);
     List<TareaDTO> total();
     List<TareaDTO> getTareaTec(Tecnico tecnico);
 

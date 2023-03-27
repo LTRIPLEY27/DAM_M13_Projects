@@ -20,7 +20,7 @@ public class Coordenada {
     private Double longitud;
 
     // relationshiop 1 UBICACION == N COORDENADAS
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "ubicacion")
     private Ubicacion ubicacion;
 

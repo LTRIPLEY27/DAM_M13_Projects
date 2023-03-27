@@ -26,20 +26,10 @@ public class AdminServiceImpl implements AdminService {
         return tecnicoServ.saveObject(tecnico);
     }
 
-   // public List<Tecnico> getAll(){
-       // return tecnicoServ.getAll();
-    //}
-
     @Override
     public List<TecnicoDTO> all() {
         var tecnico = tecnicoServ.getAll();
-        List<TecnicoDTO> byDTO = new ArrayList<>();
-
-        for(var i : tecnico){
-            byDTO.add(TecnicoDTO.byModel(i));
-        }
-
-        return byDTO;
+        return tecnico;
     }
 
     @Override

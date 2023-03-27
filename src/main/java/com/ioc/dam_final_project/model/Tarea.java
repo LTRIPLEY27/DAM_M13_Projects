@@ -9,9 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -23,15 +23,16 @@ public class Tarea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String name;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fecha_creacion = LocalDate.now();
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date fecha_culminacion= new Date();
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date fecha_asignacion = new Date();
+    private LocalDate fecha_culminacion;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Tipo_Tarea tarea;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Estatus estatus;
 
@@ -46,8 +47,8 @@ public class Tarea {
     private Admin admin;
 
     // RELATIONSHIP 1 TO 1 WITH COORDENADAS
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "ubicacion_id", referencedColumnName = "id")
+    //
+    @OneToOne(mappedBy = "tarea", cascade = CascadeType.ALL)
     private Ubicacion ubicacion;
 
     @JsonIgnore
@@ -65,7 +66,7 @@ public class Tarea {
     }
 
     public static Tarea byDTO(TareaDTO tareaDTO){
-        return new Tarea(tareaDTO.getName(), tareaDTO.getTarea(), tareaDTO.getEstatus(), null, null, null, null);
+        return new Tarea(tareaDTO.getName(), tareaDTO.getTarea(), tareaDTO.getEstatus(), null, null, new Ubicacion(), null);
     }
 
 }

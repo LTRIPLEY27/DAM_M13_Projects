@@ -3,6 +3,7 @@ package com.ioc.dam_final_project.serviceImpl;
 import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
+import com.ioc.dam_final_project.model.Ubicacion;
 import com.ioc.dam_final_project.repository.AdminRepository;
 import com.ioc.dam_final_project.repository.TareaRepository;
 import com.ioc.dam_final_project.repository.TecnicoRepository;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -30,12 +32,13 @@ public class TareaServiceImpl implements TareaService {
     }
 
     @Override
-    public Tarea saveObject(Tarea tarea) {
-        var tecnico = tecnicoRepository.findTecnicoByEmail("david@fantasymail.com");
-        var admin = adminRepository.findAdminByEmail("eduard@fantasymail.com");
+    public Tarea saveObject(String username, int id, Object tareaO) {
+        var tarea = (Tarea) tareaO;
+        var tecnico = tecnicoRepository.findById((long) id).orElseThrow();
+        var admin = adminRepository.findAdminByEmail(username).orElseThrow();
 
-        tarea.setAdmin(admin.orElseThrow());
-        tarea.setTecnico(tecnico.orElseThrow());
+        tarea.setAdmin(admin);
+        tarea.setTecnico(tecnico);
 
         return tareaRepository.save(tarea);
     }
@@ -56,14 +59,13 @@ public class TareaServiceImpl implements TareaService {
         for (var i : tareaRepository.findTareaByTecnico(tecnico)){
             object.add(TareaDTO.byModel(i));
         }
-        //var tarea = tareaRepository.findTareaByTecnico(tecnico);
-        //System.out.println(tarea.get(0).getTecnico().getNombre());
+
         return object;
     }
 
     @Override
     public void deleteEntity(Long id) {
-        tareaRepository.delete(tareaRepository.findById(id).orElseThrow());
+        tareaRepository.deleteById(id);
     }
 
 

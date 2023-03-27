@@ -9,12 +9,14 @@ public interface TecnicoService {
 
     Tecnico saveObject(Tecnico tecnico);
 
-    List <Tecnico> getAll();
-
-    Tecnico updateObject(Long id,Tecnico tecnico) throws Exception;
+    List <TecnicoDTO> getAll();
 
     Tecnico getByEmail(String user);
 
     TecnicoDTO myProfile(String tecnico);
+
+    TecnicoDTO update(Long id, Object object) throws Exception;
+
+    void deleteEntity(Long id);
 
 }

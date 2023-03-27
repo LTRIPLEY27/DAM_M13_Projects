@@ -9,8 +9,10 @@ import com.ioc.dam_final_project.repository.TareaRepository;
 import com.ioc.dam_final_project.repository.TecnicoRepository;
 import com.ioc.dam_final_project.service.TecnicoService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,11 +34,15 @@ public class TecnicoServiceimpl implements TecnicoService {
     }
 
     @Override
-    public List<Tecnico> getAll() {
-        return tecnicoRepository.findAll();
+    public List<TecnicoDTO> getAll() {
+        var byDTO = new ArrayList<TecnicoDTO>();
+        for(var i : tecnicoRepository.findAll()){
+            byDTO.add(TecnicoDTO.byModel(i));
+        }
+        return byDTO;
     }
 
-    @Override
+    /*@Override
     public Tecnico updateObject(Long id,Tecnico tecnico) throws Exception {
 
         if(!tecnicoRepository.findById(id).isPresent()){
@@ -46,7 +52,7 @@ public class TecnicoServiceimpl implements TecnicoService {
             var objectToChange = tecnicoRepository.findById(id);
         }
         return null;
-    }
+    }*/
 
     @Override
     public Tecnico getByEmail(String user) {
@@ -57,6 +63,43 @@ public class TecnicoServiceimpl implements TecnicoService {
     public TecnicoDTO myProfile(String tecnico) {
         return TecnicoDTO.byModel(tecnicoRepository.findTecnicoByEmail(tecnico).orElseThrow());
     }
+
+
+    /**
+     * Actualiza un objeto 'Tecnico' en la base de datos
+     * @return <ul>
+     *  <li>Tecnico: valores actuales</li>
+     *  </ul>
+     */
+    @Override// verificar los campos a actualizar
+    public TecnicoDTO update(Long id, Object object) throws Exception {
+        var aux = Tecnico.byDTO((TecnicoDTO) object);
+        var tecnic = tecnicoRepository.findById(id).orElseThrow();
+
+        if(!tecnicoRepository.findById(id).isPresent()){
+            throw  new Exception("Error, not present ID in the database");
+        }
+        else{
+            tecnic.setUser(aux.getUser());
+            tecnic.setPassword(new BCryptPasswordEncoder().encode(aux.getPassword()));
+            tecnic.setNombre(aux.getNombre());
+            tecnic.setApellido(aux.getApellido());
+            tecnic.setEmail(aux.getEmail());
+            tecnic.setTelefono(aux.getTelefono());
+            tecnic.setRol(aux.getRol());
+            //tecnic.setTareas(aux.getTareas());
+            //tecnic.setMensaje(aux.getMensaje());
+
+            tecnicoRepository.save(tecnic);
+        }
+        return TecnicoDTO.byModel(tecnic);
+    }
+
+    @Override
+    public void deleteEntity(Long id) {
+        tecnicoRepository.deleteById(id);
+    }
+
 
     public MensajeDTO posting(MensajeDTO mensaje) {
         var tecnico = tecnicoRepository.findTecnicoByUser(mensaje.getTecnico()).orElseThrow();

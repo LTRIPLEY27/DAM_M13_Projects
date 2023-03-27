@@ -2,7 +2,9 @@ package com.ioc.dam_final_project.model;
 
 import com.ioc.dam_final_project.model.Enums.Rol;
 import jakarta.persistence.*;
+
 import lombok.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,11 +52,13 @@ public class User implements UserDetails {
     /**
      * Username del usuario
      */
+    @NotNull
     protected String user;
 
     /**
      * Password del usuario
      */
+    @NotNull
     protected String password;
 
     /**
@@ -70,6 +74,7 @@ public class User implements UserDetails {
     /**
      * Email del usuario
      */
+    @NotNull
     @Column(unique = true)
     protected  String email;
 
@@ -81,6 +86,7 @@ public class User implements UserDetails {
     /**
      * Rol del usuario
      */
+    @NotNull
     @Enumerated(EnumType.STRING)
     protected Rol rol;
 

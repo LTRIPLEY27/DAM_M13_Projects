@@ -32,8 +32,8 @@ public class CoordenadaServiceImpl implements CoordenadaService  {
         return Optional.empty();
     }*/
 
-    public void addCoordenada(Coordenada coordenada){
-        var ubicacio = ubicacionRepository.findById(1L).orElseThrow();
+    public void addCoordenada(Coordenada coordenada, int ubicacion){
+        var ubicacio = ubicacionRepository.findById((long) ubicacion).orElseThrow();
         var tarea = ubicacio.getTarea();
         coordenada.setUbicacion(ubicacio);
 
@@ -43,8 +43,6 @@ public class CoordenadaServiceImpl implements CoordenadaService  {
 
         tarea.setUbicacion(ubicacio);
         tareaRepository.save(tarea);
-
-        System.out.println("Coordenada correctamente adherida");
     }
 
     @Override
