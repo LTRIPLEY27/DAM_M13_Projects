@@ -68,5 +68,23 @@ public class TareaServiceImpl implements TareaService {
         tareaRepository.deleteById(id);
     }
 
+    @Override
+    public TareaDTO updateTar(Long id, Object object) {
+        var tar = tareaRepository.findById(id).orElseThrow();
+        var newTar = Tarea.byDTO((TareaDTO) object);
+
+        tar.setName(newTar.getName());
+        tar.setTarea(newTar.getTarea());
+        tar.setEstatus(newTar.getEstatus());
+        tar.setTecnico(newTar.getTecnico());// transformar de dto a objeto
+        tar.setAdmin(newTar.getAdmin());//from dto
+        tar.setUbicacion(newTar.getUbicacion());
+        tar.setMensaje(newTar.getMensaje());
+
+        tareaRepository.save(tar);
+
+        return TareaDTO.byModel(tar);
+    }
+
 
 }

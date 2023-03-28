@@ -11,5 +11,5 @@ public interface AdminService {
 
     AdminDTO profile(String email);
 
-    //AdminDTO update(Strin);
+    AdminDTO update(Long id, Object object);
 }

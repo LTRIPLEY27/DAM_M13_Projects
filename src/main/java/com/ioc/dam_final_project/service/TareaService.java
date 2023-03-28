@@ -13,4 +13,6 @@ public interface TareaService {
     List<TareaDTO> getTareaTec(Tecnico tecnico);
 
     void deleteEntity(Long id);
+
+    TareaDTO updateTar(Long id, Object object);
 }

@@ -1,6 +1,7 @@
 package com.ioc.dam_final_project.serviceImpl;
 
 import com.ioc.dam_final_project.dto.MensajeDTO;
+import com.ioc.dam_final_project.dto.TecnicoDTO;
 import com.ioc.dam_final_project.model.Admin;
 import com.ioc.dam_final_project.model.Enums.Rol;
 import com.ioc.dam_final_project.model.Mensaje;
@@ -83,11 +84,12 @@ public class UserServiceImpl implements UserService {
     }
 
     // podria reutilizarse con admin
-    @Override
+    /*@Override
     public Object update(String username, Object object) throws Exception {
+    //public Object update(String username, String value, Long id, Object object) throws Exception {
         var user = userRepository.findUserByEmail(username).orElseThrow();
 
-        /*if(user.getRol() == Rol.ADMIN){
+        if(user.getRol() == Rol.ADMIN){
             switch (value) {
                 case "TAREA" -> {
                     return user;
@@ -102,17 +104,23 @@ public class UserServiceImpl implements UserService {
                     return user; // to implementade on message services
                 }
                 case "TECNICO" -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
-                    return user;
+                    return tecnicoServiceimpl.update(user.getId(), object);
                 }
             }
         }
-        else {*/
+        else {
         return tecnicoServiceimpl.update(user.getId(), object); // to implementade tarea
-        //}
+        }
 
-        //return null;
+        return null;
+    }*/
+
+    @Override
+    public Object updateTec(String username, Object object) throws Exception {
+        var user = userRepository.findUserByEmail(username).orElseThrow();
+
+        return tecnicoServiceimpl.update(user.getId(), object); // to implementade tarea
     }
-
     @Override
     public void deleteRegister(String rol, String typus, Long id) {
         var user = userRepository.findUserByEmail(rol).orElseThrow();

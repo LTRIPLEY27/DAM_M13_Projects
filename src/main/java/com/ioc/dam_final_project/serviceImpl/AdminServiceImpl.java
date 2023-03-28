@@ -36,4 +36,9 @@ public class AdminServiceImpl implements AdminService {
     public AdminDTO profile(String email) {
         return AdminDTO.byModel(adminRepository.findAdminByEmail(email).orElseThrow());
     }
+
+    @Override
+    public AdminDTO update(Long id, Object object) {
+        return null;
+    }
 }

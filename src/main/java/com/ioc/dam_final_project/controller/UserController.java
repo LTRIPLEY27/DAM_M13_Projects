@@ -1,8 +1,9 @@
 package com.ioc.dam_final_project.controller;
 
+import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.dto.TecnicoDTO;
-import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.dto.MensajeDTO;
+import com.ioc.dam_final_project.repository.TareaRepository;
 import com.ioc.dam_final_project.security.authentication.AuthenticationService;
 import com.ioc.dam_final_project.security.authentication.RegisterRequest;
 import com.ioc.dam_final_project.serviceImpl.UserServiceImpl;
@@ -25,15 +26,22 @@ public class UserController {
      * Servicio a implementar para retornar valores en la request
      */
     private final AuthenticationService serviceAuth;
+    /**
+     * Repositorio a implementar para validar existencia y throws exceptions
+     */
+    private final TareaRepository tareaRepository;
 
     /**
      * Constructor con 2 parametros
-     * @param userService servicio del usuario
-     * @param serviceAuth servicio del autenticador
+     *
+     * @param userService     servicio del usuario
+     * @param serviceAuth     servicio del autenticador
+     * @param tareaRepository
      */
-    public UserController(UserServiceImpl userService, AuthenticationService serviceAuth) {
+    public UserController(UserServiceImpl userService, AuthenticationService serviceAuth, TareaRepository tareaRepository) {
         this.userService = userService;
         this.serviceAuth = serviceAuth;
+        this.tareaRepository = tareaRepository;
     }
 
     /*************************************************************
@@ -87,13 +95,20 @@ public class UserController {
      *  <li>Una entidad: El objeto con todos sus campos actualizados</li>
      *  </ul>
      */
-    //@PutMapping(path = "update/id/{id}/value/{value}")
     @PutMapping(path = "update-user")
     @ResponseStatus(HttpStatus.OK)
-    //public Object update(Principal principal, @PathVariable (name = "id") Long id,/* @PathVariable("value") String value,*/ @RequestBody Object object) throws Exception {
     public Object update(Principal principal, @RequestBody TecnicoDTO tecnico) throws Exception {
         var userOnSession = principal.getName();
-        return ResponseEntity.ok(userService.update(userOnSession, tecnico));
+        return ResponseEntity.ok(userService.updateTec(userOnSession, tecnico));
+    }
+
+    @PutMapping(path = "update-tarea/id/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Object update(@PathVariable Long id, @RequestBody TareaDTO tarea) throws Exception {
+        if(!tareaRepository.findById(id).isPresent()){
+            throw new Exception("ID inexistente en la base de datos");
+        }
+        return ResponseEntity.ok(userService.updateTar(id, tarea));
     }
 
     /*************************************************************

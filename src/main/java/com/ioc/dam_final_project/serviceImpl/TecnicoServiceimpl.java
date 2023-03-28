@@ -100,20 +100,4 @@ public class TecnicoServiceimpl implements TecnicoService {
         tecnicoRepository.deleteById(id);
     }
 
-
-    /*public MensajeDTO posting(MensajeDTO mensaje) {
-        var tecnico = tecnicoRepository.findTecnicoByUser(mensaje.getTecnico()).orElseThrow();
-        var tarea = tareaRepository.findTareaByTecnicoAndName(tecnico, mensaje.getTarea()); //name must be unique
-
-        var byModel = new Mensaje(mensaje.getDescripcion(), tarea, tecnico);
-
-        tarea.getMensaje().add(byModel);
-        tecnico.getMensaje().add(byModel);
-        tecnicoRepository.save(tecnico);
-        tareaRepository.save(tarea);
-        mensajeRepository.save(byModel);
-
-        var dto = MensajeDTO.byModel(byModel);
-        return dto;
-    }*/
 }
