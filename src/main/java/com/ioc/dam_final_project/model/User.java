@@ -18,12 +18,12 @@ import java.util.List;
 * SERA UNA CLASE PADRE CON 2 HEREDEROS : ADMIN Y TECNICO.
 *
 *   Notaciones :
-* *****************
+*
  *  - He declarado a la clase como 'Entity' para su mappeo en la base de datos.
 *   - He usado las notaciones propias de SpringBoot, en combinacion a Java 17 y Loombook, para potenciar al maximo la codificacion.
 *
 *   Atributos :
-* * *************
+*
 * - He declarado los atributos propios de la clase basica 'Usuario', que seran heredados por ADMIN/USER.
 * - He declarado los atributos : Protected, ya que seran heredados.
 * - Motivado a la aplicacion de la capa de seguridad, he implentado la Interface ' UserDetails' , con los metodos inherentes, para
@@ -31,7 +31,7 @@ import java.util.List;
 *
 *   @author Isabel Calzadilla
  *  @version 1.0
- *  @see  UserDetails para la implementacion del session storage y validacion / autnticacion de Usuario
+ *  @see  UserDetails para la implementacion del session storage y validacion / autenticacion de Usuario
 * */
 
 @Entity

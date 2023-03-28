@@ -23,13 +23,9 @@ public class UserServiceImpl implements UserService {
     //private final UserServiceImpl userService;
     private final UbicacionServiceImpl ubicacionService;
     private final UserRepository userRepository;
-    private final TareaRepository repository;
-    private final AdminRepository adminRepository;
-    private  final TecnicoRepository tecnicoRepository;
-    private final MensajeRepository mensajeRepository;
 
 
-    public UserServiceImpl(TecnicoServiceimpl tecnicoServiceimpl, AdminServiceImpl adminService, TareaServiceImpl tareaService, CoordenadaServiceImpl coordenadaService, MensajeServiceImpl mensajeService, /*UserServiceImpl userService,*/ UbicacionServiceImpl ubicacionService, UserRepository userRepository, TareaRepository repository, AdminRepository adminRepository, TecnicoRepository tecnicoRepository, MensajeRepository mensajeRepository) {
+    public UserServiceImpl(TecnicoServiceimpl tecnicoServiceimpl, AdminServiceImpl adminService, TareaServiceImpl tareaService, CoordenadaServiceImpl coordenadaService, MensajeServiceImpl mensajeService, /*UserServiceImpl userService,*/ UbicacionServiceImpl ubicacionService, UserRepository userRepository) {
         this.tecnicoServiceimpl = tecnicoServiceimpl;
         this.adminService = adminService;
         this.tareaService = tareaService;
@@ -38,10 +34,6 @@ public class UserServiceImpl implements UserService {
         //this.userService = userService;
         this.ubicacionService = ubicacionService;
         this.userRepository = userRepository;
-        this.repository = repository;
-        this.adminRepository = adminRepository;
-        this.tecnicoRepository = tecnicoRepository;
-        this.mensajeRepository = mensajeRepository;
     }
 
 
@@ -150,42 +142,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MensajeDTO postingMessage(String username, MensajeDTO mensaje) {
-
-        var user = userRepository.findUserByEmail(username).orElseThrow();
-
-        switch (user.getRol()){
-            case ADMIN -> {
-                var object = (Tecnico) userRepository.findUserByUser(mensaje.getTecnico()).orElseThrow();
-                var tarea = repository.findTareaByAdminAndName((Admin) user, mensaje.getTarea()); //name must be unique
-                var byModel = new Mensaje(mensaje.getDescripcion(), tarea, object,(Admin) user);
-                tarea.getMensaje().add(byModel);
-                object.getMensaje().add(byModel);
-                tecnicoRepository.save(object);
-                adminRepository.save((Admin) user);
-                repository.save(tarea);
-                mensajeRepository.save(byModel);
-
-                var dto = MensajeDTO.byModel(byModel);
-                return dto;
-            }
-            case TECNIC -> {
-                var object = (Admin) userRepository.findUserByUser(mensaje.getAdmin()).orElseThrow();
-                var tarea = repository.findTareaByTecnicoAndName((Tecnico) user, mensaje.getTarea()); //name must be unique
-                var byModel = new Mensaje(mensaje.getDescripcion(), tarea, (Tecnico) user, object);
-                tarea.getMensaje().add(byModel);
-                object.getMensaje().add(byModel);
-                adminRepository.save(object);
-                tecnicoRepository.save((Tecnico) user);
-                repository.save(tarea);
-                mensajeRepository.save(byModel);
-
-                var dto = MensajeDTO.byModel(byModel);
-                return dto;
-            }
-        }
-
-        return null;
+    public MensajeDTO postingMessage(String user, MensajeDTO mensajeDTO) {
+        return mensajeService.postMessage(user, mensajeDTO);
     }
+
 
 }
