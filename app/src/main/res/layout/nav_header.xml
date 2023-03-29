@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/menuSuperiorLateral">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,17 +31,28 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="4">
+            android:layout_weight="4"
+            android:orientation="vertical"
+            android:gravity="center">
             <TextView
                 android:id="@+id/user_name_text"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Username"
                 android:textColor="@color/white"
                 android:textSize="15dp"
                 android:textAlignment="gravity"
                 android:gravity="center"
                 />
+            <TextView
+                android:id="@+id/user_email_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Email"
+                android:textAlignment="gravity"
+                android:textColor="@color/purple_200"
+                android:textSize="10dp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"

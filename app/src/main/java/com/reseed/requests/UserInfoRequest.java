@@ -44,11 +44,10 @@ public class UserInfoRequest {
 
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("Respuesta user info: ", response.toString());
+                Log.d("Respuesta user info test", response.toString());
 
-                //TODO Recuperar la informacion del usuario y de sus tareas.
-
-
+                // Enviamos la informacion de la respuesta al LoginActivity.
+                listener.onResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -87,7 +86,7 @@ public class UserInfoRequest {
             }
         };
 
-        requestQueue.add(req);
+        getRequestQueue().add(req);
 
     }
 
