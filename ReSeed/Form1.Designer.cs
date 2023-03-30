@@ -38,11 +38,9 @@
             label1 = new Label();
             pictureBox4 = new PictureBox();
             pictureBox2 = new PictureBox();
-            pictureBox3 = new PictureBox();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             SuspendLayout();
             // 
             // panel1
@@ -56,7 +54,6 @@
             panel1.Controls.Add(label1);
             panel1.Controls.Add(pictureBox4);
             panel1.Controls.Add(pictureBox2);
-            panel1.Controls.Add(pictureBox3);
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
             panel1.Size = new Size(466, 522);
@@ -142,14 +139,6 @@
             pictureBox2.TabIndex = 0;
             pictureBox2.TabStop = false;
             // 
-            // pictureBox3
-            // 
-            pictureBox3.Location = new Point(547, 131);
-            pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(100, 50);
-            pictureBox3.TabIndex = 1;
-            pictureBox3.TabStop = false;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -168,7 +157,6 @@
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ResumeLayout(false);
         }
 
@@ -176,7 +164,6 @@
 
         private Panel panel1;
         private PictureBox pictureBox2;
-        private PictureBox pictureBox3;
         private PictureBox pictureBox4;
         private TextBox textBox_password;
         private TextBox textBox_usuario;

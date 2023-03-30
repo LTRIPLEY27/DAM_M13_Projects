@@ -15,7 +15,8 @@ namespace ReSeed
         private String nombreUsuario;
         private String passwordUsuario;
         //VARIABLES DE CONEXION_URL
-        private String loginURL = "https://t-sunlight-381215.lm.r.appspot.com/auth/";
+        private String URL = "https://t-sunlight-381215.lm.r.appspot.com/auth/";
+        private Conexion_BD conexion = new Conexion_BD();
 
         public Form1()
         {
@@ -38,79 +39,29 @@ namespace ReSeed
         }
 
         /*
-         * MÉTODO ASYNCRON btn_conectar_Click
-         * ___________________________________
+         * Botón btn_conectar_Click
+         * Asigno los valores de los TextBox a las variables correspondientes:
+         * @nombreUsuario
+         * @passwordUsuario
          * 
-         * Por un lado almacenaremos en las variables @nombreUsuario y @passwordUsuario, los datos introducidos por el usuario.
-         * Además, añadiremos una comilla delante y detrás de cada String dándole la forma deseada para el JSon.
-         * 
-         * 1-Instanciaremos un objeto de la clase HTTPCLIENT
-         * 2-Crearemos un variable del tipo String @parametros para almacenar los datos introducidos por el usuario con las pautas
-         * del formato JSon de la APIRest.
-         * 3-Crearemos un objeto dynamic @jsonString y lo parseamos con JObject pasandole por parámetro la variable @parametros. Básicamente
-         * convertimos los parámetros en formato json.
-         * 4-En una variable @httpconten agregamos contendio a la http, para ello,pasamos el JSon creado anteriormante a string, 
-         * lo codificamos a UTF8 y aplicamos el parametro applicarion/json
-         *5-En una variable @response almacenaremos la respuesta obtenida de la api. Usaremos el objeto @client de la clase HTTPCLIENT llamando
-         *a su método PostAsync (puesto que enviaremos datos a la API i esperaremos recibir una respuesta), pasandole la URL y el contenido.
-         *6-En la variable @res almacenamos la respuesta @response.--> TOKEN
-         *7- Con un if, comprobamos si la respuesta de la api TRUE O FALSE.
-         *Si la respuesta es TRUE
-         *     ---> Si el usuario es 'eduard@fantasymail.com'
-         *          -Mostramos mensaje de inicio de sesión correcta y somos redirigidos al menu principal ADMINISTRADOR
-         *     ---> SiNo,cualquier otro registrado será redirigido al menú principal TECNICO.     
-         *Sino la respuesta es FALSE
-         *     ---> Se muestra mensaje ERROR. Usuario o password incorrecto.
+         * LLamamos al método LOGIN de la clase CONEXION_BD, al que le pasamos el usuario, el password y la URL y se hace la petición
+         * a la BD.
+         * Si la respuesta es TRUE: 
+         *                 -Se ha conectado administrador y nos envia al menu principal del admin
+         *                 -Se ha conectado un tecnico y nos envia al menu principal del tecnico
+         * Si la respuesta es FALSE:
+         *                 - Se muestra el mensaje de error
          */
         private async void btn_conectar_Click(object sender, EventArgs e)
         {
+
             //Añadimos a los datos que introduce el usuario una comilla simple delante y detrás de la cadena
             //Hacemos esto para que el forma JSon de @parametros sea el adecuado y no de errores
             nombreUsuario = "'" + textBox_usuario.Text.ToString() + "'";
             passwordUsuario = "'" + textBox_password.Text.ToString() + "'";
 
-            //HTTPCLIENT --> Hacer un POST**Petición API a la cual le enviamos datos y esperamos respuesta
-            HttpClient client = new HttpClient();//objeto de HttpClient
-            String parametros = "{'email':" + nombreUsuario + ",'password':" + passwordUsuario + "}";//String @parametros 
-            //client.DefaultRequestHeaders.Add("Authorization", "_TOKEN_");
-            dynamic jsonString = JObject.Parse(parametros);//convertimos @parametros a formato JSon
+            conexion.login(nombreUsuario, passwordUsuario, URL);
 
-            var httpContent = new StringContent(jsonString.ToString(), Encoding.UTF8, "application/json");//enviamos datos a http
-            var response = client.PostAsync(loginURL, httpContent).Result;//@response- utilizaremos el metodo PostAsync pasandole por parametro la url y el contendio
-            var res = response.Content.ReadAsStringAsync().Result;//@res-> lleemos el contenido
-            String TOKEN = res.ToString();//@TOKEN_almacena TOKEN inicio sesion usuario
-            //dynamic json = JObject.Parse(res);//transformamos ese contenido @res a JSOn
-
-            if (response.IsSuccessStatusCode)//si la respuesta es que existe el usuario y la contraseña introducida por el usuario...
-            {
-                if (nombreUsuario.Equals("'eduard@fantasymail.com'"))
-                {
-
-                    MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
-                    //MessageBox.Show("TOKEN :" + TOKEN);
-                    Form3 form3 = new Form3();
-                    form3.Show();
-                    this.Hide();
-
-                }
-                else
-                {
-
-                    MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
-                    //MessageBox.Show("TOKEN :" + TOKEN);
-                    Form4 form4 = new Form4();
-                    form4.Show();
-                    this.Hide();
-
-                }
-
-            }
-
-            else//sino...
-            {
-                MessageBox.Show("Usuario o contraseña incorrectos.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Warning);//Mensaje erro LOGIN
-                //MessageBox.Show("TOKEN :" + TOKEN);
-            }
         }
     }
 }

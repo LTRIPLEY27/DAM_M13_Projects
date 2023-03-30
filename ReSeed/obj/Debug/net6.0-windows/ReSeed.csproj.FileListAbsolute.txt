@@ -38,3 +38,7 @@ C:\Users\Usuario\source\repos\ReSeed\ReSeed\obj\Debug\net6.0-windows\ReSeed.Form
 C:\Users\Usuario\source\repos\ReSeed\ReSeed\obj\Debug\net6.0-windows\ReSeed.csproj.CopyComplete
 C:\Users\Usuario\source\repos\ReSeed\ReSeed\bin\Debug\net6.0-windows\Microsoft.AspNet.Identity.Core.dll
 C:\Users\Usuario\source\repos\ReSeed\ReSeed\obj\Debug\net6.0-windows\ReSeed.Form4.resources
+C:\Users\Usuario\source\repos\ReSeed\ReSeed\bin\Debug\net6.0-windows\xunit.abstractions.dll
+C:\Users\Usuario\source\repos\ReSeed\ReSeed\bin\Debug\net6.0-windows\xunit.assert.dll
+C:\Users\Usuario\source\repos\ReSeed\ReSeed\bin\Debug\net6.0-windows\xunit.core.dll
+C:\Users\Usuario\source\repos\ReSeed\ReSeed\bin\Debug\net6.0-windows\xunit.execution.dotnet.dll

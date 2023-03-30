@@ -20,6 +20,9 @@ namespace ReSeed
         //Variables Globales
         private GMarkerGoogle marcador;//Instanciamos marcadores
         private GMapOverlay capaMarcado;//Instanciamos la capa donde se añadirán los marcadores
+
+        private String TOKEN;
+
         public Form3()
         {
 
@@ -41,6 +44,15 @@ namespace ReSeed
 
         }
 
+        /*
+         
+        public Form3 (String token)
+        {
+            TOKEN = token;
+        }
+
+        */
+
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -51,7 +63,7 @@ namespace ReSeed
          */
         private void btn_principal_Click(object sender, EventArgs e)
         {
-
+            //MessageBox.Show(TOKEN);
             MessageBox.Show("Gracias por utilizar nuestro Programa. Esperamos verte pronto!", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Application.Exit();
 
@@ -155,7 +167,7 @@ namespace ReSeed
 
             if (registroCoordenadas.Rows.Count == 1)//si hay solo una fila, NO ELIMINAMOS (por defecto ponemos una fila vacia)
             {
-                MessageBox.Show("No hay coordenadas que eliminar.");//Nostramos mensaje
+                MessageBox.Show("No hay coordenadas que eliminar.", "MENSAJE ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);//Nostramos mensaje
 
             }
             else//si por el contrario hay mas de una fila...
@@ -170,8 +182,16 @@ namespace ReSeed
          */
         private void btn_eliminarTodasLasCoordenadas_Click(object sender, EventArgs e)
         {
-            registroCoordenadas.Rows.Clear();//borramos todas las coordenadas del datagrid
-            capaMarcado.Clear();//eliminamos la capa poligono que dibujamos en el mapa
+            if (registroCoordenadas.Rows.Count == 1)//si hay solo una fila, NO ELIMINAMOS (por defecto ponemos una fila vacia)
+            {
+                MessageBox.Show("No hay coordenadas que eliminar.","MENSAJE ERROR",MessageBoxButtons.OK,MessageBoxIcon.Error);//Nostramos mensaje
+
+            }
+            else//si por el contrario hay mas de una fila...
+            {
+                registroCoordenadas.Rows.Clear();//elimiamos todas las filas
+                capaMarcado.Clear();//borramos capa de dibujo poligono
+            }
         }
     }
 }
