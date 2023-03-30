@@ -44,14 +44,6 @@ namespace ReSeed
 
         }
 
-        /*
-         
-        public Form3 (String token)
-        {
-            TOKEN = token;
-        }
-
-        */
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -63,7 +55,7 @@ namespace ReSeed
          */
         private void btn_principal_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show(TOKEN);
+
             MessageBox.Show("Gracias por utilizar nuestro Programa. Esperamos verte pronto!", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Application.Exit();
 
