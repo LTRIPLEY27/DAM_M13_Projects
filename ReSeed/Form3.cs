@@ -12,19 +12,23 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GMap.NET.WindowsForms;
 using System.Net;
+using System.Diagnostics.Eventing.Reader;
 
 namespace ReSeed
 {
     public partial class Form3 : Form
     {
-        //Variables Globales
+        //VARIABLES GLOBALES MAPAS
         private GMarkerGoogle marcador;//Instanciamos marcadores
-        private GMapOverlay capaMarcado;//Instanciamos la capa donde se añadirán los marcadores
+        private GMapOverlay capaMarcado;//Instanciamos la capa donde se añadirán los marcadores        
 
-        private String TOKEN;
+        //VARIABLE PARA ALMACENAR TOKEN QUE RECIBO DE LA CLASE Conexion_BD
+        private String TOKEN_form3;
 
-        public Form3()
+        //PASAMOS AL CONTRUCTOR FORM3 EL STRING QUE RECIBIREMOS
+        public Form3(String TOKEN_Login)
         {
+            TOKEN_form3 = TOKEN_Login;//Indicamos que el String que recibiremos será igual al
 
             InitializeComponent();
 
@@ -44,7 +48,6 @@ namespace ReSeed
 
         }
 
-
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -56,6 +59,7 @@ namespace ReSeed
         private void btn_principal_Click(object sender, EventArgs e)
         {
 
+            MessageBox.Show(TOKEN_form3);
             MessageBox.Show("Gracias por utilizar nuestro Programa. Esperamos verte pronto!", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Application.Exit();
 

@@ -11,19 +11,17 @@ namespace ReSeed
     {
         //Atributos de Usuario
         private String nombre;
-        private String apellido1;
-        private String apellido2;
+        private String apellido;
         private int numeroTelefono;
         private String mail;
         private String password;
 
         //Constructor Usuario
-        public Usuario(String nombre, String apellido1, String apellido2, int numeroTelefono, String mail, String password)
+        public Usuario(String nombre, String apellido, int numeroTelefono, String mail, String password)
         {
 
             this.nombre = nombre;
-            this.apellido1 = apellido1;
-            this.apellido2 = apellido2;
+            this.apellido = apellido;
             this.numeroTelefono = numeroTelefono;
             this.mail = mail;
             this.password = password;
@@ -38,17 +36,10 @@ namespace ReSeed
 
         }
 
-        public String Apellido1//Propiedad apellido1
+        public String Apellido//Propiedad apellido1
         {
-            get { return apellido1; }
-            set { apellido1 = value; }
-        }
-
-        public String Apellido2//Propiedad apellido2
-        {
-            get { return apellido2; }
-            set { apellido2 = value; }
-
+            get { return apellido; }
+            set { apellido = value; }
         }
 
         public int NumeroTelefono//Propiedad telefono

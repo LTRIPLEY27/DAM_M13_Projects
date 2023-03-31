@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Data.Common;
 using System.DirectoryServices;
 using System.Linq;
 using System.Text;
@@ -19,66 +21,6 @@ namespace ReSeed
         HttpContent content;
         HttpResponseMessage response;
 
-
-        //CONXTRUCTOR CONEXION
-        public Conexion_BD(String usuario, String password, String URL)
-        {
-            this.usuario = usuario;
-            this.password = password;
-            this.URL = URL;
-        }
-
-        public Conexion_BD()
-        {
-
-        }
-
-        //GETTERS Y SETTERS
-        public String Usuario
-        {
-            get { return usuario; }
-            set { usuario = value; }
-
-        }
-
-        public String Password
-        {
-            get { return password; }
-            set { password = value; }
-
-        }
-
-        public String url
-        {
-            get { return URL; }
-            set { URL = value; }
-        }
-
-
-        /*
-         * MÉTODO ASYNCRON login
-         * ___________________________________
-         * 
-         * Por un lado almacenaremos en las variables @nombreUsuario y @passwordUsuario, los datos introducidos por el usuario.
-         * Además, añadiremos una comilla delante y detrás de cada String dándole la forma deseada para el JSon.
-         * 
-         * 1-Instanciaremos un objeto de la clase HTTPCLIENT
-         * 2-Crearemos un variable del tipo String @parametros para almacenar los datos introducidos por el usuario con las pautas
-         * del formato JSon de la APIRest.
-         * 3-Crearemos un objeto dynamic @jsonString y lo parseamos con JObject pasandole por parámetro la variable @parametros. Básicamente
-         * convertimos los parámetros en formato json.
-         * 4-En una variable @httpconten agregamos contendio a la http, para ello,pasamos el JSon creado anteriormante a string, 
-         * lo codificamos a UTF8 y aplicamos el parametro applicarion/json
-         *5-En una variable @response almacenaremos la respuesta obtenida de la api. Usaremos el objeto @client de la clase HTTPCLIENT llamando
-         *a su método PostAsync (puesto que enviaremos datos a la API i esperaremos recibir una respuesta), pasandole la URL y el contenido.
-         *6- Con un if, comprobamos si la respuesta de la api TRUE O FALSE.
-         *Si la respuesta es TRUE
-         *     ---> Si el usuario es 'eduard@fantasymail.com'
-         *          -Mostramos mensaje de inicio de sesión correcta y somos redirigidos al menu principal ADMINISTRADOR
-         *     ---> SiNo,cualquier otro registrado será redirigido al menú principal TECNICO.     
-         *Sino la respuesta es FALSE
-         *     ---> Se muestra mensaje ERROR. Usuario o password incorrecto.
-         */
         public async void login(String usuario, String password, String URL)
         {
             //objeto de la clase HTTPCLIENT
@@ -94,7 +36,11 @@ namespace ReSeed
             response = client.PostAsync(URL, content).Result;
             //Almacenamos el TOKEN en la variable String @TOKEN
             var res = response.Content.ReadAsStringAsync().Result;//@res-> lleemos el contenido
-            String TOKEN = res.ToString();//@TOKEN_almacena TOKEN inicio sesion usuario;
+            //String TOKEN = res.ToString();//@TOKEN_almacena TOKEN inicio sesion usuario;
+            JObject json = JObject.Parse(res);
+            json.GetValue("token");
+            String token = (String)json["token"];
+
 
             //Mostraremos por pantalla si la conexión es exitosa o no.
             //Si es exitosa y se loguea el admin, será redirigido a al menu principal admin
@@ -107,7 +53,7 @@ namespace ReSeed
 
                     MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
                     //MessageBox.Show(TOKEN);
-                    Form3 form3 = new Form3();
+                    Form3 form3 = new Form3(token);
                     Form1 form1 = new Form1();
                     form3.Show();//mostramos menu principal admin
                     form1.Hide();//ocultamos form login
@@ -121,6 +67,7 @@ namespace ReSeed
                     Form1 form1 = new Form1();
                     form4.Show();//mostramos menu principal tecnico
                     form1.Hide();//ocultamos form login
+
 
                 }
 

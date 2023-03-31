@@ -15,13 +15,14 @@ namespace ReSeed
         private String nombreUsuario;
         private String passwordUsuario;
         //VARIABLES DE CONEXION_URL
-        private String URL = "https://t-sunlight-381215.lm.r.appspot.com/auth/";
+        private static String URL_LOGIN = "https://t-sunlight-381215.lm.r.appspot.com/auth/";
         private Conexion_BD conexion = new Conexion_BD();
 
         public Form1()
         {
             InitializeComponent();
         }
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -60,8 +61,11 @@ namespace ReSeed
             nombreUsuario = "'" + textBox_usuario.Text.ToString() + "'";
             passwordUsuario = "'" + textBox_password.Text.ToString() + "'";
 
-            conexion.login(nombreUsuario, passwordUsuario, URL);
+
+            conexion.login(nombreUsuario, passwordUsuario, URL_LOGIN);
 
         }
+
+        
     }
 }

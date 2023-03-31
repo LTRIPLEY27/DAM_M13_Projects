@@ -34,13 +34,13 @@
             btn_conectar = new Button();
             textBox_password = new TextBox();
             textBox_usuario = new TextBox();
-            label2 = new Label();
-            label1 = new Label();
-            pictureBox4 = new PictureBox();
-            pictureBox2 = new PictureBox();
+            label2_PASSWORD = new Label();
+            label1_USUARIO = new Label();
+            pictureBox4_LOGIN_REESED = new PictureBox();
+            pictureBox2_FONDO_LOGIN = new PictureBox();
             panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox4_LOGIN_REESED).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2_FONDO_LOGIN).BeginInit();
             SuspendLayout();
             // 
             // panel1
@@ -50,10 +50,10 @@
             panel1.Controls.Add(btn_conectar);
             panel1.Controls.Add(textBox_password);
             panel1.Controls.Add(textBox_usuario);
-            panel1.Controls.Add(label2);
-            panel1.Controls.Add(label1);
-            panel1.Controls.Add(pictureBox4);
-            panel1.Controls.Add(pictureBox2);
+            panel1.Controls.Add(label2_PASSWORD);
+            panel1.Controls.Add(label1_USUARIO);
+            panel1.Controls.Add(pictureBox4_LOGIN_REESED);
+            panel1.Controls.Add(pictureBox2_FONDO_LOGIN);
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
             panel1.Size = new Size(466, 522);
@@ -96,48 +96,48 @@
             textBox_usuario.Size = new Size(148, 23);
             textBox_usuario.TabIndex = 5;
             // 
-            // label2
+            // label2_PASSWORD
             // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Tahoma", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.Location = new Point(138, 116);
-            label2.Name = "label2";
-            label2.Size = new Size(90, 17);
-            label2.TabIndex = 4;
-            label2.Text = "PASSWORD";
+            label2_PASSWORD.AutoSize = true;
+            label2_PASSWORD.Font = new Font("Tahoma", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            label2_PASSWORD.Location = new Point(138, 116);
+            label2_PASSWORD.Name = "label2_PASSWORD";
+            label2_PASSWORD.Size = new Size(90, 17);
+            label2_PASSWORD.TabIndex = 4;
+            label2_PASSWORD.Text = "PASSWORD";
             // 
-            // label1
+            // label1_USUARIO
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Tahoma", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(138, 82);
-            label1.Name = "label1";
-            label1.Size = new Size(75, 17);
-            label1.TabIndex = 3;
-            label1.Text = "USUARIO";
+            label1_USUARIO.AutoSize = true;
+            label1_USUARIO.Font = new Font("Tahoma", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            label1_USUARIO.Location = new Point(138, 82);
+            label1_USUARIO.Name = "label1_USUARIO";
+            label1_USUARIO.Size = new Size(75, 17);
+            label1_USUARIO.TabIndex = 3;
+            label1_USUARIO.Text = "USUARIO";
             // 
-            // pictureBox4
+            // pictureBox4_LOGIN_REESED
             // 
-            pictureBox4.BackColor = Color.Transparent;
-            pictureBox4.BackgroundImageLayout = ImageLayout.Stretch;
-            pictureBox4.BorderStyle = BorderStyle.Fixed3D;
-            pictureBox4.Image = (Image)resources.GetObject("pictureBox4.Image");
-            pictureBox4.Location = new Point(61, 12);
-            pictureBox4.Name = "pictureBox4";
-            pictureBox4.Size = new Size(347, 177);
-            pictureBox4.TabIndex = 2;
-            pictureBox4.TabStop = false;
+            pictureBox4_LOGIN_REESED.BackColor = Color.Transparent;
+            pictureBox4_LOGIN_REESED.BackgroundImageLayout = ImageLayout.Stretch;
+            pictureBox4_LOGIN_REESED.BorderStyle = BorderStyle.Fixed3D;
+            pictureBox4_LOGIN_REESED.Image = (Image)resources.GetObject("pictureBox4_LOGIN_REESED.Image");
+            pictureBox4_LOGIN_REESED.Location = new Point(61, 12);
+            pictureBox4_LOGIN_REESED.Name = "pictureBox4_LOGIN_REESED";
+            pictureBox4_LOGIN_REESED.Size = new Size(347, 177);
+            pictureBox4_LOGIN_REESED.TabIndex = 2;
+            pictureBox4_LOGIN_REESED.TabStop = false;
             // 
-            // pictureBox2
+            // pictureBox2_FONDO_LOGIN
             // 
-            pictureBox2.BackColor = Color.White;
-            pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
-            pictureBox2.Location = new Point(-11, 0);
-            pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(496, 551);
-            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox2.TabIndex = 0;
-            pictureBox2.TabStop = false;
+            pictureBox2_FONDO_LOGIN.BackColor = Color.White;
+            pictureBox2_FONDO_LOGIN.Image = (Image)resources.GetObject("pictureBox2_FONDO_LOGIN.Image");
+            pictureBox2_FONDO_LOGIN.Location = new Point(-16, 3);
+            pictureBox2_FONDO_LOGIN.Name = "pictureBox2_FONDO_LOGIN";
+            pictureBox2_FONDO_LOGIN.Size = new Size(496, 551);
+            pictureBox2_FONDO_LOGIN.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox2_FONDO_LOGIN.TabIndex = 0;
+            pictureBox2_FONDO_LOGIN.TabStop = false;
             // 
             // Form1
             // 
@@ -155,25 +155,23 @@
             Load += Form1_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox4_LOGIN_REESED).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2_FONDO_LOGIN).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private Panel panel1;
-        private PictureBox pictureBox2;
-        private PictureBox pictureBox4;
-        private TextBox textBox_password;
-        private TextBox textBox_usuario;
-        private Label label2;
-        private Label label1;
+        private PictureBox pictureBox2_FONDO_LOGIN;
+        private PictureBox pictureBox4_LOGIN_REESED;
+        private Label label2_PASSWORD;
+        private Label label1_USUARIO;
         private Button btn_salir;
         private Panel panel3;
         private Button btn_registrar;
-        private Label label4;
-        private Label label3;
         public Button btn_conectar;
+        public TextBox textBox_password;
+        public TextBox textBox_usuario;
     }
 }
