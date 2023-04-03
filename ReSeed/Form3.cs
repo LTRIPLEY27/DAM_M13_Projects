@@ -180,7 +180,7 @@ namespace ReSeed
         {
             if (registroCoordenadas.Rows.Count == 1)//si hay solo una fila, NO ELIMINAMOS (por defecto ponemos una fila vacia)
             {
-                MessageBox.Show("No hay coordenadas que eliminar.","MENSAJE ERROR",MessageBoxButtons.OK,MessageBoxIcon.Error);//Nostramos mensaje
+                MessageBox.Show("No hay coordenadas que eliminar.", "MENSAJE ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);//Nostramos mensaje
 
             }
             else//si por el contrario hay mas de una fila...

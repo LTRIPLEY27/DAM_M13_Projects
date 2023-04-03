@@ -37,6 +37,7 @@ namespace ReSeed
             //Almacenamos el TOKEN en la variable String @TOKEN
             var res = response.Content.ReadAsStringAsync().Result;//@res-> lleemos el contenido
             //String TOKEN = res.ToString();//@TOKEN_almacena TOKEN inicio sesion usuario;
+            //Convertimos la respuesta BD en objeto JSon obteniendo el valor 'token' de la BD y despues lo convertimos a String,.
             JObject json = JObject.Parse(res);
             json.GetValue("token");
             String token = (String)json["token"];
@@ -53,7 +54,7 @@ namespace ReSeed
 
                     MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
                     //MessageBox.Show(TOKEN);
-                    Form3 form3 = new Form3(token);
+                    Form3 form3 = new Form3(token);//Enviamos el TOKEN al form3
                     Form1 form1 = new Form1();
                     form3.Show();//mostramos menu principal admin
                     form1.Hide();//ocultamos form login
@@ -63,7 +64,7 @@ namespace ReSeed
                 {
 
                     MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
-                    Form4 form4 = new Form4();
+                    Form4 form4 = new Form4(token);
                     Form1 form1 = new Form1();
                     form4.Show();//mostramos menu principal tecnico
                     form1.Hide();//ocultamos form login

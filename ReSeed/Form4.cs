@@ -12,9 +12,13 @@ namespace ReSeed
 {
     public partial class Form4 : Form
     {
-        public Form4()
+        //Variable que usamos para almacenar el token de la conexion del usuario
+        private String TOKEN_Login;
+        public Form4(String token)//pasamos al constructor del form la variable que enviamos de clase Conexion_BD
         {
+            TOKEN_Login = token;//la variable que recibimos ser igual a la que hemos creado @TOKEN_Login
             InitializeComponent();
+            
         }
 
         /*

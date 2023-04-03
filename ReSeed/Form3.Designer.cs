@@ -61,6 +61,7 @@
             tabPage2 = new TabPage();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
+            panel5 = new Panel();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ConfigMapa.SuspendLayout();
@@ -68,6 +69,7 @@
             ((System.ComponentModel.ISupportInitialize)registroCoordenadas).BeginInit();
             panel4.SuspendLayout();
             panel3.SuspendLayout();
+            tabPage2.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
@@ -389,13 +391,15 @@
             // 
             // tabPage2
             // 
+            tabPage2.BackColor = Color.DarkSeaGreen;
+            tabPage2.BackgroundImageLayout = ImageLayout.Center;
+            tabPage2.Controls.Add(panel5);
             tabPage2.Location = new Point(4, 25);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
             tabPage2.Size = new Size(1166, 765);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Gestión Usuarios";
-            tabPage2.UseVisualStyleBackColor = true;
             // 
             // tabPage3
             // 
@@ -417,6 +421,15 @@
             tabPage4.Text = "Comentarios";
             tabPage4.UseVisualStyleBackColor = true;
             // 
+            // panel5
+            // 
+            panel5.BackgroundImage = (Image)resources.GetObject("panel5.BackgroundImage");
+            panel5.BackgroundImageLayout = ImageLayout.Stretch;
+            panel5.Location = new Point(227, 97);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(816, 505);
+            panel5.TabIndex = 0;
+            // 
             // Form3
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -436,6 +449,7 @@
             panel4.PerformLayout();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
+            tabPage2.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -479,5 +493,6 @@
         private Button btn_dibujarpoligono;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
+        private Panel panel5;
     }
 }
