@@ -3,7 +3,9 @@ package com.ioc.dam_final_project.controller;
 import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.dto.TecnicoDTO;
 import com.ioc.dam_final_project.dto.MensajeDTO;
+import com.ioc.dam_final_project.model.Enums.Rol;
 import com.ioc.dam_final_project.repository.TareaRepository;
+import com.ioc.dam_final_project.repository.UserRepository;
 import com.ioc.dam_final_project.security.authentication.AuthenticationService;
 import com.ioc.dam_final_project.security.authentication.RegisterRequest;
 import com.ioc.dam_final_project.serviceImpl.UserServiceImpl;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequestMapping(path = "/")
 public class UserController {
 
+    // INYECCION DE DEPENDENCIAS
     /**
      * Servicio a implementar para retornar valores en la request
      */
@@ -30,6 +33,10 @@ public class UserController {
      * Repositorio a implementar para validar existencia y throws exceptions
      */
     private final TareaRepository tareaRepository;
+    /**
+     * Repositorio a implementar para validar existencia y throws exceptions
+     */
+    private final UserRepository userRepository;
 
     /**
      * Constructor con 2 parametros
@@ -37,11 +44,13 @@ public class UserController {
      * @param userService     servicio del usuario
      * @param serviceAuth     servicio del autenticador
      * @param tareaRepository
+     * @param userRepository
      */
-    public UserController(UserServiceImpl userService, AuthenticationService serviceAuth, TareaRepository tareaRepository) {
+    public UserController(UserServiceImpl userService, AuthenticationService serviceAuth, TareaRepository tareaRepository, UserRepository userRepository) {
         this.userService = userService;
         this.serviceAuth = serviceAuth;
         this.tareaRepository = tareaRepository;
+        this.userRepository = userRepository;
     }
 
     /*************************************************************
@@ -49,8 +58,10 @@ public class UserController {
      * ***********************************************************/
     @PostMapping(value = "register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> register(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(serviceAuth.register(request));
+    public ResponseEntity<Object> register(Principal principal, @RequestBody RegisterRequest request) {
+        var user = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return user.getRol() != Rol.ADMIN ? ResponseEntity.ok("No tiene permisos para realizar ésta acción"): ResponseEntity.ok(serviceAuth.register(request));
     }
 
 

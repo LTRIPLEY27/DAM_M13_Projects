@@ -17,18 +17,18 @@ import java.util.Set;
  *********************************************************************************************************
  * SERA UNA CLASE HIJA DE 'USER'.
  *
- *   Notaciones :
- * ****************
+ *   Notaciones:
+ *
  *   - He declarado a la clase como 'Entity' para su mappeo en la base de datos.
  *   - He usado las notaciones propias de SpringBoot, en combinacion a Java 17 y Loombook, para potenciar al maximo la codificacion.
  *
- *   Atributos :
- * * *************
- * - He declarado los atributos : Private, ya que no seran heredados.
+ *   Atributos:
+ *
+ * - He declarado los atributos: Prívate, ya que no seran heredados.
  * - Motivado a que la clase Admin, estara en relacion a otras entidades, he declarado los atributos con las notaciones necesarias para tal fin.
  *
- *   Metodos :
- * * *************
+ *   Metodos:
+ *
  * - He declarado un metodo estatico de la clase, para hacer uso del mismo en la transposicion de los atributos al formato a mostrar al cliente
  *
  *  @author Isabel Calzadilla
@@ -50,7 +50,7 @@ public class Admin extends User{
     private List <Tarea> tareaList;
 
     /**
-     *  Set de Mensajes relacionadas al Tecnico
+     *  Set de Mensajes relacionado con el Tecnico
      */
     @JsonIgnore
     @OneToMany(mappedBy = "admin")

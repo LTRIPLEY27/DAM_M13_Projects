@@ -15,17 +15,17 @@ import java.util.List;
 /********************************************************************************************************
 * CLASE USER
 *********************************************************************************************************
-* SERA UNA CLASE PADRE CON 2 HEREDEROS : ADMIN Y TECNICO.
+* SERA UNA CLASE PADRE CON 2 HEREDEROS: ADMIN Y TECNICO.
 *
-*   Notaciones :
+*   Notaciones:
 *
  *  - He declarado a la clase como 'Entity' para su mappeo en la base de datos.
 *   - He usado las notaciones propias de SpringBoot, en combinacion a Java 17 y Loombook, para potenciar al maximo la codificacion.
 *
-*   Atributos :
+*   Atributos:
 *
 * - He declarado los atributos propios de la clase basica 'Usuario', que seran heredados por ADMIN/USER.
-* - He declarado los atributos : Protected, ya que seran heredados.
+* - He declarado los atributos: Protected, ya que seran heredados.
 * - Motivado a la aplicacion de la capa de seguridad, he implentado la Interface ' UserDetails' , con los metodos inherentes, para
 *   proporcionar los metodos definidos en 'security' tomando valores de los atributos.
 *
@@ -111,7 +111,7 @@ public class User implements UserDetails {
     }
 
     /**
-     * Atributos implementados de la Interfaces UserDetails
+     * Atributos implementados de la Interfaz UserDetails
      * @return <ul>
      *  <li>SimpleGrantedAuthority: Devuelve una nueva instancia SimpleGrantedAuthority con el parametro del rol a delegar para autenticar</li>
      *  </ul>

@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping(path = "/admin")
 public class AdminController {
 
-    // INYECCION DE DEPENDENCIAS
+
     @Qualifier("admin")
     private final AdminServiceImpl serviceAdmin;
     private final TareaServiceImpl tareaService;
@@ -60,11 +60,11 @@ public class AdminController {
      * ***********************************************************/
 
 
-    @PostMapping(value = "register")
+   /* @PostMapping(value = "register")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(serviceAuth.register(request));
-    }
+    }*/
 
 
     @PostMapping(path = "/add-new-tecnic")

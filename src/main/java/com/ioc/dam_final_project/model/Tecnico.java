@@ -45,14 +45,14 @@ import java.util.Set;
 public class Tecnico extends User{
 
     /**
-     *  Lista de Tareas relacionadas al Tecnico
+     *  Lista de Tareas relacionadas con el Tecnico
      */
     @JsonIgnore
     @OneToMany(mappedBy = "tecnico", fetch = FetchType.LAZY)
     private List<Tarea> tareas;
 
     /**
-     *  Set de Mensajes relacionadas al Tecnico
+     *  Set de Mensajes relacionado con el Tecnico
      */
     @JsonIgnore
     @OneToMany(mappedBy = "tecnico")
@@ -81,7 +81,7 @@ public class Tecnico extends User{
     /**
      * Traspola los valores del objeto DAO a una vista JSON personalizada
      * @return <ul>
-     *  <li>Admin: la instancia con el formato JSON especifico</li>
+     *  <li>Tecnico: la instancia con el formato JSON especifico</li>
      *  </ul>
      */
     public static Tecnico byDTO(TecnicoDTO dto){

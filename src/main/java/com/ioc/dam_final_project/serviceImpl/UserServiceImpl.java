@@ -1,10 +1,7 @@
 package com.ioc.dam_final_project.serviceImpl;
 
 import com.ioc.dam_final_project.dto.MensajeDTO;
-import com.ioc.dam_final_project.dto.TecnicoDTO;
-import com.ioc.dam_final_project.model.Admin;
 import com.ioc.dam_final_project.model.Enums.Rol;
-import com.ioc.dam_final_project.model.Mensaje;
 import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.repository.*;
 import com.ioc.dam_final_project.service.UserService;
@@ -21,18 +18,16 @@ public class UserServiceImpl implements UserService {
     private final TareaServiceImpl tareaService;
     private final CoordenadaServiceImpl coordenadaService;
     private final MensajeServiceImpl mensajeService;
-    //private final UserServiceImpl userService;
     private final UbicacionServiceImpl ubicacionService;
     private final UserRepository userRepository;
 
 
-    public UserServiceImpl(TecnicoServiceimpl tecnicoServiceimpl, AdminServiceImpl adminService, TareaServiceImpl tareaService, CoordenadaServiceImpl coordenadaService, MensajeServiceImpl mensajeService, /*UserServiceImpl userService,*/ UbicacionServiceImpl ubicacionService, UserRepository userRepository) {
+    public UserServiceImpl(TecnicoServiceimpl tecnicoServiceimpl, AdminServiceImpl adminService, TareaServiceImpl tareaService, CoordenadaServiceImpl coordenadaService, MensajeServiceImpl mensajeService, MensajeServiceImpl mensajeService1, UbicacionServiceImpl ubicacionService, UserRepository userRepository) {
         this.tecnicoServiceimpl = tecnicoServiceimpl;
         this.adminService = adminService;
         this.tareaService = tareaService;
         this.coordenadaService = coordenadaService;
-        this.mensajeService = mensajeService;
-        //this.userService = userService;
+        this.mensajeService = mensajeService1;
         this.ubicacionService = ubicacionService;
         this.userRepository = userRepository;
     }
@@ -121,6 +116,12 @@ public class UserServiceImpl implements UserService {
 
         return tecnicoServiceimpl.update(user.getId(), object); // to implementade tarea
     }
+
+    @Override
+    public Object updateTar(Long id, Object object) throws Exception {
+        return null;
+    }
+
     @Override
     public void deleteRegister(String rol, String typus, Long id) {
         var user = userRepository.findUserByEmail(rol).orElseThrow();
