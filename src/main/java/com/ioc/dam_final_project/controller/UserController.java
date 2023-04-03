@@ -69,15 +69,26 @@ public class UserController {
     /*************************************************************
      *                   GETTING RESPONSE FROM DATABASE
      * ***********************************************************/
+    /**
+     * Metodo que valida el usuario en Session, no es accesible fuera del admin y solo devuelve el perfil de la persona en session
+     * @return <ul>
+     *  <li>Entity: Retorna un perfil según la persona que haga la petición y esté loggueada/li>
+     *  </ul>
+     */
     @GetMapping(path = "perfil")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> showMyProfile(Principal principal) throws IllegalArgumentException{
-        if(principal.getName().isEmpty()){
-            throw new IllegalArgumentException("Necesitas estar logueado para tener un perfil");
-        }
-        return ResponseEntity.ok(userService.getProfile(principal.getName()));
+    public ResponseEntity<Object> showMyProfile(Principal principal) {
+        return  ResponseEntity.ok(userService.getProfile(principal.getName()));
     }
 
+    /*************************************************************
+     *                   GETTING ENTITY BY ID FROM DATABASE
+     * ***********************************************************/
+    @GetMapping(path = "find/value/{value}/id/{id}")// TODO verificar la query para que busque por todo
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object> findById(@PathVariable("value") String value,  @PathVariable("id") Long id) {
+        return  ResponseEntity.ok(userService.searchById(value, id));
+    }
     /*************************************************************
      *                   GETTING LIST RESPONSE FROM DATABASE
      * ***********************************************************/

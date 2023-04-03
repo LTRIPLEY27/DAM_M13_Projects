@@ -60,4 +60,10 @@ public class CoordenadaServiceImpl implements CoordenadaService  {
     public void deleteEntity(Long id) {
         coordenadaRepository.deleteAll();
     }
+
+    @Override
+    public CoordenadaDTO searchById(Long id) {
+        return CoordenadaDTO.byModel(coordenadaRepository.findById(id).orElseThrow());
+    }
+
 }

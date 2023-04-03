@@ -23,4 +23,6 @@ public interface UserService {
     void deleteRegister(String rol, String typus, Long id);
 
     MensajeDTO postingMessage(String user, MensajeDTO mensajeDTO);
+
+    Object searchById(String value, Long id);
 }

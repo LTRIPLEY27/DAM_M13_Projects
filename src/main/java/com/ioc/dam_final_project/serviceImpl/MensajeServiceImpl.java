@@ -60,6 +60,11 @@ public class MensajeServiceImpl implements MensajeService {
         return null;
     }
 
+    @Override
+    public MensajeDTO searchById(Long id) {
+        return MensajeDTO.byModel(mensajeRepository.findById(id).orElseThrow());
+    }
+
     /**
      * Metodo que gestionara el posteo de mensajes entre el Admin y el Tecnico a modo de hilo conversacional.
      * @param mensaje es la instancia de Mensaje a la que se le realizará el hilo.

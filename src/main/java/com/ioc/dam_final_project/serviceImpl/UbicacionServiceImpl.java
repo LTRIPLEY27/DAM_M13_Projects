@@ -58,4 +58,9 @@ public class UbicacionServiceImpl implements UbicacionService {
         tarea.setUbicacion(null);
         ubicacionRepository.deleteById(id);
     }
+
+    @Override
+    public UbicacionDTO searchById(Long id) {
+        return UbicacionDTO.byModel(ubicacionRepository.findById(id).orElseThrow());
+    }
 }

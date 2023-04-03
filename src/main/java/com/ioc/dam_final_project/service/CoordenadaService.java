@@ -11,4 +11,6 @@ public interface CoordenadaService {
     //Optional<Coordenada> saveObject(Long id, Coordenada coordenada);
     List<CoordenadaDTO> coordenas();
     void deleteEntity(Long id);
+
+    CoordenadaDTO searchById(Long id);
 }

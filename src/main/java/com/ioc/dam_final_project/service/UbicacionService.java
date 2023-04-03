@@ -14,4 +14,6 @@ public interface UbicacionService {
 
    UbicacionDTO findById(Long id);
    void deleteEntity(Long id);
+
+   UbicacionDTO searchById(Long id);
 }

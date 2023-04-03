@@ -86,5 +86,10 @@ public class TareaServiceImpl implements TareaService {
         return TareaDTO.byModel(tar);
     }
 
+    @Override
+    public TareaDTO searchById(Long id) {
+        return TareaDTO.byModel(tareaRepository.findById(id).orElseThrow());
+    }
+
 
 }

@@ -5,13 +5,14 @@ import com.ioc.dam_final_project.model.Enums.Rol;
 import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.repository.*;
 import com.ioc.dam_final_project.service.UserService;
+import com.ioc.dam_final_project.tools.Constantes;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, Constantes {
 
     private final TecnicoServiceimpl tecnicoServiceimpl;
     private final AdminServiceImpl adminService;
@@ -55,19 +56,19 @@ public class UserServiceImpl implements UserService {
 
         if (user.getRol() == Rol.ADMIN) {
             switch (value) {
-                case "TAREA" -> {
+                case TAREAS -> {
                     return Collections.singletonList(tareaService.total());
                 }
-                case "UBICACION" -> {
+                case UBICACIONES -> {
                     return Collections.singletonList(ubicacionService.getAll());
                 }
-                case "COORDENADA" -> {
+                case COORDENADAS -> {
                     return Collections.singletonList(coordenadaService.coordenas());
                 }
-                case "MENSAJE" -> {
+                case MENSAJES -> {
                     return Collections.singletonList(mensajeService); // to implementade on message services
                 }
-                case "TECNICO" -> {
+                case TECNICOS -> {
                     return Collections.singletonList(tecnicoServiceimpl.getAll());
                 }
             }
@@ -128,19 +129,19 @@ public class UserServiceImpl implements UserService {
 
         if (user.getRol() == Rol.ADMIN) {
             switch (typus) {
-                case "TAREA" -> {
+                case TAREA -> {
                     tareaService.deleteEntity(id);
                 }
-                case "UBICACION" -> {
+                case UBICACION -> {
                     ubicacionService.deleteEntity(id);
                 }
-                case "COORDENADA" -> {
+                case COORDENADA -> {
                     coordenadaService.deleteEntity(id);
                 }
-                case "MENSAJE" -> {
+                case MENSAJE -> {
                     mensajeService.deleteEntity(id);
                 }
-                case "TECNICO" -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
+                case TECNICO -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
                     tecnicoServiceimpl.deleteEntity(id);
                 }
             }
@@ -153,6 +154,28 @@ public class UserServiceImpl implements UserService {
     @Override
     public MensajeDTO postingMessage(String user, MensajeDTO mensajeDTO) {
         return mensajeService.postMessage(user, mensajeDTO);
+    }
+
+    @Override
+    public Object searchById(String value, Long id) {
+        switch (value) {
+            case TAREA -> {
+                return tareaService.searchById(id);
+            }
+            case UBICACION -> {
+                return ubicacionService.searchById(id);
+            }
+            case COORDENADA -> {
+                return coordenadaService.searchById(id);
+            }
+            case MENSAJE -> {
+                return mensajeService.searchById(id);
+            }
+            case TECNICO -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
+                return userRepository.findById(id).orElseThrow();
+            }
+        }
+        return null;
     }
 
 
