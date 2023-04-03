@@ -1,6 +1,7 @@
 package com.ioc.dam_final_project.service;
 
 import com.ioc.dam_final_project.dto.MensajeDTO;
+import com.ioc.dam_final_project.dto.UserDTO;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface UserService {
     List<Object> registers(String username, String value);
 
 
-    Object updateTec(String username, Object object) throws Exception;
+    UserDTO update(String old, UserDTO userDTO);
     Object updateTar(Long id, Object object) throws Exception;
     //Object update(String username, String value, Long id, Object object) throws Exception;
 

@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface AdminService {
 
-    List<TecnicoDTO> all();
-
     AdminDTO profile(String email);
 
     AdminDTO update(Long id, Object object);

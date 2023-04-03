@@ -1,8 +1,8 @@
 package com.ioc.dam_final_project.controller;
 
 import com.ioc.dam_final_project.dto.TareaDTO;
-import com.ioc.dam_final_project.dto.TecnicoDTO;
 import com.ioc.dam_final_project.dto.MensajeDTO;
+import com.ioc.dam_final_project.dto.UserDTO;
 import com.ioc.dam_final_project.model.Enums.Rol;
 import com.ioc.dam_final_project.repository.TareaRepository;
 import com.ioc.dam_final_project.repository.UserRepository;
@@ -61,7 +61,7 @@ public class UserController {
     public ResponseEntity<Object> register(Principal principal, @RequestBody RegisterRequest request) {
         var user = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return user.getRol() != Rol.ADMIN ? ResponseEntity.ok("No tiene permisos para realizar ésta acción"): ResponseEntity.ok(serviceAuth.register(request));
+        return user.getRol() != Rol.ADMIN ? ResponseEntity.ok("No tiene permisos para realizar ésta acción") : ResponseEntity.ok(serviceAuth.register(request));
     }
 
 
@@ -113,15 +113,16 @@ public class UserController {
 
     /**
      * Metodo que recibe 3 parametros y realiza el update correspondiente, validando el rol que realiza la request, el id y el objeto a actualizar
+     *
      * @return <ul>
-     *  <li>Una entidad: El objeto con todos sus campos actualizados</li>
-     *  </ul>
+     * <li>Una entidad: El objeto con todos sus campos actualizados</li>
+     * </ul>
      */
     @PutMapping(path = "update-user")
     @ResponseStatus(HttpStatus.OK)
-    public Object update(Principal principal, @RequestBody TecnicoDTO tecnico) throws Exception {
-        var userOnSession = principal.getName();
-        return ResponseEntity.ok(userService.updateTec(userOnSession, tecnico));
+    public Object update(Principal principal, @RequestBody UserDTO userDTO){
+        var userOnSession = userRepository.findUserByEmail(principal.getName());
+        return !userOnSession.isPresent() ? userService.update(principal.getName(), userDTO) : ResponseEntity.ok("No se puede editar su perfil, contacte al administrador");
     }
 
     @PutMapping(path = "update-tarea/id/{id}")
@@ -153,4 +154,6 @@ public class UserController {
         var userOnSession = principal.getName();
         return ResponseEntity.ok(userService.postingMessage(userOnSession, mensaje));
     }
+
+
 }

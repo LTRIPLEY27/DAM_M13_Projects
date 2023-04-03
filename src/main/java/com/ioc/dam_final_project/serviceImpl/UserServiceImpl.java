@@ -1,11 +1,14 @@
 package com.ioc.dam_final_project.serviceImpl;
 
 import com.ioc.dam_final_project.dto.MensajeDTO;
+import com.ioc.dam_final_project.dto.UserDTO;
 import com.ioc.dam_final_project.model.Enums.Rol;
 import com.ioc.dam_final_project.model.Tecnico;
+import com.ioc.dam_final_project.model.User;
 import com.ioc.dam_final_project.repository.*;
 import com.ioc.dam_final_project.service.UserService;
 import com.ioc.dam_final_project.tools.Constantes;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -79,6 +82,34 @@ public class UserServiceImpl implements UserService, Constantes {
         return null;
     }
 
+    @Override
+    public UserDTO update(String old, UserDTO userDTO) {
+        var user = userRepository.findUserByEmail(old).orElseThrow();
+
+        switch (user.getRol()){
+            case ADMIN, TECNIC -> { // TODO Aplicar el filtro a update específicos, preguntar qué valores van a editar y difieren
+                var oldUser = userRepository.findById(user.getId()).orElseThrow();
+                var userNew = User.byDTO(userDTO);
+                return updateUser(oldUser, userNew);
+            }
+        }
+        return null;
+    }
+
+    //TODO VALORAR LOS CAMPOS QUE SE VAN A PODER SETTEAR POR PERFILES
+    private UserDTO updateUser(User oldUser, User newUser) {
+        oldUser.setUser(newUser.getUser());
+        oldUser.setPassword(new BCryptPasswordEncoder().encode(newUser.getPassword()));
+        oldUser.setNombre(newUser.getNombre());
+        oldUser.setApellido(newUser.getApellido());
+        oldUser.setEmail(newUser.getEmail());
+        oldUser.setTelefono(newUser.getTelefono());
+        //oldUser.setRol(newUser.getRol());
+
+        userRepository.save(oldUser);
+
+        return UserDTO.byEntity(oldUser);
+    }
     // podria reutilizarse con admin
     /*@Override
     public Object update(String username, Object object) throws Exception {
@@ -111,12 +142,6 @@ public class UserServiceImpl implements UserService, Constantes {
         return null;
     }*/
 
-    @Override
-    public Object updateTec(String username, Object object) throws Exception {
-        var user = userRepository.findUserByEmail(username).orElseThrow();
-
-        return tecnicoServiceimpl.update(user.getId(), object); // to implementade tarea
-    }
 
     @Override
     public Object updateTar(Long id, Object object) throws Exception {

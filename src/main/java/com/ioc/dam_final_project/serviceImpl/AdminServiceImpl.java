@@ -26,11 +26,6 @@ public class AdminServiceImpl implements AdminService {
         return tecnicoServ.saveObject(tecnico);
     }
 
-    @Override
-    public List<TecnicoDTO> all() {
-        var tecnico = tecnicoServ.getAll();
-        return tecnico;
-    }
 
     @Override
     public AdminDTO profile(String email) {

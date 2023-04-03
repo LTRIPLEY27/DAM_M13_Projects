@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.model;
 
+import com.ioc.dam_final_project.dto.UserDTO;
 import com.ioc.dam_final_project.model.Enums.Rol;
 import jakarta.persistence.*;
 
@@ -108,6 +109,10 @@ public class User implements UserDetails {
         this.email = email;
         this.telefono = telefono;
         this.rol = rol;
+    }
+
+    public static User byDTO(UserDTO adminDTO){
+        return new User(adminDTO.getUser(), adminDTO.getPassword(), adminDTO.getNombre(), adminDTO.getApellido(), adminDTO.getEmail(), adminDTO.getTelefono(), null);
     }
 
     /**
