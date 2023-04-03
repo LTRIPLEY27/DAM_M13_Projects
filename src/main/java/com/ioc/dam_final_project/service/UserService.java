@@ -16,10 +16,9 @@ public interface UserService {
 
     List<Object> registers(String username, String value);
 
-
     UserDTO update(String old, UserDTO userDTO);
-    Object updateTar(Long id, Object object) throws Exception;
-    //Object update(String username, String value, Long id, Object object) throws Exception;
+
+    Object updateValue(String username, String value, Long id, Object object);
 
     void deleteRegister(String rol, String typus, Long id);
 

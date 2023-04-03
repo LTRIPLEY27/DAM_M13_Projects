@@ -66,4 +66,18 @@ public class CoordenadaServiceImpl implements CoordenadaService  {
         return CoordenadaDTO.byModel(coordenadaRepository.findById(id).orElseThrow());
     }
 
+    @Override
+    public CoordenadaDTO updateValue(Long id, Object object) {
+        var oldCoor = coordenadaRepository.findById(id).orElseThrow();
+        var newCoor = Coordenada.byDTO((CoordenadaDTO) object);
+
+        oldCoor.setLongitud(newCoor.getLongitud());
+        oldCoor.setLatitud(newCoor.getLatitud());
+        oldCoor.setUbicacion(newCoor.getUbicacion());
+
+        coordenadaRepository.save(oldCoor);
+
+        return CoordenadaDTO.byModel(oldCoor);
+    }
+
 }

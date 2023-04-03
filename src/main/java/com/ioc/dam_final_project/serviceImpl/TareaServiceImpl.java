@@ -69,7 +69,7 @@ public class TareaServiceImpl implements TareaService {
     }
 
     @Override
-    public TareaDTO updateTar(Long id, Object object) {
+    public TareaDTO updateValue(Long id, Object object) {
         var tar = tareaRepository.findById(id).orElseThrow();
         var newTar = Tarea.byDTO((TareaDTO) object);
 

@@ -1,6 +1,7 @@
 package com.ioc.dam_final_project.service;
 
 import com.ioc.dam_final_project.dto.CoordenadaDTO;
+import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.model.Coordenada;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface CoordenadaService {
     void deleteEntity(Long id);
 
     CoordenadaDTO searchById(Long id);
+
+    CoordenadaDTO updateValue(Long id, Object object);
 }

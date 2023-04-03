@@ -14,7 +14,7 @@ public interface TareaService {
 
     void deleteEntity(Long id);
 
-    TareaDTO updateTar(Long id, Object object);
+    TareaDTO updateValue(Long id, Object object);
 
     TareaDTO searchById(Long id);
 }

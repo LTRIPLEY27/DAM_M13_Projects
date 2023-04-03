@@ -125,13 +125,21 @@ public class UserController {
         return !userOnSession.isPresent() ? userService.update(principal.getName(), userDTO) : ResponseEntity.ok("No se puede editar su perfil, contacte al administrador");
     }
 
-    @PutMapping(path = "update-tarea/id/{id}")
+    /**
+     * Metodo que recibe 4 parametros y realiza el update correspondiente, validando el rol que realiza la request, el valor de la entidad a la que modificar, el id y el objeto a actualizar
+     *
+     * @return <ul>
+     * <li>Una entidad: El objeto con todos sus campos actualizados</li>
+     * </ul>
+     */
+    @PutMapping(path = "update/value/{value}/id/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Object update(@PathVariable Long id, @RequestBody TareaDTO tarea) throws Exception {
-        if(!tareaRepository.findById(id).isPresent()){
+    public ResponseEntity<Object> update(Principal principal, @PathVariable String value, @PathVariable Long id, @RequestBody Object object)  {
+        /*if(!tareaRepository.findById(id).isPresent()){
             throw new Exception("ID inexistente en la base de datos");
-        }
-        return ResponseEntity.ok(userService.updateTar(id, tarea));
+        }*/
+        // TODO REALIZAR UN MÉTODO QUE VALIDE LOS ID Y RETORNE UN BOOLEAN PARA INDICAR ANTES SI EXITE O NO EL ID
+        return ResponseEntity.ok(userService.updateValue(principal.getName(), value, id, object));
     }
 
     /*************************************************************

@@ -63,4 +63,20 @@ public class UbicacionServiceImpl implements UbicacionService {
     public UbicacionDTO searchById(Long id) {
         return UbicacionDTO.byModel(ubicacionRepository.findById(id).orElseThrow());
     }
+
+    @Override
+    public UbicacionDTO updateValue(Long id, Object object) {
+        var oldUbi = ubicacionRepository.findById(id).orElseThrow();
+        var newUbi = Ubicacion.byDTO((UbicacionDTO) object);
+
+        oldUbi.setZoom(newUbi.getZoom());
+        oldUbi.setCentroLatitud(newUbi.getCentroLatitud());
+        oldUbi.setCentroLongitud(newUbi.getCentroLongitud());
+        oldUbi.setMapa(newUbi.getMapa());
+        oldUbi.setTarea(newUbi.getTarea());
+
+        ubicacionRepository.save(oldUbi);
+
+        return UbicacionDTO.byModel(oldUbi);
+    }
 }

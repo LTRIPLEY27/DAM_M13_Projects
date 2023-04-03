@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.service;
 
+import com.ioc.dam_final_project.dto.CoordenadaDTO;
 import com.ioc.dam_final_project.dto.UbicacionDTO;
 import com.ioc.dam_final_project.model.Ubicacion;
 
@@ -12,8 +13,9 @@ public interface UbicacionService {
 
    List<UbicacionDTO> getAll();
 
-   UbicacionDTO findById(Long id);
    void deleteEntity(Long id);
 
    UbicacionDTO searchById(Long id);
+
+   UbicacionDTO updateValue(Long id, Object object);
 }

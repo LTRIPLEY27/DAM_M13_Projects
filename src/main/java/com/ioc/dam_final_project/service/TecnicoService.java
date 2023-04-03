@@ -15,7 +15,7 @@ public interface TecnicoService {
 
     TecnicoDTO myProfile(String tecnico);
 
-    TecnicoDTO update(Long id, Object object) throws Exception;
+    //TecnicoDTO update(Long id, Object object);
 
     void deleteEntity(Long id);
 

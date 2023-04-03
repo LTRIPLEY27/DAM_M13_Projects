@@ -110,42 +110,38 @@ public class UserServiceImpl implements UserService, Constantes {
 
         return UserDTO.byEntity(oldUser);
     }
-    // podria reutilizarse con admin
-    /*@Override
-    public Object update(String username, Object object) throws Exception {
-    //public Object update(String username, String value, Long id, Object object) throws Exception {
+
+
+    /**
+     * Actualiza un objeto 'Entity' en la base de datos
+     * @return <ul>
+     *  <li>Entity: valida segun el caso de uso y gestiona el update de dicha entidad con los nuevos valores</li>
+     *  </ul>
+     */
+    @Override
+    public Object updateValue(String username, String value, Long id, Object object) {
         var user = userRepository.findUserByEmail(username).orElseThrow();
 
-        if(user.getRol() == Rol.ADMIN){
+        if (user.getRol() == Rol.ADMIN) {
             switch (value) {
-                case "TAREA" -> {
-                    return user;
+                case TAREA -> {
+                    return tareaService.updateValue(id, object);
                 }
-                case "UBICACION" -> {
-                    return user;
+                case UBICACION -> {
+                    return ubicacionService.updateValue(id, object);
                 }
-                case "COORDENADA" -> {
-                    return user;
+                case COORDENADA -> {
+                    return coordenadaService.updateValue(id, object);
                 }
-                case "MENSAJE" -> {
-                    return user; // to implementade on message services
+                case MENSAJE -> {
+                    return mensajeService.updateValue(id, object); // to implementade on message services
                 }
-                case "TECNICO" -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
-                    return tecnicoServiceimpl.update(user.getId(), object);
+                case TECNICO, ADMIN -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
+                    return update(username, (UserDTO) object);
                 }
             }
         }
-        else {
-        return tecnicoServiceimpl.update(user.getId(), object); // to implementade tarea
-        }
-
-        return null;
-    }*/
-
-
-    @Override
-    public Object updateTar(Long id, Object object) throws Exception {
-        return null;
+        return update(username, (UserDTO) object); // to implementade tarea
     }
 
     @Override

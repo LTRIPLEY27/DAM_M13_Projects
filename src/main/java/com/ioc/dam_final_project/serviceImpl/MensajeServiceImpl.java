@@ -1,6 +1,7 @@
 package com.ioc.dam_final_project.serviceImpl;
 
 import com.ioc.dam_final_project.dto.MensajeDTO;
+import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.model.*;
 import com.ioc.dam_final_project.repository.*;
 import com.ioc.dam_final_project.service.MensajeService;
@@ -64,6 +65,22 @@ public class MensajeServiceImpl implements MensajeService {
     public MensajeDTO searchById(Long id) {
         return MensajeDTO.byModel(mensajeRepository.findById(id).orElseThrow());
     }
+
+    @Override
+    public MensajeDTO updateValue(Long id, Object object) {
+        var oldMess = mensajeRepository.findById(id).orElseThrow();
+        var newMess = Mensaje.byDTO((MensajeDTO) object);
+
+        oldMess.setDescripcion(newMess.getDescripcion());
+        oldMess.setTarea(newMess.getTarea());
+        oldMess.setAdmin(newMess.getAdmin());
+        oldMess.setTecnico(newMess.getTecnico());
+        // TODO PREGUNTAR SI SE DEBE DE ACTUALIZAR LA FECHA?
+        mensajeRepository.save(oldMess);
+
+        return MensajeDTO.byModel(oldMess);
+    }
+
 
     /**
      * Metodo que gestionara el posteo de mensajes entre el Admin y el Tecnico a modo de hilo conversacional.

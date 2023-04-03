@@ -71,29 +71,22 @@ public class TecnicoServiceimpl implements TecnicoService {
      *  <li>Tecnico: valores actuales</li>
      *  </ul>
      */
-    @Override// verificar los campos a actualizar
-    public TecnicoDTO update(Long id, Object object) throws Exception {
+    /*@Override// verificar los campos a actualizar
+    public TecnicoDTO update(Long id, Object object) {
         var aux = Tecnico.byDTO((TecnicoDTO) object);
         var tecnic = tecnicoRepository.findById(id).orElseThrow();
 
-        if(!tecnicoRepository.findById(id).isPresent()){
-            throw  new Exception("Error, not present ID in the database");
-        }
-        else{
-            tecnic.setUser(aux.getUser());
-            tecnic.setPassword(new BCryptPasswordEncoder().encode(aux.getPassword()));
-            tecnic.setNombre(aux.getNombre());
-            tecnic.setApellido(aux.getApellido());
-            tecnic.setEmail(aux.getEmail());
-            tecnic.setTelefono(aux.getTelefono());
-            tecnic.setRol(aux.getRol());
-            //tecnic.setTareas(aux.getTareas());
-            //tecnic.setMensaje(aux.getMensaje());
+        tecnic.setUser(aux.getUser());
+        tecnic.setPassword(new BCryptPasswordEncoder().encode(aux.getPassword()));
+        tecnic.setNombre(aux.getNombre());
+        tecnic.setApellido(aux.getApellido());
+        tecnic.setEmail(aux.getEmail());
+        tecnic.setTelefono(aux.getTelefono());
+        tecnic.setRol(aux.getRol());
 
-            tecnicoRepository.save(tecnic);
-        }
+
         return TecnicoDTO.byModel(tecnic);
-    }
+    }*/
 
     @Override
     public void deleteEntity(Long id) {
