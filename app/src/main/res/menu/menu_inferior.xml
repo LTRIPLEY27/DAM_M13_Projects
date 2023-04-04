@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_users"
+        android:icon="@drawable/baseline_face_24"
+        android:onClick="usersFragmentCall"
+        android:title="Usuarios" />
+    <item
+        android:id="@+id/menu_tasks"
+        android:icon="@drawable/baseline_view_list_24"
+        android:onClick="tasksFragmentCall"
+        android:title="Tareas" />
+    <item
+        android:id="@+id/menu_stadistics"
+        android:icon="@drawable/baseline_line_axis_24"
+        android:onClick="aboutMenuCall"
+        android:title="Estadisticas" />
+</menu>

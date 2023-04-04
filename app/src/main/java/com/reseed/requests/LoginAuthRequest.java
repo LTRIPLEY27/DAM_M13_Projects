@@ -1,6 +1,8 @@
 package com.reseed.requests;
 
+import android.content.Context;
 import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -11,52 +13,66 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.reseed.util.VolleyResponseListener;
 
+
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
+public class LoginAuthRequest {
 
-public class UserInfoRequest {
+    private String email;
+    private String password;
 
-    private String token;
+    private Context context;
     private RequestQueue requestQueue;
 
     /**
      * Constructor of the class.
-     * @param token email from the user
-     * @param requestQueue created on activity.
+     * @param email email from the user
+     * @param password password from user
      */
-    public UserInfoRequest(String token, RequestQueue requestQueue){
-        setToken(token);
+    public LoginAuthRequest(String email, String password, RequestQueue requestQueue){
+        setEmail(email);
+        setPassword(password);
         setRequestQueue(requestQueue);
     }
 
     public void sendRequest(final VolleyResponseListener listener){
 
-        String urlPostLogin = "https://t-sunlight-381215.lm.r.appspot.com/perfil";
+        String urlPostLogin = "https://t-sunlight-381215.lm.r.appspot.com/auth/";
 
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET,urlPostLogin,
-                null, new Response.Listener<JSONObject>() {
+        JSONObject jsonCallObject = new JSONObject();
+        try {
+            jsonCallObject.put("email",getEmail());
+            jsonCallObject.put("password",getPassword());
+        }catch (Exception e){
+            Log.e("Error login request: ", e.getMessage());
+        }
 
+        JsonObjectRequest req = new JsonObjectRequest
+                (Request.Method.POST, urlPostLogin, jsonCallObject, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("Respuesta user info test", response.toString());
 
-                // Enviamos la informacion de la respuesta al LoginActivity.
-                listener.onResponse(response);
+                try {
+                    //Log.i("Response login: ", response.toString());
+                    listener.onResponse(response);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                // Todo controlar el timeout de la primera request al server.
+
                 if( error instanceof NetworkError) {
-                    //Comprueva los errores de red.
+                    //handle your network error here.
                     listener.onError("No hay connexion a la red.");
                 } else if( error instanceof ServerError) {
-                    //gestiona los errores 5XX del servidor.
+                    //handle if server error occurs with 5** status code
                     listener.onError("No hay connexion al servidor.");
                 } else if( error instanceof AuthFailureError) {
                     //handle if authFailure occurs.This is generally because of invalid credentials
@@ -72,30 +88,25 @@ public class UserInfoRequest {
                     listener.onError("Error del servidor, prueba en 30 segundos.");
                 }
             }
-        }) {
-
-            /**
-             * Modificamos el header para enviar la autentificacion a través de un Beater Token.
-             */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                //headers.put("Content-Type", "application/json");
-                headers.put("Authorization", "Bearer " + getToken());
-                return headers;
-            }
-        };
+        });
 
         getRequestQueue().add(req);
-
     }
 
-    public String getToken() {
-        return token;
+    public String getEmail() {
+        return email;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setRequestQueue(RequestQueue requestQueue){

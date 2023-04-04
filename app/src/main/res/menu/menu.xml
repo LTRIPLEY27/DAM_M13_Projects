@@ -3,6 +3,11 @@
     <item
         android:id="@+id/menu_logout"
         android:icon="@drawable/baseline_logout_24"
-        android:onClick="logoutCall"
+        android:onClick="logoutMenuCall"
         android:title="Logout" />
+    <item
+        android:id="@+id/menu_sobre"
+        android:icon="@drawable/baseline_logout_24"
+        android:onClick="aboutMenuCall"
+        android:title="Acerca de Reseed" />
 </menu>
