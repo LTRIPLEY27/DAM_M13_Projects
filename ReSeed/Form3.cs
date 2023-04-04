@@ -13,14 +13,23 @@ using System.Windows.Forms;
 using GMap.NET.WindowsForms;
 using System.Net;
 using System.Diagnostics.Eventing.Reader;
+using System.ComponentModel.Design;
 
 namespace ReSeed
 {
     public partial class Form3 : Form
     {
+        //URL
+        private String URL = "https://t-sunlight-381215.lm.r.appspot.com/register";
+
         //VARIABLES GLOBALES MAPAS
         private GMarkerGoogle marcador;//Instanciamos marcadores
-        private GMapOverlay capaMarcado;//Instanciamos la capa donde se añadirán los marcadores        
+        private GMapOverlay capaMarcado;//Instanciamos la capa donde se añadirán los marcadores
+
+        //OBJETO USUARIO
+        private Usuario usuario;
+        private Conexion_BD conexion = new Conexion_BD();
+
 
         //VARIABLE PARA ALMACENAR TOKEN QUE RECIBO DE LA CLASE Conexion_BD
         private String TOKEN_form3;
@@ -59,7 +68,6 @@ namespace ReSeed
         private void btn_principal_Click(object sender, EventArgs e)
         {
 
-            MessageBox.Show(TOKEN_form3);
             MessageBox.Show("Gracias por utilizar nuestro Programa. Esperamos verte pronto!", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Application.Exit();
 
@@ -188,6 +196,55 @@ namespace ReSeed
                 registroCoordenadas.Rows.Clear();//elimiamos todas las filas
                 capaMarcado.Clear();//borramos capa de dibujo poligono
             }
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button_ENVIAR_Click(object sender, EventArgs e)
+        {
+            //Declaramos las variables que compondrán el objeto usuario
+            String nombre;
+            String apellido;
+            String user;
+            String password;
+            String email;
+            String telefono;
+            String rol = "TECNIC";//pendiente interficie-->desplegable
+
+            //Variable repetición password
+            String password_repeticíon = textBox_PASSWORD_CONFIRM.Text;
+
+            //Asignamos los textBox que introducirá el usuario
+            nombre = textBox_NOMBRE.Text;
+            apellido = textBox_APELLIDO.Text;
+            telefono = textBox_TELEFONO.Text;//Casteamos a INT el telefono
+            user = textBox_user.Text;
+            email = textBox_MAIL.Text;
+            password = textBox_PASSWORD.Text;
+
+            //Instanciamos objeto usuario y le pasamos sus parámetros correspondientes
+            usuario = new Usuario(nombre, apellido, user, password, email, telefono,rol);
+
+            //Si el password introducido por el usuario coincide con su repetición...
+            if (password.Equals(password_repeticíon))
+            {
+                conexion.altaUsuario(usuario, TOKEN_form3, URL);
+
+            }
+            else
+            {//Si las contraseñas no coinciden al confirmar, mostraremos mensaje de erro al usuario
+                MessageBox.Show("Las contraseñas introducidas no coinciden. Por favor, revise la contraseña y introdúzcala nuevamente. Gracias", "ERROR CONTRASEÑA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
+        }
+
+        private void gMapControl1_DoubleClick(object sender, EventArgs e)
+        {
+
         }
     }
 }

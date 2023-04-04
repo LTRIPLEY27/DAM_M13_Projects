@@ -1,11 +1,17 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Data.Common;
 using System.DirectoryServices;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace ReSeed
@@ -80,6 +86,50 @@ namespace ReSeed
 
             }
         }
+
+        public async void altaUsuario (Usuario usuario, String token, String URL)
+        {
+            //String parametros = "{'nombre': '" + usuario.Nombre + "','apellido':'" + usuario.Apellido + "','telefono' :'" + usuario.NumeroTelefono + "'" +
+            //",'email':'" + usuario.Mail +"','password' :'" + usuario.Password +"'}"; 
+            JsonObject json = new JsonObject();
+            json.Add("nombre", usuario.Nombre);
+            json.Add("apellido", usuario.Apellido);
+            json.Add("user", usuario.User);
+            json.Add("password", usuario.Password);
+            json.Add("email", usuario.Mail);
+            json.Add("telefono", usuario.NumeroTelefono);
+            json.Add("rol", usuario.Rol);
+           
+            //var json = JsonConvert.SerializeObject(usuario).ToLower();
+            HttpClient client = new HttpClient();
+
+            //autorización TOKEN    
+            //client.DefaultRequestHeaders.Add("Authorization","Bearer "+token);
+            //var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+            //client.DefaultRequestHeaders.Accept.Add(contentType);
+           //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+           client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+
+            var content = new StringContent (json.ToString(),Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(URL, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Usuario registrado correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } else
+            {
+                MessageBox.Show("Error al dar de alta un usuario.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        public async void listaUsuarios (String token, String URL)
+        {
+
+           
+        }
+
 
 
     }

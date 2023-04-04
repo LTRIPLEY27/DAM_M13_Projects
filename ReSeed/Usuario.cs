@@ -1,5 +1,6 @@
 ﻿    using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,19 +13,24 @@ namespace ReSeed
         //Atributos de Usuario
         private String nombre;
         private String apellido;
-        private int numeroTelefono;
-        private String mail;
+        private String usuario;
+        private String telefono;
+        private String email;
         private String password;
+        private String rol;
 
         //Constructor Usuario
-        public Usuario(String nombre, String apellido, int numeroTelefono, String mail, String password)
+        public Usuario(String nombre, String apellido, String usuario, String password, String email, String telefono, String rol)
         {
 
             this.nombre = nombre;
             this.apellido = apellido;
-            this.numeroTelefono = numeroTelefono;
-            this.mail = mail;
+            this.usuario = usuario;
             this.password = password;
+            this.email = email;
+            this.telefono = telefono;
+            this.rol = rol;
+            
 
         }
 
@@ -36,23 +42,31 @@ namespace ReSeed
 
         }
 
+        public String User
+        {
+            get { return usuario; }
+            set { usuario = value; }
+
+        }
+
+
         public String Apellido//Propiedad apellido1
         {
             get { return apellido; }
             set { apellido = value; }
         }
 
-        public int NumeroTelefono//Propiedad telefono
+        public String NumeroTelefono//Propiedad telefono
         {
-            get { return numeroTelefono; }
-            set { numeroTelefono = value; }
+            get { return telefono; }
+            set { telefono = value; }
 
         }
         
         public String Mail//Propiedad mail
         {
-            get { return mail; }
-            set { mail = value; }
+            get { return email; }
+            set { email = value; }
 
         }
 
@@ -63,6 +77,14 @@ namespace ReSeed
             set {  password = value; } 
 
         }
+
+        public String Rol
+        {
+            get { return rol; }
+            set { rol = value; }
+
+        }
+        
 
     }
 }

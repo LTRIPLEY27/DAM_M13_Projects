@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form3));
             panel1 = new Panel();
             boton_registroCoordenadas = new Button();
-            gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             panel2 = new Panel();
             label5 = new Label();
             textBox_longitud = new TextBox();
@@ -59,9 +58,32 @@
             comboBox_tareas = new ComboBox();
             label4 = new Label();
             tabPage2 = new TabPage();
+            panel5 = new Panel();
+            comboBox_ELIMINARUSUARIO = new ComboBox();
+            label15 = new Label();
+            comboBox_LISTAUSUARIOS = new ComboBox();
+            label14 = new Label();
+            label13 = new Label();
+            panel6 = new Panel();
+            textBox_user = new TextBox();
+            label16 = new Label();
+            button_CANCELAR = new Button();
+            button_ENVIAR = new Button();
+            textBox_PASSWORD_CONFIRM = new TextBox();
+            textBox_PASSWORD = new TextBox();
+            textBox_MAIL = new TextBox();
+            textBox_TELEFONO = new TextBox();
+            textBox_APELLIDO = new TextBox();
+            textBox_NOMBRE = new TextBox();
+            label12 = new Label();
+            label11 = new Label();
+            label10 = new Label();
+            label9 = new Label();
+            label8 = new Label();
+            label3 = new Label();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
-            panel5 = new Panel();
+            gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ConfigMapa.SuspendLayout();
@@ -70,13 +92,15 @@
             panel4.SuspendLayout();
             panel3.SuspendLayout();
             tabPage2.SuspendLayout();
+            panel5.SuspendLayout();
+            panel6.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.BackColor = SystemColors.ActiveCaption;
-            panel1.Controls.Add(boton_registroCoordenadas);
             panel1.Controls.Add(gMapControl1);
+            panel1.Controls.Add(boton_registroCoordenadas);
             panel1.Controls.Add(panel2);
             panel1.Location = new Point(34, 25);
             panel1.Name = "panel1";
@@ -95,33 +119,6 @@
             boton_registroCoordenadas.Text = "AÑADIR COORDENADA";
             boton_registroCoordenadas.UseVisualStyleBackColor = true;
             boton_registroCoordenadas.Click += boton_registroCoordenadas_Click;
-            // 
-            // gMapControl1
-            // 
-            gMapControl1.Bearing = 0F;
-            gMapControl1.CanDragMap = true;
-            gMapControl1.EmptyTileColor = Color.Navy;
-            gMapControl1.GrayScaleMode = false;
-            gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            gMapControl1.LevelsKeepInMemory = 5;
-            gMapControl1.Location = new Point(20, 18);
-            gMapControl1.MarkersEnabled = true;
-            gMapControl1.MaxZoom = 2;
-            gMapControl1.MinZoom = 2;
-            gMapControl1.MouseWheelZoomEnabled = true;
-            gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            gMapControl1.Name = "gMapControl1";
-            gMapControl1.NegativeMode = false;
-            gMapControl1.PolygonsEnabled = true;
-            gMapControl1.RetryLoadTile = 0;
-            gMapControl1.RoutesEnabled = true;
-            gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
-            gMapControl1.ShowTileGridLines = true;
-            gMapControl1.Size = new Size(548, 430);
-            gMapControl1.TabIndex = 0;
-            gMapControl1.Zoom = 2D;
-            gMapControl1.MouseDoubleClick += gMapControl1_MouseDoubleClick;
             // 
             // panel2
             // 
@@ -399,7 +396,227 @@
             tabPage2.Padding = new Padding(3);
             tabPage2.Size = new Size(1166, 765);
             tabPage2.TabIndex = 1;
-            tabPage2.Text = "Gestión Usuarios";
+            tabPage2.Text = "GESTIÓN de Usuarios";
+            // 
+            // panel5
+            // 
+            panel5.BackgroundImage = (Image)resources.GetObject("panel5.BackgroundImage");
+            panel5.BackgroundImageLayout = ImageLayout.Stretch;
+            panel5.Controls.Add(comboBox_ELIMINARUSUARIO);
+            panel5.Controls.Add(label15);
+            panel5.Controls.Add(comboBox_LISTAUSUARIOS);
+            panel5.Controls.Add(label14);
+            panel5.Controls.Add(label13);
+            panel5.Controls.Add(panel6);
+            panel5.Location = new Point(153, 128);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(829, 452);
+            panel5.TabIndex = 0;
+            // 
+            // comboBox_ELIMINARUSUARIO
+            // 
+            comboBox_ELIMINARUSUARIO.FormattingEnabled = true;
+            comboBox_ELIMINARUSUARIO.Location = new Point(559, 270);
+            comboBox_ELIMINARUSUARIO.Name = "comboBox_ELIMINARUSUARIO";
+            comboBox_ELIMINARUSUARIO.Size = new Size(222, 24);
+            comboBox_ELIMINARUSUARIO.TabIndex = 5;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.BackColor = Color.Transparent;
+            label15.Font = new Font("Tahoma", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            label15.Location = new Point(559, 231);
+            label15.Name = "label15";
+            label15.Size = new Size(174, 19);
+            label15.TabIndex = 4;
+            label15.Text = "ELIMINAR USUARIO";
+            // 
+            // comboBox_LISTAUSUARIOS
+            // 
+            comboBox_LISTAUSUARIOS.FormattingEnabled = true;
+            comboBox_LISTAUSUARIOS.Location = new Point(559, 173);
+            comboBox_LISTAUSUARIOS.Name = "comboBox_LISTAUSUARIOS";
+            comboBox_LISTAUSUARIOS.Size = new Size(222, 24);
+            comboBox_LISTAUSUARIOS.TabIndex = 3;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.BackColor = Color.Transparent;
+            label14.Font = new Font("Tahoma", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            label14.Location = new Point(559, 138);
+            label14.Name = "label14";
+            label14.Size = new Size(155, 19);
+            label14.TabIndex = 2;
+            label14.Text = "EDITAR USUARIO";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.BackColor = Color.Transparent;
+            label13.Font = new Font("Tahoma", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            label13.Location = new Point(39, 65);
+            label13.Name = "label13";
+            label13.Size = new Size(172, 19);
+            label13.TabIndex = 1;
+            label13.Text = "ALTA DE USUARIOS";
+            // 
+            // panel6
+            // 
+            panel6.BackColor = SystemColors.ActiveCaption;
+            panel6.Controls.Add(textBox_user);
+            panel6.Controls.Add(label16);
+            panel6.Controls.Add(button_CANCELAR);
+            panel6.Controls.Add(button_ENVIAR);
+            panel6.Controls.Add(textBox_PASSWORD_CONFIRM);
+            panel6.Controls.Add(textBox_PASSWORD);
+            panel6.Controls.Add(textBox_MAIL);
+            panel6.Controls.Add(textBox_TELEFONO);
+            panel6.Controls.Add(textBox_APELLIDO);
+            panel6.Controls.Add(textBox_NOMBRE);
+            panel6.Controls.Add(label12);
+            panel6.Controls.Add(label11);
+            panel6.Controls.Add(label10);
+            panel6.Controls.Add(label9);
+            panel6.Controls.Add(label8);
+            panel6.Controls.Add(label3);
+            panel6.Location = new Point(39, 77);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(366, 296);
+            panel6.TabIndex = 0;
+            // 
+            // textBox_user
+            // 
+            textBox_user.Location = new Point(211, 3);
+            textBox_user.Name = "textBox_user";
+            textBox_user.Size = new Size(100, 23);
+            textBox_user.TabIndex = 15;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(61, 9);
+            label16.Name = "label16";
+            label16.Size = new Size(55, 16);
+            label16.TabIndex = 14;
+            label16.Text = "Usuarui";
+            // 
+            // button_CANCELAR
+            // 
+            button_CANCELAR.Location = new Point(36, 229);
+            button_CANCELAR.Name = "button_CANCELAR";
+            button_CANCELAR.Size = new Size(85, 50);
+            button_CANCELAR.TabIndex = 13;
+            button_CANCELAR.Text = "CANCELAR";
+            button_CANCELAR.UseVisualStyleBackColor = true;
+            // 
+            // button_ENVIAR
+            // 
+            button_ENVIAR.Location = new Point(186, 229);
+            button_ENVIAR.Name = "button_ENVIAR";
+            button_ENVIAR.Size = new Size(154, 50);
+            button_ENVIAR.TabIndex = 12;
+            button_ENVIAR.Text = "GUARDAR";
+            button_ENVIAR.UseVisualStyleBackColor = true;
+            button_ENVIAR.Click += button_ENVIAR_Click;
+            // 
+            // textBox_PASSWORD_CONFIRM
+            // 
+            textBox_PASSWORD_CONFIRM.Location = new Point(186, 193);
+            textBox_PASSWORD_CONFIRM.Name = "textBox_PASSWORD_CONFIRM";
+            textBox_PASSWORD_CONFIRM.Size = new Size(153, 23);
+            textBox_PASSWORD_CONFIRM.TabIndex = 11;
+            // 
+            // textBox_PASSWORD
+            // 
+            textBox_PASSWORD.Location = new Point(185, 159);
+            textBox_PASSWORD.Name = "textBox_PASSWORD";
+            textBox_PASSWORD.Size = new Size(154, 23);
+            textBox_PASSWORD.TabIndex = 10;
+            // 
+            // textBox_MAIL
+            // 
+            textBox_MAIL.Location = new Point(186, 125);
+            textBox_MAIL.Name = "textBox_MAIL";
+            textBox_MAIL.Size = new Size(154, 23);
+            textBox_MAIL.TabIndex = 9;
+            // 
+            // textBox_TELEFONO
+            // 
+            textBox_TELEFONO.Location = new Point(185, 95);
+            textBox_TELEFONO.Name = "textBox_TELEFONO";
+            textBox_TELEFONO.Size = new Size(154, 23);
+            textBox_TELEFONO.TabIndex = 8;
+            // 
+            // textBox_APELLIDO
+            // 
+            textBox_APELLIDO.Location = new Point(185, 61);
+            textBox_APELLIDO.Name = "textBox_APELLIDO";
+            textBox_APELLIDO.Size = new Size(154, 23);
+            textBox_APELLIDO.TabIndex = 7;
+            textBox_APELLIDO.TextChanged += textBox2_TextChanged;
+            // 
+            // textBox_NOMBRE
+            // 
+            textBox_NOMBRE.Location = new Point(185, 28);
+            textBox_NOMBRE.Name = "textBox_NOMBRE";
+            textBox_NOMBRE.Size = new Size(154, 23);
+            textBox_NOMBRE.TabIndex = 6;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(43, 196);
+            label12.Name = "label12";
+            label12.Size = new Size(137, 16);
+            label12.TabIndex = 5;
+            label12.Text = "REPITE PASSWORD :";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(43, 162);
+            label11.Name = "label11";
+            label11.Size = new Size(90, 16);
+            label11.TabIndex = 4;
+            label11.Text = "PASSWORD :";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(45, 128);
+            label10.Name = "label10";
+            label10.Size = new Size(49, 16);
+            label10.TabIndex = 3;
+            label10.Text = "MAIL :";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(45, 98);
+            label9.Name = "label9";
+            label9.Size = new Size(76, 16);
+            label9.TabIndex = 2;
+            label9.Text = "TELÉFONO :";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(43, 64);
+            label8.Name = "label8";
+            label8.Size = new Size(78, 16);
+            label8.TabIndex = 1;
+            label8.Text = "APELLIDO :";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(43, 31);
+            label3.Name = "label3";
+            label3.Size = new Size(68, 16);
+            label3.TabIndex = 0;
+            label3.Text = "NOMBRE :";
             // 
             // tabPage3
             // 
@@ -421,14 +638,32 @@
             tabPage4.Text = "Comentarios";
             tabPage4.UseVisualStyleBackColor = true;
             // 
-            // panel5
+            // gMapControl1
             // 
-            panel5.BackgroundImage = (Image)resources.GetObject("panel5.BackgroundImage");
-            panel5.BackgroundImageLayout = ImageLayout.Stretch;
-            panel5.Location = new Point(227, 97);
-            panel5.Name = "panel5";
-            panel5.Size = new Size(816, 505);
-            panel5.TabIndex = 0;
+            gMapControl1.Bearing = 0F;
+            gMapControl1.CanDragMap = true;
+            gMapControl1.EmptyTileColor = Color.Navy;
+            gMapControl1.GrayScaleMode = false;
+            gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            gMapControl1.LevelsKeepInMemory = 5;
+            gMapControl1.Location = new Point(19, 17);
+            gMapControl1.MarkersEnabled = true;
+            gMapControl1.MaxZoom = 2;
+            gMapControl1.MinZoom = 2;
+            gMapControl1.MouseWheelZoomEnabled = true;
+            gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            gMapControl1.Name = "gMapControl1";
+            gMapControl1.NegativeMode = false;
+            gMapControl1.PolygonsEnabled = true;
+            gMapControl1.RetryLoadTile = 0;
+            gMapControl1.RoutesEnabled = true;
+            gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
+            gMapControl1.ShowTileGridLines = false;
+            gMapControl1.Size = new Size(549, 433);
+            gMapControl1.TabIndex = 3;
+            gMapControl1.Zoom = 0D;
+            gMapControl1.MouseDoubleClick += gMapControl1_MouseDoubleClick;
             // 
             // Form3
             // 
@@ -450,19 +685,22 @@
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             tabPage2.ResumeLayout(false);
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
+            panel6.ResumeLayout(false);
+            panel6.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
 
         private Panel panel1;
-        private GMap.NET.WindowsForms.GMapControl gMapControl1;
         private Button btn_cancelar;
         private TabControl ConfigMapa;
         private TabPage tabPage1;
         private Panel panel2;
-        private TextBox textBox2;
-        private TextBox textBox1;
+        private TextBox textBox_APELLIDO;
+        private TextBox textBox_NOMBRE;
         private Label label2;
         private Label label1;
         private TabPage tabPage2;
@@ -470,7 +708,7 @@
         private TabPage tabPage4;
         private Button btn_enviar;
         private Panel panel4;
-        private TextBox textBox4;
+        private TextBox textBox_MAIL;
         private Label label7;
         private Panel panel3;
         private ComboBox comboBox2;
@@ -478,7 +716,7 @@
         private ComboBox comboBox1;
         private Label label4;
         private Label label5;
-        private TextBox textBox3;
+        private TextBox textBox_TELEFONO;
         private Button btn_salir;
         private TextBox textBox_comentarios;
         private ComboBox comboBox_usuarios;
@@ -494,5 +732,24 @@
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
         private Panel panel5;
+        private Panel panel6;
+        private Label label11;
+        private Label label10;
+        private Label label9;
+        private Label label8;
+        private Label label3;
+        private Label label12;
+        private TextBox textBox_PASSWORD_CONFIRM;
+        private TextBox textBox_PASSWORD;
+        private Button button_CANCELAR;
+        private Button button_ENVIAR;
+        private ComboBox comboBox_ELIMINARUSUARIO;
+        private Label label15;
+        private ComboBox comboBox_LISTAUSUARIOS;
+        private Label label14;
+        private Label label13;
+        private TextBox textBox_user;
+        private Label label16;
+        private GMap.NET.WindowsForms.GMapControl gMapControl1;
     }
 }
