@@ -54,6 +54,7 @@ public class User implements UserDetails {
      * Username del usuario
      */
     @NotNull
+    @Column(unique = true)
     protected String user;
 
     /**

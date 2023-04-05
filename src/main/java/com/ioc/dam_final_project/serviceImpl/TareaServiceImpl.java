@@ -92,4 +92,7 @@ public class TareaServiceImpl implements TareaService {
     }
 
 
+    public boolean isExistence(Long id){
+        return tareaRepository.findById(id).isPresent();
+    }
 }

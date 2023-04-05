@@ -1,6 +1,5 @@
 package com.ioc.dam_final_project.controller;
 
-import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.dto.MensajeDTO;
 import com.ioc.dam_final_project.dto.UserDTO;
 import com.ioc.dam_final_project.model.Enums.Rol;
@@ -75,7 +74,7 @@ public class UserController {
      *  <li>Entity: Retorna un perfil según la persona que haga la petición y esté loggueada/li>
      *  </ul>
      */
-    @GetMapping(path = "perfil")
+    @GetMapping(path = "perfil")//TODO : check el endpoint desde el server
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> showMyProfile(Principal principal) {
         return  ResponseEntity.ok(userService.getProfile(principal.getName()));
@@ -84,7 +83,7 @@ public class UserController {
     /*************************************************************
      *                   GETTING ENTITY BY ID FROM DATABASE
      * ***********************************************************/
-    @GetMapping(path = "find/value/{value}/id/{id}")// TODO verificar la query para que busque por todo
+    @GetMapping(path = "find/value/{value}/id/{id}")// TODO verificar la query para que busque por todo, realizar el método para validar la existencia del id, indiferentemente a la clase y retornar la excepcion, verificar los dto de respuestas (users)  retorna aún el objeto
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> findById(@PathVariable("value") String value,  @PathVariable("id") Long id) {
         return  ResponseEntity.ok(userService.searchById(value, id));
@@ -99,7 +98,7 @@ public class UserController {
      *  <li>Lista de Valores: Retorna una lista segun el parametro indicado</li>
      *  </ul>
      */
-    @GetMapping(path = "results/{value}")
+    @GetMapping(path = "results/{value}")// todo, controlar mejor la respuesta para devolver errores y resultados vacios
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Object>> getRegisters(Principal principal, @PathVariable("value") String value){
 
@@ -118,7 +117,7 @@ public class UserController {
      * <li>Una entidad: El objeto con todos sus campos actualizados</li>
      * </ul>
      */
-    @PutMapping(path = "update-user")
+    @PutMapping(path = "update-user")// TODO revisar la respuesta y controlar mejor
     @ResponseStatus(HttpStatus.OK)
     public Object update(Principal principal, @RequestBody UserDTO userDTO){
         var userOnSession = userRepository.findUserByEmail(principal.getName());
@@ -146,10 +145,11 @@ public class UserController {
      *                   DELETE VALUES FROM A OBJET IN DATABASE
      * ***********************************************************/
     @DeleteMapping("/delete/typus/{typus}/id/{id}")
-    public ResponseEntity<String> deleteById(Principal principal, @PathVariable String typus, @PathVariable Long id){
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity<Object> deleteById(Principal principal, @PathVariable String typus, @PathVariable Long id){
+
         var userOnSession = principal.getName();
-        userService.deleteRegister(userOnSession, typus, id);
-        return ResponseEntity.ok("Elemento borrado");
+        return userService.isRegistered(typus, id) != false ? ResponseEntity.ok(userService.deleteRegister(userOnSession, typus, id)) : ResponseEntity.ok("No hay registro del ID proporcionado de la clase " + typus.toUpperCase() + " Por favor, verifique") ;
     }
 
     /*************************************************************

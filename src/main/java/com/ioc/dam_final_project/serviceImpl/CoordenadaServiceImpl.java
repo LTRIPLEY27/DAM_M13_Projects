@@ -80,4 +80,7 @@ public class CoordenadaServiceImpl implements CoordenadaService  {
         return CoordenadaDTO.byModel(oldCoor);
     }
 
+    public boolean isExistence(Long id){
+        return coordenadaRepository.findById(id).isPresent();
+    }
 }

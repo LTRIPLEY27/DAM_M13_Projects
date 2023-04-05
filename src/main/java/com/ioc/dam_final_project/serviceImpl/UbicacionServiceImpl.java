@@ -45,14 +45,6 @@ public class UbicacionServiceImpl implements UbicacionService {
     }
 
     @Override
-    public UbicacionDTO findById(Long id) {
-        var ubicacion = ubicacionRepository.findById(id).orElseThrow();
-        var ubicacionDTO = UbicacionDTO.byModel(ubicacion);
-
-        return ubicacionDTO;
-    }
-
-    @Override
     public void deleteEntity(Long id) {
         var tarea = tareaRepository.findTareaByUbicacion(ubicacionRepository.findById(id).orElseThrow());
         tarea.setUbicacion(null);
@@ -78,5 +70,9 @@ public class UbicacionServiceImpl implements UbicacionService {
         ubicacionRepository.save(oldUbi);
 
         return UbicacionDTO.byModel(oldUbi);
+    }
+
+    public boolean isExistence(Long id){
+        return ubicacionRepository.findById(id).isPresent();
     }
 }

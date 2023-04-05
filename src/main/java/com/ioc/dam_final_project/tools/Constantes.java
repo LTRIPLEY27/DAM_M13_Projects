@@ -8,6 +8,7 @@ public interface Constantes {
     String MENSAJE = "mensaje";
     String ADMIN = "admin";
     String TECNICO = "tecnico";
+    String USER = "usuario";
 
     // plural
 

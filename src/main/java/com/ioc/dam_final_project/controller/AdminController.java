@@ -52,7 +52,7 @@ public class AdminController {
     @ResponseStatus(HttpStatus.OK)
     public UbicacionDTO getValue(@PathVariable Long id){
 
-        return ubicacionService.findById(id);
+        return ubicacionService.searchById(id);
     }
 
     /*************************************************************

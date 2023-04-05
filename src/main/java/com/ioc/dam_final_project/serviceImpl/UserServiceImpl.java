@@ -36,7 +36,12 @@ public class UserServiceImpl implements UserService, Constantes {
         this.userRepository = userRepository;
     }
 
-
+    /**
+     * Devuelve un objeto con el perfil de la persona en la sesión autenticada
+     * @return <ul>
+     *  <li>Entity: Según el rol devuelve el perfil del usuario</li>
+     *  </ul>
+     */
     @Override
     public Object getProfile(String username) {
 
@@ -53,6 +58,12 @@ public class UserServiceImpl implements UserService, Constantes {
         return null;
     }
 
+    /**
+     * Devuelve una lista de elementos contenidos en la base de datos, realiza un switch para devolver la respuesta según cada clase demandada
+     * @return <ul>
+     *  <li>Lista de Entidades: Según el rol administra el acceso a todos los valores contenidos</li>
+     *  </ul>
+     */
     @Override
     public List<Object> registers(String username, String value) {
         var user = userRepository.findUserByEmail(username).orElseThrow();
@@ -82,6 +93,12 @@ public class UserServiceImpl implements UserService, Constantes {
         return null;
     }
 
+    /**
+     * Actualiza un objeto 'Entity' en la base de datos
+     * @return <ul>
+     *  <li>Entity: valida segun el caso de uso y gestiona el update de dicha entidad con los nuevos valores</li>
+     *  </ul>
+     */
     @Override
     public UserDTO update(String old, UserDTO userDTO) {
         var user = userRepository.findUserByEmail(old).orElseThrow();
@@ -145,31 +162,39 @@ public class UserServiceImpl implements UserService, Constantes {
     }
 
     @Override
-    public void deleteRegister(String rol, String typus, Long id) {
+    public Object deleteRegister(String rol, String typus, Long id) {
         var user = userRepository.findUserByEmail(rol).orElseThrow();
 
         if (user.getRol() == Rol.ADMIN) {
             switch (typus) {
                 case TAREA -> {
                     tareaService.deleteEntity(id);
+                    return "Registro eliminado";
                 }
                 case UBICACION -> {
                     ubicacionService.deleteEntity(id);
+                    return "Registro eliminado";
                 }
                 case COORDENADA -> {
                     coordenadaService.deleteEntity(id);
+                    return "Registro eliminado";
                 }
                 case MENSAJE -> {
                     mensajeService.deleteEntity(id);
+                    return "Registro eliminado";
                 }
-                case TECNICO -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
-                    tecnicoServiceimpl.deleteEntity(id);
+                case USER -> {  // TODO, CHEQUEAR EL DELETE DEFINIDO POR ADMIN CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
+                    userRepository.deleteById(id);
+                    return "Registro eliminado";
                 }
             }
         }
         else {
             mensajeService.deleteEntity(id);
+            return "Registro eliminado";
         }
+
+        return "No hay registros con estos valores";
     }
 
     @Override
@@ -199,5 +224,22 @@ public class UserServiceImpl implements UserService, Constantes {
         return null;
     }
 
+    public boolean isRegistered(String value, Long id){
+        switch (value){
+            case COORDENADA -> {
+                return coordenadaService.isExistence(id);
+            }
+            case MENSAJE -> {
+                return mensajeService.isExistence(id);
+            }
+            case TAREA -> {
+                return tareaService.isExistence(id);
+            }
+            case USER -> {
+                return userRepository.findById(id).isPresent();
+            }
+        }
+        return false;
+    }
 
 }

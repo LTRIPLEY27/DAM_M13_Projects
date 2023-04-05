@@ -105,4 +105,8 @@ public class MensajeServiceImpl implements MensajeService {
         var dto = MensajeDTO.byModel(byModel);
         return dto;
     }
+
+    public boolean isExistence(Long id){
+        return mensajeRepository.findById(id).isPresent();
+    }
 }

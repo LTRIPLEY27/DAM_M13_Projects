@@ -20,7 +20,8 @@ public interface UserService {
 
     Object updateValue(String username, String value, Long id, Object object);
 
-    void deleteRegister(String rol, String typus, Long id);
+    //void deleteRegister(String rol, String typus, Long id);
+    Object deleteRegister(String rol, String typus, Long id);
 
     MensajeDTO postingMessage(String user, MensajeDTO mensajeDTO);
 
