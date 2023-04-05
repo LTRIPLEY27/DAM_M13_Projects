@@ -16,4 +16,5 @@ public interface CoordenadaService {
     CoordenadaDTO searchById(Long id);
 
     CoordenadaDTO updateValue(Long id, Object object);
+    CoordenadaDTO saveObject(Coordenada coordenada, Long ubicacion);
 }

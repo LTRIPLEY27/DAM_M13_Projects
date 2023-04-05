@@ -1,9 +1,12 @@
 package com.ioc.dam_final_project.serviceImpl;
 
 import com.ioc.dam_final_project.dto.MensajeDTO;
+import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.dto.UserDTO;
+import com.ioc.dam_final_project.model.Coordenada;
 import com.ioc.dam_final_project.model.Enums.Rol;
 import com.ioc.dam_final_project.model.Tecnico;
+import com.ioc.dam_final_project.model.Ubicacion;
 import com.ioc.dam_final_project.model.User;
 import com.ioc.dam_final_project.repository.*;
 import com.ioc.dam_final_project.service.UserService;
@@ -219,6 +222,22 @@ public class UserServiceImpl implements UserService, Constantes {
             }
             case TECNICO -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
                 return userRepository.findById(id).orElseThrow();
+            }
+        }
+        return null;
+    }
+
+    @Override// TODO, verificar si mensaje puede ser adherido desde acá, register desde acá?
+    public Object addNew(String user, String tipo, Long valor, Object object) {
+        switch (tipo) {
+            case TAREA -> {
+                return tareaService.saveObject(user, valor, object);
+            }
+            case UBICACION -> {
+                return ubicacionService.saveObject((Ubicacion) object, valor);
+            }
+            case COORDENADA -> {
+                return coordenadaService.saveObject((Coordenada) object, valor);
             }
         }
         return null;

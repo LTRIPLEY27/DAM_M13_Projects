@@ -26,13 +26,8 @@ public class CoordenadaServiceImpl implements CoordenadaService  {
         this.tareaRepository = tareaRepository;
     }
 
-   /* @Override
-    public Optional<Coordenada> saveObject(Coordenada coordenada) {
-        //var coordenada = new Coordenada();
-        return Optional.empty();
-    }*/
 
-    public void addCoordenada(Coordenada coordenada, Long ubicacion){
+    public CoordenadaDTO saveObject(Coordenada coordenada, Long ubicacion){
         var ubicacio = ubicacionRepository.findById(ubicacion).orElseThrow();
         var tarea = ubicacio.getTarea();
         coordenada.setUbicacion(ubicacio);
@@ -40,9 +35,11 @@ public class CoordenadaServiceImpl implements CoordenadaService  {
         ubicacio.addCoordenate(coordenada);
         coordenadaRepository.save(coordenada);
         ubicacionRepository.save(ubicacio);
-
         tarea.setUbicacion(ubicacio);
         tareaRepository.save(tarea);
+
+        // TODO, verificar la respuesta o si se mantiene en void ya que es una entidad debil
+        return CoordenadaDTO.byModel(coordenada);
     }
 
     @Override

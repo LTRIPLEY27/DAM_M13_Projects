@@ -93,10 +93,11 @@ public class AdminController {
      *                  CREATING TASK IN THE DATABASE
      * ***********************************************************/
 
+    // TODO, refactor en USERCONTROLLER
 
     @PostMapping(path = "/tarea/tecnico/{tecnico}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> newObject(Principal principal, @PathVariable int tecnico, @RequestBody Tarea tarea) {
+    public ResponseEntity<Object> newObject(Principal principal, @PathVariable Long tecnico, @RequestBody Tarea tarea) {
         var userOnSession = principal.getName();
         return ResponseEntity.ok(tareaService.saveObject(userOnSession, tecnico, tarea));
     }
@@ -104,14 +105,15 @@ public class AdminController {
     @PostMapping(path = "/ubicacion/tarea/{tarea}")
     @ResponseStatus(HttpStatus.CREATED)
     public Ubicacion newObject(@RequestBody Ubicacion ubicacion, @PathVariable Long tarea) {
-        return ubicacionService.addObject(ubicacion, tarea);
+        return ubicacionService.saveObject(ubicacion, tarea);
     }
 
     @PostMapping(path = "/coordenada/ubicacion/{ubicacion}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> newCoordenada(@RequestBody Coordenada coordenada, @PathVariable Long ubicacion){
-        coordenadaService.addCoordenada(coordenada, ubicacion);
-        return ResponseEntity.ok("Coordenada adherida a la ubicacion " + ubicacion);
+    public ResponseEntity<Object> newCoordenada(@RequestBody Coordenada coordenada, @PathVariable Long ubicacion){
+        //coordenadaService.addNew(coordenada, ubicacion);
+       // return ResponseEntity.ok("Coordenada adherida a la ubicacion " + ubicacion);
+        return ResponseEntity.ok(coordenadaService.saveObject(coordenada, ubicacion));
     }
 
     /*************************************************************

@@ -27,7 +27,7 @@ public class UbicacionServiceImpl implements UbicacionService {
     }
 
     @Override
-    public Ubicacion addObject(Ubicacion ubicacion, Long tareaId) {
+    public Ubicacion saveObject(Ubicacion ubicacion, Long tareaId) {
         var tarea = tareaRepository.findById(tareaId).orElseThrow();
         tarea.setUbicacion(ubicacion);
         ubicacion.setTarea(tarea);

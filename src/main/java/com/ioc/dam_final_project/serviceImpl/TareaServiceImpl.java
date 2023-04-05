@@ -31,16 +31,24 @@ public class TareaServiceImpl implements TareaService {
         this.tareaRepository = tareaRepository;
     }
 
+    /**
+     * Metodo que recibe un Objeto para crear una tarea
+     * @return <ul>
+     *  <li>TareaDTO: Retorna un Tarea Entity con los valores editados para el formato JSON</li>
+     *  </ul>
+     */
     @Override
-    public Tarea saveObject(String username, int id, Object tareaO) {
-        var tarea = (Tarea) tareaO;
-        var tecnico = tecnicoRepository.findById((long) id).orElseThrow();
+    public Tarea saveObject(String username, Long id, Object object) {
+    //public TareaDTO saveObject(String username, Long id, Object object) {
+        var tarea = (Tarea) object;
+        var tecnico = tecnicoRepository.findById(id).orElseThrow(); // TODO, VALIDAR QUÉ IDENTIFICACIÓN NOS PASARÁ EL ADMIN PARA EL TECNICO
         var admin = adminRepository.findAdminByEmail(username).orElseThrow();
 
         tarea.setAdmin(admin);
         tarea.setTecnico(tecnico);
+        tareaRepository.save(tarea);
 
-        return tareaRepository.save(tarea);
+        return tarea;
     }
 
     @Override

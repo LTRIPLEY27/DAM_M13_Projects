@@ -26,4 +26,6 @@ public interface UserService {
     MensajeDTO postingMessage(String user, MensajeDTO mensajeDTO);
 
     Object searchById(String value, Long id);
+
+    Object addNew(String user, String tipo, Long valor, Object object);
 }

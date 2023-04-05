@@ -49,10 +49,12 @@ public class SecurityConfiguration  {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**").permitAll()
+                 // --> OK
                 .requestMatchers("/register/**").permitAll()  // --> OK
                 //.requestMatchers("/register/**").hasAuthority("ADMIN")
                 //.requestMatchers("/tecnico/**").hasAuthority("TECNIC")
                 //.requestMatchers("/admin/**").permitAll() // --to restart users
+                //.requestMatchers("/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

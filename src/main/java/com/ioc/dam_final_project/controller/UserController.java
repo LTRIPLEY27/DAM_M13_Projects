@@ -3,6 +3,7 @@ package com.ioc.dam_final_project.controller;
 import com.ioc.dam_final_project.dto.MensajeDTO;
 import com.ioc.dam_final_project.dto.UserDTO;
 import com.ioc.dam_final_project.model.Enums.Rol;
+import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.repository.TareaRepository;
 import com.ioc.dam_final_project.repository.UserRepository;
 import com.ioc.dam_final_project.security.authentication.AuthenticationService;
@@ -55,12 +56,21 @@ public class UserController {
     /*************************************************************
      *                   GETTING REGISTER INTO DATABASE
      * ***********************************************************/
+
+    /**
+     * Metodo que valida el registro de un usuario, no es accesible fuera del admin
+     * @return <ul>
+     *  <li>Token: Retorna un Token como respuesta de un registro exitoso para la utenticación del usuario/li>
+     *  </ul>
+     */
+
     @PostMapping(value = "register")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> register(Principal principal, @RequestBody RegisterRequest request) {
         var user = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
         return user.getRol() != Rol.ADMIN ? ResponseEntity.ok("No tiene permisos para realizar ésta acción") : ResponseEntity.ok(serviceAuth.register(request));
+        //return ResponseEntity.ok(serviceAuth.register(request));
     }
 
 
@@ -74,12 +84,23 @@ public class UserController {
      *  <li>Entity: Retorna un perfil según la persona que haga la petición y esté loggueada/li>
      *  </ul>
      */
-    @GetMapping(path = "perfil")//TODO : check el endpoint desde el server
+    @GetMapping(path = "perfil")//TODO : check el endpoint desde el server, verificar si el admin puede acceder al perfil de cualquier usuario
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> showMyProfile(Principal principal) {
         return  ResponseEntity.ok(userService.getProfile(principal.getName()));
     }
 
+    /*************************************************************
+     *                   CREATE ENTITIES IN THE DATABASE
+     * ***********************************************************/
+
+    @PostMapping(path = "new/tipo/{tipo}/valor/{valor}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Object> newObject(Principal principal, @PathVariable("tipo")String tipo,  @PathVariable("valor") Long idObject, @RequestBody Object object) {
+        var userOnSession = principal.getName();
+
+        return ResponseEntity.ok(userService.addNew(userOnSession, tipo, idObject, object));
+    }
     /*************************************************************
      *                   GETTING ENTITY BY ID FROM DATABASE
      * ***********************************************************/
@@ -100,7 +121,7 @@ public class UserController {
      */
     @GetMapping(path = "results/{value}")// todo, controlar mejor la respuesta para devolver errores y resultados vacios
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<Object>> getRegisters(Principal principal, @PathVariable("value") String value){
+    public ResponseEntity<List <Object>> getRegisters(Principal principal, @PathVariable("value") String value){
 
         var username = principal.getName();
         return ResponseEntity.ok(userService.registers(username, value));
@@ -134,28 +155,40 @@ public class UserController {
     @PutMapping(path = "update/value/{value}/id/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> update(Principal principal, @PathVariable String value, @PathVariable Long id, @RequestBody Object object)  {
-        /*if(!tareaRepository.findById(id).isPresent()){
-            throw new Exception("ID inexistente en la base de datos");
-        }*/
         // TODO REALIZAR UN MÉTODO QUE VALIDE LOS ID Y RETORNE UN BOOLEAN PARA INDICAR ANTES SI EXITE O NO EL ID
-        return ResponseEntity.ok(userService.updateValue(principal.getName(), value, id, object));
+        return userService.isRegistered(value, id) != false ? ResponseEntity.ok(userService.updateValue(principal.getName(), value, id, object)) : ResponseEntity.ok("No hay registro del ID proporcionado de la clase " + value.toUpperCase() + " Por favor, verifique");
     }
 
     /*************************************************************
      *                   DELETE VALUES FROM A OBJET IN DATABASE
      * ***********************************************************/
+
+    /**
+     * Metodo que recibe 3 parametros y realiza el delete correspondiente, validando el rol que realiza la request, la clase a la que refiere la elimincación y la existencia del ID correspondiente a esa clase en la base de datos.
+     *
+     * @return <ul>
+     * <li>String: Con la respuesta de la consulta y según el caso exitoso o no de la eliminacion</li>
+     * </ul>
+     */
     @DeleteMapping("/delete/typus/{typus}/id/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<Object> deleteById(Principal principal, @PathVariable String typus, @PathVariable Long id){
 
         var userOnSession = principal.getName();
-        return userService.isRegistered(typus, id) != false ? ResponseEntity.ok(userService.deleteRegister(userOnSession, typus, id)) : ResponseEntity.ok("No hay registro del ID proporcionado de la clase " + typus.toUpperCase() + " Por favor, verifique") ;
+        return userService.isRegistered(typus, id) != false ? ResponseEntity.ok(userService.deleteRegister(userOnSession, typus, id)) : ResponseEntity.ok("No hay registro del ID proporcionado de la clase " + typus.toUpperCase() + " Por favor, verifique");
     }
 
     /*************************************************************
      *                   POST VALUES FROM A OBJET IN DATABASE
      * ***********************************************************/
 
+    /**
+     * Metodo que recibe 2 parametros y realiza el posteo del mensaje correspondiente a la Tarea y Usuario que la realizan.
+     *
+     * @return <ul>
+     * <li>String: Con la respuesta de la consulta y según el caso exitoso o no de la eliminacion</li>
+     * </ul>
+     */
     @PostMapping("/post-mensaje")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensajeDTO> postMessage(Principal principal, @RequestBody MensajeDTO mensaje){
