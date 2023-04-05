@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.reseed.objects.UserObj;
+import com.reseed.util.JsonReseedUtils;
 import com.reseed.util.adapter.TaskAdapter;
 import com.reseed.objects.TaskObj;
 import com.google.android.material.navigation.NavigationView;
@@ -46,9 +47,6 @@ public class AppActivity extends AppCompatActivity {
 
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        // Extraemos el usuario del objeto json.
-        extractUser();
-
         /**
          * Creamos el objeto que lista las tareas, se usará para llenar el TaskAdapter.
          */
@@ -70,6 +68,8 @@ public class AppActivity extends AppCompatActivity {
         // Buscamos el drawerLayout para poder interactuar con el.
         drawerLayout = findViewById(R.id.drawer_layer);
         fragmentContainerView = findViewById(R.id.fragmentContainerView);
+
+        extractUser();
 
 
         // Buscamos el texto para poner el nombre del usuario.
@@ -97,17 +97,21 @@ public class AppActivity extends AppCompatActivity {
     /**
      * Extraemos el user del json.
      */
-    private void extractUser() {
+    private void extractUser(){
         // cogemos la info del usuario del LoginActivity.
         //TODO recuperar la info del intent para usar la clase JsonReseedUtils para convertir a userobj y a TaskObj  OK!!
+
+        JSONObject convertJson;
         try {
-            JSONObject convertJson = new JSONObject(getIntent().getStringExtra("jsonObject"));
+            convertJson = new JSONObject(getIntent().getStringExtra("jsonObject"));
             this.userJSONInfo = convertJson;
             userToken = getIntent().getStringExtra("token");
+
+            JsonReseedUtils jsonReseedUtils = new JsonReseedUtils();
+            this.userObj = jsonReseedUtils.convertToUserObj(convertJson,userToken);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
 
 
     }

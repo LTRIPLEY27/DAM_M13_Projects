@@ -4,12 +4,14 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
@@ -50,6 +52,8 @@ public class LoginAuthRequest {
             Log.e("Error login request: ", e.getMessage());
         }
 
+        //creamos la retry policy para definir los intentos y el tiempo de la request.
+
         JsonObjectRequest req = new JsonObjectRequest
                 (Request.Method.POST, urlPostLogin, jsonCallObject, new Response.Listener<JSONObject>() {
             @Override
@@ -89,6 +93,11 @@ public class LoginAuthRequest {
                 }
             }
         });
+
+        req.setRetryPolicy(new DefaultRetryPolicy(
+                2500,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         getRequestQueue().add(req);
     }

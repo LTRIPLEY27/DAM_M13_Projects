@@ -15,18 +15,19 @@ public class JsonReseedUtils {
 
     /**
      * Classe para convertir de JsonObject a TaskObj
-     * @param jsonUserObject objeto request de la peticion de informacion del user
+     * @param jsonProfileObject objeto request de la peticion de informacion del user
      * @param token token del usuario para añadir al UserObj
      * @return devuelve el objeto UserObj
      */
 
     //TODO finalizar la clase para convertir el objeto request en UserObj
-    public UserObj convertToUserObj(JSONObject jsonUserObject, String token){
+    public UserObj convertToUserObj(JSONObject jsonProfileObject, String token){
 
         try {
-            userJSONInfo = jsonUserObject;
+            userJSONInfo = jsonProfileObject;
 
-            userObj = new UserObj(userJSONInfo.getString("user"),
+            userObj = new UserObj(
+                    userJSONInfo.getString("user"),
                     userJSONInfo.getString("nombre"),
                     userJSONInfo.getString("apellido"),
                     userJSONInfo.getString("email"),

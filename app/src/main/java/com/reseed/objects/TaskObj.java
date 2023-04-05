@@ -20,8 +20,8 @@ public class TaskObj {
      * @param fecha_creacion fecha de creación de la tarea.
      * @param fecha_asignacion fecha de asignacion de la tarea.
      * @param estatus Estado de la tarea.
-     * @param tecnico Tecnico asignado a la tarea.
-     * @param admin Administrador que ha asignado la tarea.
+     * @param tecnico Tecnico asignado a la tarea. ******ID?******  <-------------------------
+     * @param admin Administrador que ha asignado la tarea. ******ID?******  <-------------------------
      * @param taskLocation Localizacion central del mapa.
      * @param taskComments Comentarios de la tarea en un ArrayList.
      */
