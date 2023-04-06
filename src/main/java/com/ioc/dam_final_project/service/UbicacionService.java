@@ -17,5 +17,6 @@ public interface UbicacionService {
 
    UbicacionDTO searchById(Long id);
 
-   UbicacionDTO updateValue(Long id, Object object);
+   //UbicacionDTO updateValue(Long id, Object object);
+   Ubicacion updateValue(Long id, Object object);
 }

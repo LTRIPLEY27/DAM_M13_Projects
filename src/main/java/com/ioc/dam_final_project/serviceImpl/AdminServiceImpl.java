@@ -36,4 +36,11 @@ public class AdminServiceImpl implements AdminService {
     public AdminDTO update(Long id, Object object) {
         return null;
     }
+
+    @Override
+    public List<AdminDTO> getAll() {
+        var admins = new ArrayList<AdminDTO>();
+        adminRepository.findAll().forEach(admin -> admins.add(AdminDTO.byModel(admin)));
+        return admins;
+    }
 }

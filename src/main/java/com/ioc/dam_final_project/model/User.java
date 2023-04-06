@@ -112,8 +112,8 @@ public class User implements UserDetails {
         this.rol = rol;
     }
 
-    public static User byDTO(UserDTO adminDTO){
-        return new User(adminDTO.getId(), adminDTO.getUser(), adminDTO.getPassword(), adminDTO.getNombre(), adminDTO.getApellido(), adminDTO.getEmail(), adminDTO.getTelefono(), null);
+    public static User byDTO(UserDTO userDTO){
+        return new User(userDTO.getId(), userDTO.getUser(), userDTO.getPassword(), userDTO.getNombre(), userDTO.getApellido(), userDTO.getEmail(), userDTO.getTelefono(), userDTO.getRol());
     }
 
     /**

@@ -1,7 +1,10 @@
 package com.ioc.dam_final_project.tools;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public interface Constantes {
 
+    ObjectMapper mapper = new ObjectMapper();
     String TAREA = "tarea";
     String UBICACION = "ubicacion";
     String COORDENADA = "coordenada";

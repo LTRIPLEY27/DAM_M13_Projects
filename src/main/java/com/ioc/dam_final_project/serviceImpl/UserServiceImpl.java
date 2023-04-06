@@ -12,6 +12,7 @@ import com.ioc.dam_final_project.tools.Constantes;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -67,9 +68,9 @@ public class UserServiceImpl implements UserService, Constantes {
      */
     @Override
     public List<Object> registers(String username, String value) {
-        var user = userRepository.findUserByEmail(username).orElseThrow();
+        var usuari = userRepository.findUserByEmail(username).orElseThrow();
 
-        if (user.getRol() == Rol.ADMIN) {
+        if (usuari.getRol() == Rol.ADMIN) {
             switch (value) {
                 case TAREAS -> {
                     return Collections.singletonList(tareaService.total());
@@ -86,9 +87,17 @@ public class UserServiceImpl implements UserService, Constantes {
                 case TECNICOS -> {
                     return Collections.singletonList(tecnicoServiceimpl.getAll());
                 }
+                case ADMINS -> {
+                    return Collections.singletonList(adminService.getAll());
+                }
+                case USER -> { // TODO, CHEQUEAR USERS GENERIC
+                    var users = new ArrayList<UserDTO>();
+                    userRepository.findAll().forEach(user -> users.add(UserDTO.byEntity(user)));
+                    return Collections.singletonList(users);
+                }
             }
         } else {
-            return Collections.singletonList(tareaService.getTareaTec((Tecnico) user)); // to implementade tarea
+            return Collections.singletonList(tareaService.getTareaTec((Tecnico) usuari)); // to implementade tarea
         }
 
         return null;
@@ -217,8 +226,8 @@ public class UserServiceImpl implements UserService, Constantes {
             case MENSAJE -> {
                 return mensajeService.searchById(id);
             }
-            case TECNICO -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
-                return userRepository.findById(id).orElseThrow();
+            case USER -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
+                return UserDTO.byEntity(userRepository.findById(id).orElseThrow());
             }
         }
         return null;
@@ -269,6 +278,9 @@ public class UserServiceImpl implements UserService, Constantes {
             }
             case USER -> {
                 return userRepository.findById(id).isPresent();
+            }
+            case UBICACION -> {
+                return ubicacionService.isExistence(id);
             }
         }
         return false;

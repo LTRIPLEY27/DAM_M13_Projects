@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.dto;
 
+import com.ioc.dam_final_project.model.Enums.Rol;
 import com.ioc.dam_final_project.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,10 +19,10 @@ public class UserDTO {
     private String apellido;
     private  String email;
     private  String telefono;
-    //private Rol rol;
+    private Rol rol;
 
     //TODO Verificar si al realizar update : id y rol se pueden editar (en teoría no, pero comprobar)
     public static UserDTO byEntity(User user){
-        return new UserDTO(user.getId(), user.getUser(), user.getPassword(), user.getNombre(), user.getApellido(), user.getEmail(), user.getTelefono());
+        return new UserDTO(user.getId(), user.getUser(), user.getPassword(), user.getNombre(), user.getApellido(), user.getEmail(), user.getTelefono(), user.getRol());
     }
 }

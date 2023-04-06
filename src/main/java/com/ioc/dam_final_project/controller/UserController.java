@@ -95,32 +95,35 @@ public class UserController implements Constantes {
     @PostMapping(value = "register")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> register(Principal principal, @RequestBody RegisterRequest request) {
-        var user = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+        //var user = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return user.getRol() != Rol.ADMIN ? ResponseEntity.ok("No tiene permisos para realizar ésta acción") : ResponseEntity.ok(serviceAuth.register(request));
-        //return ResponseEntity.ok(serviceAuth.register(request));
+        //return user.getRol() != Rol.ADMIN ? ResponseEntity.ok("No tiene permisos para realizar ésta acción") : ResponseEntity.ok(serviceAuth.register(request));
+        return ResponseEntity.ok(serviceAuth.register(request));
     }
 
     // TODO AGREGAR VALIDATOR PARA OBJETO AGREGADO POR ID, verificador de rol, y dtos de tareas, RESPUESTA DE AGREGADO CORRECTAMENTE
-    @PostMapping(path = "/tarea/tecnico/{tecnico}")
+    @PostMapping(path = "/tarea/tecnico/{idtecnico}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> newObject(Principal principal, @PathVariable Long tecnico, @RequestBody Tarea object) {
+    public ResponseEntity<Object> newObject(Principal principal, @PathVariable Long idtecnico, @RequestBody Tarea object) {
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(USER, tecnico) != false ? ResponseEntity.ok(userService.addNewTar(principal.getName(), tecnico, object)) : ResponseEntity.ok("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + TECNICO.toUpperCase() + "  Por favor, verifique");
+        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(USER, idtecnico) != false ? ResponseEntity.ok(userService.addNewTar(principal.getName(), idtecnico, object)) : ResponseEntity.ok("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + TECNICO.toUpperCase() + "  Por favor, verifique");
     }
 
-    @PostMapping(path = "/ubicacion/tarea/{tarea}")
+    @PostMapping(path = "/ubicacion/tarea/{idtarea}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> newObject(@RequestBody Ubicacion ubicacion, @PathVariable Long tarea) {
-        return ResponseEntity.ok(userService.addNewUbicacion(ubicacion, tarea));
+    public ResponseEntity<Object> newObject(Principal principal, @RequestBody Ubicacion ubicacion, @PathVariable Long idtarea) {
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(TAREA, idtarea) != false ? ResponseEntity.ok(userService.addNewUbicacion(ubicacion, idtarea)) : ResponseEntity.ok("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + TAREA.toUpperCase() + "  Por favor, verifique");
     }
 
-    @PostMapping(path = "/coordenada/ubicacion/{ubicacion}")
+    @PostMapping(path = "/coordenada/ubicacion/{idUbicacion}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> newCoordenada(@RequestBody Coordenada coordenada, @PathVariable Long ubicacion){
-        return ResponseEntity.ok(userService.addNewCoor(coordenada, ubicacion));
+    public ResponseEntity<Object> newCoordenada(Principal principal, @RequestBody Coordenada coordenada, @PathVariable Long idUbicacion){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(UBICACION, idUbicacion) != false ? ResponseEntity.ok(userService.addNewCoor(coordenada, idUbicacion)) : ResponseEntity.ok("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + UBICACION.toUpperCase() + "  Por favor, verifique");
     }
+
     /*************************************************************
      *                   GETTING ENTITY BY ID FROM DATABASE
      * ***********************************************************/
@@ -158,11 +161,11 @@ public class UserController implements Constantes {
      * <li>Una entidad: El objeto con todos sus campos actualizados</li>
      * </ul>
      */
-    @PutMapping(path = "update-user")// TODO revisar la respuesta y controlar mejor
+    @PutMapping(path = "update-user")// TODO revisar la respuesta y controlar mejor, ubicar qué campos realmente ejecutará el rol de user normal en el suyo
     @ResponseStatus(HttpStatus.OK)
     public Object update(Principal principal, @RequestBody UserDTO userDTO){
-        var userOnSession = userRepository.findUserByEmail(principal.getName());
-        return !userOnSession.isPresent() ? userService.update(principal.getName(), userDTO) : ResponseEntity.ok("No se puede editar su perfil, contacte al administrador");
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+        return userOnSession.isEnabled() ? userService.update(principal.getName(), userDTO) : ResponseEntity.ok("No se puede editar su perfil, contacte al administrador");
     }
 
     /**

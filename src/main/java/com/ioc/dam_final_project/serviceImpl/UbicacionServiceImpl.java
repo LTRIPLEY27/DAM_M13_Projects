@@ -6,6 +6,7 @@ import com.ioc.dam_final_project.repository.CoordenadaRepository;
 import com.ioc.dam_final_project.repository.TareaRepository;
 import com.ioc.dam_final_project.repository.UbicacionRepository;
 import com.ioc.dam_final_project.service.UbicacionService;
+import com.ioc.dam_final_project.tools.Constantes;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Service
 @Qualifier(value = "ubicacion")
-public class UbicacionServiceImpl implements UbicacionService {
+public class UbicacionServiceImpl implements UbicacionService, Constantes {
 
     private final UbicacionRepository ubicacionRepository;
     private final TareaRepository tareaRepository;
@@ -57,9 +58,9 @@ public class UbicacionServiceImpl implements UbicacionService {
     }
 
     @Override
-    public UbicacionDTO updateValue(Long id, Object object) {
+    public Ubicacion updateValue(Long id, Object object) {
         var oldUbi = ubicacionRepository.findById(id).orElseThrow();
-        var newUbi = Ubicacion.byDTO((UbicacionDTO) object);
+        var newUbi = mapper.convertValue(object, Ubicacion.class);
 
         oldUbi.setZoom(newUbi.getZoom());
         oldUbi.setCentroLatitud(newUbi.getCentroLatitud());
@@ -67,9 +68,8 @@ public class UbicacionServiceImpl implements UbicacionService {
         oldUbi.setMapa(newUbi.getMapa());
         oldUbi.setTarea(newUbi.getTarea());
 
-        ubicacionRepository.save(oldUbi);
-
-        return UbicacionDTO.byModel(oldUbi);
+        //return UbicacionDTO.byModel(oldUbi);
+        return ubicacionRepository.save(oldUbi);
     }
 
     public boolean isExistence(Long id){

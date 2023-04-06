@@ -10,4 +10,6 @@ public interface AdminService {
     AdminDTO profile(String email);
 
     AdminDTO update(Long id, Object object);
+
+    List<AdminDTO> getAll();
 }

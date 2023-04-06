@@ -1,24 +1,24 @@
 package com.ioc.dam_final_project.serviceImpl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
-import com.ioc.dam_final_project.model.Ubicacion;
 import com.ioc.dam_final_project.repository.AdminRepository;
 import com.ioc.dam_final_project.repository.TareaRepository;
 import com.ioc.dam_final_project.repository.TecnicoRepository;
 import com.ioc.dam_final_project.service.TareaService;
+import com.ioc.dam_final_project.tools.Constantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
 @Qualifier(value = "tarea")
-public class TareaServiceImpl implements TareaService {
+public class TareaServiceImpl implements TareaService, Constantes {
 
     // INYECCIÓN DE DEPENDENCIAS
     @Autowired
@@ -26,6 +26,8 @@ public class TareaServiceImpl implements TareaService {
     @Autowired
     AdminRepository adminRepository;
     private final TareaRepository tareaRepository;
+
+    //private ObjectMapper mapper = new ObjectMapper();
 
     public TareaServiceImpl(TareaRepository tareaRepository) {
         this.tareaRepository = tareaRepository;
@@ -74,9 +76,9 @@ public class TareaServiceImpl implements TareaService {
     }
 
     @Override
-    public TareaDTO updateValue(Long id, Object object) {
+    public Tarea updateValue(Long id, Object object) {
         var tar = tareaRepository.findById(id).orElseThrow();
-        var newTar = Tarea.byDTO((TareaDTO) object);
+        var newTar = mapper.convertValue(object, Tarea.class);
 
         tar.setName(newTar.getName());
         tar.setTarea(newTar.getTarea());
@@ -86,9 +88,7 @@ public class TareaServiceImpl implements TareaService {
         tar.setUbicacion(newTar.getUbicacion());
         tar.setMensaje(newTar.getMensaje());
 
-        tareaRepository.save(tar);
-
-        return TareaDTO.byModel(tar);
+        return tareaRepository.save(tar);
     }
 
     @Override
