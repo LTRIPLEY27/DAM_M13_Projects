@@ -11,6 +11,7 @@ import com.ioc.dam_final_project.repository.UserRepository;
 import com.ioc.dam_final_project.security.authentication.AuthenticationService;
 import com.ioc.dam_final_project.security.authentication.RegisterRequest;
 import com.ioc.dam_final_project.serviceImpl.UserServiceImpl;
+import com.ioc.dam_final_project.tools.Constantes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/")
-public class UserController {
+public class UserController implements Constantes {
 
     // INYECCION DE DEPENDENCIAS
     /**
@@ -59,21 +60,6 @@ public class UserController {
      *                   GETTING REGISTER INTO DATABASE
      * ***********************************************************/
 
-    /**
-     * Metodo que valida el registro de un usuario, no es accesible fuera del admin
-     * @return <ul>
-     *  <li>Token: Retorna un Token como respuesta de un registro exitoso para la utenticación del usuario/li>
-     *  </ul>
-     */
-
-    @PostMapping(value = "register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> register(Principal principal, @RequestBody RegisterRequest request) {
-        var user = userRepository.findUserByEmail(principal.getName()).orElseThrow();
-
-        return user.getRol() != Rol.ADMIN ? ResponseEntity.ok("No tiene permisos para realizar ésta acción") : ResponseEntity.ok(serviceAuth.register(request));
-        //return ResponseEntity.ok(serviceAuth.register(request));
-    }
 
 
 
@@ -97,22 +83,31 @@ public class UserController {
      * ***********************************************************/
 
     // TODO, centralizar todos los new registers
-   /* @PostMapping(path = "new/tipo/{tipo}/valor/{valor}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> newObject(Principal principal, @PathVariable("tipo")String tipo,  @PathVariable("valor") Long idObject, @RequestBody Object object) {
-        var userOnSession = principal.getName();
-
-        return ResponseEntity.ok(userService.addNew(userOnSession, tipo, idObject, object));
-    }*/
-
     // POR ORDEN DE JERARQUÍA EN LA RELACIÓN.
+
+    /**
+     * Metodo que valida el registro de un usuario, no es accesible fuera del admin
+     * @return <ul>
+     *  <li>Token: Retorna un Token como respuesta de un registro exitoso para la utenticación del usuario/li>
+     *  </ul>
+     */
+
+    @PostMapping(value = "register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Object> register(Principal principal, @RequestBody RegisterRequest request) {
+        var user = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return user.getRol() != Rol.ADMIN ? ResponseEntity.ok("No tiene permisos para realizar ésta acción") : ResponseEntity.ok(serviceAuth.register(request));
+        //return ResponseEntity.ok(serviceAuth.register(request));
+    }
 
     // TODO AGREGAR VALIDATOR PARA OBJETO AGREGADO POR ID, verificador de rol, y dtos de tareas, RESPUESTA DE AGREGADO CORRECTAMENTE
     @PostMapping(path = "/tarea/tecnico/{tecnico}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> newObject(Principal principal, @PathVariable Long tecnico, @RequestBody Tarea object) {
-        var userOnSession = principal.getName();
-        return ResponseEntity.ok(userService.addNewTar(userOnSession, tecnico, object));
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(USER, tecnico) != false ? ResponseEntity.ok(userService.addNewTar(principal.getName(), tecnico, object)) : ResponseEntity.ok("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + TECNICO.toUpperCase() + "  Por favor, verifique");
     }
 
     @PostMapping(path = "/ubicacion/tarea/{tarea}")
