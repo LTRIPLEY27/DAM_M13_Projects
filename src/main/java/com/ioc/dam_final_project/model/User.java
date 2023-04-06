@@ -113,7 +113,7 @@ public class User implements UserDetails {
     }
 
     public static User byDTO(UserDTO adminDTO){
-        return new User(adminDTO.getUser(), adminDTO.getPassword(), adminDTO.getNombre(), adminDTO.getApellido(), adminDTO.getEmail(), adminDTO.getTelefono(), null);
+        return new User(adminDTO.getId(), adminDTO.getUser(), adminDTO.getPassword(), adminDTO.getNombre(), adminDTO.getApellido(), adminDTO.getEmail(), adminDTO.getTelefono(), null);
     }
 
     /**

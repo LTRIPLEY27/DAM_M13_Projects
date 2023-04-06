@@ -2,8 +2,10 @@ package com.ioc.dam_final_project.controller;
 
 import com.ioc.dam_final_project.dto.MensajeDTO;
 import com.ioc.dam_final_project.dto.UserDTO;
+import com.ioc.dam_final_project.model.Coordenada;
 import com.ioc.dam_final_project.model.Enums.Rol;
 import com.ioc.dam_final_project.model.Tarea;
+import com.ioc.dam_final_project.model.Ubicacion;
 import com.ioc.dam_final_project.repository.TareaRepository;
 import com.ioc.dam_final_project.repository.UserRepository;
 import com.ioc.dam_final_project.security.authentication.AuthenticationService;
@@ -94,12 +96,35 @@ public class UserController {
      *                   CREATE ENTITIES IN THE DATABASE
      * ***********************************************************/
 
-    @PostMapping(path = "new/tipo/{tipo}/valor/{valor}")
+    // TODO, centralizar todos los new registers
+   /* @PostMapping(path = "new/tipo/{tipo}/valor/{valor}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> newObject(Principal principal, @PathVariable("tipo")String tipo,  @PathVariable("valor") Long idObject, @RequestBody Object object) {
         var userOnSession = principal.getName();
 
         return ResponseEntity.ok(userService.addNew(userOnSession, tipo, idObject, object));
+    }*/
+
+    // POR ORDEN DE JERARQUÍA EN LA RELACIÓN.
+
+    // TODO AGREGAR VALIDATOR PARA OBJETO AGREGADO POR ID, verificador de rol, y dtos de tareas, RESPUESTA DE AGREGADO CORRECTAMENTE
+    @PostMapping(path = "/tarea/tecnico/{tecnico}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Object> newObject(Principal principal, @PathVariable Long tecnico, @RequestBody Tarea object) {
+        var userOnSession = principal.getName();
+        return ResponseEntity.ok(userService.addNewTar(userOnSession, tecnico, object));
+    }
+
+    @PostMapping(path = "/ubicacion/tarea/{tarea}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Object> newObject(@RequestBody Ubicacion ubicacion, @PathVariable Long tarea) {
+        return ResponseEntity.ok(userService.addNewUbicacion(ubicacion, tarea));
+    }
+
+    @PostMapping(path = "/coordenada/ubicacion/{ubicacion}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Object> newCoordenada(@RequestBody Coordenada coordenada, @PathVariable Long ubicacion){
+        return ResponseEntity.ok(userService.addNewCoor(coordenada, ubicacion));
     }
     /*************************************************************
      *                   GETTING ENTITY BY ID FROM DATABASE

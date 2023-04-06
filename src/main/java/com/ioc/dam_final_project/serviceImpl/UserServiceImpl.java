@@ -1,8 +1,6 @@
 package com.ioc.dam_final_project.serviceImpl;
 
-import com.ioc.dam_final_project.dto.MensajeDTO;
-import com.ioc.dam_final_project.dto.TareaDTO;
-import com.ioc.dam_final_project.dto.UserDTO;
+import com.ioc.dam_final_project.dto.*;
 import com.ioc.dam_final_project.model.Coordenada;
 import com.ioc.dam_final_project.model.Enums.Rol;
 import com.ioc.dam_final_project.model.Tecnico;
@@ -196,7 +194,6 @@ public class UserServiceImpl implements UserService, Constantes {
             mensajeService.deleteEntity(id);
             return "Registro eliminado";
         }
-
         return "No hay registros con estos valores";
     }
 
@@ -227,7 +224,22 @@ public class UserServiceImpl implements UserService, Constantes {
         return null;
     }
 
-    @Override// TODO, verificar si mensaje puede ser adherido desde acá, register desde acá?
+    @Override
+    public Object addNewTar(String username, Long id, Object object) {
+        return tareaService.saveObject(username, id, object);
+    }
+
+    @Override
+    public Ubicacion addNewUbicacion(Ubicacion ubicacion, Long id) {
+        return ubicacionService.saveObject(ubicacion, id);
+    }
+
+    @Override
+    public CoordenadaDTO addNewCoor(Coordenada coordenada, Long ubicacion) {
+        return coordenadaService.saveObject(coordenada, ubicacion);
+    }
+
+    /*@Override// TODO, verificar si mensaje puede ser adherido desde acá, register desde acá?
     public Object addNew(String user, String tipo, Long valor, Object object) {
         switch (tipo) {
             case TAREA -> {
@@ -241,7 +253,8 @@ public class UserServiceImpl implements UserService, Constantes {
             }
         }
         return null;
-    }
+    }*/
+
 
     public boolean isRegistered(String value, Long id){
         switch (value){

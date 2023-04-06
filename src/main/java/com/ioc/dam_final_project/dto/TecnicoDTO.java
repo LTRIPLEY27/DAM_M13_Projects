@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class TecnicoDTO {
 
+    private Long id;
     private String user;
    // private String password;
     private String nombre;
@@ -24,12 +25,10 @@ public class TecnicoDTO {
     private  String telefono;
     private Rol rol;
     private List<TareaDTO> tarea; // POR VERIFIAR SI SOLO SE MUESTRA EL NOMBRE EN EL PERFIL O EL DETALLE DE TAREA
-
     public static TecnicoDTO byModel(Tecnico tecnico){
         List<TareaDTO> tareaDTOS = new ArrayList<>();
-        for (var i : tecnico.getTareas()){
-            tareaDTOS.add(TareaDTO.byModel(i));
-        }
-        return new TecnicoDTO(tecnico.getUser(), tecnico.getNombre(), tecnico.getApellido(), tecnico.getEmail(), tecnico.getTelefono(), tecnico.getRol(), tareaDTOS);
+        tecnico.getTareas().forEach(tarea1 -> tareaDTOS.add(TareaDTO.byModel(tarea1)));
+
+        return new TecnicoDTO(tecnico.getId(), tecnico.getUser(), tecnico.getNombre(), tecnico.getApellido(), tecnico.getEmail(), tecnico.getTelefono(), tecnico.getRol(), tareaDTOS);
     }
 }

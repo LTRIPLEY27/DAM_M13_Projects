@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.aspectj.weaver.UnresolvedType.add;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -31,10 +33,7 @@ public class TareaDTO {
     public static TareaDTO byModel(Tarea tarea){
         Set<MensajeDTO> mensajes = new HashSet<>();
 
-
-        for (var i : tarea.getMensaje()){
-            mensajes.add(MensajeDTO.byModel(i));
-        }
+        tarea.getMensaje().forEach(mensaje -> mensajes.add(MensajeDTO.byModel(mensaje)));
 
         var ubicacion = tarea.getUbicacion() != null ? UbicacionDTO.byModel(tarea.getUbicacion()) : tarea.getUbicacion();
         return new TareaDTO(tarea.getName(), tarea.getFecha_creacion(), tarea.getFecha_culminacion(), tarea.getTarea(), tarea.getEstatus(), tarea.getTecnico().getUser(), tarea.getAdmin().getUser(), ubicacion, mensajes);

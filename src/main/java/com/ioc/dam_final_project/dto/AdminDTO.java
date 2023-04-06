@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AdminDTO {
 
+    private Long id;
     private String user;
     //private String password;
     private String nombre;
@@ -27,11 +28,9 @@ public class AdminDTO {
 
     // SETTING VALUES FROM OBJETC FOR THE VALUES WE WANT SHOW ON JSON
     public static AdminDTO byModel(Admin admin){
-        var tadeaDTO = new ArrayList<TareaDTO>();
-        for(var i : admin.getTareaList()){
-            tadeaDTO.add(TareaDTO.byModel(i));
-        }
+        var tareaDTO = new ArrayList<TareaDTO>();
+        admin.getTareaList().forEach(tarea1 -> tareaDTO.add(TareaDTO.byModel(tarea1)));
 
-        return  new AdminDTO(admin.getUser(),  admin.getNombre(), admin.getApellido(), admin.getEmail(), admin.getTelefono(), admin.getRol(), tadeaDTO);
+        return  new AdminDTO(admin.getId(), admin.getUser(),  admin.getNombre(), admin.getApellido(), admin.getEmail(), admin.getTelefono(), admin.getRol(), tareaDTO);
     }
 }

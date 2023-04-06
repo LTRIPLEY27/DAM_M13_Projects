@@ -46,17 +46,14 @@ public class TareaServiceImpl implements TareaService {
 
         tarea.setAdmin(admin);
         tarea.setTecnico(tecnico);
-        tareaRepository.save(tarea);
 
-        return tarea;
+        return tareaRepository.save(tarea);
     }
 
     @Override
     public List<TareaDTO> total() {
         var object = new ArrayList<TareaDTO>();
-        for (var i : tareaRepository.findAll()){
-            object.add(TareaDTO.byModel(i));
-        }
+        tareaRepository.findAll().forEach(tarea -> object.add(TareaDTO.byModel(tarea)));
         return object;
     }
 
