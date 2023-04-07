@@ -1,10 +1,12 @@
 package com.reseed.objects;
 
+import java.util.ArrayList;
+
 public class TaskLocation {
 
-    private Long latitud, longitud;
-    private Float zoom;
-    private Integer idMapa;
+    private String latitud, longitud;
+    private String zoom;
+    private ArrayList<MapPoint> mapPoints;
 
     /**
      * Constructor de la clase TaskLocation, que se encarga de localizar
@@ -12,44 +14,45 @@ public class TaskLocation {
      * @param latitud Posición del centro del mapa.
      * @param longitud Posición del centro del mapa.
      * @param zoom Zoom inicial del mapa por defecto.
-     * @param idMapa Id del mapa relacionado.
+     * @param mapPoints Puntos de geometria del mapa relacionado.
      */
-    public  TaskLocation (Long latitud, Long longitud, Float zoom, Integer idMapa){
+    public  TaskLocation (String latitud, String longitud, String zoom, ArrayList<MapPoint> mapPoints){
         setLatitud(latitud);
         setLongitud(longitud);
         setZoom(zoom);
-        setIdMapa(idMapa);
+        setMapPoints(mapPoints);
     }
 
-    public Long getLatitud() {
+    public String getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(Long latitud) {
+    public void setLatitud(String latitud) {
         this.latitud = latitud;
     }
 
-    public Long getLongitud() {
+    public String getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(Long longitud) {
+    public void setLongitud(String longitud) {
         this.longitud = longitud;
     }
 
-    public Float getZoom() {
+    public String getZoom() {
         return zoom;
     }
 
-    public void setZoom(Float zoom) {
+    public void setZoom(String zoom) {
         this.zoom = zoom;
     }
 
-    public Integer getIdMapa() {
-        return idMapa;
+    public ArrayList<MapPoint> getMapPoints() {
+        return mapPoints;
     }
 
-    public void setIdMapa(Integer idMapa) {
-        this.idMapa = idMapa;
+    public TaskLocation setMapPoints(ArrayList<MapPoint> mapPoints) {
+        this.mapPoints = mapPoints;
+        return this;
     }
 }

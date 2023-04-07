@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.reseed.objects.TaskObj;
 import com.reseed.util.adapter.TaskAdapter;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 /**
@@ -75,6 +77,7 @@ public class FragmentTaskList extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -105,5 +108,16 @@ public class FragmentTaskList extends Fragment {
             //imageViewNoTask.setVisibility(View.VISIBLE);
         }
         return view;
+    }
+
+    /**
+     * Metodo para extraer las tareas del JSON.
+     */
+    private void extractTasks(){
+        try {
+            this.userTaskObjs = jsonReseedUtils.convertToTaskObj(userJSONInfo);
+        }catch (JSONException e){
+            throw new RuntimeException(e);
+        }
     }
 }

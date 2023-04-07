@@ -3,11 +3,8 @@ package com.reseed.objects;
 import java.util.ArrayList;
 
 public class TaskObj {
-    private String name, description, tarea, estatus, tecnico, admin;
-    private Long fecha_culminacion, fecha_creacion, fecha_asignacion;
-
+    private String name, description, tarea, estatus, tecnico, admin,fecha_culminacion, fecha_creacion;
     private TaskLocation taskLocation;
-
     private ArrayList<TaskComment> taskComments;
 
     /**
@@ -18,23 +15,21 @@ public class TaskObj {
      * @param tarea tipo de tarea (analisis, limpieza y replantacion).
      * @param fecha_culminacion fecha de ejecucion de la tarea.
      * @param fecha_creacion fecha de creación de la tarea.
-     * @param fecha_asignacion fecha de asignacion de la tarea.
      * @param estatus Estado de la tarea.
      * @param tecnico Tecnico asignado a la tarea. ******ID?******  <-------------------------
      * @param admin Administrador que ha asignado la tarea. ******ID?******  <-------------------------
      * @param taskLocation Localizacion central del mapa.
      * @param taskComments Comentarios de la tarea en un ArrayList.
      */
-    public TaskObj(String name, String description, String tarea, Long fecha_culminacion, Long fecha_creacion,
-                   Long fecha_asignacion, String estatus, String tecnico, String admin,
-                   TaskLocation taskLocation, ArrayList<TaskComment> taskComments){
+    public TaskObj(String name, String description, String tarea, String fecha_culminacion, String fecha_creacion,
+                   String estatus, String tecnico, String admin,TaskLocation taskLocation,
+                   ArrayList<TaskComment> taskComments){
 
         setName(name);
         setDescription(description);
         setTarea(tarea);
         setFecha_creacion(fecha_creacion);
         setFecha_culminacion(fecha_culminacion);
-        setFecha_asignacion(fecha_asignacion);
         setEstatus(estatus);
         setTecnico(tecnico);
         setAdmin(admin);
@@ -95,30 +90,21 @@ public class TaskObj {
         return this;
     }
 
-    public Long getFecha_culminacion() {
+    public String getFecha_culminacion() {
         return fecha_culminacion;
     }
 
-    public TaskObj setFecha_culminacion(Long fecha_culminacion) {
+    public TaskObj setFecha_culminacion(String fecha_culminacion) {
         this.fecha_culminacion = fecha_culminacion;
         return this;
     }
 
-    public Long getFecha_creacion() {
+    public String getFecha_creacion() {
         return fecha_creacion;
     }
 
-    public TaskObj setFecha_creacion(Long fecha_creacion) {
+    public TaskObj setFecha_creacion(String fecha_creacion) {
         this.fecha_creacion = fecha_creacion;
-        return this;
-    }
-
-    public Long getFecha_asignacion() {
-        return fecha_asignacion;
-    }
-
-    public TaskObj setFecha_asignacion(Long fecha_asignacion) {
-        this.fecha_asignacion = fecha_asignacion;
         return this;
     }
 

@@ -2,6 +2,7 @@ package com.reseed;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 
 import android.content.Intent;
@@ -41,6 +42,10 @@ public class AppActivity extends AppCompatActivity {
     private JSONObject userJSONInfo;
     private String userToken;
 
+    ArrayList<TaskObj> userTaskObjs;
+
+    private JsonReseedUtils jsonReseedUtils = new JsonReseedUtils();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +74,7 @@ public class AppActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layer);
         fragmentContainerView = findViewById(R.id.fragmentContainerView);
 
+        //Extract UserObj from userJSONInfo.
         extractUser();
 
 
@@ -77,7 +83,7 @@ public class AppActivity extends AppCompatActivity {
         View header = navigationView.getHeaderView(0);
         textViewUsername = header.findViewById(R.id.user_name_text);
         textViewEmail = header.findViewById(R.id.user_email_text);
-        textViewUsername.setText(userObj.getNombre() + " " + userObj.getApellido());
+        textViewUsername.setText(String.format("%s %s", userObj.getNombre(), userObj.getApellido()));
         textViewEmail.setText(userObj.getEmail());
 
 
@@ -97,9 +103,9 @@ public class AppActivity extends AppCompatActivity {
     /**
      * Extraemos el user del json.
      */
-    private void extractUser(){
+    private void extractUser() {
         // cogemos la info del usuario del LoginActivity.
-        //TODO recuperar la info del intent para usar la clase JsonReseedUtils para convertir a userobj y a TaskObj  OK!!
+        // recuperar la info del intent para usar la clase JsonReseedUtils para convertir a userobj.
 
         JSONObject convertJson;
         try {
@@ -107,12 +113,10 @@ public class AppActivity extends AppCompatActivity {
             this.userJSONInfo = convertJson;
             userToken = getIntent().getStringExtra("token");
 
-            JsonReseedUtils jsonReseedUtils = new JsonReseedUtils();
-            this.userObj = jsonReseedUtils.convertToUserObj(convertJson,userToken);
+            this.userObj = jsonReseedUtils.convertToUserObj(convertJson, userToken);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-
 
     }
 
@@ -161,8 +165,6 @@ public class AppActivity extends AppCompatActivity {
                 .setReorderingAllowed(true)
                 .add(R.id.fragmentContainerView, FragmentUsersList.class, null)
                 .commit();
-
-
     }
     /**
      * Metodo usado para llamar al fragmento de lista de tareas.
@@ -170,9 +172,15 @@ public class AppActivity extends AppCompatActivity {
      */
     public void tasksFragmentCall(MenuItem item) {
         fragmentContainerView.removeAllViewsInLayout();
+        FragmentTaskList fragmentTaskList = new FragmentTaskList();
+
+        Bundle bundleArgs = new Bundle();
+        bundleArgs.putString("data", userJSONInfo.toString());
+
+
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .add(R.id.fragmentContainerView, FragmentTaskList.class, null)
+                .add(R.id.fragmentContainerView, fragmentTaskList, null)
                 .commit();
     }
 }

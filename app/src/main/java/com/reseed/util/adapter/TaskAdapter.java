@@ -87,7 +87,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
         viewHolder.getTypeText().setText("Hola");
         viewHolder.getDescriptionText().setText(localDataSet.get(position).getDescription());
-        viewHolder.getDateTaskText().setText(Long.toString(localDataSet.get(position).getFecha_culminacion()));
+        viewHolder.getDateTaskText().setText(localDataSet.get(position).getFecha_culminacion());
 
 
 

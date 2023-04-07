@@ -18,13 +18,13 @@ public class TaskComment {
      * @param descripcion
      * @param fecha
      * @param tarea
-     * @param tecnico
+     * @param user
      */
-    public TaskComment(String descripcion, String fecha, String tarea, String tecnico) {
+    public TaskComment(String descripcion, String fecha, String tarea, String user) {
         setDescripcion(descripcion);
         setFecha(fecha);
         setTarea(tarea);
-        setTecnico(tecnico);
+        setUser(user);
     }
 
     public String getDescripcion() {
@@ -54,11 +54,11 @@ public class TaskComment {
         return this;
     }
 
-    public String getTecnico() {
+    public String getUser() {
         return tecnico;
     }
 
-    public TaskComment setTecnico(String tecnico) {
+    public TaskComment setUser(String tecnico) {
         this.tecnico = tecnico;
         return this;
     }
