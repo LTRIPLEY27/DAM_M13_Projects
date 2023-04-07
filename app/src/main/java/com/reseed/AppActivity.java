@@ -159,7 +159,7 @@ public class AppActivity extends AppCompatActivity {
         fragmentContainerView.removeAllViewsInLayout();
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .add(R.id.fragmentContainerView, fragment_users_list.class, null)
+                .add(R.id.fragmentContainerView, FragmentUsersList.class, null)
                 .commit();
 
 
@@ -172,7 +172,7 @@ public class AppActivity extends AppCompatActivity {
         fragmentContainerView.removeAllViewsInLayout();
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .add(R.id.fragmentContainerView, fragment_task_list.class, null)
+                .add(R.id.fragmentContainerView, FragmentTaskList.class, null)
                 .commit();
     }
 }

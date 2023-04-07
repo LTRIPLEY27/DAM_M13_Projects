@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-        LoginAuthRequest login = new LoginAuthRequest(email, password, requestQueue);
+        LoginAuthRequest login = new LoginAuthRequest(email, password, requestQueue,false);
 
         login.sendRequest(new VolleyResponseListener() {
             @Override
@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getUserInfo(String token) {
-        UserInfoRequest userInfoRequest = new UserInfoRequest(token, requestQueue);
+        UserInfoRequest userInfoRequest = new UserInfoRequest(token, requestQueue,false);
 
         userInfoRequest.sendRequest(new VolleyResponseListener() {
             @Override

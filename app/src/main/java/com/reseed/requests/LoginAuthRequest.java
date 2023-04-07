@@ -25,6 +25,8 @@ public class LoginAuthRequest {
 
     private String email;
     private String password;
+    String urlPostLogin;
+    private Boolean isDemoReq;
 
     private Context context;
     private RequestQueue requestQueue;
@@ -34,15 +36,21 @@ public class LoginAuthRequest {
      * @param email email from the user
      * @param password password from user
      */
-    public LoginAuthRequest(String email, String password, RequestQueue requestQueue){
+    public LoginAuthRequest(String email, String password, RequestQueue requestQueue,Boolean isDemoReq){
         setEmail(email);
         setPassword(password);
         setRequestQueue(requestQueue);
+        setDemoReq(isDemoReq);
     }
 
     public void sendRequest(final VolleyResponseListener listener){
 
-        String urlPostLogin = "https://t-sunlight-381215.lm.r.appspot.com/auth/";
+        if(getDemoReq()){
+            urlPostLogin = "https://7fb95452-32bb-4186-a691-5be768b33401.mock.pstmn.io/auth/";
+        }else{
+            urlPostLogin = "https://t-sunlight-381215.lm.r.appspot.com/auth/";
+        }
+
 
         JSONObject jsonCallObject = new JSONObject();
         try {
@@ -124,5 +132,13 @@ public class LoginAuthRequest {
 
     public RequestQueue getRequestQueue(){
         return requestQueue;
+    }
+
+    public Boolean getDemoReq() {
+        return isDemoReq;
+    }
+
+    public void setDemoReq(Boolean demoReq) {
+        isDemoReq = demoReq;
     }
 }

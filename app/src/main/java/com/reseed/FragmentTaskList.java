@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.reseed.objects.TaskObj;
@@ -18,11 +19,11 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link fragment_task_list#newInstance} factory method to
+ * Use the {@link FragmentTaskList#newInstance} factory method to
  * create an instance of this fragment.
  *
  */
-public class fragment_task_list extends Fragment {
+public class FragmentTaskList extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,6 +35,8 @@ public class fragment_task_list extends Fragment {
     private String mParam2;
 
     private RecyclerView recyclerView;
+
+    private ImageView imageViewNoTask;
 
     private TaskAdapter adapter;
 
@@ -50,8 +53,8 @@ public class fragment_task_list extends Fragment {
      * @return A new instance of fragment fragment_task_list.
      */
     // TODO: Rename and change types and number of parameters
-    public static fragment_task_list newInstance(String param1, String param2) {
-        fragment_task_list fragment = new fragment_task_list();
+    public static FragmentTaskList newInstance(String param1, String param2) {
+        FragmentTaskList fragment = new FragmentTaskList();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,7 +62,7 @@ public class fragment_task_list extends Fragment {
         return fragment;
     }
 
-    public fragment_task_list() {
+    public FragmentTaskList() {
         // Required empty public constructor
     }
 
@@ -79,6 +82,8 @@ public class fragment_task_list extends Fragment {
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
         recyclerView = view.findViewById(R.id.recyclerTask);
         textViewNoTareas = view.findViewById(R.id.textNoTareas);
+        //imageViewNoTask = (ImageView) view.findViewById(R.id.no_task_img);
+
 
         // Si no hay tareas se hace visible el text view.
         //todo canviar el textview por algo más sugerente.
@@ -87,6 +92,7 @@ public class fragment_task_list extends Fragment {
 
             recyclerView.setVisibility(View.VISIBLE);
             textViewNoTareas.setVisibility(View.GONE);
+            //imageViewNoTask.setVisibility(View.GONE);
 
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             adapter = new TaskAdapter(listaTareas);
@@ -96,6 +102,7 @@ public class fragment_task_list extends Fragment {
             Log.e("Lista tareas","Esta vacio.");
             recyclerView.setVisibility(View.GONE);
             textViewNoTareas.setVisibility(View.VISIBLE);
+            //imageViewNoTask.setVisibility(View.VISIBLE);
         }
         return view;
     }

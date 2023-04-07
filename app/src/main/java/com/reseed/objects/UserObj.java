@@ -1,5 +1,6 @@
 package com.reseed.objects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserObj {
@@ -13,7 +14,7 @@ public class UserObj {
     private String tipoUsuario;
 
     // Lista de tareas del usuario.
-    private List<TaskObj> taskObjs;
+    private ArrayList<TaskObj> taskObjs;
 
     /**
      * Todo Acabar de rellenar y comprovar los campos, segun los datos de la DB.
@@ -93,11 +94,11 @@ public class UserObj {
         this.tipoUsuario = tipoUsuario;
     }
 
-    public List<TaskObj> getTaskObjs() {
+    public ArrayList<TaskObj> getTaskObjs() {
         return taskObjs;
     }
 
-    public void setTaskObjs(List<TaskObj> taskObjs) {
+    public void setTaskObjs(ArrayList<TaskObj> taskObjs) {
         this.taskObjs = taskObjs;
     }
 }

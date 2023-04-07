@@ -24,20 +24,29 @@ public class UserInfoRequest {
 
     private String token;
     private RequestQueue requestQueue;
+    private Boolean isDemoReq;
+    private String urlPostLogin;
 
     /**
      * Constructor of the class.
      * @param token email from the user
      * @param requestQueue created on activity.
      */
-    public UserInfoRequest(String token, RequestQueue requestQueue){
+    public UserInfoRequest(String token, RequestQueue requestQueue, Boolean isDemoReq){
         setToken(token);
         setRequestQueue(requestQueue);
+        setDemoReq(isDemoReq);
     }
 
     public void sendRequest(final VolleyResponseListener listener){
 
-        String urlPostLogin = "https://t-sunlight-381215.lm.r.appspot.com/perfil";
+        if(getDemoReq()){
+            urlPostLogin = "https://7fb95452-32bb-4186-a691-5be768b33401.mock.pstmn.io/perfil";
+        }else{
+
+            urlPostLogin = "https://t-sunlight-381215.lm.r.appspot.com/perfil";
+        }
+
 
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET,urlPostLogin,
                 null, new Response.Listener<JSONObject>() {
@@ -104,5 +113,13 @@ public class UserInfoRequest {
 
     public RequestQueue getRequestQueue(){
         return requestQueue;
+    }
+
+    public Boolean getDemoReq() {
+        return isDemoReq;
+    }
+
+    public void setDemoReq(Boolean demoReq) {
+        isDemoReq = demoReq;
     }
 }
