@@ -57,15 +57,8 @@ public class AppActivity extends AppCompatActivity {
          */
         ArrayList<TaskObj> listaTareas = new ArrayList<>();
 
-        /*for (int i = 0; i < 10; i++) {
-            listaTareas.add(new TaskObj(
-                    "Tarea " + i,
-                    "Description de la tarea " + i,
-                    "Analisis",
-                    Calendar.getInstance().getTimeInMillis(),
-                    Calendar.getInstance().getTimeInMillis()
-            ));
-        }*/
+        //Extract UserObj from userJSONInfo.
+        extractUser();
 
         // Iniciamos el layout de activity_app.
         setContentView(R.layout.activity_app);
@@ -73,9 +66,6 @@ public class AppActivity extends AppCompatActivity {
         // Buscamos el drawerLayout para poder interactuar con el.
         drawerLayout = findViewById(R.id.drawer_layer);
         fragmentContainerView = findViewById(R.id.fragmentContainerView);
-
-        //Extract UserObj from userJSONInfo.
-        extractUser();
 
 
         // Buscamos el texto para poner el nombre del usuario.
@@ -176,6 +166,7 @@ public class AppActivity extends AppCompatActivity {
 
         Bundle bundleArgs = new Bundle();
         bundleArgs.putString("data", userJSONInfo.toString());
+        fragmentTaskList.setArguments(bundleArgs);
 
 
         getSupportFragmentManager().beginTransaction()

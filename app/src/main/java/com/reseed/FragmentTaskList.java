@@ -13,24 +13,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.reseed.objects.TaskObj;
+import com.reseed.util.JsonReseedUtils;
 import com.reseed.util.adapter.TaskAdapter;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentTaskList#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class FragmentTaskList extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private JSONObject jsonObjectTasks = new JSONObject();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -46,24 +44,6 @@ public class FragmentTaskList extends Fragment {
 
     private ArrayList <TaskObj> listaTareas;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment fragment_task_list.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentTaskList newInstance(String param1, String param2) {
-        FragmentTaskList fragment = new FragmentTaskList();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     public FragmentTaskList() {
         // Required empty public constructor
     }
@@ -72,9 +52,13 @@ public class FragmentTaskList extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            try {
+                jsonObjectTasks = new JSONObject(getArguments().getString("data"));
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
         }
+        extractTasks(jsonObjectTasks);
     }
 
 
@@ -113,11 +97,13 @@ public class FragmentTaskList extends Fragment {
     /**
      * Metodo para extraer las tareas del JSON.
      */
-    private void extractTasks(){
+    private void extractTasks(JSONObject jsonUserInfo){
         try {
-            this.userTaskObjs = jsonReseedUtils.convertToTaskObj(userJSONInfo);
+            JsonReseedUtils jsonReseedUtils = new JsonReseedUtils();
+            this.listaTareas = jsonReseedUtils.convertToTaskObj(jsonUserInfo);
         }catch (JSONException e){
-            throw new RuntimeException(e);
+            Log.e("Error convertToTaskObj",e.getMessage());
+            //throw new RuntimeException(e);
         }
     }
 }
