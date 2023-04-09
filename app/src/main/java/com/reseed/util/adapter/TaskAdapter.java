@@ -1,11 +1,17 @@
 package com.reseed.util.adapter;
 
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.reseed.R;
@@ -27,15 +33,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView titleText,typeText, descriptionText, dateTaskText;
+        private CardView cardViewTask;
+        private ImageView imageViewTask;
+
 
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
 
-            titleText = (TextView) view.findViewById(R.id.titleTaskText);
-            typeText = (TextView) view.findViewById(R.id.typeTaskText);
-            descriptionText = (TextView) view.findViewById(R.id.descriptionTaskText);
-            dateTaskText = (TextView) view.findViewById(R.id.dateTaskText);
+            titleText = view.findViewById(R.id.titleTaskText);
+            typeText = view.findViewById(R.id.typeTaskText);
+            descriptionText = view.findViewById(R.id.descriptionTaskText);
+            dateTaskText = view.findViewById(R.id.dateTaskText);
+            cardViewTask = view.findViewById(R.id.card_task);
+            imageViewTask = view.findViewById(R.id.imageTaskType);
+
         }
 
         public TextView getTitleText() {
@@ -50,6 +62,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         public TextView getDateTaskText() {
             return dateTaskText;
         }
+        public CardView getCardViewTask(){return cardViewTask;}
+        public ImageView getImageTask(){return imageViewTask;}
     }
 
     /**
@@ -88,8 +102,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         viewHolder.getTypeText().setText("Hola");
         viewHolder.getDescriptionText().setText(localDataSet.get(position).getDescription());
         viewHolder.getDateTaskText().setText(localDataSet.get(position).getFecha_culminacion());
-
-
+        if (localDataSet.get(position).getTarea().contentEquals("ANALISIS")){
+            viewHolder.getCardViewTask().setBackgroundColor(Color.parseColor("#acceff"));
+        }
+        if (localDataSet.get(position).getTarea().contentEquals("LIMPIEZA")){
+            viewHolder.getCardViewTask().setBackgroundColor(Color.parseColor("#fff4ac"));
+        }
 
     }
 

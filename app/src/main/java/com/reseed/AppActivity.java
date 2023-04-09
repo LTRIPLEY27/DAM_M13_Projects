@@ -71,13 +71,16 @@ public class AppActivity extends AppCompatActivity {
         fragmentContainerView = findViewById(R.id.fragmentContainerView);
 
 
+
         // Buscamos el texto para poner el nombre del usuario.
+
         navigationView = findViewById(R.id.lateral_Menu);
         View header = navigationView.getHeaderView(0);
         textViewUsername = header.findViewById(R.id.user_name_text);
         textViewEmail = header.findViewById(R.id.user_email_text);
         textViewUsername.setText(String.format("%s %s", userObj.getNombre(), userObj.getApellido()));
         textViewEmail.setText(userObj.getEmail());
+
 
         tasksFragmentCall(null);
 
