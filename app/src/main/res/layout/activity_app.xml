@@ -26,7 +26,7 @@
             android:name="com.reseed.FragmentTaskList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:layout="@layout/activity_dummy" />
+            tools:layout="@layout/fragment_blank" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"

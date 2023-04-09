@@ -1,9 +1,12 @@
 package com.reseed;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -76,19 +79,11 @@ public class AppActivity extends AppCompatActivity {
         textViewUsername.setText(String.format("%s %s", userObj.getNombre(), userObj.getApellido()));
         textViewEmail.setText(userObj.getEmail());
 
-
-        //TODO que se vean las tareas.
-        // Ponemos en marcha el recyclerViewTask.
-        /*Fragment fragmentTasks = findViewById(R.id.fragmentTasks);
-        RecyclerView recyclerViewTask = findViewById(R.id.recyclerTask);
-        recyclerViewTask.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new TaskAdapter(listaTareas);
-        adapter.setClickListener(this);
-        recyclerViewTask.setAdapter(adapter);*/
-
-        //Cargamos la informacion del nombre de usuario.
+        tasksFragmentCall(null);
 
     }
+
+
 
     /**
      * Extraemos el user del json.
@@ -160,7 +155,7 @@ public class AppActivity extends AppCompatActivity {
      * Metodo usado para llamar al fragmento de lista de tareas.
      * @param item el menu de donde proviene.
      */
-    public void tasksFragmentCall(MenuItem item) {
+    public void tasksFragmentCall( @Nullable MenuItem item) {
         fragmentContainerView.removeAllViewsInLayout();
         FragmentTaskList fragmentTaskList = new FragmentTaskList();
 
