@@ -22,104 +22,113 @@ import java.util.ArrayList;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
-    private final ArrayList <TaskObj> localDataSet;
+	private final ArrayList<TaskObj> localDataSet;
 
-    public void setClickListener(AppActivity appActivity) {
-    }
+	public void setClickListener(AppActivity appActivity) {
+	}
 
-    /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder)
-     */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView titleText,typeText, descriptionText, dateTaskText;
-        private CardView cardViewTask;
-        private ImageView imageViewTask;
+	/**
+	 * Provide a reference to the type of views that you are using
+	 * (custom ViewHolder)
+	 */
+	public static class ViewHolder extends RecyclerView.ViewHolder {
+		private final TextView titleText, typeText, descriptionText, dateTaskText;
+		private CardView cardViewTask;
+		private ImageView imageViewTask;
 
 
-        public ViewHolder(View view) {
-            super(view);
-            // Define click listener for the ViewHolder's View
+		public ViewHolder(View view) {
+			super(view);
+			// Define click listener for the ViewHolder's View
 
-            titleText = view.findViewById(R.id.titleTaskText);
-            typeText = view.findViewById(R.id.typeTaskText);
-            descriptionText = view.findViewById(R.id.descriptionTaskText);
-            dateTaskText = view.findViewById(R.id.dateTaskText);
-            cardViewTask = view.findViewById(R.id.card_task);
-            imageViewTask = view.findViewById(R.id.imageTaskType);
+			titleText = view.findViewById(R.id.titleTaskText);
+			typeText = view.findViewById(R.id.typeTaskText);
+			descriptionText = view.findViewById(R.id.descriptionTaskText);
+			dateTaskText = view.findViewById(R.id.dateTaskText);
+			cardViewTask = view.findViewById(R.id.card_task);
+			imageViewTask = view.findViewById(R.id.imageTaskType);
 
-        }
+		}
 
-        public TextView getTitleText() {
-            return titleText;
-        }
-        public TextView getTypeText() {
-            return typeText;
-        }
-        public TextView getDescriptionText() {
-            return descriptionText;
-        }
-        public TextView getDateTaskText() {
-            return dateTaskText;
-        }
-        public CardView getCardViewTask(){return cardViewTask;}
-        public ImageView getImageTask(){return imageViewTask;}
-    }
+		public TextView getTitleText() {
+			return titleText;
+		}
 
-    /**
-     * Initialize the dataset of the Adapter
-     *
-     * @param dataSet String[] containing the data to populate views to be used
-     *                by RecyclerView
-     */
-    public TaskAdapter(ArrayList<TaskObj> dataSet) {
-        localDataSet = dataSet;
-    }
+		public TextView getTypeText() {
+			return typeText;
+		}
 
-    // Create new views (invoked by the layout manager)
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Create a new view, which defines the UI of the list item
-        View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.taskitem, viewGroup, false);
+		public TextView getDescriptionText() {
+			return descriptionText;
+		}
 
-        return new ViewHolder(view);
-    }
+		public TextView getDateTaskText() {
+			return dateTaskText;
+		}
 
-    // Replace the contents of a view (invoked by the layout manager)
-    @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+		public CardView getCardViewTask() {
+			return cardViewTask;
+		}
 
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
+		public ImageView getImageTask() {
+			return imageViewTask;
+		}
+	}
 
-        //set the title text.
-        viewHolder.getTitleText().setText(localDataSet.get(position).getName());
+	/**
+	 * Initialize the dataset of the Adapter
+	 *
+	 * @param dataSet String[] containing the data to populate views to be used
+	 *                by RecyclerView
+	 */
+	public TaskAdapter(ArrayList<TaskObj> dataSet) {
+		localDataSet = dataSet;
+	}
 
-        //TODO Make the date formater for date and time.
+	// Create new views (invoked by the layout manager)
+	@NonNull
+	@Override
+	public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+		// Create a new view, which defines the UI of the list item
+		View view = LayoutInflater.from(viewGroup.getContext())
+				.inflate(R.layout.taskitem, viewGroup, false);
 
-        viewHolder.getTypeText().setText("Hola");
-        viewHolder.getDescriptionText().setText(localDataSet.get(position).getDescription());
-        viewHolder.getDateTaskText().setText(localDataSet.get(position).getFecha_culminacion());
-        if (localDataSet.get(position).getTarea().contentEquals("ANALISIS")){
-            viewHolder.getCardViewTask().setBackgroundColor(Color.parseColor("#acceff"));
-        }
-        if (localDataSet.get(position).getTarea().contentEquals("LIMPIEZA")){
-            viewHolder.getCardViewTask().setBackgroundColor(Color.parseColor("#fff4ac"));
-        }
+		return new ViewHolder(view);
+	}
 
-    }
+	// Replace the contents of a view (invoked by the layout manager)
+	@Override
+	public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
-    // Return the size of your dataset (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        if (localDataSet.isEmpty()){
-            return 0;
-        }else {
-            return localDataSet.size();
-        }
+		// Get element from your dataset at this position and replace the
+		// contents of the view with that element
 
-    }
+		//set the title text.
+		viewHolder.getTitleText().setText(localDataSet.get(position).getName());
+
+		//TODO Make the date formater for date and time.
+
+		viewHolder.getTypeText().setText("Hola");
+		viewHolder.getDescriptionText().setText(localDataSet.get(position).getDescription());
+		viewHolder.getDateTaskText().setText(localDataSet.get(position).getFecha_culminacion());
+		if (localDataSet.get(position).getTarea().contentEquals("ANALISIS")) {
+			viewHolder.getCardViewTask().setBackgroundColor(Color.parseColor("#acceff"));
+		}
+		if (localDataSet.get(position).getTarea().contentEquals("LIMPIEZA")) {
+			viewHolder.getCardViewTask().setBackgroundColor(Color.parseColor("#fff4ac"));
+		}
+
+	}
+
+	// Return the size of your dataset (invoked by the layout manager)
+	@Override
+	public int getItemCount() {
+		if (localDataSet.isEmpty()) {
+			return 0;
+		} else {
+			return localDataSet.size();
+		}
+
+	}
 }
 

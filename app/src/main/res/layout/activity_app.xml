@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="start"
-    android:fitsSystemWindows="true"
     tools:context=".AppActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -33,9 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="bottom"
+            app:itemBackground="@color/green_200"
             app:itemIconSize="30dp"
-            app:itemIconTint="@color/white"
-            app:itemBackground="@color/green_500"
             app:labelVisibilityMode="unlabeled"
             app:menu="@menu/menu_inferior" />
 
