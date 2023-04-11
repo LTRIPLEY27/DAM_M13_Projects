@@ -10,6 +10,7 @@ import androidx.core.view.MenuCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -93,23 +94,35 @@ public class AppActivity extends AppCompatActivity {
 
 		}
 
-		// Buscamos la bottomnavigation y la instanciamos en una variable.
-		bottomNavigationViewTasks = findViewById(R.id.bottomNavigationView);
+		BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-		// Listener para recuperar donde ha hecho click en la bottom nav bar.
-		bottomNavigationViewTasks.setOnItemSelectedListener(navListener);
+		bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+			@Override
+			public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
+				Log.i("Id bottom menu", String.valueOf(item.getItemId()));
+				Log.i("Id fragment", String.valueOf(item.getTitle()));
 
+				CharSequence title = item.getTitle();
+
+				if ("Usuarios".equals(title)) {
+					usersFragmentCall(item);
+					return true;
+				} else if ("Tareas".equals(title)) {
+					tasksFragmentCall(item);
+					return true;
+				} else if ("Estadisticas".equals(title)) {
+					aboutMenuCall(item);
+					return true;
+				}
+				return true;
+			}
+		});
 
 		setUserDataToNavMenu();
 
 		tasksFragmentCall(null);
 	}
-
-	private NavigationBarView.OnItemSelectedListener navListener = item -> {
-		Log.i("Bottom nav bar,clicked", String.valueOf(item.getItemId()));
-		return true;
-	};
 
 
 	/**
@@ -219,6 +232,6 @@ public class AppActivity extends AppCompatActivity {
 	}
 
 	public void disableAllAdminTaskButtons(){
-
+		
 	}
 }
