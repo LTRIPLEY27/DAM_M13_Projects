@@ -96,11 +96,20 @@ public class AppActivity extends AppCompatActivity {
 		// Buscamos la bottomnavigation y la instanciamos en una variable.
 		bottomNavigationViewTasks = findViewById(R.id.bottomNavigationView);
 
+		// Listener para recuperar donde ha hecho click en la bottom nav bar.
+		bottomNavigationViewTasks.setOnItemSelectedListener(navListener);
+
+
+
 		setUserDataToNavMenu();
 
 		tasksFragmentCall(null);
 	}
 
+	private NavigationBarView.OnItemSelectedListener navListener = item -> {
+		Log.i("Bottom nav bar,clicked", String.valueOf(item.getItemId()));
+		return true;
+	};
 
 
 	/**
