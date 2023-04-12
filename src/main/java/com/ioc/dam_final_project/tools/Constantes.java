@@ -20,4 +20,6 @@ public interface Constantes {
     String MENSAJES = "mensajes";
     String ADMINS = "admins";
     String TECNICOS = "tecnicos";
+
+    String USERS = "usuarios";
 }

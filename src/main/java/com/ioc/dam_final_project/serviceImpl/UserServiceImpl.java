@@ -19,15 +19,47 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService, Constantes {
 
+    // INYECCION DE DEPENDENCIAS
+    /**
+     * Servicio de Tecnico a implementar para retornar valores centralizados en éste services.
+     */
     private final TecnicoServiceimpl tecnicoServiceimpl;
+    /**
+     * Servicio de Admin a implementar para retornar valores centralizados en éste services.
+     */
     private final AdminServiceImpl adminService;
+    /**
+     * Servicio de Tarea a implementar para retornar valores centralizados en éste services.
+     */
     private final TareaServiceImpl tareaService;
+    /**
+     * Servicio de Coordenada a implementar para retornar valores centralizados en éste services.
+     */
     private final CoordenadaServiceImpl coordenadaService;
+    /**
+     * Servicio de Mensaje a implementar para retornar valores centralizados en éste services.
+     */
     private final MensajeServiceImpl mensajeService;
+    /**
+     * Servicio de Ubicacion a implementar para retornar valores centralizados en éste services.
+     */
     private final UbicacionServiceImpl ubicacionService;
+    /**
+     * Repositorio de User a implementar para retornar valores centralizados en éste services.
+     */
     private final UserRepository userRepository;
 
 
+    /**
+     * Constructor con 7 parametros
+     * @param tecnicoServiceimpl en referencia al Service de Tecnico
+     * @param adminService en referencia al Service de Admin
+     * @param tareaService en referencia al Service de Tarea
+     * @param coordenadaService en referencia al Service de Coordenada
+     * @param mensajeService en referencia al Service de Mensaje
+     * @param ubicacionService en referencia al Service de Ubicacion
+     * @param userRepository en referencia al Repository de User
+     */
     public UserServiceImpl(TecnicoServiceimpl tecnicoServiceimpl, AdminServiceImpl adminService, TareaServiceImpl tareaService, CoordenadaServiceImpl coordenadaService, MensajeServiceImpl mensajeService, MensajeServiceImpl mensajeService1, UbicacionServiceImpl ubicacionService, UserRepository userRepository) {
         this.tecnicoServiceimpl = tecnicoServiceimpl;
         this.adminService = adminService;
@@ -38,8 +70,8 @@ public class UserServiceImpl implements UserService, Constantes {
         this.userRepository = userRepository;
     }
 
-    /**
-     * Devuelve un objeto con el perfil de la persona en la sesión autenticada
+    /** Metodo getProfile
+     * Recibe un parametro que contiene el username del usuario y devuelve un objeto con el perfil de la persona en la sesión autenticada
      * @return <ul>
      *  <li>Entity: Según el rol devuelve el perfil del usuario</li>
      *  </ul>
@@ -60,8 +92,8 @@ public class UserServiceImpl implements UserService, Constantes {
         return null;
     }
 
-    /**
-     * Devuelve una lista de elementos contenidos en la base de datos, realiza un switch para devolver la respuesta según cada clase demandada
+    /** Metodo registers
+     * Recibe 2 parametros : el username del usuario, para validar el rol, y el tipo de entidad a ubicar en la respuesta. Devuelve una lista de elementos contenidos en la base de datos, realiza un switch para devolver la respuesta según cada clase demandada
      * @return <ul>
      *  <li>Lista de Entidades: Según el rol administra el acceso a todos los valores contenidos</li>
      *  </ul>
@@ -90,7 +122,7 @@ public class UserServiceImpl implements UserService, Constantes {
                 case ADMINS -> {
                     return Collections.singletonList(adminService.getAll());
                 }
-                case USER -> { // TODO, CHEQUEAR USERS GENERIC
+                case USERS -> { // TODO, CHEQUEAR USERS GENERIC
                     var users = new ArrayList<UserDTO>();
                     userRepository.findAll().forEach(user -> users.add(UserDTO.byEntity(user)));
                     return Collections.singletonList(users);
@@ -103,8 +135,8 @@ public class UserServiceImpl implements UserService, Constantes {
         return null;
     }
 
-    /**
-     * Actualiza un objeto 'Entity' en la base de datos
+    /** Metodo update
+     * Recibe 2 argumentos : username del usuario a realizar el update y los datos nuevos a actualizar. Actualiza un objeto 'Entity' en la base de datos
      * @return <ul>
      *  <li>Entity: valida segun el caso de uso y gestiona el update de dicha entidad con los nuevos valores</li>
      *  </ul>
@@ -124,6 +156,12 @@ public class UserServiceImpl implements UserService, Constantes {
     }
 
     //TODO VALORAR LOS CAMPOS QUE SE VAN A PODER SETTEAR POR PERFILES
+    /** Metodo privado updateUser
+     * Recibe 2 argumentos : Usuario antiguo y Usuario Nuevo con todos los campos a settear. Actualiza un objeto 'Entity' en la base de datos
+     * @return <ul>
+     *  <li>Entity: valida segun el caso de uso y gestiona el update de dicha entidad con los nuevos valores</li>
+     *  </ul>
+     */
     private UserDTO updateUser(User oldUser, User newUser) {
         oldUser.setUser(newUser.getUser());
         oldUser.setPassword(new BCryptPasswordEncoder().encode(newUser.getPassword()));
@@ -139,8 +177,8 @@ public class UserServiceImpl implements UserService, Constantes {
     }
 
 
-    /**
-     * Actualiza un objeto 'Entity' en la base de datos
+    /** Metodo updateValue
+     * Recibe 4 parametros : el usuario para validar el rol, el valor de la entidad a apuntar dicho cambio, el id especifico de la entidad a actualizar y el Objeto con los nuevos valores contenidos. Actualiza un objeto 'Entity' en la base de datos
      * @return <ul>
      *  <li>Entity: valida segun el caso de uso y gestiona el update de dicha entidad con los nuevos valores</li>
      *  </ul>
@@ -171,6 +209,12 @@ public class UserServiceImpl implements UserService, Constantes {
         return update(username, (UserDTO) object); // to implementade tarea
     }
 
+    /** Metodo 'deleteRegister()'
+     * Recibe 3 parametros : username para validar el rol del usuario, typus para definir la entidad dentro del switch y el id al que se eliminara en la base de datos. Elimina un registro en la base de datos segun el id validado
+     * @return <ul>
+     *  <li>String : con respuesta de la operacion exitosa</li>
+     *  </ul>
+     */
     @Override
     public Object deleteRegister(String rol, String typus, Long id) {
         var user = userRepository.findUserByEmail(rol).orElseThrow();
@@ -206,11 +250,23 @@ public class UserServiceImpl implements UserService, Constantes {
         return "No hay registros con estos valores";
     }
 
+    /** Metodo 'postingMessage()'
+     * Recibe 2 parametros : username para validar el rol del usuario, mensaje contenido a postear
+     * @return <ul>
+     *  <li>String : con respuesta de la operacion exitosa</li>
+     *  </ul>
+     */
     @Override
     public MensajeDTO postingMessage(String user, MensajeDTO mensajeDTO) {
         return mensajeService.postMessage(user, mensajeDTO);
     }
 
+    /** Metodo 'searchById()'
+     * Recibe 2 parametros : value para validar el nombre de la entidad dentro del switch, id para realizar el llamado al service de esa entidad con el id
+     * @return <ul>
+     *  <li>String : con respuesta de la operacion exitosa</li>
+     *  </ul>
+     */
     @Override
     public Object searchById(String value, Long id) {
         switch (value) {
@@ -233,16 +289,34 @@ public class UserServiceImpl implements UserService, Constantes {
         return null;
     }
 
+    /** Metodo 'addNewTar()'
+     * Recibe 3 parametros : username para validar el usuario admin a definir en la creacion, id del tecnico a indicar en la tarea, Objeto a crear
+     * @return <ul>
+     *  <li>Entity : Registro de la tarea en la database</li>
+     *  </ul>
+     */
     @Override
     public Object addNewTar(String username, Long id, Object object) {
         return tareaService.saveObject(username, id, object);
     }
 
+    /** Metodo 'addNewUbicacion()'
+     * Recibe 2 parametros : Objeto a crear, Id de la tarea a la que se le asignará para establecer la relación
+     * @return <ul>
+     *  <li>Entity : Registro de la ubicacion en la database</li>
+     *  </ul>
+     */
     @Override
     public Ubicacion addNewUbicacion(Ubicacion ubicacion, Long id) {
         return ubicacionService.saveObject(ubicacion, id);
     }
 
+    /** Metodo 'addNewCoor()'
+     * Recibe 2 parametros : Objeto a crear, Id de la ubicacion a la que se le asignará para establecer la relación
+     * @return <ul>
+     *  <li>Entity : Registro de la coordenada en la database</li>
+     *  </ul>
+     */
     @Override
     public CoordenadaDTO addNewCoor(Coordenada coordenada, Long ubicacion) {
         return coordenadaService.saveObject(coordenada, ubicacion);
@@ -265,6 +339,12 @@ public class UserServiceImpl implements UserService, Constantes {
     }*/
 
 
+    /** Metodo 'isRegistered()'
+     * Recibe 2 parametros : definicion de la clase a la cual validar el id, Id de la clase a la cual se validara la existencia en la base de datos
+     * @return <ul>
+     *  <li>Boolean : True o False segun aplique el caso</li>
+     *  </ul>
+     */
     public boolean isRegistered(String value, Long id){
         switch (value){
             case COORDENADA -> {

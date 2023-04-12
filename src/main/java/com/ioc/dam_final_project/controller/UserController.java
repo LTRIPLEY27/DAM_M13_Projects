@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -153,10 +154,19 @@ public class UserController implements Constantes {
     /*************************************************************
      *                   GETTING ENTITY BY ID FROM DATABASE
      * ***********************************************************/
+
+
+    /** Metodo findById
+     *  Recibe 2 parametros y valida segun el rol y los parametros la respuesta a emitir, en caso contrario, retorna una respuesta por falta de permisos o ID inexistente, segun aplique
+     * @return <ul>
+     *  <li>ResponseEntity: Retorna una entidad segun el parametro indicado, o en caso contrario una respuesta indicando el fallo</li>
+     *  </ul>
+     */
     @GetMapping(path = "find/value/{value}/id/{id}")// TODO verificar la query para que busque por todo, realizar el método para validar la existencia del id, indiferentemente a la clase y retornar la excepcion, verificar los dto de respuestas (users)  retorna aún el objeto
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> findById(@PathVariable("value") String value,  @PathVariable("id") Long id) {
-        return  ResponseEntity.ok(userService.searchById(value, id));
+    public ResponseEntity<Object> findById(Principal principal, @PathVariable("value") String value,  @PathVariable("id") Long id) {
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+        return  userService.isRegistered(value, id) != false && userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.searchById(value, id))  : ResponseEntity.ok("Por favor, verifique, es probable que no tengas permisos para esta opcion o el ID proporcionado no este contenido en la Database");
     }
     /*************************************************************
      *                   GETTING LIST RESPONSE FROM DATABASE
@@ -171,9 +181,9 @@ public class UserController implements Constantes {
     @GetMapping(path = "results/{value}")// todo, controlar mejor la respuesta para devolver errores y resultados vacios
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List <Object>> getRegisters(Principal principal, @PathVariable("value") String value){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        var username = principal.getName();
-        return ResponseEntity.ok(userService.registers(username, value));
+        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.registers(principal.getName(), value)) : ResponseEntity.ok(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
 
     /*************************************************************

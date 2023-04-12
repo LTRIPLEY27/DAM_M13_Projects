@@ -35,7 +35,11 @@ public class TareaDTO {
 
         tarea.getMensaje().forEach(mensaje -> mensajes.add(MensajeDTO.byModel(mensaje)));
 
+        // VALIDACIONES PARA CONSIDERAR OPCIONES EN NULL
         var ubicacion = tarea.getUbicacion() != null ? UbicacionDTO.byModel(tarea.getUbicacion()) : tarea.getUbicacion();
-        return new TareaDTO(tarea.getName(), tarea.getFecha_creacion(), tarea.getFecha_culminacion(), tarea.getTarea(), tarea.getEstatus(), tarea.getTecnico().getUser(), tarea.getAdmin().getUser(), ubicacion, mensajes);
+        var tecnic = tarea.getTecnico() != null ? tarea.getTecnico().getUser() : "";
+        var admin = tarea.getAdmin() != null ? tarea.getAdmin().getUser() : "";
+
+        return new TareaDTO(tarea.getName(), tarea.getFecha_creacion(), tarea.getFecha_culminacion(), tarea.getTarea(), tarea.getEstatus(), tecnic, admin, ubicacion, mensajes);
     }
 }
