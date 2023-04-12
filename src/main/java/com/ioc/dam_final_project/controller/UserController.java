@@ -19,6 +19,32 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
+
+/********************************************************************************************************
+ * CLASE USERCONTROLLER
+ *********************************************************************************************************
+ * SERA UNA CLASE RESTCONTROLLER, ESTABLECERA LOS PATHS A USAR Y DEVOLVER UNA RESPUESTA.
+ *
+ *  La clase sera la RootController, con la misma se ejecutaran todos los paths en cada request, centralizando todos los services a la misma y potenciando
+ *  una mayor cobertura de errores y optimizacion de codigo.
+ *
+ *   Notaciones:
+ *
+ *  - He declarado a la clase como 'Restcontroller' para su mappeo en la base de datos.
+ *  - He declarado a la clase como 'RequestMapping' para identificar el pah especifico a los cuales deberán de hacer referencia los paths derivados.
+ *  - He usado las notaciones propias de SpringBoot, en combinacion a Java 17 y Loombook, para potenciar al maximo la codificacion.
+ *
+ *   Atributos:
+ *
+ * - He declarado como 'Inyeccion de Dependencias' a los atributos services que serán devueltos como respuesta al cliente.
+ * - He declarado los atributos: Prívate, ya que seran de acceso privado de clase.
+ *
+ *  @author Isabel Calzadilla
+ *  @version 1.0
+ *  @see AuthenticationService para la implementacion del session storage y validacion / autenticacion de Usuario
+ *  @see UserServiceImpl para la implementación centralizada de las respuestas de cada Entity que le hereda.
+ *  @see UserRepository para la validación del usuario On session y las excepciones.
+ * */
 @RestController
 @RequestMapping(path = "/")
 public class UserController implements Constantes {
