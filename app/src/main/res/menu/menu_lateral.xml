@@ -6,6 +6,11 @@
         android:onClick="logoutMenuCall"
         android:title="Logout" />
     <item
+        android:id="@+id/menu_user_config"
+        android:icon="@drawable/baseline_logout_24"
+        android:onClick="configMenuCall"
+        android:title="Configuración" />
+    <item
         android:id="@+id/menu_sobre"
         android:icon="@drawable/baseline_logout_24"
         android:onClick="aboutMenuCall"

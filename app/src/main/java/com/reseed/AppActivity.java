@@ -6,11 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuView;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.MenuCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,7 +53,7 @@ public class AppActivity extends AppCompatActivity {
 
 	FragmentContainerView fragmentContainerView;
 
-	// NavigationView del menu lateral.
+	// NavigationView del menu_lateral lateral.
 	NavigationView navigationView;
 
 	Integer bottomMenuSelected;
@@ -100,7 +100,7 @@ public class AppActivity extends AppCompatActivity {
 			@Override
 			public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-				Log.i("Id bottom menu", String.valueOf(item.getItemId()));
+				Log.i("Id bottom menu_lateral", String.valueOf(item.getItemId()));
 				Log.i("Id fragment", String.valueOf(item.getTitle()));
 
 				CharSequence title = item.getTitle();
@@ -146,7 +146,7 @@ public class AppActivity extends AppCompatActivity {
 	}
 
 	/**
-	 * Extraemos la información del userObj para recoger la información del usuario para mostrarla en el menu lateral.
+	 * Extraemos la información del userObj para recoger la información del usuario para mostrarla en el menu_lateral lateral.
 	 */
 	private void setUserDataToNavMenu() {
 		// Buscamos el texto para poner el nombre del usuario.
@@ -160,9 +160,9 @@ public class AppActivity extends AppCompatActivity {
 	}
 
 	/**
-	 * Metodo para abrir el menu lateral.
+	 * Metodo para abrir el menu_lateral lateral.
 	 *
-	 * @param drawerLayout el layout donde esta ubicado el menu.
+	 * @param drawerLayout el layout donde esta ubicado el menu_lateral.
 	 */
 	private void abrirMenu(DrawerLayout drawerLayout) {
 		drawerLayout.open();
@@ -170,9 +170,9 @@ public class AppActivity extends AppCompatActivity {
 
 
 	/**
-	 * Metodo llamado cuando se hace clic en el menu de logout. Y se vuelve al menu de login.
+	 * Metodo llamado cuando se hace clic en el menu_lateral de logout. Y se vuelve al menu_lateral de login.
 	 *
-	 * @param item recibe el menu donde se ha hecho clic.
+	 * @param item recibe el menu_lateral donde se ha hecho clic.
 	 */
 	public void logoutMenuCall(MenuItem item) {
 
@@ -183,7 +183,7 @@ public class AppActivity extends AppCompatActivity {
 	}
 
 	/**
-	 * Metodo llamado cuando se hace clic en el menu de "Acerca de Reseed".
+	 * Metodo llamado cuando se hace clic en el menu_lateral de "Acerca de Reseed".
 	 *
 	 * @param item
 	 */
@@ -194,10 +194,20 @@ public class AppActivity extends AppCompatActivity {
 		finish();
 	}
 
+	public void configMenuCall(MenuItem item) {
+		drawerLayout.closeDrawer(GravityCompat.START);
+
+		fragmentContainerView.removeAllViewsInLayout();
+		getSupportFragmentManager().beginTransaction()
+				.setReorderingAllowed(true)
+				.add(R.id.fragmentContainerView, FragmentUserConfig.class, null)
+				.commit();
+	}
+
 	/**
 	 * Metodo usado para llamar al fragmento de lista de usuarios.
 	 *
-	 * @param item el menu de donde proviene.
+	 * @param item el menu_lateral de donde proviene.
 	 */
 	public void usersFragmentCall(MenuItem item) {
 		bottomMenuSelected = 0;
@@ -212,7 +222,7 @@ public class AppActivity extends AppCompatActivity {
 	/**
 	 * Metodo usado para llamar al fragmento de lista de tareas.
 	 *
-	 * @param item el menu de donde proviene.
+	 * @param item el menu_lateral de donde proviene.
 	 */
 	public void tasksFragmentCall(@Nullable MenuItem item) {
 		bottomMenuSelected = 1;
