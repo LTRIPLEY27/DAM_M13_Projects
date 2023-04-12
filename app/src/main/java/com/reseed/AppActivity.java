@@ -103,15 +103,15 @@ public class AppActivity extends AppCompatActivity {
 				Log.i("Id bottom menu_lateral", String.valueOf(item.getItemId()));
 				Log.i("Id fragment", String.valueOf(item.getTitle()));
 
-				CharSequence title = item.getTitle();
+				Integer menuId = item.getItemId();
 
-				if ("Usuarios".equals(title)) {
+				if (R.id.menu_users == menuId) {
 					usersFragmentCall(item);
 					return true;
-				} else if ("Tareas".equals(title)) {
+				} else if (R.id.menu_tasks == menuId) {
 					tasksFragmentCall(item);
 					return true;
-				} else if ("Estadisticas".equals(title)) {
+				} else if (R.id.menu_stadistics == menuId) {
 					aboutMenuCall(item);
 					return true;
 				}
@@ -120,7 +120,6 @@ public class AppActivity extends AppCompatActivity {
 		});
 
 		setUserDataToNavMenu();
-
 		tasksFragmentCall(null);
 	}
 
@@ -242,6 +241,6 @@ public class AppActivity extends AppCompatActivity {
 	}
 
 	public void disableAllAdminTaskButtons(){
-		
+
 	}
 }

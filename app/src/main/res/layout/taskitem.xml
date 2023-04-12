@@ -22,7 +22,7 @@
                 android:id="@+id/titleTaskText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tarea numero 1" />
+                android:text="Titulo" />
 
             <ImageView
                 android:id="@+id/imageTaskType"
@@ -35,19 +35,13 @@
         <TableRow>
 
             <TextView
-                android:id="@+id/typeTaskText"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-        </TableRow>
-
-        <TableRow>
-
-            <TextView
                 android:id="@+id/descriptionTaskText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:maxLines="4"
+                android:singleLine="false"
+                android:text="TextView"
+                android:textSize="15dp" />
         </TableRow>
 
         <TableRow >

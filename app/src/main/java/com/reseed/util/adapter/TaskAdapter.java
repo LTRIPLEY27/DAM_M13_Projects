@@ -32,7 +32,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 	 * (custom ViewHolder)
 	 */
 	public static class ViewHolder extends RecyclerView.ViewHolder {
-		private final TextView titleText, typeText, descriptionText, dateTaskText;
+		private final TextView titleText, descriptionText, dateTaskText;
 		private CardView cardViewTask;
 		private ImageView imageViewTask;
 
@@ -42,7 +42,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 			// Define click listener for the ViewHolder's View
 
 			titleText = view.findViewById(R.id.titleTaskText);
-			typeText = view.findViewById(R.id.typeTaskText);
 			descriptionText = view.findViewById(R.id.descriptionTaskText);
 			dateTaskText = view.findViewById(R.id.dateTaskText);
 			cardViewTask = view.findViewById(R.id.card_task);
@@ -52,10 +51,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
 		public TextView getTitleText() {
 			return titleText;
-		}
-
-		public TextView getTypeText() {
-			return typeText;
 		}
 
 		public TextView getDescriptionText() {
@@ -104,12 +99,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 		// contents of the view with that element
 
 		//set the title text.
-		viewHolder.getTitleText().setText(localDataSet.get(position).getName());
+		viewHolder.getTitleText().setText(localDataSet.get(position).getTarea());
 
 		//TODO Make the date formater for date and time.
 
-		viewHolder.getTypeText().setText("Hola");
-		viewHolder.getDescriptionText().setText(localDataSet.get(position).getDescription());
+		viewHolder.getDescriptionText().setText(localDataSet.get(position).getName());
 		viewHolder.getDateTaskText().setText(localDataSet.get(position).getFecha_culminacion());
 		if (localDataSet.get(position).getTarea().contentEquals("ANALISIS")) {
 			viewHolder.getCardViewTask().setBackgroundColor(Color.parseColor("#acceff"));
