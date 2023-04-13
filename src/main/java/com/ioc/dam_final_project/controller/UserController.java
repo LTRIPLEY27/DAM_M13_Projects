@@ -122,10 +122,10 @@ public class UserController implements Constantes {
     @PostMapping(value = "register")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> register(Principal principal, @RequestBody RegisterRequest request) {
-        //var user = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+        var user = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        //return user.getRol() != Rol.ADMIN ? ResponseEntity.ok("No tiene permisos para realizar ésta acción") : ResponseEntity.ok(serviceAuth.register(request));
-        return ResponseEntity.ok(serviceAuth.register(request));
+        return user.getRol() != Rol.ADMIN ? ResponseEntity.ok("No tiene permisos para realizar ésta acción") : ResponseEntity.ok(serviceAuth.register(request));
+        //return ResponseEntity.ok(serviceAuth.register(request));
     }
 
     // TODO AGREGAR VALIDATOR PARA OBJETO AGREGADO POR ID, verificador de rol, y dtos de tareas, RESPUESTA DE AGREGADO CORRECTAMENTE

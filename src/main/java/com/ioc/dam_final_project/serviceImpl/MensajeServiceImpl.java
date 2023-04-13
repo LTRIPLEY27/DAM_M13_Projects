@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Qualifier(value = "mensaje")
 public class MensajeServiceImpl implements MensajeService {
@@ -79,6 +82,14 @@ public class MensajeServiceImpl implements MensajeService {
         mensajeRepository.save(oldMess);
 
         return MensajeDTO.byModel(oldMess);
+    }
+
+    @Override
+    public List<MensajeDTO> getAll() {
+        var messages = new ArrayList<MensajeDTO>();
+        mensajeRepository.findAll().forEach(mensaje -> messages.add(MensajeDTO.byModel(mensaje)));
+
+        return messages;
     }
 
 

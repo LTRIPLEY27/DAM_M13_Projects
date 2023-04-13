@@ -21,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UbicacionDTO {
 
+    private Long id;
     private Double centroLatitud;
     private Double centroLongitud;
     private Double zoom;
@@ -32,7 +33,7 @@ public class UbicacionDTO {
         for (var i : ubicacion.getMapa()){
             mapas.add(CoordenadaDTO.byModel(i));
         }
-        return new UbicacionDTO(ubicacion.getCentroLatitud(), ubicacion.getCentroLongitud(), ubicacion.getZoom(), mapas, ubicacion.getTarea().getName());
+        return new UbicacionDTO(ubicacion.getId(), ubicacion.getCentroLatitud(), ubicacion.getCentroLongitud(), ubicacion.getZoom(), mapas, ubicacion.getTarea().getName());
     }
 
 }

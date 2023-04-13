@@ -8,10 +8,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="DAM_Final_Project" />
+        <module name="openapi-java-client" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="openapi-java-client" target="1.7" />
+      <module name="swagger-java-client" target="1.7" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

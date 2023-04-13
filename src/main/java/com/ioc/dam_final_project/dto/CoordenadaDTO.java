@@ -11,10 +11,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CoordenadaDTO {
+    private Long id;
     private Double latitud;
     private Double longitud;
 
     public static CoordenadaDTO byModel(Coordenada coordenada){
-        return new CoordenadaDTO(coordenada.getLatitud(), coordenada.getLongitud());
+        return new CoordenadaDTO(coordenada.getId(), coordenada.getLatitud(), coordenada.getLongitud());
     }
 }

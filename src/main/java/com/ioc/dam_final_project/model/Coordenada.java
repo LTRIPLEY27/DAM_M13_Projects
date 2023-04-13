@@ -31,6 +31,6 @@ public class Coordenada {
     }
 
     public static Coordenada byDTO(CoordenadaDTO coordenadaDTO){
-        return new Coordenada(coordenadaDTO.getLatitud(), coordenadaDTO.getLongitud(), null);
+        return new Coordenada(coordenadaDTO.getId(), coordenadaDTO.getLatitud(), coordenadaDTO.getLongitud(), null);
     }
 }

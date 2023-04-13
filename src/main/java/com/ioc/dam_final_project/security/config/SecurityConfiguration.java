@@ -49,6 +49,7 @@ public class SecurityConfiguration  {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**").permitAll()
+               // .requestMatchers("/**").permitAll()
                  // --> OK
                 .requestMatchers("/register/**").permitAll()  // --> OK
                 //.requestMatchers("/register/**").hasAuthority("ADMIN")

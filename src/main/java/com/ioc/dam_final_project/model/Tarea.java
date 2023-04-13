@@ -66,6 +66,7 @@ public class Tarea {
         this.mensaje = mensaje;
     }
 
+
     public static Tarea byDTO(TareaDTO tareaDTO){
         return new Tarea(tareaDTO.getName(), tareaDTO.getTarea(), tareaDTO.getEstatus(), null, null, new Ubicacion(), null);
     }

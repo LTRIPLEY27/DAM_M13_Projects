@@ -21,7 +21,7 @@ public class UserDTO {
     private  String telefono;
     private Rol rol;
 
-    //TODO Verificar si al realizar update : id y rol se pueden editar (en teoría no, pero comprobar)
+    //TODO Verificar si al realizar update : id y rol se pueden editar (en teoría no, pero comprobar), preguntar respecto del password
     public static UserDTO byEntity(User user){
         return new UserDTO(user.getId(), user.getUser(), user.getPassword(), user.getNombre(), user.getApellido(), user.getEmail(), user.getTelefono(), user.getRol());
     }

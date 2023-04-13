@@ -113,8 +113,8 @@ public class UserServiceImpl implements UserService, Constantes {
                 case COORDENADAS -> {
                     return Collections.singletonList(coordenadaService.coordenas());
                 }
-                case MENSAJES -> {
-                    return Collections.singletonList(mensajeService); // to implementade on message services
+                case MENSAJES -> { // todo, implementar el listado de mensajes a retornar en el services de mensajes
+                    return Collections.singletonList(mensajeService.getAll()); // to implementade on message services
                 }
                 case TECNICOS -> {
                     return Collections.singletonList(tecnicoServiceimpl.getAll());
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService, Constantes {
         oldUser.setPassword(new BCryptPasswordEncoder().encode(newUser.getPassword()));
         oldUser.setNombre(newUser.getNombre());
         oldUser.setApellido(newUser.getApellido());
-        oldUser.setEmail(newUser.getEmail());
+        //oldUser.setEmail(newUser.getEmail()); // todo, condicionar éste parámetro ya que no se va a poder editar, a menos que sea admin?
         oldUser.setTelefono(newUser.getTelefono());
         //oldUser.setRol(newUser.getRol());
 
@@ -282,7 +282,7 @@ public class UserServiceImpl implements UserService, Constantes {
             case MENSAJE -> {
                 return mensajeService.searchById(id);
             }
-            case USER -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
+            case USER -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER // TODO, VERIFICAR SI LA BÚSQUEDA SE NECESITA ESPECÍFICAR A ADMIN O A TÉCNICO
                 return UserDTO.byEntity(userRepository.findById(id).orElseThrow());
             }
         }

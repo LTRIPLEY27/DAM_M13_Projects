@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MensajeDTO {
+    private Long id;
     private String descripcion;
     private LocalDate fecha;
     private String tarea;
@@ -20,6 +21,6 @@ public class MensajeDTO {
     private String admin;
 
     public static MensajeDTO byModel(Mensaje mensaje){
-        return new MensajeDTO(mensaje.getDescripcion(), mensaje.getFecha(), mensaje.getTarea().getName(), mensaje.getTecnico().getUser(), mensaje.getAdmin().getUser());
+        return new MensajeDTO(mensaje.getId(), mensaje.getDescripcion(), mensaje.getFecha(), mensaje.getTarea().getName(), mensaje.getTecnico().getUser(), mensaje.getAdmin().getUser());
     }
 }

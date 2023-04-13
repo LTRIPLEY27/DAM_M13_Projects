@@ -19,7 +19,7 @@ import static org.aspectj.weaver.UnresolvedType.add;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TareaDTO {
-
+    private Long id;
     private String name;
     private LocalDate fecha_creacion;
     private LocalDate fecha_culminacion;
@@ -40,6 +40,6 @@ public class TareaDTO {
         var tecnic = tarea.getTecnico() != null ? tarea.getTecnico().getUser() : "";
         var admin = tarea.getAdmin() != null ? tarea.getAdmin().getUser() : "";
 
-        return new TareaDTO(tarea.getName(), tarea.getFecha_creacion(), tarea.getFecha_culminacion(), tarea.getTarea(), tarea.getEstatus(), tecnic, admin, ubicacion, mensajes);
+        return new TareaDTO(tarea.getId(), tarea.getName(), tarea.getFecha_creacion(), tarea.getFecha_culminacion(), tarea.getTarea(), tarea.getEstatus(), tecnic, admin, ubicacion, mensajes);
     }
 }
