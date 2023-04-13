@@ -61,7 +61,6 @@ public class MensajeServiceImpl implements MensajeService, Constantes {
                 return posting(mensaje, tarea, (Tecnico) user, object);
             }
         }
-
         return null;
     }
 
