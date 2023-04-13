@@ -6,6 +6,7 @@ import java.util.List;
 public class UserObj {
 
     private String id;
+    private String user;
     private String nombre;
     private String apellido;
     private String email;
@@ -20,6 +21,7 @@ public class UserObj {
      * Todo Acabar de rellenar y comprovar los campos, segun los datos de la DB.
      * Objeto de usuario, contiene toda la informacion del usuario.
      * @param id id del usuario
+     * @param user user del usuario
      * @param name nombre del usuario
      * @param surname apellido del usuario
      * @param email correo electronico del usuario
@@ -27,9 +29,10 @@ public class UserObj {
      * @param userToken token del usuario al iniciar sesión
      * @param userType tipo de usuario
      */
-    public UserObj(String id, String name, String surname, String email, String phone, String userToken, String userType){
+    public UserObj(String id, String user,String name, String surname, String email, String phone, String userToken, String userType){
 
         setId(id);
+        setUser(user);
         setNombre(name);
         setApellido(surname);
         setEmail(email);
@@ -44,6 +47,14 @@ public class UserObj {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getNombre() {

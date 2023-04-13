@@ -11,55 +11,68 @@ public class TaskComment {
      *  "tecnico": "davidf"
      */
 
-    private String descripcion, fecha, tarea, tecnico;
+    private String id, descripcion, fecha, tarea, tecnico, admin;
 
     /**
      * Constructor de la clase TaskComment, son los comentarios dentro de las tareas.
      * @param descripcion
      * @param fecha
      * @param tarea
-     * @param user
+     * @param tecnico
+     * @param admin
      */
-    public TaskComment(String descripcion, String fecha, String tarea, String user) {
+    public TaskComment(String id, String descripcion, String fecha, String tarea, String tecnico, String admin) {
+        setId(id);
         setDescripcion(descripcion);
         setFecha(fecha);
         setTarea(tarea);
-        setUser(user);
+        setTecnico(tecnico);
+        setAdmin(admin);
+    }
+    public String getId() {
+        return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getDescripcion() {
         return descripcion;
     }
 
-    public TaskComment setDescripcion(String descripcion) {
+    public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-        return this;
     }
 
     public String getFecha() {
         return fecha;
     }
 
-    public TaskComment setFecha(String fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
-        return this;
     }
 
     public String getTarea() {
         return tarea;
     }
 
-    public TaskComment setTarea(String tarea) {
+    public void setTarea(String tarea) {
         this.tarea = tarea;
-        return this;
     }
 
-    public String getUser() {
+    public String getTecnico() {
         return tecnico;
     }
 
-    public TaskComment setUser(String tecnico) {
+    public void setTecnico(String tecnico) {
         this.tecnico = tecnico;
-        return this;
+    }
+
+    public String getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(String admin) {
+        this.admin = admin;
     }
 }

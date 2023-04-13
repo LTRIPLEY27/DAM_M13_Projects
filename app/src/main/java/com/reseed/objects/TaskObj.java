@@ -3,15 +3,15 @@ package com.reseed.objects;
 import java.util.ArrayList;
 
 public class TaskObj {
-    private String name, description, tarea, estatus, tecnico, admin,fecha_culminacion, fecha_creacion;
+    private String id, name, tarea, estatus, tecnico, admin,fecha_culminacion, fecha_creacion;
     private TaskLocation taskLocation;
     private ArrayList<TaskComment> taskComments;
 
     /**
      * Todo Acabar de rellenar y comprovar los campos, segun los datos de la DB.
      * Objeto de tarea, contiene toda la informacion de la tarea.
+     * @param id nombre de la tarea.
      * @param name nombre de la tarea.
-     * @param description contenido descriptivo de la tarea.
      * @param tarea tipo de tarea (analisis, limpieza y replantacion).
      * @param fecha_culminacion fecha de ejecucion de la tarea.
      * @param fecha_creacion fecha de creación de la tarea.
@@ -21,12 +21,12 @@ public class TaskObj {
      * @param taskLocation Localizacion central del mapa.
      * @param taskComments Comentarios de la tarea en un ArrayList.
      */
-    public TaskObj(String name, String description, String tarea, String fecha_culminacion, String fecha_creacion,
+    public TaskObj(String id,String name, String tarea, String fecha_culminacion, String fecha_creacion,
                    String estatus, String tecnico, String admin,TaskLocation taskLocation,
                    ArrayList<TaskComment> taskComments){
 
+        setId(id);
         setName(name);
-        setDescription(description);
         setTarea(tarea);
         setFecha_creacion(fecha_creacion);
         setFecha_culminacion(fecha_culminacion);
@@ -36,22 +36,19 @@ public class TaskObj {
         setTaskLocation(taskLocation);
         setTaskComments(taskComments);
     }
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public TaskObj setDescription(String description) {
-        this.description = description;
-        return this;
     }
 
     public String getTarea() {

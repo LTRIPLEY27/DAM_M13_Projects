@@ -40,8 +40,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="4"
                 android:singleLine="false"
-                android:text="TextView"
-                android:textSize="15dp" />
+                android:text="TextView" />
         </TableRow>
 
         <TableRow >

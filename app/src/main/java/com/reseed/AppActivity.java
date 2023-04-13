@@ -196,10 +196,16 @@ public class AppActivity extends AppCompatActivity {
 	public void configMenuCall(MenuItem item) {
 		drawerLayout.closeDrawer(GravityCompat.START);
 
+		FragmentUserConfig fragmentUserConfig = new FragmentUserConfig();
+
+		Bundle bundleArgs = new Bundle();
+		bundleArgs.putString("data", userJSONInfo.toString());
+		fragmentUserConfig.setArguments(bundleArgs);
+
 		fragmentContainerView.removeAllViewsInLayout();
 		getSupportFragmentManager().beginTransaction()
 				.setReorderingAllowed(true)
-				.add(R.id.fragmentContainerView, FragmentUserConfig.class, null)
+				.add(R.id.fragmentContainerView, fragmentUserConfig, null)
 				.commit();
 	}
 

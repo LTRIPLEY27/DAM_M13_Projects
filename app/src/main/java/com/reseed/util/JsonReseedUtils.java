@@ -39,6 +39,7 @@ public class JsonReseedUtils {
             userJSONInfo = jsonProfileObject;
 
             userObj = new UserObj(
+                    userJSONInfo.getString("id"),
                     userJSONInfo.getString("user"),
                     userJSONInfo.getString("nombre"),
                     userJSONInfo.getString("apellido"),
@@ -73,8 +74,8 @@ public class JsonReseedUtils {
             jsonObjectTask = tasksJson.getJSONObject(i);
 
             taskObj.add(new TaskObj(
+                    jsonObjectTask.getString("id"),
                     jsonObjectTask.getString("name"),
-                    "Descripción de test.",
                     jsonObjectTask.getString("tarea"),
                     jsonObjectTask.getString("fecha_culminacion"),
                     jsonObjectTask.getString("fecha_creacion"),
@@ -98,6 +99,7 @@ public class JsonReseedUtils {
     private TaskLocation extractLocation(JSONObject jsonObject) throws JSONException {
 
         TaskLocation taskLocation = new TaskLocation(
+                jsonObject.getString("id"),
                 jsonObject.getString("centroLatitud"),
                 jsonObject.getString("centroLatitud"),
                 jsonObject.getString("zoom"),
@@ -116,7 +118,9 @@ public class JsonReseedUtils {
 
         for (int i = 0; i < mapa.length(); i++) {
 
-            MapPoint mapPoint = new MapPoint(mapa.getJSONObject(i).getString("latitud"),
+            MapPoint mapPoint = new MapPoint(
+                    mapa.getJSONObject(i).getString("id"),
+                    mapa.getJSONObject(i).getString("latitud"),
                     mapa.getJSONObject(i).getString("longitud"));
 
             mapPoints.add(mapPoint);
@@ -136,10 +140,12 @@ public class JsonReseedUtils {
 
         for (int i = 0; i < jsonArrayComments.length(); i++) {
             TaskComment taskComment = new TaskComment(
+                    jsonArrayComments.getJSONObject(i).getString("id"),
                     jsonArrayComments.getJSONObject(i).getString("descripcion"),
                     jsonArrayComments.getJSONObject(i).getString("fecha"),
                     jsonArrayComments.getJSONObject(i).getString("tarea"),
-                    jsonArrayComments.getJSONObject(i).getString("user")
+                    jsonArrayComments.getJSONObject(i).getString("tecnico"),
+                    jsonArrayComments.getJSONObject(i).getString("admin")
                     );
 
             arrayListComments.add(taskComment);
