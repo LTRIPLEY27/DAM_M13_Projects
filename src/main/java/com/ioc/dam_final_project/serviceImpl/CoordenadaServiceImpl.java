@@ -6,6 +6,7 @@ import com.ioc.dam_final_project.repository.CoordenadaRepository;
 import com.ioc.dam_final_project.repository.TareaRepository;
 import com.ioc.dam_final_project.repository.UbicacionRepository;
 import com.ioc.dam_final_project.service.CoordenadaService;
+import com.ioc.dam_final_project.tools.Constantes;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Service
 @Qualifier(value = "coordenada")
-public class CoordenadaServiceImpl implements CoordenadaService  {
+public class CoordenadaServiceImpl implements CoordenadaService, Constantes {
 
     private final CoordenadaRepository coordenadaRepository;
     private final UbicacionRepository ubicacionRepository;
@@ -63,14 +64,20 @@ public class CoordenadaServiceImpl implements CoordenadaService  {
         return CoordenadaDTO.byModel(coordenadaRepository.findById(id).orElseThrow());
     }
 
+    /** Metodo updateValue
+     * Recibe 2 parametros : el Id de la entidad a actualizar, el valor de la entidad a apuntar dicho cambio, el Objeto con los nuevos valores contenidos. Actualiza un objeto 'Entity' en la base de datos
+     * @return <ul>
+     *  <li>Entity: valida segun el caso de uso y gestiona el update de dicha entidad con los nuevos valores</li>
+     *  </ul>
+     */
     @Override
     public CoordenadaDTO updateValue(Long id, Object object) {
         var oldCoor = coordenadaRepository.findById(id).orElseThrow();
-        var newCoor = Coordenada.byDTO((CoordenadaDTO) object);
+        var newCoor = mapper.convertValue(object, CoordenadaDTO.class);
 
         oldCoor.setLongitud(newCoor.getLongitud());
         oldCoor.setLatitud(newCoor.getLatitud());
-        oldCoor.setUbicacion(newCoor.getUbicacion());
+        //oldCoor.setUbicacion(newCoor.getUbicacion());
 
         coordenadaRepository.save(oldCoor);
 

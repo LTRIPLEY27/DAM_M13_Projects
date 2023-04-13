@@ -24,7 +24,7 @@ public class Ubicacion {
     private Double centroLongitud;
     private Double zoom;
     @JsonIgnore
-    @OneToMany(mappedBy = "ubicacion", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL) //(orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ubicacion", fetch = FetchType.LAZY, cascade = CascadeType.ALL) //(orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Coordenada> mapa;
     @OneToOne
     @JoinColumn(name = "tarea_id", referencedColumnName = "id")

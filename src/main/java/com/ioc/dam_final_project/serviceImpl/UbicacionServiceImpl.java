@@ -65,8 +65,8 @@ public class UbicacionServiceImpl implements UbicacionService, Constantes {
         oldUbi.setZoom(newUbi.getZoom());
         oldUbi.setCentroLatitud(newUbi.getCentroLatitud());
         oldUbi.setCentroLongitud(newUbi.getCentroLongitud());
-        oldUbi.setMapa(newUbi.getMapa());
-        oldUbi.setTarea(newUbi.getTarea());
+        //oldUbi.setMapa(newUbi.getMapa());
+        //oldUbi.setTarea(newUbi.getTarea());
 
         //return UbicacionDTO.byModel(oldUbi);
         return ubicacionRepository.save(oldUbi);

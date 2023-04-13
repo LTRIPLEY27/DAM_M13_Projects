@@ -20,7 +20,7 @@ public interface UserService {
 
     List<Object> registers(String username, String value);
 
-    UserDTO update(String old, UserDTO userDTO);
+    UserDTO update(String old, Object userDTO);
 
     Object updateValue(String username, String value, Long id, Object object);
 

@@ -142,14 +142,14 @@ public class UserServiceImpl implements UserService, Constantes {
      *  </ul>
      */
     @Override
-    public UserDTO update(String old, UserDTO userDTO) {
+    public UserDTO update(String old, Object userDTO) {
         var user = userRepository.findUserByEmail(old).orElseThrow();
 
         switch (user.getRol()){
             case ADMIN, TECNIC -> { // TODO Aplicar el filtro a update específicos, preguntar qué valores van a editar y difieren
                 var oldUser = userRepository.findById(user.getId()).orElseThrow();
-                var userNew = User.byDTO(userDTO);
-                return updateUser(oldUser, userNew);
+                var userNew = mapper.convertValue(userDTO, UserDTO.class);
+                return updateUser(oldUser, User.byDTO(userNew));
             }
         }
         return null;
@@ -167,6 +167,9 @@ public class UserServiceImpl implements UserService, Constantes {
         oldUser.setPassword(new BCryptPasswordEncoder().encode(newUser.getPassword()));
         oldUser.setNombre(newUser.getNombre());
         oldUser.setApellido(newUser.getApellido());
+        if(oldUser.getRol() == Rol.ADMIN){
+            oldUser.setRol(newUser.getRol());// TODO, VERIFICAR SI EL ADMIN PUEDE CAMBIAR EL ROL
+        }
         //oldUser.setEmail(newUser.getEmail()); // todo, condicionar éste parámetro ya que no se va a poder editar, a menos que sea admin?
         oldUser.setTelefono(newUser.getTelefono());
         //oldUser.setRol(newUser.getRol());
@@ -202,11 +205,21 @@ public class UserServiceImpl implements UserService, Constantes {
                     return mensajeService.updateValue(id, object); // to implementade on message services
                 }
                 case TECNICO, ADMIN -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
-                    return update(username, (UserDTO) object);
+                    return update(id,  object);
                 }
             }
         }
-        return update(username, (UserDTO) object); // to implementade tarea
+
+        return null; // to implementade tarea
+    }
+
+
+    public UserDTO update(Long id, Object object) {
+        //var user = userRepository.findById(id).orElseThrow();
+        var oldUser = userRepository.findById(id).orElseThrow();
+        var userNew = mapper.convertValue(object, UserDTO.class);
+
+        return updateUser(oldUser, User.byDTO(userNew));
     }
 
     /** Metodo 'deleteRegister()'
@@ -356,7 +369,7 @@ public class UserServiceImpl implements UserService, Constantes {
             case TAREA -> {
                 return tareaService.isExistence(id);
             }
-            case USER -> {
+            case USER , TECNICO, ADMIN -> {
                 return userRepository.findById(id).isPresent();
             }
             case UBICACION -> {

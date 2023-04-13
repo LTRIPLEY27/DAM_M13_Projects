@@ -5,6 +5,7 @@ import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.model.*;
 import com.ioc.dam_final_project.repository.*;
 import com.ioc.dam_final_project.service.MensajeService;
+import com.ioc.dam_final_project.tools.Constantes;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Service
 @Qualifier(value = "mensaje")
-public class MensajeServiceImpl implements MensajeService {
+public class MensajeServiceImpl implements MensajeService, Constantes {
 
     private final MensajeRepository mensajeRepository;
     private final UserRepository userRepository;
@@ -72,13 +73,15 @@ public class MensajeServiceImpl implements MensajeService {
     @Override
     public MensajeDTO updateValue(Long id, Object object) {
         var oldMess = mensajeRepository.findById(id).orElseThrow();
-        var newMess = Mensaje.byDTO((MensajeDTO) object);
+        var newMess = mapper.convertValue(object, MensajeDTO.class);
 
         oldMess.setDescripcion(newMess.getDescripcion());
-        oldMess.setTarea(newMess.getTarea());
-        oldMess.setAdmin(newMess.getAdmin());
-        oldMess.setTecnico(newMess.getTecnico());
-        // TODO PREGUNTAR SI SE DEBE DE ACTUALIZAR LA FECHA?
+        // TODO PREGUNTAR SI SE DEBE DE ACTUALIZAR EN MENSAJES, EN TEORIA LAS FECHAS Y DEMAS ASIGNACIONES NO SE DEBERÍAN DE PODER EDITAR
+        //oldMess.setFecha(object.);
+        //oldMess.setTarea(newMess.getTarea());
+        //oldMess.setAdmin(newMess.getAdmin());
+        //oldMess.setTecnico(newMess.getTecnico());
+
         mensajeRepository.save(oldMess);
 
         return MensajeDTO.byModel(oldMess);
@@ -113,8 +116,7 @@ public class MensajeServiceImpl implements MensajeService {
         tareaRepository.save(tarea);
         mensajeRepository.save(byModel);
 
-        var dto = MensajeDTO.byModel(byModel);
-        return dto;
+        return MensajeDTO.byModel(byModel);
     }
 
     public boolean isExistence(Long id){

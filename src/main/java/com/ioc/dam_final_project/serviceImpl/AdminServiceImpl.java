@@ -5,6 +5,7 @@ import com.ioc.dam_final_project.dto.TecnicoDTO;
 import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.repository.AdminRepository;
 import com.ioc.dam_final_project.service.AdminService;
+import com.ioc.dam_final_project.tools.Constantes;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Service
 @Qualifier(value = "admin")
-public class AdminServiceImpl implements AdminService {
+public class AdminServiceImpl implements AdminService, Constantes {
 
     private final TecnicoServiceimpl tecnicoServ;
     private final AdminRepository adminRepository;
@@ -34,6 +35,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public AdminDTO update(Long id, Object object) {
+
         return null;
     }
 
