@@ -194,13 +194,13 @@ public class UserController implements Constantes {
      *  <li>Lista de Valores: Retorna una lista de tares según el usuario : Tecnico, las que tenga asignadas, Admin, por username del Tecnico</li>
      *  </ul>
      */
-   /* @GetMapping(path = "tareas/tecnico/{tecnico}")
+    @GetMapping(path = "tareas/tecnico/{tecnico}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List <Object>> getRegistersByTecnic(Principal principal, @PathVariable("tecnico") String value){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.registers(principal.getName(), value)) : ResponseEntity.ok(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
-    }*/
+        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.findTaskByTecnic(value)) : ResponseEntity.ok(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }
 
     /*************************************************************
      *                   UPDATE VALUES FROM A OBJET IN DATABASE
