@@ -87,6 +87,21 @@ public class MensajeServiceImpl implements MensajeService, Constantes {
     }
 
     @Override
+    public List<MensajeDTO> findMessageByTecnic(Tecnico tecnico) {
+        var mensajes = new ArrayList<MensajeDTO>();
+        mensajeRepository.findMensajeByTecnico(tecnico).forEach(mensaje -> mensajes.add(MensajeDTO.byModel(mensaje)));
+
+        return mensajes;
+    }
+
+    @Override
+    public List<MensajeDTO> findMessageByAdmin(Admin admin) {
+        var mensajes = new ArrayList<MensajeDTO>();
+        mensajeRepository.findMensajeByAdmin(admin).forEach(mensaje -> mensajes.add(MensajeDTO.byModel(mensaje)));
+        return mensajes;
+    }
+
+    @Override
     public List<MensajeDTO> getAll() {
         var messages = new ArrayList<MensajeDTO>();
         mensajeRepository.findAll().forEach(mensaje -> messages.add(MensajeDTO.byModel(mensaje)));

@@ -183,8 +183,24 @@ public class UserController implements Constantes {
     public ResponseEntity<List <Object>> getRegisters(Principal principal, @PathVariable("value") String value){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.registers(principal.getName(), value)) : ResponseEntity.ok(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+        //return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.registers(principal.getName(), value)) : ResponseEntity.ok(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+        return ResponseEntity.ok(userService.registers(principal.getName(), value));
     }
+
+
+    /**
+     * Metodo que recibe un parametro y valida segun el rol y el parametro
+     * @return <ul>
+     *  <li>Lista de Valores: Retorna una lista de tares según el usuario : Tecnico, las que tenga asignadas, Admin, por username del Tecnico</li>
+     *  </ul>
+     */
+   /* @GetMapping(path = "tareas/tecnico/{tecnico}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List <Object>> getRegistersByTecnic(Principal principal, @PathVariable("tecnico") String value){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.registers(principal.getName(), value)) : ResponseEntity.ok(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }*/
 
     /*************************************************************
      *                   UPDATE VALUES FROM A OBJET IN DATABASE

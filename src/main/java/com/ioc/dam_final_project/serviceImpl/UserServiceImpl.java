@@ -1,11 +1,8 @@
 package com.ioc.dam_final_project.serviceImpl;
 
 import com.ioc.dam_final_project.dto.*;
-import com.ioc.dam_final_project.model.Coordenada;
+import com.ioc.dam_final_project.model.*;
 import com.ioc.dam_final_project.model.Enums.Rol;
-import com.ioc.dam_final_project.model.Tecnico;
-import com.ioc.dam_final_project.model.Ubicacion;
-import com.ioc.dam_final_project.model.User;
 import com.ioc.dam_final_project.repository.*;
 import com.ioc.dam_final_project.service.UserService;
 import com.ioc.dam_final_project.tools.Constantes;
@@ -113,8 +110,11 @@ public class UserServiceImpl implements UserService, Constantes {
                 case COORDENADAS -> {
                     return Collections.singletonList(coordenadaService.coordenas());
                 }
-                case MENSAJES -> { // todo, implementar el listado de mensajes a retornar en el services de mensajes
+                case MENSAJES -> { // todo, corresponde a todos los mensajes contenidos en la base de datos
                     return Collections.singletonList(mensajeService.getAll()); // to implementade on message services
+                }
+                case MENSAJE -> { // todo, éste equivale a la lista de los mensajes que ha realizado el admin
+                    return Collections.singletonList(mensajeService.findMessageByAdmin((Admin) usuari)); // to implementade on message services
                 }
                 case TECNICOS -> {
                     return Collections.singletonList(tecnicoServiceimpl.getAll());
@@ -129,7 +129,14 @@ public class UserServiceImpl implements UserService, Constantes {
                 }
             }
         } else {
-            return Collections.singletonList(tareaService.getTareaTec((Tecnico) usuari)); // to implementade tarea
+            switch (value) {
+                case MENSAJES -> { // todo, implementar el listado de mensajes a retornar en el services de mensajes
+                    return Collections.singletonList(mensajeService.findMessageByTecnic((Tecnico) usuari)); // to implementade on message services
+                }
+                case TAREAS -> {
+                    return Collections.singletonList(tareaService.getTareaByTecnico((Tecnico) usuari));
+                }
+            }
         }
 
         return null;
@@ -333,6 +340,21 @@ public class UserServiceImpl implements UserService, Constantes {
     @Override
     public CoordenadaDTO addNewCoor(Coordenada coordenada, Long ubicacion) {
         return coordenadaService.saveObject(coordenada, ubicacion);
+    }
+
+    /**
+     * Metodo 'findTaskByTecnic'
+     * Recibe 1 parametro: Username del tecnico al que se retornara la lista de Tareas asignadas
+     *
+     * @return <ul>
+     * <li>Entity : Registro de la coordenada en la database</li>
+     * </ul>
+     */
+    @Override
+    public List<Object> findTaskByTecnic(String username) {
+        var tecnico = userRepository.findUserByUser(username).orElseThrow();
+
+        return Collections.singletonList(tareaService.getTareaByTecnico((Tecnico) tecnico));
     }
 
     /*@Override// TODO, verificar si mensaje puede ser adherido desde acá, register desde acá?

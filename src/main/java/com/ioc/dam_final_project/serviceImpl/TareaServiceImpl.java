@@ -60,12 +60,10 @@ public class TareaServiceImpl implements TareaService, Constantes {
     }
 
     @Override
-    public List<TareaDTO> getTareaTec(Tecnico tecnico) {
+    public List<TareaDTO> getTareaByTecnico(Tecnico tecnico) {
 
         var object = new ArrayList<TareaDTO>();
-        for (var i : tareaRepository.findTareaByTecnico(tecnico)){
-            object.add(TareaDTO.byModel(i));
-        }
+        tareaRepository.findTareaByTecnico(tecnico).forEach(tarea -> object.add(TareaDTO.byModel(tarea)));
 
         return object;
     }

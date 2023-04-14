@@ -37,4 +37,6 @@ public interface UserService {
     Ubicacion addNewUbicacion(Ubicacion ubicacion, Long id);
 
     CoordenadaDTO addNewCoor(Coordenada coordenada, Long ubicacion);
+
+    List<Object> findTaskByTecnic(String username);
 }

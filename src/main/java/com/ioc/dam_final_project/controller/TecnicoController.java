@@ -37,7 +37,7 @@ public class TecnicoController {
     public ResponseEntity<List<TareaDTO>> getTareas(Principal principal){
 
         var user = tecnicoServiceimpl.getByEmail(principal.getName());
-        return ResponseEntity.ok(tareaService.getTareaTec(user));
+        return ResponseEntity.ok(tareaService.getTareaByTecnico((user)));
     }
 
 
