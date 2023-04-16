@@ -1,6 +1,5 @@
 package com.reseed;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,16 +8,15 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
-import com.reseed.objects.UserObj;
-import com.reseed.requests.LoginAuthRequest;
+import com.reseed.requests.UserPpdateRequest;
 import com.reseed.requests.SingletonReqQueue;
 import com.reseed.requests.UserInfoRequest;
+import com.reseed.util.EncryptUtils;
 import com.reseed.util.VolleyResponseListener;
 
 import org.json.JSONException;
@@ -28,7 +26,8 @@ public class LoginActivity extends AppCompatActivity {
     Button loginB;
     TextView userTextView, passwordTextView;
     RequestQueue requestQueue;
-    private String loginToken;
+    EncryptUtils encryptUtils;
+    private String loginToken, encryptedPasswd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +49,11 @@ public class LoginActivity extends AppCompatActivity {
         userTextView = findViewById(R.id.editTextEmailAddress);
         passwordTextView = findViewById(R.id.editTextPassword);
 
-        //instanciamos la requestqueue
+        // instanciamos la requestqueue
         requestQueue = SingletonReqQueue.getInstance(this.getApplicationContext()).getRequestQueue();
+
+        // inicializamos las utilidades de encriptación.
+        encryptUtils = new EncryptUtils();
 
         loginB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Metodo usado para realizar el login, se usa la clase {@link LoginAuthRequest}, y sobre ella
+     * Metodo usado para realizar el login, se usa la clase {@link UserPpdateRequest}, y sobre ella
      * se le asigna un listener para el evento de la request.
      *
      * @param email    Email del usuario
@@ -94,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-        LoginAuthRequest login = new LoginAuthRequest(email, password, requestQueue,false);
+        UserPpdateRequest login = new UserPpdateRequest(email, password, requestQueue);
 
         login.sendRequest(new VolleyResponseListener() {
             @Override
@@ -112,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(Object response) {
+            public boolean onResponse(Object response) {
 
                 //Si la respuesta
 
@@ -127,8 +129,14 @@ public class LoginActivity extends AppCompatActivity {
                 Toast toast = Toast.makeText(getApplicationContext(), loginToken, Toast.LENGTH_LONG);
                 toast.show();
 
-                //openAppActivity();
+                /**
+                 *  encriptamos el password y lo pasamos por si mas adelante el usuario
+                 *  quiere cambiarlo en {@link FragmentUserConfig}.
+                 */
+                encryptedPasswd = encryptUtils.encryptPasswordMd5(password);
+
                 getUserInfo(loginToken);
+                return false;
             }
         });
     }
@@ -140,6 +148,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AppActivity.class);
         intent.putExtra("jsonObject", jsonObject.toString());
         intent.putExtra("token", getLoginToken());
+        intent.putExtra("encryptedPasswd",encryptedPasswd);
         startActivity(intent);
     }
 
@@ -158,10 +167,11 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(Object response) {
+            public boolean onResponse(Object response) {
                 JSONObject jsResponse = (JSONObject) response;
                 Log.i("Respuesta user info",jsResponse.toString());
                 openAppActivity(jsResponse);
+                return false;
             }
         });
         //This is for Headers If You Needed

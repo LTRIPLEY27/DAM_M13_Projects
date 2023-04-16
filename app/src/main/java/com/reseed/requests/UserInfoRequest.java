@@ -53,7 +53,7 @@ public class UserInfoRequest {
 
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("Respuesta user info test", response.toString());
+                Log.d("Respuesta user info request", response.toString());
 
                 // Enviamos la informacion de la respuesta al LoginActivity.
                 listener.onResponse(response);

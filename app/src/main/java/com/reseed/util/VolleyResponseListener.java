@@ -6,5 +6,5 @@ package com.reseed.util;
  */
 public interface VolleyResponseListener {
     void onError(String message);
-    void onResponse(Object response);
+    boolean onResponse(Object response);
 }

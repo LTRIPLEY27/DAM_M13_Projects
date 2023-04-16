@@ -30,9 +30,11 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.reseed.objects.UserObj;
+import com.reseed.requests.SingletonReqQueue;
 import com.reseed.util.JsonReseedUtils;
 import com.reseed.util.adapter.TaskAdapter;
 import com.reseed.objects.TaskObj;
@@ -50,14 +52,11 @@ public class AppActivity extends AppCompatActivity {
 	UserObj userObj;
 	ImageView image_menu_btn;
 	TextView textViewUsername, textViewEmail;
-
 	FragmentContainerView fragmentContainerView;
-
 	// NavigationView del menu_lateral lateral.
 	NavigationView navigationView;
-
 	Integer bottomMenuSelected;
-
+	String encryptedPasswd;
 	private JSONObject userJSONInfo;
 
 	private ArrayList<TaskObj> userTaskObjs;
@@ -72,6 +71,9 @@ public class AppActivity extends AppCompatActivity {
 
 		supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
 
+		// Guardamos el password encriptado para posterior uso
+		encryptedPasswd = getIntent().getStringExtra("encryptedPasswd");
+
 		//Extraemos UserObj del userJSONInfo.
 		extractUser();
 
@@ -85,6 +87,9 @@ public class AppActivity extends AppCompatActivity {
 		// Buscamos el drawerLayout para poder interactuar con el.
 		drawerLayout = findViewById(R.id.drawer_layer);
 		fragmentContainerView = findViewById(R.id.fragmentContainerView);
+
+
+		// TODO hacer la separacion de tipo de usuario.
 
 		if(userObj.getTipoUsuario().equalsIgnoreCase("tecnic")){
 
@@ -173,7 +178,7 @@ public class AppActivity extends AppCompatActivity {
 	 *
 	 * @param item recibe el menu_lateral donde se ha hecho clic.
 	 */
-	public void logoutMenuCall(MenuItem item) {
+	public void logoutMenuCall(@Nullable MenuItem item) {
 
 		Intent intent = new Intent(this, LoginActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -200,6 +205,8 @@ public class AppActivity extends AppCompatActivity {
 
 		Bundle bundleArgs = new Bundle();
 		bundleArgs.putString("data", userJSONInfo.toString());
+		bundleArgs.putString("token", userObj.getTokenUsuario());
+		bundleArgs.putString("encryptedPasswd", encryptedPasswd);
 		fragmentUserConfig.setArguments(bundleArgs);
 
 		fragmentContainerView.removeAllViewsInLayout();

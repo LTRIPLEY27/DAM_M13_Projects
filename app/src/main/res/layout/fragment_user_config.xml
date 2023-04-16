@@ -79,17 +79,73 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewConfigTypeuser" />
 
+    <TextView
+        android:id="@+id/textViewChangePass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Protege tu cuenta con una contraseña única de 6 caracteres como mínimo."
+        android:textAlignment="center"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewIconUser" />
+
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/editTextPasswordActual"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
+        android:hint="Contraseña actual"
         android:ems="10"
         android:inputType="textPassword"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewConfigTypeuser" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewChangePass" />
+    <EditText
+        android:id="@+id/editTextPasswordNuevo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="Nueva contraseña"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordActual" />
+    <EditText
+        android:id="@+id/editTextPasswordRepite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:hint="Repite la nueva contraseña"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordNuevo" />
+    <Button
+        android:id="@+id/buttonChangePasswordAccept"
+        android:layout_width="231dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="15dp"
+        android:text="Aceptar"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPasswordRepite" />
+    <Button
+        android:id="@+id/buttonChangePasswordCancel"
+        android:layout_width="231dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="15dp"
+        android:text="Cancelar"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonChangePasswordAccept" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
