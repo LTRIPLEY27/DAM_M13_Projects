@@ -1,4 +1,4 @@
-package com.reseed.requests;
+package com.reseed.util.adapter.requests;
 
 import android.util.Log;
 import com.android.volley.AuthFailureError;
@@ -11,9 +11,8 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.reseed.util.VolleyResponseListener;
+import com.reseed.interfaces.VolleyResponseInterface;
 
 import org.json.JSONObject;
 
@@ -38,7 +37,7 @@ public class UserInfoRequest {
         setDemoReq(isDemoReq);
     }
 
-    public void sendRequest(final VolleyResponseListener listener){
+    public void sendRequest(final VolleyResponseInterface listener){
 
         if(getDemoReq()){
             urlPostLogin = "https://7fb95452-32bb-4186-a691-5be768b33401.mock.pstmn.io/perfil";

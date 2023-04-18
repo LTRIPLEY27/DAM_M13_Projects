@@ -1,4 +1,4 @@
-package com.reseed.requests;
+package com.reseed.util.adapter.requests;
 
 import android.util.Log;
 
@@ -13,7 +13,7 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.reseed.util.VolleyResponseListener;
+import com.reseed.interfaces.VolleyResponseInterface;
 
 import org.json.JSONObject;
 
@@ -42,7 +42,7 @@ public class UserUpdateRequest {
 
 
 
-	public void sendRequest(final VolleyResponseListener listener) {
+	public void sendRequest(final VolleyResponseInterface listener) {
 
 		urlPostLogin = "https://t-sunlight-381215.lm.r.appspot.com/update-user";
 

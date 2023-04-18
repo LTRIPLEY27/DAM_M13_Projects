@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:text="Username"
                 android:textColor="@color/white"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:textAlignment="gravity"
                 android:gravity="center"
                 />
@@ -52,7 +52,7 @@
                 android:text="Email"
                 android:textAlignment="gravity"
                 android:textColor="@color/green_200"
-                android:textSize="10dp" />
+                android:textSize="10sp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"

@@ -3,11 +3,13 @@ package com.reseed.util.adapter;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -16,30 +18,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.reseed.R;
 import com.reseed.AppActivity;
+import com.reseed.interfaces.RecyclerViewInterface;
 import com.reseed.objects.TaskObj;
 
 import java.util.ArrayList;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
+	private final RecyclerViewInterface recyclerViewInterface;
 	private final ArrayList<TaskObj> localDataSet;
-
-	public void setClickListener(AppActivity appActivity) {
-	}
 
 	/**
 	 * Provide a reference to the type of views that you are using
 	 * (custom ViewHolder)
 	 */
-	public static class ViewHolder extends RecyclerView.ViewHolder {
+	public static class ViewHolder extends RecyclerView.ViewHolder{
 		private final TextView titleText, descriptionText, dateTaskText;
-		private CardView cardViewTask;
-		private ImageView imageViewTask;
+		private final CardView cardViewTask;
+		private final ImageView imageViewTask;
 
 
-		public ViewHolder(View view) {
+		public ViewHolder(@NonNull View view, RecyclerViewInterface recyclerViewInterface) {
 			super(view);
-			// Define click listener for the ViewHolder's View
 
 			titleText = view.findViewById(R.id.titleTaskText);
 			descriptionText = view.findViewById(R.id.descriptionTaskText);
@@ -47,6 +47,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 			cardViewTask = view.findViewById(R.id.card_task);
 			imageViewTask = view.findViewById(R.id.imageTaskType);
 
+			view.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					if(recyclerViewInterface != null){
+
+						int pos = getAbsoluteAdapterPosition();
+
+						if(pos != RecyclerView.NO_POSITION){
+							recyclerViewInterface.onItemClicked(pos);
+						}
+					}
+				}
+			});
 		}
 
 		public TextView getTitleText() {
@@ -68,6 +81,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 		public ImageView getImageTask() {
 			return imageViewTask;
 		}
+
 	}
 
 	/**
@@ -76,8 +90,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 	 * @param dataSet String[] containing the data to populate views to be used
 	 *                by RecyclerView
 	 */
-	public TaskAdapter(ArrayList<TaskObj> dataSet) {
+	public TaskAdapter(ArrayList<TaskObj> dataSet, RecyclerViewInterface recyclerViewInterface) {
 		localDataSet = dataSet;
+		this.recyclerViewInterface = recyclerViewInterface;
+
 	}
 
 	// Create new views (invoked by the layout manager)
@@ -88,7 +104,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 		View view = LayoutInflater.from(viewGroup.getContext())
 				.inflate(R.layout.taskitem, viewGroup, false);
 
-		return new ViewHolder(view);
+		return new ViewHolder(view, recyclerViewInterface);
 	}
 
 	// Replace the contents of a view (invoked by the layout manager)
@@ -111,6 +127,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 		if (localDataSet.get(position).getTarea().contentEquals("LIMPIEZA")) {
 			viewHolder.getCardViewTask().setBackgroundColor(Color.parseColor("#fff4ac"));
 		}
+
 
 	}
 

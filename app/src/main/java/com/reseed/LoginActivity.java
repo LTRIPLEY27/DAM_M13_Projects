@@ -13,11 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
-import com.reseed.requests.UserPpdateRequest;
-import com.reseed.requests.SingletonReqQueue;
-import com.reseed.requests.UserInfoRequest;
+import com.reseed.util.adapter.requests.UserPpdateRequest;
+import com.reseed.util.adapter.requests.SingletonReqQueue;
+import com.reseed.util.adapter.requests.UserInfoRequest;
 import com.reseed.util.EncryptUtils;
-import com.reseed.util.VolleyResponseListener;
+import com.reseed.interfaces.VolleyResponseInterface;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,21 +33,16 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Hacemos que la pantalla de la aplicacion sea full screeen.
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        /*supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }*/
 
         setContentView(R.layout.activity_login);
 
         loginB = findViewById(R.id.loginButton);
         userTextView = findViewById(R.id.editTextEmailAddress);
         passwordTextView = findViewById(R.id.editTextPassword);
+
+        changeStatusInputUser(true);
+
 
         // instanciamos la requestqueue
         requestQueue = SingletonReqQueue.getInstance(this.getApplicationContext()).getRequestQueue();
@@ -59,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isValidEmail(userTextView.getText().toString())) {
+                    changeStatusInputUser(false);
                     sendLoginRequest(userTextView.getText().toString(), passwordTextView.getText().toString());
                 } else {
                     Log.e("Error email: ", "format email incorrect.");
@@ -68,6 +64,17 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    /**
+     * Activa o desactiva la edicion de los controles de input del login del usuario.
+     * @param status Boolean, true} si se quieren activar, false para desactivar.
+     */
+    public void changeStatusInputUser(Boolean status) {
+        loginB.setEnabled(status);
+        userTextView.setEnabled(status);
+        passwordTextView.setEnabled(status);
     }
 
     /**
@@ -98,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
 
         UserPpdateRequest login = new UserPpdateRequest(email, password, requestQueue);
 
-        login.sendRequest(new VolleyResponseListener() {
+        login.sendRequest(new VolleyResponseInterface() {
             @Override
             public void onError(String message) {
                 /**/
@@ -111,6 +118,8 @@ public class LoginActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
                     toast.show();
                 }
+
+                changeStatusInputUser(true);
             }
 
             @Override
@@ -155,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
     private void getUserInfo(String token) {
         UserInfoRequest userInfoRequest = new UserInfoRequest(token, requestQueue,false);
 
-        userInfoRequest.sendRequest(new VolleyResponseListener() {
+        userInfoRequest.sendRequest(new VolleyResponseInterface() {
             @Override
             public void onError(String message) {
                 /**/
@@ -163,6 +172,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
                 toast.show();
+                changeStatusInputUser(true);
 
             }
 

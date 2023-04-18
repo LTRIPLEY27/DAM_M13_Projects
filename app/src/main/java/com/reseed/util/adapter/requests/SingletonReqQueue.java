@@ -1,5 +1,6 @@
-package com.reseed.requests;
+package com.reseed.util.adapter.requests;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.LruCache;
@@ -10,9 +11,10 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
 public class SingletonReqQueue {
+
     private static SingletonReqQueue instance;
     private RequestQueue requestQueue;
-    private ImageLoader imageLoader;
+    private final ImageLoader imageLoader;
     private static Context ctx;
 
     private SingletonReqQueue(Context context) {

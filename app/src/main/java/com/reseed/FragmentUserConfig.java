@@ -14,11 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
-import com.reseed.requests.SingletonReqQueue;
-import com.reseed.requests.UserUpdateRequest;
+import com.reseed.util.adapter.requests.SingletonReqQueue;
+import com.reseed.util.adapter.requests.UserUpdateRequest;
 import com.reseed.util.EncryptUtils;
-import com.reseed.util.JsonReseedUtils;
-import com.reseed.util.VolleyResponseListener;
+import com.reseed.interfaces.VolleyResponseInterface;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,11 +25,10 @@ import org.json.JSONObject;
 public class FragmentUserConfig extends Fragment {
 
 	JSONObject jsonUser;
-	JsonReseedUtils jsonReseedUtils;
 	TextView textViewNombre, textViewApellido, textViewEmail, textViewTelefono, textViewUser, textViewCambiarPasswd;
 	Button changePassButton, buttonChangePasswordAccept, buttonChangePasswordCancel;
 	EditText editTextPasswordActual, editTextPasswordNuevo, editTextPasswordRepite;
-	String actualPasswordString, passwordString, repeatPasswordString, originalEncryptedPasswd, token;
+	String actualPasswordString, originalEncryptedPasswd, token;
 
 	RequestQueue requestQueue;
 
@@ -100,18 +98,7 @@ public class FragmentUserConfig extends Fragment {
 		changePassButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				textViewNombre.setVisibility(View.GONE);
-				textViewApellido.setVisibility(View.GONE);
-				textViewEmail.setVisibility(View.GONE);
-				textViewTelefono.setVisibility(View.GONE);
-				textViewUser.setVisibility(View.GONE);
-				changePassButton.setVisibility(View.GONE);
-				textViewCambiarPasswd.setVisibility(View.VISIBLE);
-				editTextPasswordActual.setVisibility(View.VISIBLE);
-				editTextPasswordNuevo.setVisibility(View.VISIBLE);
-				editTextPasswordRepite.setVisibility(View.VISIBLE);
-				buttonChangePasswordAccept.setVisibility(View.VISIBLE);
-				buttonChangePasswordCancel.setVisibility(View.VISIBLE);
+				enablePasswordChange(View.GONE, View.VISIBLE);
 
 			}
 		});
@@ -124,6 +111,9 @@ public class FragmentUserConfig extends Fragment {
 						editTextPasswordNuevo.getText().toString(),
 						editTextPasswordRepite.getText().toString())) {
 
+					changeStatusInputUserPasswd(false);
+
+					enablePasswordChange(View.GONE, View.VISIBLE);
 					sendUpdateRequest(editTextPasswordRepite.getText().toString());
 
 				}
@@ -133,24 +123,45 @@ public class FragmentUserConfig extends Fragment {
 		buttonChangePasswordCancel.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				textViewNombre.setVisibility(View.VISIBLE);
-				textViewApellido.setVisibility(View.VISIBLE);
-				textViewEmail.setVisibility(View.VISIBLE);
-				textViewTelefono.setVisibility(View.VISIBLE);
-				textViewUser.setVisibility(View.VISIBLE);
-				changePassButton.setVisibility(View.VISIBLE);
-
-				textViewCambiarPasswd.setVisibility(View.GONE);
-				editTextPasswordActual.setVisibility(View.GONE);
-				editTextPasswordNuevo.setVisibility(View.GONE);
-				editTextPasswordRepite.setVisibility(View.GONE);
-				buttonChangePasswordAccept.setVisibility(View.GONE);
-				buttonChangePasswordCancel.setVisibility(View.GONE);
+				enablePasswordChange(View.VISIBLE, View.GONE);
 
 			}
 		});
 
 		return view;
+	}
+
+	/**
+	 * Activa o desactiva la edicion de los controles de input del password del usuario.
+	 * @param status Boolean, true} si se quieren activar, false para desactivar.
+	 */
+	private void changeStatusInputUserPasswd(Boolean status) {
+		editTextPasswordActual.setEnabled(status);
+		editTextPasswordNuevo.setEnabled(status);
+		editTextPasswordRepite.setEnabled(status);
+		buttonChangePasswordAccept.setEnabled(status);
+		buttonChangePasswordCancel.setEnabled(status);
+	}
+
+	/**
+	 * Activa la visivilidad de los controles segun si se quiere ver la información del usuario
+	 * o la edición de la contraseña.
+	 * @param infoElements Elementos de información del usuario
+	 * @param editElements Elementos de edición de la contraseña
+	 */
+	private void enablePasswordChange(int infoElements, int editElements) {
+		textViewNombre.setVisibility(infoElements);
+		textViewApellido.setVisibility(infoElements);
+		textViewEmail.setVisibility(infoElements);
+		textViewTelefono.setVisibility(infoElements);
+		textViewUser.setVisibility(infoElements);
+		changePassButton.setVisibility(infoElements);
+		textViewCambiarPasswd.setVisibility(editElements);
+		editTextPasswordActual.setVisibility(editElements);
+		editTextPasswordNuevo.setVisibility(editElements);
+		editTextPasswordRepite.setVisibility(editElements);
+		buttonChangePasswordAccept.setVisibility(editElements);
+		buttonChangePasswordCancel.setVisibility(editElements);
 	}
 
 	/**
@@ -190,7 +201,7 @@ public class FragmentUserConfig extends Fragment {
 		UserUpdateRequest userUpdate = new UserUpdateRequest(token, jsonUser, passwordString, requestQueue);
 
 
-		userUpdate.sendRequest(new VolleyResponseListener() {
+		userUpdate.sendRequest(new VolleyResponseInterface() {
 			@Override
 			public void onError(String message) {
 				/**/
@@ -203,6 +214,7 @@ public class FragmentUserConfig extends Fragment {
 					Toast toast = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG);
 					toast.show();
 				}
+				changeStatusInputUserPasswd(true);
 			}
 
 			@Override
@@ -214,7 +226,7 @@ public class FragmentUserConfig extends Fragment {
 					Toast toast = Toast.makeText(requireContext(), jsResponse.getString("password"), Toast.LENGTH_LONG);
 					toast.show();
 
-					((AppActivity)getActivity()).logoutMenuCall(null);
+					((AppActivity)requireActivity()).logoutMenuCall(null);
 
 
 				} catch (JSONException e) {

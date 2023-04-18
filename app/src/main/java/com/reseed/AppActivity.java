@@ -3,38 +3,22 @@ package com.reseed;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuView;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.reseed.objects.UserObj;
-import com.reseed.requests.SingletonReqQueue;
 import com.reseed.util.JsonReseedUtils;
 import com.reseed.util.adapter.TaskAdapter;
 import com.reseed.objects.TaskObj;
@@ -45,7 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class AppActivity extends AppCompatActivity {
+public class AppActivity extends AppCompatActivity{
 
 	TaskAdapter adapter;
 	DrawerLayout drawerLayout;
@@ -63,7 +47,7 @@ public class AppActivity extends AppCompatActivity {
 
 	private BottomNavigationView bottomNavigationViewTasks;
 
-	private JsonReseedUtils jsonReseedUtils = new JsonReseedUtils();
+	private final JsonReseedUtils jsonReseedUtils = new JsonReseedUtils();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +92,7 @@ public class AppActivity extends AppCompatActivity {
 				Log.i("Id bottom menu_lateral", String.valueOf(item.getItemId()));
 				Log.i("Id fragment", String.valueOf(item.getTitle()));
 
-				Integer menuId = item.getItemId();
+				int menuId = item.getItemId();
 
 				if (R.id.menu_users == menuId) {
 					usersFragmentCall(item);
@@ -127,7 +111,6 @@ public class AppActivity extends AppCompatActivity {
 		setUserDataToNavMenu();
 		tasksFragmentCall(null);
 	}
-
 
 	/**
 	 * Extraemos el user del json.
@@ -209,7 +192,7 @@ public class AppActivity extends AppCompatActivity {
 		bundleArgs.putString("encryptedPasswd", encryptedPasswd);
 		fragmentUserConfig.setArguments(bundleArgs);
 
-		fragmentContainerView.removeAllViewsInLayout();
+		//fragmentContainerView.removeAllViewsInLayout();
 		getSupportFragmentManager().beginTransaction()
 				.setReorderingAllowed(true)
 				.add(R.id.fragmentContainerView, fragmentUserConfig, null)
@@ -224,7 +207,7 @@ public class AppActivity extends AppCompatActivity {
 	public void usersFragmentCall(MenuItem item) {
 		bottomMenuSelected = 0;
 
-		fragmentContainerView.removeAllViewsInLayout();
+		//fragmentContainerView.removeAllViewsInLayout();
 		getSupportFragmentManager().beginTransaction()
 				.setReorderingAllowed(true)
 				.add(R.id.fragmentContainerView, FragmentUsersList.class, null)
@@ -239,7 +222,7 @@ public class AppActivity extends AppCompatActivity {
 	public void tasksFragmentCall(@Nullable MenuItem item) {
 		bottomMenuSelected = 1;
 
-		fragmentContainerView.removeAllViewsInLayout();
+		//fragmentContainerView.removeAllViewsInLayout();
 		FragmentTaskList fragmentTaskList = new FragmentTaskList();
 
 		Bundle bundleArgs = new Bundle();
@@ -250,6 +233,20 @@ public class AppActivity extends AppCompatActivity {
 		getSupportFragmentManager().beginTransaction()
 				.setReorderingAllowed(true)
 				.add(R.id.fragmentContainerView, fragmentTaskList, null)
+				.commit();
+	}
+
+	/**
+	 * Metodo usado para llamar al fragmento de tarea.
+	 *
+	 */
+	public void taskFragmentCall() {
+
+		FragmentTask fragmentTaskList = new FragmentTask();
+		//fragmentContainerView.removeAllViewsInLayout();
+		getSupportFragmentManager().beginTransaction()
+				.setReorderingAllowed(true)
+				.add(R.id.fragmentContainerView, FragmentTask.class, null)
 				.commit();
 	}
 
