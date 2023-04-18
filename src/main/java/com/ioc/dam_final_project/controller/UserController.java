@@ -21,9 +21,9 @@ import java.util.Collections;
 import java.util.List;
 
 
-/********************************************************************************************************
+/**
  * CLASE USERCONTROLLER
- *********************************************************************************************************
+ *
  * SERA UNA CLASE RESTCONTROLLER, ESTABLECERA LOS PATHS A USAR Y DEVOLVER UNA RESPUESTA.
  *
  *  La clase sera la RootController, con la misma se ejecutaran todos los paths en cada request, centralizando todos los services a la misma y potenciando
@@ -84,29 +84,7 @@ public class UserController implements Constantes {
     }
 
     /*************************************************************
-     *                   GETTING REGISTER INTO DATABASE
-     * ***********************************************************/
-
-
-
-
-    /*************************************************************
-     *                   GETTING RESPONSE FROM DATABASE
-     * ***********************************************************/
-    /**
-     * Metodo que valida el usuario en Session, no es accesible fuera del admin y solo devuelve el perfil de la persona en session
-     * @return <ul>
-     *  <li>Entity: Retorna un perfil según la persona que haga la petición y esté loggueada/li>
-     *  </ul>
-     */
-    @GetMapping(path = "perfil")//TODO : check el endpoint desde el server, verificar si el admin puede acceder al perfil de cualquier usuario
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> showMyProfile(Principal principal) {
-        return  ResponseEntity.ok(userService.getProfile(principal.getName()));
-    }
-
-    /*************************************************************
-     *                   CREATE ENTITIES IN THE DATABASE
+     *                   CREATING REGISTER INTO DATABASE    -       CREATE
      * ***********************************************************/
 
     // TODO, centralizar todos los new registers
@@ -118,38 +96,62 @@ public class UserController implements Constantes {
      *  <li>Token: Retorna un Token como respuesta de un registro exitoso para la utenticación del usuario/li>
      *  </ul>
      */
-
     @PostMapping(value = "register")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> register(Principal principal, @RequestBody RegisterRequest request) {
         var user = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return user.getRol() != Rol.ADMIN ? ResponseEntity.ok("No tiene permisos para realizar ésta acción") : ResponseEntity.ok(serviceAuth.register(request));
-        //return ResponseEntity.ok(serviceAuth.register(request));
+        return user.getRol() != Rol.ADMIN ? ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tiene permisos para realizar ésta acción") : ResponseEntity.status(HttpStatus.CREATED).body(serviceAuth.register(request));
     }
 
     // TODO AGREGAR VALIDATOR PARA OBJETO AGREGADO POR ID, verificador de rol, y dtos de tareas, RESPUESTA DE AGREGADO CORRECTAMENTE
     @PostMapping(path = "/tarea/tecnico/{idtecnico}")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> newObject(Principal principal, @PathVariable Long idtecnico, @RequestBody Tarea object) {
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(USER, idtecnico) != false ? ResponseEntity.ok(userService.addNewTar(principal.getName(), idtecnico, object)) : ResponseEntity.ok("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + TECNICO.toUpperCase() + "  Por favor, verifique");
+        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(USER, idtecnico) != false ? ResponseEntity.status(HttpStatus.CREATED).body(userService.addNewTar(principal.getName(), idtecnico, object)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + TECNICO.toUpperCase() + "  Por favor, verifique");
     }
 
     @PostMapping(path = "/ubicacion/tarea/{idtarea}")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> newObject(Principal principal, @RequestBody Ubicacion ubicacion, @PathVariable Long idtarea) {
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
-        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(TAREA, idtarea) != false ? ResponseEntity.ok(userService.addNewUbicacion(ubicacion, idtarea)) : ResponseEntity.ok("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + TAREA.toUpperCase() + "  Por favor, verifique");
+
+        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(TAREA, idtarea) != false ? ResponseEntity.status(HttpStatus.CREATED).body(userService.addNewUbicacion(ubicacion, idtarea)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + TAREA.toUpperCase() + "  Por favor, verifique");
     }
 
     @PostMapping(path = "/coordenada/ubicacion/{idUbicacion}")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> newCoordenada(Principal principal, @RequestBody Coordenada coordenada, @PathVariable Long idUbicacion){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
-        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(UBICACION, idUbicacion) != false ? ResponseEntity.ok(userService.addNewCoor(coordenada, idUbicacion)) : ResponseEntity.ok("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + UBICACION.toUpperCase() + "  Por favor, verifique");
+        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(UBICACION, idUbicacion) != false ? ResponseEntity.status(HttpStatus.CREATED).body(userService.addNewCoor(coordenada, idUbicacion)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + UBICACION.toUpperCase() + "  Por favor, verifique");
     }
+
+
+    /**
+     * Metodo que recibe 2 parametros y realiza el posteo del mensaje correspondiente a la Tarea y Usuario que la realizan.
+     *
+     * @return <ul>
+     * <li>String: Con la respuesta de la consulta y según el caso exitoso o no de la eliminacion</li>
+     * </ul>
+     */
+    @PostMapping("/post-mensaje")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MensajeDTO> postMessage(Principal principal, @RequestBody MensajeDTO mensaje){
+        var userOnSession = principal.getName();
+        return ResponseEntity.ok(userService.postingMessage(userOnSession, mensaje));
+    }
+    /*************************************************************
+     *                   GETTING RESPONSE FROM DATABASE
+     * ***********************************************************/
+    /**
+     * Metodo que valida el usuario en Session, no es accesible fuera del admin y solo devuelve el perfil de la persona en session
+     * @return <ul>
+     *  <li>Entity: Retorna un perfil según la persona que haga la petición y esté loggueada/li>
+     *  </ul>
+     */
+    @GetMapping(path = "perfil")//TODO : check el endpoint desde el server, verificar si el admin puede acceder al perfil de cualquier usuario
+    public ResponseEntity<Object> showMyProfile(Principal principal) {
+        return  ResponseEntity.ok(userService.getProfile(principal.getName()));
+    }
+
 
     /*************************************************************
      *                   GETTING ENTITY BY ID FROM DATABASE
@@ -163,10 +165,9 @@ public class UserController implements Constantes {
      *  </ul>
      */
     @GetMapping(path = "find/value/{value}/id/{id}")// TODO verificar la query para que busque por todo, realizar el método para validar la existencia del id, indiferentemente a la clase y retornar la excepcion, verificar los dto de respuestas (users)  retorna aún el objeto
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> findById(Principal principal, @PathVariable("value") String value,  @PathVariable("id") Long id) {
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
-        return  userService.isRegistered(value, id) != false && userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.searchById(value, id))  : ResponseEntity.ok("Por favor, verifique, es probable que no tengas permisos para esta opcion o el ID proporcionado no este contenido en la Database");
+        return  userService.isRegistered(value, id) != false && userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.searchById(value, id))  : ResponseEntity.status(HttpStatus.FORBIDDEN).body("Por favor, verifique, es probable que no tengas permisos para esta opcion o el ID proporcionado no este contenido en la Database");
     }
     /*************************************************************
      *                   GETTING LIST RESPONSE FROM DATABASE
@@ -179,7 +180,6 @@ public class UserController implements Constantes {
      *  </ul>
      */
     @GetMapping(path = "results/{value}")// todo, controlar mejor la respuesta para devolver errores y resultados vacios
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List <Object>> getRegisters(Principal principal, @PathVariable("value") String value){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
@@ -195,11 +195,10 @@ public class UserController implements Constantes {
      *  </ul>
      */
     @GetMapping(path = "tareas/tecnico/{tecnico}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List <Object>> getRegistersByTecnic(Principal principal, @PathVariable("tecnico") String value){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.findTaskByTecnic(value)) : ResponseEntity.ok(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.findTaskByTecnic(value)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
 
     /*************************************************************
@@ -214,10 +213,10 @@ public class UserController implements Constantes {
      * </ul>
      */
     @PutMapping(path = "update-user")// TODO revisar la respuesta y controlar mejor, ubicar qué campos realmente ejecutará el rol de user normal en el suyo
-    @ResponseStatus(HttpStatus.OK)
     public Object update(Principal principal, @RequestBody UserDTO userDTO){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
-        return userOnSession.isEnabled() ? userService.update(principal.getName(), userDTO) : ResponseEntity.ok("No se puede editar su perfil, contacte al administrador");
+
+        return userOnSession.isEnabled() ? userService.update(principal.getName(), userDTO) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No se puede editar su perfil, contacte al administrador");
     }
 
     /**
@@ -228,10 +227,9 @@ public class UserController implements Constantes {
      * </ul>
      */
     @PutMapping(path = "update/value/{value}/id/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> update(Principal principal, @PathVariable String value, @PathVariable Long id, @RequestBody Object object)  {
-        // TODO REALIZAR UN MÉTODO QUE VALIDE LOS ID Y RETORNE UN BOOLEAN PARA INDICAR ANTES SI EXITE O NO EL ID
-        return userService.isRegistered(value, id) != false ? ResponseEntity.ok(userService.updateValue(principal.getName(), value, id, object)) : ResponseEntity.ok("No hay registro del ID proporcionado de la clase " + value.toUpperCase() + " Por favor, verifique");
+
+        return userService.isRegistered(value, id) != false ? ResponseEntity.ok(userService.updateValue(principal.getName(), value, id, object)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No hay registro del ID proporcionado de la clase " + value.toUpperCase() + " Por favor, verifique");
     }
 
     /*************************************************************
@@ -246,30 +244,10 @@ public class UserController implements Constantes {
      * </ul>
      */
     @DeleteMapping("/delete/typus/{typus}/id/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<Object> deleteById(Principal principal, @PathVariable String typus, @PathVariable Long id){
-
         var userOnSession = principal.getName();
-        return userService.isRegistered(typus, id) != false ? ResponseEntity.ok(userService.deleteRegister(userOnSession, typus, id)) : ResponseEntity.ok("No hay registro del ID proporcionado de la clase " + typus.toUpperCase() + " Por favor, verifique");
+
+        return userService.isRegistered(typus, id) != false ? ResponseEntity.ok(userService.deleteRegister(userOnSession, typus, id)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No hay registro del ID proporcionado de la clase " + typus.toUpperCase() + " Por favor, verifique");
     }
-
-    /*************************************************************
-     *                   POST VALUES FROM A OBJET IN DATABASE
-     * ***********************************************************/
-
-    /**
-     * Metodo que recibe 2 parametros y realiza el posteo del mensaje correspondiente a la Tarea y Usuario que la realizan.
-     *
-     * @return <ul>
-     * <li>String: Con la respuesta de la consulta y según el caso exitoso o no de la eliminacion</li>
-     * </ul>
-     */
-    @PostMapping("/post-mensaje")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<MensajeDTO> postMessage(Principal principal, @RequestBody MensajeDTO mensaje){
-        var userOnSession = principal.getName();
-        return ResponseEntity.ok(userService.postingMessage(userOnSession, mensaje));
-    }
-
 
 }
