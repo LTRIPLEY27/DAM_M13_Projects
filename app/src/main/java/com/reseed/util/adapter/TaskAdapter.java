@@ -127,8 +127,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 		if (localDataSet.get(position).getTarea().contentEquals("LIMPIEZA")) {
 			viewHolder.getCardViewTask().setBackgroundColor(Color.parseColor("#fff4ac"));
 		}
-
-
 	}
 
 	// Return the size of your dataset (invoked by the layout manager)
@@ -141,5 +139,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 		}
 
 	}
+}
+interface OnSelectedListener {
+
 }
 

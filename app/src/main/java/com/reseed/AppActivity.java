@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.reseed.interfaces.FragmentTaskListInterface;
+import com.reseed.interfaces.RecyclerViewInterface;
 import com.reseed.objects.UserObj;
 import com.reseed.util.JsonReseedUtils;
 import com.reseed.util.adapter.TaskAdapter;
@@ -29,7 +31,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class AppActivity extends AppCompatActivity{
+public class AppActivity extends AppCompatActivity implements FragmentTaskListInterface {
 
 	TaskAdapter adapter;
 	DrawerLayout drawerLayout;
@@ -236,21 +238,18 @@ public class AppActivity extends AppCompatActivity{
 				.commit();
 	}
 
-	/**
-	 * Metodo usado para llamar al fragmento de tarea.
-	 *
-	 */
-	public void taskFragmentCall() {
+	public void disableAllAdminTaskButtons(){
 
-		FragmentTask fragmentTaskList = new FragmentTask();
+	}
+
+	@Override
+	public void onEnvioDatos(String data) {
+		Log.i("Recycler View Click!!",data);
+		FragmentTask fragmentTask = new FragmentTask();
 		//fragmentContainerView.removeAllViewsInLayout();
 		getSupportFragmentManager().beginTransaction()
 				.setReorderingAllowed(true)
-				.add(R.id.fragmentContainerView, FragmentTask.class, null)
+				.add(R.id.fragmentContainerView, fragmentTask, null)
 				.commit();
-	}
-
-	public void disableAllAdminTaskButtons(){
-
 	}
 }
