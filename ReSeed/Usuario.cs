@@ -30,7 +30,6 @@ namespace ReSeed
             this.email = email;
             this.telefono = telefono;
             this.rol = rol;
-            
 
         }
 

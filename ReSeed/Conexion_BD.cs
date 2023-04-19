@@ -1,18 +1,26 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data.Common;
 using System.DirectoryServices;
+using System.Dynamic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Xunit.Sdk;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+using Newtonsoft.Json;
 
 namespace ReSeed
 {
@@ -60,7 +68,7 @@ namespace ReSeed
 
                     MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
                     //MessageBox.Show(TOKEN);
-                    Form3 form3 = new Form3(token);//Enviamos el TOKEN al form3
+                    Administrador form3 = new Administrador(token);//Enviamos el TOKEN al form3
                     Form1 form1 = new Form1();
                     form3.Show();//mostramos menu principal admin
                     form1.Hide();//ocultamos form login
@@ -70,7 +78,7 @@ namespace ReSeed
                 {
 
                     MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
-                    Form4 form4 = new Form4(token);
+                    Tecnico form4 = new Tecnico(token);
                     Form1 form1 = new Form1();
                     form4.Show();//mostramos menu principal tecnico
                     form1.Hide();//ocultamos form login
@@ -89,8 +97,7 @@ namespace ReSeed
 
         public async void altaUsuario (Usuario usuario, String token, String URL)
         {
-            //String parametros = "{'nombre': '" + usuario.Nombre + "','apellido':'" + usuario.Apellido + "','telefono' :'" + usuario.NumeroTelefono + "'" +
-            //",'email':'" + usuario.Mail +"','password' :'" + usuario.Password +"'}"; 
+            //Creación Usuario en json
             JsonObject json = new JsonObject();
             json.Add("nombre", usuario.Nombre);
             json.Add("apellido", usuario.Apellido);
@@ -104,12 +111,7 @@ namespace ReSeed
             HttpClient client = new HttpClient();
 
             //autorización TOKEN    
-            //client.DefaultRequestHeaders.Add("Authorization","Bearer "+token);
-            //var contentType = new MediaTypeWithQualityHeaderValue("application/json");
-            //client.DefaultRequestHeaders.Accept.Add(contentType);
-           //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-           client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var content = new StringContent (json.ToString(),Encoding.UTF8, "application/json");
             var response = await client.PostAsync(URL, content);
@@ -124,10 +126,79 @@ namespace ReSeed
 
         }
 
-        public async void listaUsuarios (String token, String URL)
+        /*
+         * Método ObtenerUsuarios asíncrono
+         * ---------------------------------
+         * Este método envía una solicitud a la API a través de una dirección web (End Point)
+         * y retorna un array JSon de objetos usuario.
+         * Recorremos este array Json y cada usuario lo transformamos en objeto de clase y lo añadimos
+         * al List.
+         * 
+         */
+        public async Task <List<Post>> ObtenerUsuarios (String token, String URL)
+        {
+            //Lista dónde almacenaremos los usuarios de respuesta EndPoint
+            List <Post> usuariosRegistrados = new List <Post> ();
+
+            HttpClient client = new HttpClient();
+
+            //autorización TOKEN    
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            //respuesta de la petición (true or false)
+            var respuesta = await client.GetAsync (URL);
+
+            if (respuesta.IsSuccessStatusCode)
+            {
+                //variable String que recibe el resultado de la petición
+                var content = respuesta.Content.ReadAsStringAsync().Result;
+                //Transformamos esta respuesta en Array
+                JArray listaUsuarios = JArray.Parse (content);
+                //Recorremos todo el Array (es bidimensoinal pero solo tiene una fila por eso solo un LOOP FOR)
+                for (int i = 0; i < listaUsuarios.First.Count();i++)
+                {
+                    String usuarioJson = listaUsuarios[0][i].ToString();//@usuarioJson almacena usuario en posición [0][i]
+
+                    Post usuario = JsonConvert.DeserializeObject<Post>(usuarioJson);//@usuario es el objeto de clase donde se deserializa @usuarioJson
+
+                    usuariosRegistrados.Add(usuario);//@ usuariosRegistrados es el List donde se almacenan @usuario
+
+                }
+
+            } else
+
+            {
+                MessageBox.Show("Error al conectar con el Servidor. Intentelo más tarde.","INFORMACIÓN",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+            }
+
+            return usuariosRegistrados;
+
+        }
+
+        public async void modificarUsuarioAsync (Usuario usuario, String token, String URL)
         {
 
            
+        }
+
+        public async void eliminarUsuarioAsync (String token, String URL,Usuario usuario)
+        {
+           
+            HttpClient client = new HttpClient();
+
+            //autorización TOKEN    
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            //borramos en la apirest a razón de su endpount con la id correspondiente del usuario
+            var response = await client.DeleteAsync(URL+usuario.User);
+
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Usuario borrado correctamente.","INFORMACIÓN",MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } else
+            {
+                MessageBox.Show("El usuario no se ha podido borrar.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+          
         }
 
 
