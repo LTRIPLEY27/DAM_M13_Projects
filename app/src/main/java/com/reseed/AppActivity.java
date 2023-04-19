@@ -249,16 +249,8 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 
 		getSupportFragmentManager().beginTransaction()
 				.setReorderingAllowed(true)
-				.add(R.id.fragmentContainerView, FragmentUsersList.class, null)
+				.add(R.id.fragmentContainerView, TaskFragment.class, null)
 				.commit();
 
-	}
-
-	public void testFunction(){
-		Log.i("Recycler View Click!!","test");
-		getSupportFragmentManager().beginTransaction()
-				.setReorderingAllowed(true)
-				.add(R.id.fragmentContainerView, FragmentUsersList.class, null)
-				.commit();
 	}
 }
