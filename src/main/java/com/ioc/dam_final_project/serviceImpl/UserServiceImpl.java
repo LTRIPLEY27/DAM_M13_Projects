@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.serviceImpl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ioc.dam_final_project.dto.*;
 import com.ioc.dam_final_project.model.*;
 import com.ioc.dam_final_project.model.Enums.Rol;
@@ -171,15 +172,17 @@ public class UserServiceImpl implements UserService, Constantes {
      */
     private UserDTO updateUser(User oldUser, User newUser) {
         oldUser.setUser(newUser.getUser());
-        oldUser.setPassword(new BCryptPasswordEncoder().encode(newUser.getPassword()));
+
+        // CONDICIONAL A ESTABLECER NUEVA CONTRASEÑA EN CASO DE APLICAR.
+        if(newUser.getPassword() != null){
+            oldUser.setPassword(new BCryptPasswordEncoder().encode(newUser.getPassword()));
+        }
         oldUser.setNombre(newUser.getNombre());
         oldUser.setApellido(newUser.getApellido());
         if(oldUser.getRol() == Rol.ADMIN){
-            oldUser.setRol(newUser.getRol());// TODO, VERIFICAR SI EL ADMIN PUEDE CAMBIAR EL ROL
+            oldUser.setRol(newUser.getRol());
         }
-        //oldUser.setEmail(newUser.getEmail()); // todo, condicionar éste parámetro ya que no se va a poder editar, a menos que sea admin?
         oldUser.setTelefono(newUser.getTelefono());
-        //oldUser.setRol(newUser.getRol());
 
         userRepository.save(oldUser);
 
@@ -194,7 +197,7 @@ public class UserServiceImpl implements UserService, Constantes {
      *  </ul>
      */
     @Override
-    public Object updateValue(String username, String value, Long id, Object object) {
+    public Object updateValue(String username, String value, Long id, Object object) throws JsonProcessingException {
         var user = userRepository.findUserByEmail(username).orElseThrow();
 
         if (user.getRol() == Rol.ADMIN) {
@@ -222,7 +225,6 @@ public class UserServiceImpl implements UserService, Constantes {
 
 
     public UserDTO update(Long id, Object object) {
-        //var user = userRepository.findById(id).orElseThrow();
         var oldUser = userRepository.findById(id).orElseThrow();
         var userNew = mapper.convertValue(object, UserDTO.class);
 

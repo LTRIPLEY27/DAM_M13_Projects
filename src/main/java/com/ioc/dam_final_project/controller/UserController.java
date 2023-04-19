@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ioc.dam_final_project.dto.MensajeDTO;
 import com.ioc.dam_final_project.dto.UserDTO;
 import com.ioc.dam_final_project.model.Coordenada;
@@ -227,7 +228,7 @@ public class UserController implements Constantes {
      * </ul>
      */
     @PutMapping(path = "update/value/{value}/id/{id}")
-    public ResponseEntity<Object> update(Principal principal, @PathVariable String value, @PathVariable Long id, @RequestBody Object object)  {
+    public ResponseEntity<Object> update(Principal principal, @PathVariable String value, @PathVariable Long id, @RequestBody Object object) throws JsonProcessingException {
 
         return userService.isRegistered(value, id) != false ? ResponseEntity.ok(userService.updateValue(principal.getName(), value, id, object)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No hay registro del ID proporcionado de la clase " + value.toUpperCase() + " Por favor, verifique");
     }

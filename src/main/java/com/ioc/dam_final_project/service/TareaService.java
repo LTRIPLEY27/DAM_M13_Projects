@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
@@ -16,7 +17,7 @@ public interface TareaService {
     void deleteEntity(Long id);
 
     //TareaDTO updateValue(Long id, Object object);
-    Tarea updateValue(Long id, Object object);
+    Object updateValue(Long id, Object object) throws JsonProcessingException;
 
     TareaDTO searchById(Long id);
 }

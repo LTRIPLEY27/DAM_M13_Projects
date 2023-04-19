@@ -1,5 +1,6 @@
 package com.ioc.dam_final_project.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ioc.dam_final_project.dto.CoordenadaDTO;
 import com.ioc.dam_final_project.dto.MensajeDTO;
 import com.ioc.dam_final_project.dto.UbicacionDTO;
@@ -22,7 +23,7 @@ public interface UserService {
 
     UserDTO update(String old, Object userDTO);
 
-    Object updateValue(String username, String value, Long id, Object object);
+    Object updateValue(String username, String value, Long id, Object object) throws JsonProcessingException;
 
     //void deleteRegister(String rol, String typus, Long id);
     Object deleteRegister(String rol, String typus, Long id);

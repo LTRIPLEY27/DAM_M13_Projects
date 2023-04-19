@@ -1,7 +1,10 @@
 package com.ioc.dam_final_project.serviceImpl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ioc.dam_final_project.dto.TareaDTO;
+import com.ioc.dam_final_project.model.Admin;
 import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.repository.AdminRepository;
@@ -9,10 +12,10 @@ import com.ioc.dam_final_project.repository.TareaRepository;
 import com.ioc.dam_final_project.repository.TecnicoRepository;
 import com.ioc.dam_final_project.service.TareaService;
 import com.ioc.dam_final_project.tools.Constantes;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,15 +24,13 @@ import java.util.List;
 public class TareaServiceImpl implements TareaService, Constantes {
 
     // INYECCIÓN DE DEPENDENCIAS
-    @Autowired
-    TecnicoRepository tecnicoRepository;
-    @Autowired
-    AdminRepository adminRepository;
+    private final TecnicoRepository tecnicoRepository;
+    private final AdminRepository adminRepository;
     private final TareaRepository tareaRepository;
 
-    //private ObjectMapper mapper = new ObjectMapper();
-
-    public TareaServiceImpl(TareaRepository tareaRepository) {
+    public TareaServiceImpl(TecnicoRepository tecnicoRepository, AdminRepository adminRepository, TareaRepository tareaRepository) {
+        this.tecnicoRepository = tecnicoRepository;
+        this.adminRepository = adminRepository;
         this.tareaRepository = tareaRepository;
     }
 
@@ -41,7 +42,6 @@ public class TareaServiceImpl implements TareaService, Constantes {
      */
     @Override
     public Tarea saveObject(String username, Long id, Object object) {
-    //public TareaDTO saveObject(String username, Long id, Object object) {
         var tarea = (Tarea) object;
         var tecnico = tecnicoRepository.findById(id).orElseThrow(); // TODO, VALIDAR QUÉ IDENTIFICACIÓN NOS PASARÁ EL ADMIN PARA EL TECNICO
         var admin = adminRepository.findAdminByEmail(username).orElseThrow();
@@ -73,20 +73,27 @@ public class TareaServiceImpl implements TareaService, Constantes {
         tareaRepository.deleteById(id);
     }
 
-    @Override
-    public Tarea updateValue(Long id, Object object) {
-        var tar = tareaRepository.findById(id).orElseThrow();
-        var newTar = mapper.convertValue(object, Tarea.class);
 
-        tar.setName(newTar.getName());
+    // TODO, MUY URGENTE, IDENTIFICAR FINALMENTE QUÉ CAMPOS DE TAREA SE HARÁN UPDATE CADA VEZ QUE SE DESEE?
+    @Override
+    public Object updateValue(Long id, Object object) throws JsonProcessingException {
+        var tar = tareaRepository.findById(id).orElseThrow();
+        var newTar = mapper.convertValue(object, TareaDTO.class);
+
+        //Tecnico tecnico = tecnicoRepository.findTecnicoByUser(newTar.getTecnico()).orElseThrow();
+        //Admin admin = adminRepository.findAdminByUser(newTar.getAdmin());
+
+        tar.setName(newTar.getName()); // todo, chequear las validaciones en caso de campos null?
         tar.setTarea(newTar.getTarea());
         tar.setEstatus(newTar.getEstatus());
-        tar.setTecnico(newTar.getTecnico());// transformar de dto a objeto
-        tar.setAdmin(newTar.getAdmin());//from dto
-        tar.setUbicacion(newTar.getUbicacion());
-        tar.setMensaje(newTar.getMensaje());
+        tar.setFecha_culminacion(newTar.getFecha_culminacion());
+        tar.setTecnico(tecnicoRepository.findTecnicoByUser(newTar.getTecnico()).orElseThrow());// transformar de dto a objeto
+        tar.setAdmin(adminRepository.findAdminByUser(newTar.getAdmin()));//from dto
+        //tar.setUbicacion(newTar.getUbicacion());
+        //tar.setMensaje(newTar.getMensaje());
 
-        return tareaRepository.save(tar);
+        tareaRepository.save(tar);
+        return TareaDTO.byModel(tar);
     }
 
     @Override
