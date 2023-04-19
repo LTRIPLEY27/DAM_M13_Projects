@@ -74,7 +74,6 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		drawerLayout = findViewById(R.id.drawer_layer);
 		fragmentContainerView = findViewById(R.id.fragmentContainerView);
 
-
 		// TODO hacer la separacion de tipo de usuario.
 
 		if(userObj.getTipoUsuario().equalsIgnoreCase("tecnic")){
@@ -86,6 +85,8 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		}
 
 		BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+		bottomNavigationView.setSelectedItemId(R.id.menu_tasks);
 
 		bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
 			@Override
@@ -245,11 +246,19 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	@Override
 	public void onEnvioDatos(String data) {
 		Log.i("Recycler View Click!!",data);
-		FragmentTask fragmentTask = new FragmentTask();
-		//fragmentContainerView.removeAllViewsInLayout();
+
 		getSupportFragmentManager().beginTransaction()
 				.setReorderingAllowed(true)
-				.add(R.id.fragmentContainerView, fragmentTask, null)
+				.add(R.id.fragmentContainerView, FragmentUsersList.class, null)
+				.commit();
+
+	}
+
+	public void testFunction(){
+		Log.i("Recycler View Click!!","test");
+		getSupportFragmentManager().beginTransaction()
+				.setReorderingAllowed(true)
+				.add(R.id.fragmentContainerView, FragmentUsersList.class, null)
 				.commit();
 	}
 }

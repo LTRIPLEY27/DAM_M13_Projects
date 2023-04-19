@@ -128,5 +128,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 
 		//Log.i("Recycler View Click!!",listaTareas.get(posicion).getName());
 		fragmentTaskListInterface.onEnvioDatos("Envio de datos.");
+		//((AppActivity) requireActivity()).testFunction();
+
 	}
 }
