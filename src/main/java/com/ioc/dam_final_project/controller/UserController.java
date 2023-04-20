@@ -106,7 +106,8 @@ public class UserController implements Constantes {
 
     // TODO AGREGAR VALIDATOR PARA OBJETO AGREGADO POR ID, verificador de rol, y dtos de tareas, RESPUESTA DE AGREGADO CORRECTAMENTE
     @PostMapping(path = "/tarea/tecnico/{idtecnico}")
-    public ResponseEntity<Object> newObject(Principal principal, @PathVariable Long idtecnico, @RequestBody Tarea object) {
+    //public ResponseEntity<Object> newObject(Principal principal, @PathVariable Long idtecnico, @RequestBody Tarea object) {
+    public ResponseEntity<Object> newObject(Principal principal, @PathVariable Long idtecnico, @RequestBody Object object) {
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
         return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(USER, idtecnico) != false ? ResponseEntity.status(HttpStatus.CREATED).body(userService.addNewTar(principal.getName(), idtecnico, object)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + TECNICO.toUpperCase() + "  Por favor, verifique");

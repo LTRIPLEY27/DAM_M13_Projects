@@ -68,6 +68,61 @@ public class UserServiceImpl implements UserService, Constantes {
         this.userRepository = userRepository;
     }
 
+    /*************************************************************
+     *                   CREATING REGISTER INTO DATABASE    -       CREATE
+     * ***********************************************************/
+
+
+
+    /** Metodo 'addNewTar()'
+     * Recibe 3 parametros : username para validar el usuario admin a definir en la creacion, id del tecnico a indicar en la tarea, Objeto a crear
+     * @return <ul>
+     *  <li>Entity : Registro de la tarea en la database</li>
+     *  </ul>
+     */
+    @Override
+    public Object addNewTar(String username, Long id, Object object) {
+        return tareaService.saveObject(username, id, object);
+    }
+
+    /** Metodo 'addNewUbicacion()'
+     * Recibe 2 parametros : Objeto a crear, Id de la tarea a la que se le asignará para establecer la relación
+     * @return <ul>
+     *  <li>Entity : Registro de la ubicacion en la database</li>
+     *  </ul>
+     */
+    @Override
+    public Ubicacion addNewUbicacion(Ubicacion ubicacion, Long id) {
+        return ubicacionService.saveObject(ubicacion, id);
+    }
+
+    /** Metodo 'addNewCoor()'
+     * Recibe 2 parametros : Objeto a crear, Id de la ubicacion a la que se le asignará para establecer la relación
+     * @return <ul>
+     *  <li>Entity : Registro de la coordenada en la database</li>
+     *  </ul>
+     */
+    @Override
+    public CoordenadaDTO addNewCoor(Coordenada coordenada, Long ubicacion) {
+        return coordenadaService.saveObject(coordenada, ubicacion);
+    }
+
+    /** Metodo 'postingMessage()'
+     * Recibe 2 parametros : username para validar el rol del usuario, mensaje contenido a postear
+     * @return <ul>
+     *  <li>String : con respuesta de la operacion exitosa</li>
+     *  </ul>
+     */
+    @Override
+    public MensajeDTO postingMessage(String user, MensajeDTO mensajeDTO) {
+        return mensajeService.postMessage(user, mensajeDTO);
+    }
+
+
+    /*************************************************************
+     *                   READING  REGISTER IN THE DATABASE    -       READ
+     * ***********************************************************/
+
     /** Metodo getProfile
      * Recibe un parametro que contiene el username del usuario y devuelve un objeto con el perfil de la persona en la sesión autenticada
      * @return <ul>
@@ -142,6 +197,86 @@ public class UserServiceImpl implements UserService, Constantes {
 
         return null;
     }
+
+
+
+    /** Metodo 'searchById()'
+     * Recibe 2 parametros : value para validar el nombre de la entidad dentro del switch, id para realizar el llamado al service de esa entidad con el id
+     * @return <ul>
+     *  <li>String : con respuesta de la operacion exitosa</li>
+     *  </ul>
+     */
+    @Override
+    public Object searchById(String value, Long id) {
+        switch (value) {
+            case TAREA -> {
+                return tareaService.searchById(id);
+            }
+            case UBICACION -> {
+                return ubicacionService.searchById(id);
+            }
+            case COORDENADA -> {
+                return coordenadaService.searchById(id);
+            }
+            case MENSAJE -> {
+                return mensajeService.searchById(id);
+            }
+            case USER -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER // TODO, VERIFICAR SI LA BÚSQUEDA SE NECESITA ESPECÍFICAR A ADMIN O A TÉCNICO
+                return UserDTO.byEntity(userRepository.findById(id).orElseThrow());
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Metodo 'findTaskByTecnic'
+     * Recibe 1 parametro: Username del tecnico al que se retornara la lista de Tareas asignadas
+     *
+     * @return <ul>
+     * <li>Entity : Registro de la coordenada en la database</li>
+     * </ul>
+     */
+    @Override
+    public List<Object> findTaskByTecnic(String username) {
+        var tecnico = userRepository.findUserByUser(username).orElseThrow();
+
+        return Collections.singletonList(tareaService.getTareaByTecnico((Tecnico) tecnico));
+    }
+
+
+
+    /** Metodo 'isRegistered()'
+     * Recibe 2 parametros : definicion de la clase a la cual validar el id, Id de la clase a la cual se validara la existencia en la base de datos
+     * @return <ul>
+     *  <li>Boolean : True o False segun aplique el caso</li>
+     *  </ul>
+     */
+    public boolean isRegistered(String value, Long id){
+        switch (value){
+            case COORDENADA -> {
+                return coordenadaService.isExistence(id);
+            }
+            case MENSAJE -> {
+                return mensajeService.isExistence(id);
+            }
+            case TAREA -> {
+                return tareaService.isExistence(id);
+            }
+            case USER , TECNICO, ADMIN -> {
+                return userRepository.findById(id).isPresent();
+            }
+            case UBICACION -> {
+                return ubicacionService.isExistence(id);
+            }
+        }
+        return false;
+    }
+
+
+    /*************************************************************
+     *                   UPDATING REGISTER IN THE DATABASE    -       UPDATE
+     * ***********************************************************/
 
     /** Metodo update
      * Recibe 2 argumentos : username del usuario a realizar el update y los datos nuevos a actualizar. Actualiza un objeto 'Entity' en la base de datos
@@ -231,6 +366,11 @@ public class UserServiceImpl implements UserService, Constantes {
         return updateUser(oldUser, User.byDTO(userNew));
     }
 
+
+    /*************************************************************
+     *                   DELETING REGISTER FROM DATABASE    -       DELETE
+     * ***********************************************************/
+
     /** Metodo 'deleteRegister()'
      * Recibe 3 parametros : username para validar el rol del usuario, typus para definir la entidad dentro del switch y el id al que se eliminara en la base de datos. Elimina un registro en la base de datos segun el id validado
      * @return <ul>
@@ -272,135 +412,6 @@ public class UserServiceImpl implements UserService, Constantes {
         return "No hay registros con estos valores";
     }
 
-    /** Metodo 'postingMessage()'
-     * Recibe 2 parametros : username para validar el rol del usuario, mensaje contenido a postear
-     * @return <ul>
-     *  <li>String : con respuesta de la operacion exitosa</li>
-     *  </ul>
-     */
-    @Override
-    public MensajeDTO postingMessage(String user, MensajeDTO mensajeDTO) {
-        return mensajeService.postMessage(user, mensajeDTO);
-    }
 
-    /** Metodo 'searchById()'
-     * Recibe 2 parametros : value para validar el nombre de la entidad dentro del switch, id para realizar el llamado al service de esa entidad con el id
-     * @return <ul>
-     *  <li>String : con respuesta de la operacion exitosa</li>
-     *  </ul>
-     */
-    @Override
-    public Object searchById(String value, Long id) {
-        switch (value) {
-            case TAREA -> {
-                return tareaService.searchById(id);
-            }
-            case UBICACION -> {
-                return ubicacionService.searchById(id);
-            }
-            case COORDENADA -> {
-                return coordenadaService.searchById(id);
-            }
-            case MENSAJE -> {
-                return mensajeService.searchById(id);
-            }
-            case USER -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER // TODO, VERIFICAR SI LA BÚSQUEDA SE NECESITA ESPECÍFICAR A ADMIN O A TÉCNICO
-                return UserDTO.byEntity(userRepository.findById(id).orElseThrow());
-            }
-        }
-        return null;
-    }
-
-    /** Metodo 'addNewTar()'
-     * Recibe 3 parametros : username para validar el usuario admin a definir en la creacion, id del tecnico a indicar en la tarea, Objeto a crear
-     * @return <ul>
-     *  <li>Entity : Registro de la tarea en la database</li>
-     *  </ul>
-     */
-    @Override
-    public Object addNewTar(String username, Long id, Object object) {
-        return tareaService.saveObject(username, id, object);
-    }
-
-    /** Metodo 'addNewUbicacion()'
-     * Recibe 2 parametros : Objeto a crear, Id de la tarea a la que se le asignará para establecer la relación
-     * @return <ul>
-     *  <li>Entity : Registro de la ubicacion en la database</li>
-     *  </ul>
-     */
-    @Override
-    public Ubicacion addNewUbicacion(Ubicacion ubicacion, Long id) {
-        return ubicacionService.saveObject(ubicacion, id);
-    }
-
-    /** Metodo 'addNewCoor()'
-     * Recibe 2 parametros : Objeto a crear, Id de la ubicacion a la que se le asignará para establecer la relación
-     * @return <ul>
-     *  <li>Entity : Registro de la coordenada en la database</li>
-     *  </ul>
-     */
-    @Override
-    public CoordenadaDTO addNewCoor(Coordenada coordenada, Long ubicacion) {
-        return coordenadaService.saveObject(coordenada, ubicacion);
-    }
-
-    /**
-     * Metodo 'findTaskByTecnic'
-     * Recibe 1 parametro: Username del tecnico al que se retornara la lista de Tareas asignadas
-     *
-     * @return <ul>
-     * <li>Entity : Registro de la coordenada en la database</li>
-     * </ul>
-     */
-    @Override
-    public List<Object> findTaskByTecnic(String username) {
-        var tecnico = userRepository.findUserByUser(username).orElseThrow();
-
-        return Collections.singletonList(tareaService.getTareaByTecnico((Tecnico) tecnico));
-    }
-
-    /*@Override// TODO, verificar si mensaje puede ser adherido desde acá, register desde acá?
-    public Object addNew(String user, String tipo, Long valor, Object object) {
-        switch (tipo) {
-            case TAREA -> {
-                return tareaService.saveObject(user, valor, object);
-            }
-            case UBICACION -> {
-                return ubicacionService.saveObject((Ubicacion) object, valor);
-            }
-            case COORDENADA -> {
-                return coordenadaService.saveObject((Coordenada) object, valor);
-            }
-        }
-        return null;
-    }*/
-
-
-    /** Metodo 'isRegistered()'
-     * Recibe 2 parametros : definicion de la clase a la cual validar el id, Id de la clase a la cual se validara la existencia en la base de datos
-     * @return <ul>
-     *  <li>Boolean : True o False segun aplique el caso</li>
-     *  </ul>
-     */
-    public boolean isRegistered(String value, Long id){
-        switch (value){
-            case COORDENADA -> {
-                return coordenadaService.isExistence(id);
-            }
-            case MENSAJE -> {
-                return mensajeService.isExistence(id);
-            }
-            case TAREA -> {
-                return tareaService.isExistence(id);
-            }
-            case USER , TECNICO, ADMIN -> {
-                return userRepository.findById(id).isPresent();
-            }
-            case UBICACION -> {
-                return ubicacionService.isExistence(id);
-            }
-        }
-        return false;
-    }
 
 }

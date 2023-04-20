@@ -56,8 +56,9 @@ public class Tarea {
     @OneToMany(mappedBy = "tarea", cascade = CascadeType.REMOVE)
     private Set <Mensaje> mensaje;
 
-    public Tarea(String name, Tipo_Tarea tarea, Estatus estatus, Tecnico tecnico, Admin admin, Ubicacion ubicacion, Set<Mensaje> mensaje) {
+    public Tarea(@NotNull String name, LocalDate fecha_culminacion, @NotNull Tipo_Tarea tarea, @NotNull Estatus estatus, Tecnico tecnico, Admin admin, Ubicacion ubicacion, Set<Mensaje> mensaje) {
         this.name = name;
+        this.fecha_culminacion = fecha_culminacion;
         this.tarea = tarea;
         this.estatus = estatus;
         this.tecnico = tecnico;
@@ -66,9 +67,8 @@ public class Tarea {
         this.mensaje = mensaje;
     }
 
-
     public static Tarea byDTO(TareaDTO tareaDTO){
-        return new Tarea(tareaDTO.getName(), tareaDTO.getTarea(), tareaDTO.getEstatus(), null, null, new Ubicacion(), null);
+        return new Tarea(tareaDTO.getName(), tareaDTO.getFecha_culminacion(), tareaDTO.getTarea(), tareaDTO.getEstatus(), null, null, new Ubicacion(), null);
     }
 
 }

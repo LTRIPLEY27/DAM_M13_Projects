@@ -50,13 +50,13 @@ public class MensajeServiceImpl implements MensajeService, Constantes {
         switch (user.getRol()){
             case ADMIN -> {
                 var object = (Tecnico) userRepository.findUserByUser(mensaje.getTecnico()).orElseThrow();
-                var tarea = tareaRepository.findTareaByAdminAndName((Admin) user, mensaje.getTarea()); //name must be unique
+                var tarea = tareaRepository.findTareaByAdminAndId((Admin) user, mensaje.getTarea()); //name must be unique
 
                 return posting(mensaje, tarea, object, (Admin) user);
             }
             case TECNIC -> {
                 var object = (Admin) userRepository.findUserByUser(mensaje.getAdmin()).orElseThrow();
-                var tarea = tareaRepository.findTareaByTecnicoAndName((Tecnico) user, mensaje.getTarea()); //name must be unique
+                var tarea = tareaRepository.findTareaByTecnicoAndId((Tecnico) user, mensaje.getTarea()); //name must be unique
 
                 return posting(mensaje, tarea, (Tecnico) user, object);
             }
@@ -75,12 +75,6 @@ public class MensajeServiceImpl implements MensajeService, Constantes {
         var newMess = mapper.convertValue(object, MensajeDTO.class);
 
         oldMess.setDescripcion(newMess.getDescripcion());
-        // TODO PREGUNTAR SI SE DEBE DE ACTUALIZAR EN MENSAJES, EN TEORIA LAS FECHAS Y DEMAS ASIGNACIONES NO SE DEBERÍAN DE PODER EDITAR
-        //oldMess.setFecha(object.);
-        //oldMess.setTarea(newMess.getTarea());
-        //oldMess.setAdmin(newMess.getAdmin());
-        //oldMess.setTecnico(newMess.getTecnico());
-
         mensajeRepository.save(oldMess);
 
         return MensajeDTO.byModel(oldMess);

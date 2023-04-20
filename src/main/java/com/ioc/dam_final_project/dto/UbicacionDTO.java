@@ -26,14 +26,13 @@ public class UbicacionDTO {
     private Double centroLongitud;
     private Double zoom;
     private List<CoordenadaDTO> mapa;
-    private String tarea;
+    private Long tarea;
 
     public static UbicacionDTO byModel(Ubicacion ubicacion){
         var mapas = new ArrayList<CoordenadaDTO>();
-        for (var i : ubicacion.getMapa()){
-            mapas.add(CoordenadaDTO.byModel(i));
-        }
-        return new UbicacionDTO(ubicacion.getId(), ubicacion.getCentroLatitud(), ubicacion.getCentroLongitud(), ubicacion.getZoom(), mapas, ubicacion.getTarea().getName());
+        ubicacion.getMapa().forEach(mapa -> mapas.add(CoordenadaDTO.byModel(mapa)));
+
+        return new UbicacionDTO(ubicacion.getId(), ubicacion.getCentroLatitud(), ubicacion.getCentroLongitud(), ubicacion.getZoom(), mapas, ubicacion.getTarea().getId());
     }
 
 }

@@ -14,8 +14,12 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
 
     List <Tarea> findTareaByTecnico(Tecnico tecnico);
 
-    Tarea findTareaByTecnicoAndName(Tecnico tecnico, String name);
+    //Tarea findTareaByTecnicoAndName(Tecnico tecnico, String name);
+    Tarea findTareaByTecnicoAndId(Tecnico tecnico, Long id);
 
     Tarea findTareaByUbicacion(Ubicacion ubicacion);
-    Tarea findTareaByAdminAndName(Admin admin, String name);
+
+   // Tarea findTareaByUbicacion_Id(Long id);
+    //Tarea findTareaByAdminAndName(Admin admin, String name);
+    Tarea findTareaByAdminAndId(Admin admin, Long name);
 }
