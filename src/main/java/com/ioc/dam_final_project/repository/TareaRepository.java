@@ -8,18 +8,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TareaRepository extends JpaRepository <Tarea, Long> {
 
     List <Tarea> findTareaByTecnico(Tecnico tecnico);
-
-    //Tarea findTareaByTecnicoAndName(Tecnico tecnico, String name);
     Tarea findTareaByTecnicoAndId(Tecnico tecnico, Long id);
 
     Tarea findTareaByUbicacion(Ubicacion ubicacion);
-
-   // Tarea findTareaByUbicacion_Id(Long id);
-    //Tarea findTareaByAdminAndName(Admin admin, String name);
+    Optional <Tarea> findTareaByUbicacion_Id(Long id);
     Tarea findTareaByAdminAndId(Admin admin, Long name);
 }

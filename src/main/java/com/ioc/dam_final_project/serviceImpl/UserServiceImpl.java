@@ -244,6 +244,10 @@ public class UserServiceImpl implements UserService, Constantes {
         return Collections.singletonList(tareaService.getTareaByTecnico((Tecnico) tecnico));
     }
 
+    @Override
+    public boolean checkLocation(Long idTarea) {
+        return ubicacionService.checkTarea(idTarea);
+    }
 
 
     /** Metodo 'isRegistered()'

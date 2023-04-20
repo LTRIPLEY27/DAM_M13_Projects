@@ -2,6 +2,8 @@ package com.ioc.dam_final_project.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ioc.dam_final_project.dto.MensajeDTO;
+import com.ioc.dam_final_project.dto.TareaDTO;
+import com.ioc.dam_final_project.dto.UbicacionDTO;
 import com.ioc.dam_final_project.dto.UserDTO;
 import com.ioc.dam_final_project.model.Coordenada;
 import com.ioc.dam_final_project.model.Enums.Rol;
@@ -230,6 +232,14 @@ public class UserController implements Constantes {
      */
     @PutMapping(path = "update/value/{value}/id/{id}")
     public ResponseEntity<Object> update(Principal principal, @PathVariable String value, @PathVariable Long id, @RequestBody Object object) throws JsonProcessingException {
+
+        if(value.equals(TAREA)){
+           return userService.isRegistered(value, id) != false && userService.checkLocation(id) != true ? ResponseEntity.ok(userService.updateValue(principal.getName(), value, id, object)) : ResponseEntity.status(HttpStatus.CONFLICT).body("Esta Tarea ya contine una Ubicación, si desea editar la misma, primero elimine la ubicación existente");
+        }
+        if (value.equals(UBICACION)){
+            var tareaId = mapper.convertValue(object, UbicacionDTO.class);
+            return userService.isRegistered(value, id) != false && userService.checkLocation(tareaId.getTarea()) != true ? ResponseEntity.ok(userService.updateValue(principal.getName(), value, id, object)) : ResponseEntity.status(HttpStatus.CONFLICT).body("Esta Tarea ya contine una Ubicación, si desea editar la misma, primero elimine la ubicación existente");
+        }
 
         return userService.isRegistered(value, id) != false ? ResponseEntity.ok(userService.updateValue(principal.getName(), value, id, object)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No hay registro del ID proporcionado de la clase " + value.toUpperCase() + " Por favor, verifique");
     }

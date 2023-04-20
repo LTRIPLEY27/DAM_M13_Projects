@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Qualifier(value = "ubicacion")
@@ -58,18 +59,21 @@ public class UbicacionServiceImpl implements UbicacionService, Constantes {
     }
 
     @Override
-    public Ubicacion updateValue(Long id, Object object) {
+    public Object updateValue(Long id, Object object) {
         var oldUbi = ubicacionRepository.findById(id).orElseThrow();
-        var newUbi = mapper.convertValue(object, Ubicacion.class);
+        var newUbi = mapper.convertValue(object, UbicacionDTO.class);
 
         oldUbi.setZoom(newUbi.getZoom());
         oldUbi.setCentroLatitud(newUbi.getCentroLatitud());
         oldUbi.setCentroLongitud(newUbi.getCentroLongitud());
-        //oldUbi.setMapa(newUbi.getMapa());
-        //oldUbi.setTarea(newUbi.getTarea());
+        //oldUbi.setTarea(tareaRepository.findById(newUbi.getTarea()).orElseThrow());
 
-        //return UbicacionDTO.byModel(oldUbi);
-        return ubicacionRepository.save(oldUbi);
+        return UbicacionDTO.byModel(ubicacionRepository.save(oldUbi));
+    }
+
+    @Override
+    public boolean checkTarea(Long id) {
+        return ubicacionRepository.findByTarea_Id(id).isPresent();
     }
 
     public boolean isExistence(Long id){

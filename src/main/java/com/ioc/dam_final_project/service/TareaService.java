@@ -9,16 +9,13 @@ import java.util.List;
 
 public interface TareaService {
 
-    //TareaDTO saveObject(String username, Long id, Object object);
-    //Tarea saveObject(String username, Long id, Object object);
     TareaDTO saveObject(String username, Long id, Object object);
     List<TareaDTO> total();
     List<TareaDTO> getTareaByTecnico(Tecnico tecnico);
 
     void deleteEntity(Long id);
-
-    //TareaDTO updateValue(Long id, Object object);
     Object updateValue(Long id, Object object) throws JsonProcessingException;
 
     TareaDTO searchById(Long id);
+    boolean ubicacionExistence(Long id);
 }

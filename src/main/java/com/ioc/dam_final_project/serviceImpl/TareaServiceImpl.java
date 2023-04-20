@@ -89,14 +89,19 @@ public class TareaServiceImpl implements TareaService, Constantes {
         tar.setTecnico(tecnicoRepository.findTecnicoByUser(newTar.getTecnico()).orElseThrow());// transformar de dto a objeto
         tar.setAdmin(adminRepository.findAdminByUser(newTar.getAdmin()));//from dto
         tar.setUbicacion(ubicacionRepository.findById(newTar.getUbicacionId()).orElseThrow());
+        ubicacionRepository.findById(newTar.getUbicacionId()).orElseThrow().setTarea(tar);
 
-        tareaRepository.save(tar);
-        return TareaDTO.byModel(tar);
+        return TareaDTO.byModel(tareaRepository.save(tar));
     }
 
     @Override
     public TareaDTO searchById(Long id) {
         return TareaDTO.byModel(tareaRepository.findById(id).orElseThrow());
+    }
+
+    @Override
+    public boolean ubicacionExistence(Long id) {
+        return tareaRepository.findTareaByUbicacion_Id(id).isPresent();
     }
 
 
