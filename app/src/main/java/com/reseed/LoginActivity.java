@@ -159,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra("token", getLoginToken());
         intent.putExtra("encryptedPasswd",encryptedPasswd);
         startActivity(intent);
+        this.finish();
     }
 
     private void getUserInfo(String token) {
