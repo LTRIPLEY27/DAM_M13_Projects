@@ -17,5 +17,4 @@ public interface TareaService {
     Object updateValue(Long id, Object object) throws JsonProcessingException;
 
     TareaDTO searchById(Long id);
-    boolean ubicacionExistence(Long id);
 }

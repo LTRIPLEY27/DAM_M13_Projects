@@ -1,12 +1,6 @@
 package com.ioc.dam_final_project.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ioc.dam_final_project.model.Coordenada;
-import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Ubicacion;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +9,19 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * CLASE UbicacionDTO
+ *
+ * SERA UNA CLASE DEL TIPO 'DATA TRANSFER OBJECT', ESTABLECERA LOS CAMPOS CUSTOMIZADOS A MANEJAR COMO RESPUESTA.
+ *
+ *   Notaciones:
+ *
+ *  - He declarado a la clase como 'Getter', 'Setter', 'AllArgsConstructor', 'NoArgsConstructor'  para su mappeo en la base de datos.
+ *  - He usado las notaciones propias de SpringBoot, en combinacion a Java 17 y Loombook, para potenciar al maximo la codificacion.
+ *
+ *  @author Isabel Calzadilla
+ *  @version 1.0
+ * */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,6 +35,12 @@ public class UbicacionDTO {
     private List<CoordenadaDTO> mapa;
     private Long tarea;
 
+    /**
+     * Traspola los valores del objeto DAO a una vista JSON personalizada
+     * @return <ul>
+     *  <li>NormalDTO: la instancia con el formato JSON especifico</li>
+     *  </ul>
+     */
     public static UbicacionDTO byModel(Ubicacion ubicacion){
         var mapas = new ArrayList<CoordenadaDTO>();
         ubicacion.getMapa().forEach(mapa -> mapas.add(CoordenadaDTO.byModel(mapa)));

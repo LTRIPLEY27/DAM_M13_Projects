@@ -99,12 +99,6 @@ public class TareaServiceImpl implements TareaService, Constantes {
         return TareaDTO.byModel(tareaRepository.findById(id).orElseThrow());
     }
 
-    @Override
-    public boolean ubicacionExistence(Long id) {
-        return tareaRepository.findTareaByUbicacion_Id(id).isPresent();
-    }
-
-
     public boolean isExistence(Long id){
         return tareaRepository.findById(id).isPresent();
     }

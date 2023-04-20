@@ -10,6 +10,19 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * CLASE AdminDTO
+ *
+ * SERA UNA CLASE DEL TIPO 'DATA TRANSFER OBJECT', ESTABLECERA LOS CAMPOS CUSTOMIZADOS A MANEJAR COMO RESPUESTA.
+ *
+ *   Notaciones:
+ *
+ *  - He declarado a la clase como 'Getter', 'Setter', 'AllArgsConstructor', 'NoArgsConstructor'  para su mappeo en la base de datos.
+ *  - He usado las notaciones propias de SpringBoot, en combinacion a Java 17 y Loombook, para potenciar al maximo la codificacion.
+ *
+ *  @author Isabel Calzadilla
+ *  @version 1.0
+ * */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,6 +40,13 @@ public class AdminDTO {
     private List<TareaDTO> tarea;
 
     // SETTING VALUES FROM OBJETC FOR THE VALUES WE WANT SHOW ON JSON
+    //Metodo publico estatico
+    /**
+     * Traspola los valores del objeto DAO a una vista JSON personalizada
+     * @return <ul>
+     *  <li>AdminDTO: la instancia con el formato JSON especifico</li>
+     *  </ul>
+     */
     public static AdminDTO byModel(Admin admin){
         var tareaDTO = new ArrayList<TareaDTO>();
         admin.getTareaList().forEach(tarea1 -> tareaDTO.add(TareaDTO.byModel(tarea1)));

@@ -259,7 +259,7 @@ public class UserController implements Constantes {
     public ResponseEntity<Object> deleteById(Principal principal, @PathVariable String typus, @PathVariable Long id){
         var userOnSession = principal.getName();
 
-        return userService.isRegistered(typus, id) != false ? ResponseEntity.ok(userService.deleteRegister(userOnSession, typus, id)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No hay registro del ID proporcionado de la clase " + typus.toUpperCase() + " Por favor, verifique");
+        return userService.isRegistered(typus, id) != false ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(userService.deleteRegister(userOnSession, typus, id)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No hay registro del ID proporcionado de la clase " + typus.toUpperCase() + " Por favor, verifique");
     }
 
 }

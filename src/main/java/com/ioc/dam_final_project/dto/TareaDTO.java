@@ -7,11 +7,21 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
-import static org.aspectj.weaver.UnresolvedType.add;
-
+/**
+ * CLASE TareaDTO
+ *
+ * SERA UNA CLASE DEL TIPO 'DATA TRANSFER OBJECT', ESTABLECERA LOS CAMPOS CUSTOMIZADOS A MANEJAR COMO RESPUESTA.
+ *
+ *   Notaciones:
+ *
+ *  - He declarado a la clase como 'Getter', 'Setter', 'AllArgsConstructor', 'NoArgsConstructor'  para su mappeo en la base de datos.
+ *  - He usado las notaciones propias de SpringBoot, en combinacion a Java 17 y Loombook, para potenciar al maximo la codificacion.
+ *
+ *  @author Isabel Calzadilla
+ *  @version 1.0
+ * */
 @Setter
 @Getter
 //@NoArgsConstructor
@@ -29,7 +39,13 @@ public class TareaDTO {
     private Set<MensajeDTO> mensajes;
     private Long ubicacionId;
 
-
+    //Metodo publico estatico
+    /**
+     * Traspola los valores del objeto DAO a una vista JSON personalizada
+     * @return <ul>
+     *  <li>NormalDTO: la instancia con el formato JSON especifico</li>
+     *  </ul>
+     */
     public static TareaDTO byModel(Tarea tarea){
         Set<MensajeDTO> mensajes = new HashSet<>();
 

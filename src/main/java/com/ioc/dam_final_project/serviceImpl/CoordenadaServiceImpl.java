@@ -39,7 +39,6 @@ public class CoordenadaServiceImpl implements CoordenadaService, Constantes {
         tarea.setUbicacion(ubicacio);
         tareaRepository.save(tarea);
 
-        // TODO, verificar la respuesta o si se mantiene en void ya que es una entidad debil
         return CoordenadaDTO.byModel(coordenada);
     }
 
@@ -77,7 +76,6 @@ public class CoordenadaServiceImpl implements CoordenadaService, Constantes {
 
         oldCoor.setLongitud(newCoor.getLongitud());
         oldCoor.setLatitud(newCoor.getLatitud());
-        //oldCoor.setUbicacion(newCoor.getUbicacion());
 
         coordenadaRepository.save(oldCoor);
 
