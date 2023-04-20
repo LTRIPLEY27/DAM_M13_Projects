@@ -7,6 +7,13 @@ import com.ioc.dam_final_project.model.Tecnico;
 
 import java.util.List;
 
+/**
+ * Interface MensajeService
+ *
+ * SERA UNA INTERFACE PROTOCOLO A IMPLEMENTAR POR EL SERVICES, extiende de la clase JPARepository para realizar el puente entre la entidad y la base de datos.
+ *  @author Isabel Calzadilla
+ *  @version  1.0
+ */
 public interface MensajeService {
 
     void deleteEntity(Long id);
