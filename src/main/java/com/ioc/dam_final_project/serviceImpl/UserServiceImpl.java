@@ -14,6 +14,40 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * CLASE UserServiceImpl
+ *
+ * SERA UNA CLASE DEL TIPO 'SERVICES', FUNCIONARA COMO UN ROOT-SERVICES PARA CENTRALIZAR TODOS LOS SERVICES A RESPONDER EN EL ROOTCONTROLLER,
+ * DICHA APLICACION PROPORCIONARA UN MAYOR CONTROL SOBRE POTENCIALES ERRORES, ACCESOS INDEBIDOS Y POTENCIARA EL ACOPLAMIENTRO ENTRE SERVICES Y CLASES .
+ *
+ * Implementa 2 Interfaces : 'UserService' y 'Constantes'.
+ *
+ * 'UserService' : Interface de la clase User, contiene todos los protocolos que se deberan de implementar desde el Services y que centralizan a su vez, los de los demas.
+ * 'Constantes' : Interface que almacena multiples variables de tipo estatico a usar, y que potencia la eliminacion de errores y eficiencia de codigo
+ *
+ *   Notaciones:
+ *
+ *  - He declarado a la clase como 'Services' para su mappeo en la base de datos.
+ *  - He declarado a la clase con un 'Qualifier' para identificar la especificidad de la misma, y potenciando la reutilizacion e implementacion de multiples Services a los cuales deberan de hacer referencia los paths derivados.
+ *  - He usado las notaciones propias de SpringBoot, en combinacion a Java 17 y Loombook, para potenciar al maximo la codificacion.
+ *
+ *   Atributos:
+ *
+ * - He declarado como 'Inyeccion de Dependencias' a los atributos services que seran devueltos como respuesta al cliente.
+ * - He declarado los atributos: Private, ya que seran de acceso privado de clase.
+ *
+ *  @author Isabel Calzadilla
+ *  @version 1.0
+ *  @see UserRepository para la implementacion del almacenaje y operaciones de Usuario
+ *  @see AdminServiceImpl para la implementacion y acoplamiento centralizado de los metodos inherentes a Admin.
+ *  @see TecnicoServiceimpl para la implementacion y acoplamiento centralizado de los metodos inherentes a Tecnico.
+ *  @see TareaServiceImpl para la implementacion y acoplamiento centralizado de los metodos inherentes a Tarea.
+ *  @see CoordenadaServiceImpl para la implementacion y acoplamiento centralizado de los metodos inherentes a Coordenada.
+ *  @see MensajeServiceImpl para la implementacion y acoplamiento centralizado de los metodos inherentes a Mensaje.
+ *  @see UbicacionServiceImpl para la implementacion y acoplamiento centralizado de los metodos inherentes a Ubicacion.
+ *  @see UserService para la implementacion y acoplamiento centralizado de los metodos inherentes a la Interface de User.
+ *  @see Constantes para la implementacion y acoplamiento centralizado de las variables constantes a usar, potenciando el control y asegurando en mayor medida el manejo de errores.
+ * */
 @Service
 public class UserServiceImpl implements UserService, Constantes {
 
@@ -75,7 +109,7 @@ public class UserServiceImpl implements UserService, Constantes {
 
 
     /** Metodo 'addNewTar()'
-     * Recibe 3 parametros : username para validar el usuario admin a definir en la creacion, id del tecnico a indicar en la tarea, Objeto a crear
+     * Recibe 3 parametros: username para validar el usuario admin a definir en la creacion, id del tecnico a indicar en la tarea, Objeto a crear
      * @return <ul>
      *  <li>Entity : Registro de la tarea en la database</li>
      *  </ul>
@@ -167,7 +201,7 @@ public class UserServiceImpl implements UserService, Constantes {
                     return Collections.singletonList(coordenadaService.coordenas());
                 }
                 case MENSAJES -> { // todo, corresponde a todos los mensajes contenidos en la base de datos
-                    return Collections.singletonList(mensajeService.getAll()); // to implementade on message services
+                    return Collections.singletonList(mensajeService.getAll());
                 }
                 case MENSAJE -> { // todo, éste equivale a la lista de los mensajes que ha realizado el admin
                     return Collections.singletonList(mensajeService.findMessageByAdmin((Admin) usuari)); // to implementade on message services
@@ -244,6 +278,12 @@ public class UserServiceImpl implements UserService, Constantes {
         return Collections.singletonList(tareaService.getTareaByTecnico((Tecnico) tecnico));
     }
 
+    /** Metodo 'checkLocation()'
+     * Recibe 1 parametro: Id de la clase Ubicacion  a la cual se validara la existencia en la base de datos de alguna Tarea, ya que la relaciones 1 : 1
+     * @return <ul>
+     *  <li>Boolean : True o False segun aplique el caso</li>
+     *  </ul>
+     */
     @Override
     public boolean checkLocation(Long idTarea) {
         return ubicacionService.checkTarea(idTarea);
@@ -282,8 +322,10 @@ public class UserServiceImpl implements UserService, Constantes {
      *                   UPDATING REGISTER IN THE DATABASE    -       UPDATE
      * ***********************************************************/
 
+
+
     /** Metodo update
-     * Recibe 2 argumentos : username del usuario a realizar el update y los datos nuevos a actualizar. Actualiza un objeto 'Entity' en la base de datos
+     * Recibe 2 argumentos: username del usuario logueado a realizar el update y los datos nuevos a actualizar. Actualiza un objeto 'Entity' en la base de datos
      * @return <ul>
      *  <li>Entity: valida segun el caso de uso y gestiona el update de dicha entidad con los nuevos valores</li>
      *  </ul>
@@ -302,9 +344,22 @@ public class UserServiceImpl implements UserService, Constantes {
         return null;
     }
 
+    /** Metodo update Sobrecarga del Metodo 'update'
+     * Recibe 2 argumentos: Id del usuario a realizar el update y los datos nuevos a actualizar. Actualiza un objeto 'Entity' en la base de datos
+     * @return <ul>
+     *  <li>Entity: Valida el Rol de Admin para realizar modificaciones sobre usuarios en la Base datos.</li>
+     *  </ul>
+     */
+    public UserDTO update(Long id, Object object) {
+        var oldUser = userRepository.findById(id).orElseThrow();
+        var userNew = mapper.convertValue(object, UserDTO.class);
+
+        return updateUser(oldUser, User.byDTO(userNew));
+    }
+
     //TODO VALORAR LOS CAMPOS QUE SE VAN A PODER SETTEAR POR PERFILES
     /** Metodo privado updateUser
-     * Recibe 2 argumentos : Usuario antiguo y Usuario Nuevo con todos los campos a settear. Actualiza un objeto 'Entity' en la base de datos
+     * Recibe 2 argumentos: Usuario antiguo y Usuario Nuevo con todos los campos a settear. Actualiza un objeto 'Entity' en la base de datos, aplicando filtros a ciertos campos sensibles
      * @return <ul>
      *  <li>Entity: valida segun el caso de uso y gestiona el update de dicha entidad con los nuevos valores</li>
      *  </ul>
@@ -330,12 +385,12 @@ public class UserServiceImpl implements UserService, Constantes {
 
 
     /** Metodo updateValue
-     * Recibe 4 parametros : el usuario para validar el rol, el valor de la entidad a apuntar dicho cambio, el id especifico de la entidad a actualizar y el Objeto con los nuevos valores contenidos. Actualiza un objeto 'Entity' en la base de datos
+     * Recibe 4 parametros: el usuario para validar el rol, el valor de la entidad a apuntar dicho cambio, el id especifico de la entidad a actualizar y el Objeto con los nuevos valores contenidos. Actualiza un objeto 'Entity' en la base de datos
      * @return <ul>
      *  <li>Entity: valida segun el caso de uso y gestiona el update de dicha entidad con los nuevos valores</li>
      *  </ul>
      */
-    @Override
+    @Override// todo, agregar edicion de mensajes para tecnicos?
     public Object updateValue(String username, String value, Long id, Object object) throws JsonProcessingException {
         var user = userRepository.findUserByEmail(username).orElseThrow();
 
@@ -353,22 +408,15 @@ public class UserServiceImpl implements UserService, Constantes {
                 case MENSAJE -> {
                     return mensajeService.updateValue(id, object); // to implementade on message services
                 }
-                case TECNICO, ADMIN -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER
+                case TECNICO, ADMIN -> {
                     return update(id,  object);
                 }
             }
         }
 
-        return null; // to implementade tarea
+        return null;
     }
 
-
-    public UserDTO update(Long id, Object object) {
-        var oldUser = userRepository.findById(id).orElseThrow();
-        var userNew = mapper.convertValue(object, UserDTO.class);
-
-        return updateUser(oldUser, User.byDTO(userNew));
-    }
 
 
     /*************************************************************
@@ -410,7 +458,7 @@ public class UserServiceImpl implements UserService, Constantes {
             }
         }
         else {
-            mensajeService.deleteEntity(id);
+            mensajeService.deleteEntity(id); // TODO, validar si un usuario puede o no eliminar un mensaje sin ser admin?
             return "Registro eliminado";
         }
         return "No hay registros con estos valores";
