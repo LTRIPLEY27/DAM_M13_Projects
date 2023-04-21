@@ -38,7 +38,7 @@ namespace ReSeed
             Application.Exit();//cerramos form actual
 
         }
-
+        
         /*
          * Botón btn_conectar_Click
          * Asigno los valores de los TextBox a las variables correspondientes:
@@ -63,10 +63,10 @@ namespace ReSeed
 
 
             conexion.login(nombreUsuario, passwordUsuario, URL_LOGIN);
-
+            
         }
 
-
+      
         
     }
 }

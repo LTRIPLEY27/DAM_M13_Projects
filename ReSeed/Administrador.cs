@@ -24,11 +24,11 @@ namespace ReSeed
 {
     public partial class Administrador : Form
     {
-        //URL
+        //URLs-END POINT
         private String URL_registrarUsuarios = "https://t-sunlight-381215.lm.r.appspot.com/register";
         private String URL_usuariosRegistrados = "https://t-sunlight-381215.lm.r.appspot.com/results/usuarios";
         private String URL_elimarUsuario = "https://t-sunlight-381215.lm.r.appspot.com/delete/typus/usuario/id/";//A falta de añador a ID del usuario
-        private String URL_busquedaUsuarioParticular = "https://t-sunlight-381215.lm.r.appspot.com/find/value/usuario/id/1";
+        private string URL_modificarUsuario = " https://t-sunlight381215.lm.r.appspot.com/update/value/usuario/id/";
 
         //VARIABLES GLOBALES MAPAS
         private GMarkerGoogle marcador;//Instanciamos marcadores
@@ -48,28 +48,22 @@ namespace ReSeed
             TOKEN_form3 = TOKEN_Login;//Indicamos que el String que recibiremos será igual al
 
             InitializeComponent();
-
+            //CARGAMOS MAPA Y CARACTERISTICAS AL INICIAR EL FORM
             gMapControl1.DragButton = MouseButtons.Left;
             gMapControl1.CanDragMap = true;
             gMapControl1.MapProvider = GMapProviders.GoogleMap;
             gMapControl1.Position = new PointLatLng(40.463667, -3.74922);//COORDENADAS ESPAÑA
-
             gMapControl1.MinZoom = 0;//Minimo zoom que el usuario puede realizar
             gMapControl1.MaxZoom = 24;//Maximo zoom que el usuario puede realizar
             gMapControl1.Zoom = 5;//zoom que inicializaremos por defecto (5- dado que queremos que se centre en España)
-
             gMapControl1.AutoScroll = true;
-
             gMapControl1.ShowTileGridLines = false;//Quitamos las lineas de coordenadas
-
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
+            //CARGAMOS REGISTRO DE USUARIOS AL ARRANCAR EL FORM
+            mostrarRegistro();
 
         }
+
+        #region BOTÓN CIERRE APLICACIÓN
         /*
          * Este botón cierra la aplicación
          */
@@ -80,6 +74,9 @@ namespace ReSeed
             Application.Exit();
 
         }
+        #endregion
+
+        #region BOTÓN CANCELAR COORDENADAS
         /*
          * El botón cancela restaura todos los valores, es decir, elimina todos los campos
          * que hayamos editado haciendo un RESET
@@ -100,6 +97,9 @@ namespace ReSeed
             capaMarcado.Clear();//eliminamos la capa poligono que dibujamos en el mapa
 
         }
+        #endregion
+
+        #region OBTENCIÓN COORDENADAS (LATITUD Y LONGITUD)
         /*
          * Hacemos un evento que funcionará haciendo doble click en el mapa:
          * -Obtendremos la longitud y la latitud y almacenaremos los datos en los textbox correspondientes.
@@ -115,7 +115,9 @@ namespace ReSeed
             textBox_longitud.Text = longitud.ToString();
 
         }
+        #endregion
 
+        #region REGISTRAR COORDENADAS EN DATAGRID
         /*
          *Este botón se encarga bde registrar las coordenadas en el dataGrid 
          */
@@ -136,7 +138,9 @@ namespace ReSeed
             }
 
         }
+        #endregion
 
+        #region DIBUJAR POLÍGONO
         /*
          * Este botón se encarga de crear una capa encima del mapa y unir los puntos
          * de las diferentes coordenadas almacenadas en el dataGrid.
@@ -171,6 +175,9 @@ namespace ReSeed
 
 
         }
+        #endregion
+
+        #region ELIMINAR FILA SELECCIONADA DATAGRID COORDENADAS
         /*
          * Botón que eliminará la fila seleccionada
          */
@@ -189,6 +196,9 @@ namespace ReSeed
             }
 
         }
+        #endregion
+
+        #region ELIMINAR TODAS LAS COORDENADAS DEL DATAGRID
         /*
          * Metodo que elimina todas las coordenadas del mapa y desdibuja
          */
@@ -205,12 +215,9 @@ namespace ReSeed
                 capaMarcado.Clear();//borramos capa de dibujo poligono
             }
         }
+        #endregion
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
+        #region ALTA DE USUARIOS
         private void button_ENVIAR_Click(object sender, EventArgs e)
         {
             //Declaramos las variables que compondrán el objeto usuario
@@ -224,20 +231,23 @@ namespace ReSeed
 
             //Con este condicional IF controlamos que el usuario solo pueda marcar una opción 
             //y en consecuéncia determinar si será técnico o no
-            if (checkBox_TECNIC.Checked && !checkBox_ADMIN.Checked)
+            if (checkBox_TECNIC.Checked)
             {
                 rol = "TECNIC";
                 checkBox_ADMIN.Enabled = false;//desactivamos checkbox admin
 
             }
-            else if (checkBox_ADMIN.Checked && !checkBox_TECNIC.Checked)
+            else if (checkBox_ADMIN.Checked)
             {
-                rol = "ADMINISTRADOR";
+                rol = "ADMIN";
                 checkBox_TECNIC.Enabled = false;//desactivamos checkbox tecnic
             }
+
             else
             {
                 MessageBox.Show("Solo es posible marcar una opción para rol!", "ERROR ROL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                checkBox_ADMIN.Enabled = true;
+                checkBox_TECNIC.Enabled = true;
             }
 
             //Variable repetición password
@@ -260,35 +270,132 @@ namespace ReSeed
             {
                 conexion.altaUsuario(usuario, TOKEN_form3, URL_registrarUsuarios);
 
+                //una vez el usuario está registrado,limpiamos los textbox
+                textBox_NOMBRE.Clear();
+                textBox_APELLIDO.Clear();
+                textBox_TELEFONO.Clear();
+                textBox_user.Clear();
+                textBox_MAIL.Clear();
+                textBox_PASSWORD.Clear();
+                textBox_PASSWORD_CONFIRM.Clear();
+
+                checkBox_ADMIN.Checked = false;
+                checkBox_TECNIC.Checked = false;
+
             }
             else
             {//Si las contraseñas no coinciden al confirmar, mostraremos mensaje de erro al usuario
                 MessageBox.Show("Las contraseñas introducidas no coinciden. Por favor, revise la contraseña y introdúzcala nuevamente. Gracias", "ERROR CONTRASEÑA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //Enviamos el focus() a la contraseña puesta que es erronea
+                textBox_PASSWORD.Focus();
             }
 
         }
+        #endregion
 
+        #region MOSTRAR REGISTRO DE USUARIOS
         /*
-         * Este botón permitairá mostrar los usuarios registrados en la base de datos
+         * Este botón permitairá MOSTRAR USUARIOS registrados en la base de datos
          */
-        private async void button_MOSTRAR_USERS_Click(object sender, EventArgs e)
+        private async void mostrarRegistro()
         {
-            List <Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3, URL_usuariosRegistrados);
-            
+            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3, URL_usuariosRegistrados);
+
             for (int i = 0; i < listaUsuarios.Count; i++)
             {
                 String id = listaUsuarios[i].Id;
                 String user = listaUsuarios[i].User;
                 String email = listaUsuarios[i].Email;
 
-                dataGridView_usuarios.Rows.Add(id,user,email);
+                dataGridView_usuarios.Rows.Add(id, user, email);
 
             }
+        }
+        #endregion
 
-            //MessageBox.Show(usuarios);
-            //eduard@fantasymail.com
+        #region ELIMINAR USUARIO
+        /*
+         * Botón ELIMINAR usuarios
+         */
+        private async void button2_Click(object sender, EventArgs e)
+        {
 
+            //Obtenemos la lista de usuarios
+            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3, URL_usuariosRegistrados);
+            //Obtenemos la posición en el Datagrid
+            int numeroSeleccionado = dataGridView_usuarios.CurrentRow.Index;
+            //Creamos variable que almacena POSICION
+            int posicionUsuarioEnList = 0;
 
+            //Recorremos el listado de Usuarios
+            for (int i = 0; i < listaUsuarios.Count; i++)
+            {
+                posicionUsuarioEnList = i;//Misma estructuta y posición entre Datagrid y List
+
+                if (posicionUsuarioEnList == numeroSeleccionado)//cuando la posición del Datagrid sea igual a la posición del LIST...
+                {
+                    String id = listaUsuarios[i].Id;//Obtenemos la Id del Usuario
+                    //Mostramos al Usuario la pregunta de si esta seguro de eliminar al usuario n...
+                    DialogResult result = MessageBox.Show("¿Está seguro de querer eliminar al usuario con ID: " + id + "de la base de datos?",
+                        "ELIMINAR USUARIO", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)//si esta seguro en eliminar...Eliminamos de la BD, del Datagrid y mostramos mensaje
+                    {
+                        conexion.eliminarUsuarioAsync(URL_elimarUsuario, TOKEN_form3, id);
+                        dataGridView_usuarios.Rows.RemoveAt(i);
+                        MessageBox.Show("Usuario con ID: " + listaUsuarios[i].Id + ", ha sido eliminado de la base de datos correctamente.",
+                            "ELIMINAR USUARIO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else if (result == DialogResult.No)//si no esta seguro en eliminar usuario...Mostramos mensaje
+                    {
+                        MessageBox.Show("No se ha eliminado ningún registro.",
+                           "ELIMINAR USUARIO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Eliminación del usuario cancelada",//si cancela, mostramos mensaje
+                           "ELIMINAR USUARIO", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
+                }
+            }
+        }
+        #endregion
+
+        #region ACTUALIZAR USUARIOS
+        /*
+         * Botón ACTUALIZAR
+         * Limpia por completo el registro datagrid y carga nuevamente todos los usuarios de la base de datos
+         */
+        private void button3_ACTUALIZARLISTA_Click(object sender, EventArgs e)
+        {
+            dataGridView_usuarios.Rows.Clear();
+            mostrarRegistro();
+        }
+        #endregion
+
+        #region MODIFICAR USUARIO
+        /*
+         * Botón para MODIFICAR usuarios
+         */
+        private async void button1_Click_1(object sender, EventArgs e)
+        {
+            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3, URL_usuariosRegistrados);
+
+            //Obtenemos la posición en el Datagrid
+            int numeroSeleccionado = dataGridView_usuarios.CurrentRow.Index;
+            //Creamos variable que almacena POSICION
+            int posicionUsuarioEnList = 0;
+            //Recorremos el listado de Usuarios
+            for (int i = 0; i < listaUsuarios.Count; i++)
+            {
+                posicionUsuarioEnList = i;//Misma estructuta y posición entre Datagrid y List
+
+                if (posicionUsuarioEnList == numeroSeleccionado)//cuando la posición del Datagrid sea igual a la posición del LIST...
+                {
+
+                }
+            }
+        }
+            #endregion
         }
     }
-}

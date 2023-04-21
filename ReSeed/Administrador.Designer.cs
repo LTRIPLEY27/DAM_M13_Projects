@@ -61,6 +61,14 @@
             label4 = new Label();
             tabPage2 = new TabPage();
             panel5 = new Panel();
+            button3_ACTUALIZARLISTA = new Button();
+            label14 = new Label();
+            button2 = new Button();
+            button1 = new Button();
+            dataGridView_usuarios = new DataGridView();
+            id_user = new DataGridViewTextBoxColumn();
+            user_name = new DataGridViewTextBoxColumn();
+            email = new DataGridViewTextBoxColumn();
             label13 = new Label();
             panel6 = new Panel();
             checkBox_ADMIN = new CheckBox();
@@ -84,11 +92,6 @@
             label3 = new Label();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
-            dataGridView_usuarios = new DataGridView();
-            id_user = new DataGridViewTextBoxColumn();
-            user_name = new DataGridViewTextBoxColumn();
-            email = new DataGridViewTextBoxColumn();
-            button_MOSTRAR_USERS = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ConfigMapa.SuspendLayout();
@@ -98,8 +101,8 @@
             panel3.SuspendLayout();
             tabPage2.SuspendLayout();
             panel5.SuspendLayout();
-            panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView_usuarios).BeginInit();
+            panel6.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
@@ -121,7 +124,7 @@
             gMapControl1.GrayScaleMode = false;
             gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
             gMapControl1.LevelsKeepInMemory = 5;
-            gMapControl1.Location = new Point(20, 25);
+            gMapControl1.Location = new Point(20, 18);
             gMapControl1.MarkersEnabled = true;
             gMapControl1.MaxZoom = 2;
             gMapControl1.MinZoom = 2;
@@ -135,7 +138,7 @@
             gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
             gMapControl1.ShowTileGridLines = false;
-            gMapControl1.Size = new Size(548, 425);
+            gMapControl1.Size = new Size(548, 432);
             gMapControl1.TabIndex = 3;
             gMapControl1.Zoom = 0D;
             gMapControl1.MouseDoubleClick += gMapControl1_MouseDoubleClick;
@@ -435,25 +438,110 @@
             // 
             panel5.BackgroundImage = (Image)resources.GetObject("panel5.BackgroundImage");
             panel5.BackgroundImageLayout = ImageLayout.Stretch;
-            panel5.Controls.Add(button_MOSTRAR_USERS);
+            panel5.Controls.Add(button3_ACTUALIZARLISTA);
+            panel5.Controls.Add(label14);
+            panel5.Controls.Add(button2);
+            panel5.Controls.Add(button1);
             panel5.Controls.Add(dataGridView_usuarios);
             panel5.Controls.Add(label13);
             panel5.Controls.Add(panel6);
-            panel5.Location = new Point(60, 128);
+            panel5.Location = new Point(145, 124);
             panel5.Name = "panel5";
-            panel5.Size = new Size(984, 515);
+            panel5.Size = new Size(839, 515);
             panel5.TabIndex = 0;
+            // 
+            // button3_ACTUALIZARLISTA
+            // 
+            button3_ACTUALIZARLISTA.Location = new Point(437, 439);
+            button3_ACTUALIZARLISTA.Name = "button3_ACTUALIZARLISTA";
+            button3_ACTUALIZARLISTA.Size = new Size(141, 62);
+            button3_ACTUALIZARLISTA.TabIndex = 7;
+            button3_ACTUALIZARLISTA.Text = "Actualiza Lista Usuarios";
+            button3_ACTUALIZARLISTA.UseVisualStyleBackColor = true;
+            button3_ACTUALIZARLISTA.Click += button3_ACTUALIZARLISTA_Click;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.BackColor = Color.IndianRed;
+            label14.Font = new Font("Tahoma", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            label14.Location = new Point(494, 29);
+            label14.Name = "label14";
+            label14.Size = new Size(260, 25);
+            label14.TabIndex = 6;
+            label14.Text = "LISTADO DE USUARIOS";
+            // 
+            // button2
+            // 
+            button2.Location = new Point(598, 473);
+            button2.Name = "button2";
+            button2.Size = new Size(208, 28);
+            button2.TabIndex = 5;
+            button2.Text = "Eliminar usuario";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(598, 439);
+            button1.Name = "button1";
+            button1.Size = new Size(208, 28);
+            button1.TabIndex = 4;
+            button1.Text = "Modificar Usuario";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click_1;
+            // 
+            // dataGridView_usuarios
+            // 
+            dataGridView_usuarios.AllowUserToAddRows = false;
+            dataGridView_usuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Tahoma", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView_usuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView_usuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView_usuarios.Columns.AddRange(new DataGridViewColumn[] { id_user, user_name, email });
+            dataGridView_usuarios.Location = new Point(432, 57);
+            dataGridView_usuarios.MultiSelect = false;
+            dataGridView_usuarios.Name = "dataGridView_usuarios";
+            dataGridView_usuarios.RowTemplate.DefaultCellStyle.SelectionBackColor = Color.Red;
+            dataGridView_usuarios.RowTemplate.Height = 25;
+            dataGridView_usuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView_usuarios.Size = new Size(374, 364);
+            dataGridView_usuarios.TabIndex = 2;
+            // 
+            // id_user
+            // 
+            id_user.HeaderText = "ID";
+            id_user.Name = "id_user";
+            id_user.ReadOnly = true;
+            // 
+            // user_name
+            // 
+            user_name.HeaderText = "Nombre Usuario";
+            user_name.Name = "user_name";
+            user_name.ReadOnly = true;
+            // 
+            // email
+            // 
+            email.HeaderText = "Email";
+            email.Name = "email";
+            email.ReadOnly = true;
             // 
             // label13
             // 
             label13.AutoSize = true;
-            label13.BackColor = Color.Transparent;
+            label13.BackColor = Color.IndianRed;
             label13.Font = new Font("Tahoma", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            label13.Location = new Point(26, 19);
+            label13.Location = new Point(62, 18);
             label13.Name = "label13";
-            label13.Size = new Size(172, 19);
+            label13.Size = new Size(312, 19);
             label13.TabIndex = 1;
-            label13.Text = "ALTA DE USUARIOS";
+            label13.Text = "ALTA/MODIFICACIÓN  DE USUARIOS";
             // 
             // panel6
             // 
@@ -550,6 +638,7 @@
             // 
             textBox_PASSWORD_CONFIRM.Location = new Point(186, 227);
             textBox_PASSWORD_CONFIRM.Name = "textBox_PASSWORD_CONFIRM";
+            textBox_PASSWORD_CONFIRM.PasswordChar = '*';
             textBox_PASSWORD_CONFIRM.Size = new Size(153, 23);
             textBox_PASSWORD_CONFIRM.TabIndex = 11;
             // 
@@ -557,6 +646,7 @@
             // 
             textBox_PASSWORD.Location = new Point(185, 193);
             textBox_PASSWORD.Name = "textBox_PASSWORD";
+            textBox_PASSWORD.PasswordChar = '*';
             textBox_PASSWORD.Size = new Size(154, 23);
             textBox_PASSWORD.TabIndex = 10;
             // 
@@ -580,7 +670,6 @@
             textBox_APELLIDO.Name = "textBox_APELLIDO";
             textBox_APELLIDO.Size = new Size(154, 23);
             textBox_APELLIDO.TabIndex = 7;
-            textBox_APELLIDO.TextChanged += textBox2_TextChanged;
             // 
             // textBox_NOMBRE
             // 
@@ -663,54 +752,6 @@
             tabPage4.Text = "Comentarios";
             tabPage4.UseVisualStyleBackColor = true;
             // 
-            // dataGridView_usuarios
-            // 
-            dataGridView_usuarios.AllowUserToAddRows = false;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Tahoma", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridView_usuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dataGridView_usuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView_usuarios.Columns.AddRange(new DataGridViewColumn[] { id_user, user_name, email });
-            dataGridView_usuarios.Location = new Point(432, 29);
-            dataGridView_usuarios.Name = "dataGridView_usuarios";
-            dataGridView_usuarios.RowTemplate.Height = 25;
-            dataGridView_usuarios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView_usuarios.Size = new Size(374, 392);
-            dataGridView_usuarios.TabIndex = 2;
-            // 
-            // id_user
-            // 
-            id_user.HeaderText = "ID";
-            id_user.Name = "id_user";
-            id_user.ReadOnly = true;
-            // 
-            // user_name
-            // 
-            user_name.HeaderText = "Nombre Usuario";
-            user_name.Name = "user_name";
-            user_name.ReadOnly = true;
-            // 
-            // email
-            // 
-            email.HeaderText = "Email";
-            email.Name = "email";
-            email.ReadOnly = true;
-            // 
-            // button_MOSTRAR_USERS
-            // 
-            button_MOSTRAR_USERS.Location = new Point(434, 437);
-            button_MOSTRAR_USERS.Name = "button_MOSTRAR_USERS";
-            button_MOSTRAR_USERS.Size = new Size(157, 39);
-            button_MOSTRAR_USERS.TabIndex = 3;
-            button_MOSTRAR_USERS.Text = "MOSTRAR USUARIOS";
-            button_MOSTRAR_USERS.UseVisualStyleBackColor = true;
-            button_MOSTRAR_USERS.Click += button_MOSTRAR_USERS_Click;
-            // 
             // Administrador
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -733,9 +774,9 @@
             tabPage2.ResumeLayout(false);
             panel5.ResumeLayout(false);
             panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView_usuarios).EndInit();
             panel6.ResumeLayout(false);
             panel6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView_usuarios).EndInit();
             ResumeLayout(false);
         }
 
@@ -763,7 +804,6 @@
         private ComboBox comboBox1;
         private Label label4;
         private Label label5;
-        private TextBox textBox_TELEFONO;
         private Button btn_salir;
         private TextBox textBox_comentarios;
         private ComboBox comboBox_usuarios;
@@ -786,21 +826,25 @@
         private Label label8;
         private Label label3;
         private Label label12;
-        private TextBox textBox_PASSWORD_CONFIRM;
-        private TextBox textBox_PASSWORD;
         private Button button_CANCELAR;
         private Button button_ENVIAR;
         private Label label13;
         private TextBox textBox_user;
         private Label label16;
         private Label label_rol;
-        private CheckBox checkBox_ADMIN;
-        private CheckBox checkBox_TECNIC;
-        private GMap.NET.WindowsForms.GMapControl gMapControl1;
         private DataGridView dataGridView_usuarios;
         private DataGridViewTextBoxColumn id_user;
         private DataGridViewTextBoxColumn user_name;
         private DataGridViewTextBoxColumn email;
-        private Button button_MOSTRAR_USERS;
+        private Button button2;
+        private Button button1;
+        private Label label14;
+        private Button button3_ACTUALIZARLISTA;
+        private GMap.NET.WindowsForms.GMapControl gMapControl1;
+        public TextBox textBox_TELEFONO;
+        public TextBox textBox_PASSWORD_CONFIRM;
+        public TextBox textBox_PASSWORD;
+        public CheckBox checkBox_ADMIN;
+        public CheckBox checkBox_TECNIC;
     }
 }

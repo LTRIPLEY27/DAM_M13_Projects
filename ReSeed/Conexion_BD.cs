@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Xunit.Sdk;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using Newtonsoft.Json;
+using System.Net.Http.Json;
 
 namespace ReSeed
 {
@@ -35,6 +36,19 @@ namespace ReSeed
         HttpContent content;
         HttpResponseMessage response;
 
+        /*--------------
+         * MÉTODO LOGIN
+         * -------------
+         * Método que recibe 3 parametros: String usuario, String password, String URL
+         * Comstruimos a través de dynamic jsonString un Json que contiene la clave:valor del usuario y contraseña.
+         * Enviaremos el json a la Api a través de su End Point y esperaremos respuesta.
+         * --Por otro lado-- Obtenemos el Token puesto que lo necesitaremos en otros métodos. El token nos identifica como usuarios logueados.
+         * Dicho esto, si la respues de la Api es true:200 y si el usuario es el administrador, mostraremos la pantalla correspondiente.
+         * De lo contrario, el usuario logueado será el técnico.
+         * Si la respuesta de la Api es false, mostraremos el mensaje corresponiente.
+         * 
+         */
+        #region MÉTODO LOGIN
         public async void login(String usuario, String password, String URL)
         {
             //objeto de la clase HTTPCLIENT
@@ -94,7 +108,19 @@ namespace ReSeed
 
             }
         }
+        #endregion
 
+        /*-------------------
+         * MÉTODO altaUsuario
+         * ------------------
+         * Recibirá 3 parámetros: un objeto Usuario, un String token y un Strin URL.
+         * Crearemos objeto @json con todos los atributos de usuario.
+         * Después de declarar un objeto HttpClient y de validar nuestro Token de inicio de sesión,
+         * pasaremos el @json codificado a UTF8 a llamada API End Point.
+         * Esperamos la respuesta y si es correcta (true codigo 200), mostraremos mensaje correspondiente. En caso de que 
+         * la respuesta sea false,mostraremos el mensaje oportuno.
+         */
+        #region MÉTODO ALTA USUARIO
         public async void altaUsuario (Usuario usuario, String token, String URL)
         {
             //Creación Usuario en json
@@ -125,16 +151,18 @@ namespace ReSeed
             }
 
         }
+        #endregion
 
-        /*
-         * Método ObtenerUsuarios asíncrono
+        /*----------------------------------
+         * MÉTODO ObtenerUsuarios asíncrono
          * ---------------------------------
          * Este método envía una solicitud a la API a través de una dirección web (End Point)
          * y retorna un array JSon de objetos usuario.
          * Recorremos este array Json y cada usuario lo transformamos en objeto de clase y lo añadimos
          * al List.
-         * 
+         * @return se devuelve la lista de objetos de usuarios
          */
+        #region MÉTODO ASÍNCRONO OBTENER USUARIO
         public async Task <List<Post>> ObtenerUsuarios (String token, String URL)
         {
             //Lista dónde almacenaremos los usuarios de respuesta EndPoint
@@ -173,14 +201,39 @@ namespace ReSeed
             return usuariosRegistrados;
 
         }
+        #endregion
 
-        public async void modificarUsuarioAsync (Usuario usuario, String token, String URL)
+        /*-----------------------------
+         * MÉTODO modificarUsuarioAsync
+         * ----------------------------
+         * Recibe 3 parámetros: @URL, @token,@content
+         * No retorna nada-
+         * Tras utilizar nuestro token enviamos el @content junto con @URL a la Api y esperamos respuesta
+         */
+        #region MÉTODO ASÍNCRONO MODIFICAR USUARIO
+        public async void modificarUsuarioAsync (String URL,String token, HttpContent content)
         {
+            //declaramos objeto client
+            client = new HttpClient();
 
-           
+            //autorización TOKEN    
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            //respuesta
+            var response = await client.PutAsync (URL,content);
+
+    
         }
+        #endregion
 
-        public async void eliminarUsuarioAsync (String token, String URL,Usuario usuario)
+        /*
+         * MÉTODO eliminarUsuarioAsync
+         * Recibirá 3 parámetros (@URL, @token, @idUser)
+         * Utilizamos nuestro Token de inicio de sesión
+         * Enviamos a la API la URL End Point añadiendo el IdUsuario y esperamos respuesta
+         */
+        #region MÉTODO ELIMINAR USUARIO
+        public async void eliminarUsuarioAsync (String URL, String token,String idUser)
         {
            
             HttpClient client = new HttpClient();
@@ -189,19 +242,12 @@ namespace ReSeed
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             //borramos en la apirest a razón de su endpount con la id correspondiente del usuario
-            var response = await client.DeleteAsync(URL+usuario.User);
+            var response = await client.DeleteAsync(URL + idUser);
+           
 
-            if (response.IsSuccessStatusCode)
-            {
-                MessageBox.Show("Usuario borrado correctamente.","INFORMACIÓN",MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } else
-            {
-                MessageBox.Show("El usuario no se ha podido borrar.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-          
         }
 
-
+        #endregion
 
     }
 
