@@ -243,9 +243,26 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 
 	}
 
+	/**
+	 * Metodo llamado desde el {@link FragmentTaskList} ya que esta implementado en {@link FragmentTaskListInterface},
+	 * se llama cuando se hace un clic en el item del {@link androidx.recyclerview.widget.RecyclerView}
+	 * @param jsonData datos del item en formato String, pero convertible a json, conversión realizada
+	 * en {@link JsonReseedUtils}.
+	 */
 	@Override
-	public void onEnvioDatos(String data) {
-		Log.i("Recycler View Click!!",data);
+	public void onEnvioDatos(String jsonData) {
+		Log.i("Recycler View Click!!",jsonData);
+
+		TaskFragment taskFragment = new TaskFragment();
+
+		Bundle bundleArgs = new Bundle();
+		try {
+			// Datos del item clicado.
+			bundleArgs.putString("data", jsonReseedUtils.extractJsonTasks(userJSONInfo).toString());
+		} catch (JSONException e) {
+			throw new RuntimeException(e);
+		}
+		taskFragment.setArguments(bundleArgs);
 
 		getSupportFragmentManager().beginTransaction()
 				.setReorderingAllowed(true)

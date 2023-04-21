@@ -123,12 +123,15 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 		}
 	}
 
+	/**
+	 * Metodo llamado cuando se realiza un clic desde {@link TaskAdapter} donde se añade el listener al objeto.
+	 * @param posicion posicion del objeto dentro del array de tareas.
+	 */
 	@Override
 	public void onItemClicked(int posicion) {
 
-		//Log.i("Recycler View Click!!",listaTareas.get(posicion).getName());
+
 		fragmentTaskListInterface.onEnvioDatos("Envio de datos.");
-		//((AppActivity) requireActivity()).testFunction();
 
 	}
 }

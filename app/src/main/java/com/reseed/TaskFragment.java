@@ -16,6 +16,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class TaskFragment extends Fragment {
 
 	private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -36,6 +39,20 @@ public class TaskFragment extends Fragment {
 			googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 		}
 	};
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		if (getArguments() != null) {
+			try {
+				jsonUser = new JSONObject(getArguments().getString("data"));
+				token = getArguments().getString("token");
+				actualPasswordString = getArguments().getString("encryptedPasswd");
+			} catch (JSONException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
 
 	@Nullable
 	@Override

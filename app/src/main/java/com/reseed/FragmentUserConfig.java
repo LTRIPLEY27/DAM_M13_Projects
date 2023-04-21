@@ -57,11 +57,8 @@ public class FragmentUserConfig extends Fragment {
 			Log.e("Error en la RequestQueue",exception.getMessage());
 		}
 
-
-		//todo hacer el update request del usuario.
-
-		/**
-		 * Guardamos los datos recividos del password de {@link AppActivity}
+		/*
+		 * Guardamos los datos recividos del password de AppActivity
 		 */
 		originalEncryptedPasswd = getArguments().getString("encryptedPasswd");
 	}
@@ -168,9 +165,10 @@ public class FragmentUserConfig extends Fragment {
 	 * Comprueva que el password actual concuerda y que los contenidos de el password
 	 * se quiere cambiar junto con la repeticion de este es correcta.
 	 *
-	 * @param actualPasswordString
-	 * @param passwordString
-	 * @param repeatPasswordString
+	 * @param actualPasswordString password actual (se utiliza una encriptación para comprovar el password,
+	 * así se mantiene seguro).
+	 * @param passwordString nuevo password.
+	 * @param repeatPasswordString repetición del nuevo password.
 	 * @return devuelve true si es correcto false si hay algun error.
 	 */
 	private boolean comprovarPasswd(String actualPasswordString, String passwordString, String repeatPasswordString) {

@@ -153,4 +153,15 @@ public class JsonReseedUtils {
         }
         return arrayListComments;
     }
+
+    /**
+     * Metodo que devuelve el objeto json de tareas.
+     * @param jsonUserObject pide el objeto json del usuario.
+     * @return devuelve un Array Json.
+     * @throws JSONException
+     */
+    public JSONArray extractJsonTasks(JSONObject jsonUserObject) throws JSONException{
+
+        return jsonUserObject.getJSONArray("tarea");
+    }
 }

@@ -140,7 +140,4 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
 	}
 }
-interface OnSelectedListener {
-
-}
 
