@@ -26,6 +26,8 @@ public interface Constantes {
     String ADMIN = "admin";
     String TECNICO = "tecnico";
     String USER = "usuario";
+    String USERNAME = "usuario";
+    String NAME = "nombre";
 
     // plural
 

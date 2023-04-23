@@ -2,14 +2,12 @@ package com.ioc.dam_final_project.serviceImpl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ioc.dam_final_project.dto.TareaDTO;
+import com.ioc.dam_final_project.model.Admin;
+import com.ioc.dam_final_project.model.Enums.Rol;
 import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
-import com.ioc.dam_final_project.model.Ubicacion;
-import com.ioc.dam_final_project.repository.AdminRepository;
-import com.ioc.dam_final_project.repository.TareaRepository;
-import com.ioc.dam_final_project.repository.TecnicoRepository;
-import com.ioc.dam_final_project.repository.UbicacionRepository;
-import com.ioc.dam_final_project.service.MensajeService;
+import com.ioc.dam_final_project.model.User;
+import com.ioc.dam_final_project.repository.*;
 import com.ioc.dam_final_project.service.TareaService;
 import com.ioc.dam_final_project.tools.Constantes;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -54,19 +52,26 @@ public class TareaServiceImpl implements TareaService, Constantes {
      * UbicacionRepository, refiere al repositorio de clase
      */
     private final UbicacionRepository ubicacionRepository;
+    /**
+     * UserRepository, refiere al repositorio de clase
+     */
+    private final UserRepository userRepository;
 
     /**
      * Constructor con 4 parametros
-     * @param tecnicoRepository entidad Repository de la clase
-     * @param adminRepository entidad Repository de la clase
-     * @param tareaRepository entidad Repository de la clase
+     *
+     * @param tecnicoRepository   entidad Repository de la clase
+     * @param adminRepository     entidad Repository de la clase
+     * @param tareaRepository     entidad Repository de la clase
      * @param ubicacionRepository entidad Repository de la clase
+     * @param userRepository      entidad Repository de la clase
      */
-    public TareaServiceImpl(TecnicoRepository tecnicoRepository, AdminRepository adminRepository, TareaRepository tareaRepository, UbicacionRepository ubicacionRepository) {
+    public TareaServiceImpl(TecnicoRepository tecnicoRepository, AdminRepository adminRepository, TareaRepository tareaRepository, UbicacionRepository ubicacionRepository, UserRepository userRepository) {
         this.tecnicoRepository = tecnicoRepository;
         this.adminRepository = adminRepository;
         this.tareaRepository = tareaRepository;
         this.ubicacionRepository = ubicacionRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -116,6 +121,38 @@ public class TareaServiceImpl implements TareaService, Constantes {
         return object;
     }
 
+    /** Metodo 'getTareaByUser'
+     * @return <ul>
+     *  <li>List de TareaDTO: Recorre las Tareas del usuario, los cuales retorna</li>
+     *  </ul>
+     */
+    @Override
+    public List<TareaDTO> getTareaByUser(String user) {
+        var usuario = userRepository.findUserByUser(user).orElseThrow();
+        var object = new ArrayList<TareaDTO>();
+
+        if (usuario.getRol() != Rol.ADMIN) { tareaRepository.findTareaByTecnico((Tecnico) usuario).forEach(tarea -> object.add(TareaDTO.byModel(tarea)));}
+        else {tareaRepository.findTareaByAdmin((Admin) usuario).forEach(tarea -> object.add(TareaDTO.byModel(tarea)));}
+
+        return object;
+    }
+
+    /** Metodo 'getTareaByName'
+     * @return <ul>
+     *  <li>List de TareaDTO: Recorre las Tareas del usuario por Nombre, los cuales retorna</li>
+     *  </ul>
+     */
+    @Override
+    public List<TareaDTO> getTareaByName(String user) {
+        var usuario = userRepository.findUserByNombre(user).orElseThrow();
+        var object = new ArrayList<TareaDTO>();
+
+        if (usuario.getRol() != Rol.ADMIN) { tareaRepository.findTareaByTecnico((Tecnico) usuario).forEach(tarea -> object.add(TareaDTO.byModel(tarea)));}
+        else {tareaRepository.findTareaByAdmin((Admin) usuario).forEach(tarea -> object.add(TareaDTO.byModel(tarea)));}
+
+        return object;
+    }
+
     /** Metodo 'deleteEntity'
      * Recibe un Id  y lo elimina de la base de datos.
      */
@@ -133,18 +170,20 @@ public class TareaServiceImpl implements TareaService, Constantes {
      *  </ul>
      */
     @Override
-    public Object updateValue(Long id, Object object) throws JsonProcessingException {
+    public Object updateValue(Long id, Object object, User user) throws JsonProcessingException {
         var tar = tareaRepository.findById(id).orElseThrow();
         var newTar = mapper.convertValue(object, TareaDTO.class);
 
-        tar.setName(newTar.getName()); // todo, chequear las validaciones en caso de campos null?
-        tar.setTarea(newTar.getTarea());
+        if(user.getRol() != Rol.TECNIC){
+            tar.setName(newTar.getName());
+            tar.setTarea(newTar.getTarea());
+            tar.setFecha_culminacion(newTar.getFecha_culminacion());
+            tar.setTecnico(tecnicoRepository.findTecnicoByUser(newTar.getTecnico()).orElseThrow());// transformar de dto a objeto
+            tar.setAdmin(adminRepository.findAdminByUser(newTar.getAdmin()));//from dto
+            tar.setUbicacion(ubicacionRepository.findById(newTar.getUbicacionId()).orElseThrow());
+            ubicacionRepository.findById(newTar.getUbicacionId()).orElseThrow().setTarea(tar);
+        }
         tar.setEstatus(newTar.getEstatus());
-        tar.setFecha_culminacion(newTar.getFecha_culminacion());
-        tar.setTecnico(tecnicoRepository.findTecnicoByUser(newTar.getTecnico()).orElseThrow());// transformar de dto a objeto
-        tar.setAdmin(adminRepository.findAdminByUser(newTar.getAdmin()));//from dto
-        tar.setUbicacion(ubicacionRepository.findById(newTar.getUbicacionId()).orElseThrow());
-        ubicacionRepository.findById(newTar.getUbicacionId()).orElseThrow().setTarea(tar);
 
         return TareaDTO.byModel(tareaRepository.save(tar));
     }

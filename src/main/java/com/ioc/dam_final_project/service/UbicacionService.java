@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface UbicacionService {
 
-   Ubicacion saveObject(Ubicacion ubicacion, Long id);
+   UbicacionDTO saveObject(Ubicacion ubicacion, Long id);
 
    List<UbicacionDTO> getAll();
 

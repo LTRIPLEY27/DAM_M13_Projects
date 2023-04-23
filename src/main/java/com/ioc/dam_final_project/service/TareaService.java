@@ -3,6 +3,8 @@ package com.ioc.dam_final_project.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.model.Tecnico;
+import com.ioc.dam_final_project.model.User;
+
 import java.util.List;
 
 /**
@@ -17,9 +19,11 @@ public interface TareaService {
     TareaDTO saveObject(String username, Long id, Object object);
     List<TareaDTO> total();
     List<TareaDTO> getTareaByTecnico(Tecnico tecnico);
+    List<TareaDTO> getTareaByUser(String user);
+    List<TareaDTO> getTareaByName(String nombre);
 
     void deleteEntity(Long id);
-    Object updateValue(Long id, Object object) throws JsonProcessingException;
+    Object updateValue(Long id, Object object, User user) throws JsonProcessingException;
 
     TareaDTO searchById(Long id);
 }

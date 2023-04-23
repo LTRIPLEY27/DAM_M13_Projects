@@ -67,12 +67,12 @@ public class UbicacionServiceImpl implements UbicacionService, Constantes {
      *  </ul>
      */
     @Override
-    public Ubicacion saveObject(Ubicacion ubicacion, Long tareaId) {
+    public UbicacionDTO saveObject(Ubicacion ubicacion, Long tareaId) {
         var tarea = tareaRepository.findById(tareaId).orElseThrow();
         tarea.setUbicacion(ubicacion);
         ubicacion.setTarea(tarea);
 
-        return ubicacionRepository.save(ubicacion);
+        return UbicacionDTO.byModel(ubicacionRepository.save(ubicacion));
     }
 
     /** Metodo 'getAll'

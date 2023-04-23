@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService, Constantes {
      *  </ul>
      */
     @Override
-    public Ubicacion addNewUbicacion(Ubicacion ubicacion, Long id) {
+    public UbicacionDTO addNewUbicacion(Ubicacion ubicacion, Long id) {
         return ubicacionService.saveObject(ubicacion, id);
     }
 
@@ -272,10 +272,14 @@ public class UserServiceImpl implements UserService, Constantes {
      * </ul>
      */
     @Override
-    public List<Object> findTaskByTecnic(String username) {
-        var tecnico = userRepository.findUserByUser(username).orElseThrow();
+    public List<Object> filterByValue(String value, Object object) {
+        var user = mapper.convertValue(object, UserDTO.class);
 
-        return Collections.singletonList(tareaService.getTareaByTecnico((Tecnico) tecnico));
+        if (value.equals(USERNAME)) {
+            return Collections.singletonList(tareaService.getTareaByUser(user.getUser()));
+        }
+
+        return Collections.singletonList(tareaService.getTareaByName(user.getNombre()));
     }
 
     /** Metodo 'checkLocation()'
@@ -331,7 +335,7 @@ public class UserServiceImpl implements UserService, Constantes {
      *  </ul>
      */
     @Override
-    public UserDTO update(String old, Object userDTO) {
+    public Object update(String old, Object userDTO) {
         var user = userRepository.findUserByEmail(old).orElseThrow();
 
         switch (user.getRol()){
@@ -397,7 +401,7 @@ public class UserServiceImpl implements UserService, Constantes {
         if (user.getRol() == Rol.ADMIN) {
             switch (value) {
                 case TAREA -> {
-                    return tareaService.updateValue(id, object);
+                    return tareaService.updateValue(id, object, user);
                 }
                 case UBICACION -> {
                     return ubicacionService.updateValue(id, object);
@@ -412,6 +416,9 @@ public class UserServiceImpl implements UserService, Constantes {
                     return update(id,  object);
                 }
             }
+        }
+        else {
+              return Collections.singletonList(tareaService.updateValue(id, object, user));
         }
 
         return null;

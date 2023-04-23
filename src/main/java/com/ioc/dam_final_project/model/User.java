@@ -60,7 +60,6 @@ public class User implements UserDetails {
     /**
      * Password del usuario
      */
-    @NotNull
     protected String password;
 
     /**

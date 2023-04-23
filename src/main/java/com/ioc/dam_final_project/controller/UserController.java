@@ -137,10 +137,9 @@ public class UserController implements Constantes {
      * </ul>
      */
     @PostMapping("/post-mensaje")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<MensajeDTO> postMessage(Principal principal, @RequestBody MensajeDTO mensaje){
         var userOnSession = principal.getName();
-        return ResponseEntity.ok(userService.postingMessage(userOnSession, mensaje));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.postingMessage(userOnSession, mensaje));
     }
     /*************************************************************
      *                   GETTING RESPONSE FROM DATABASE
@@ -193,16 +192,16 @@ public class UserController implements Constantes {
 
 
     /**
-     * Metodo que recibe un parametro y valida segun el rol y el parametro
+     * Metodo FilterBy que recibe un parametro y valida segun el rol y el parametro
      * @return <ul>
      *  <li>Lista de Valores: Retorna una lista de tares según el usuario : Tecnico, las que tenga asignadas, Admin, por username del Tecnico</li>
      *  </ul>
      */
-    @GetMapping(path = "tareas/tecnico/{tecnico}")
-    public ResponseEntity<List <Object>> getRegistersByTecnic(Principal principal, @PathVariable("tecnico") String value){
+    @GetMapping(path = "tareas/filterBy/{value}")
+    public ResponseEntity<List <Object>> filterBy(Principal principal, @PathVariable("value") String value, @RequestBody Object object){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.findTaskByTecnic(value)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByValue(value, object)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
 
     /*************************************************************
@@ -217,7 +216,7 @@ public class UserController implements Constantes {
      * </ul>
      */
     @PutMapping(path = "update-user")// TODO revisar la respuesta y controlar mejor, ubicar qué campos realmente ejecutará el rol de user normal en el suyo
-    public Object update(Principal principal, @RequestBody UserDTO userDTO){
+    public Object update(Principal principal, @RequestBody Object userDTO){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
         return userOnSession.isEnabled() ? userService.update(principal.getName(), userDTO) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No se puede editar su perfil, contacte al administrador");
@@ -233,13 +232,14 @@ public class UserController implements Constantes {
     @PutMapping(path = "update/value/{value}/id/{id}")
     public ResponseEntity<Object> update(Principal principal, @PathVariable String value, @PathVariable Long id, @RequestBody Object object) throws JsonProcessingException {
 
-        if(value.equals(TAREA)){
+        // TODO, CHEQUEAR PUES BLOQUEA TODO EDIT EN TAREA SI ESTA YA ESTA ASIGNADA
+        /*if(value.equals(TAREA)){
            return userService.isRegistered(value, id) != false && userService.checkLocation(id) != true ? ResponseEntity.ok(userService.updateValue(principal.getName(), value, id, object)) : ResponseEntity.status(HttpStatus.CONFLICT).body("Esta Tarea ya contine una Ubicación, si desea editar la misma, primero elimine la ubicación existente");
         }
         if (value.equals(UBICACION)){
             var tareaId = mapper.convertValue(object, UbicacionDTO.class);
             return userService.isRegistered(value, id) != false && userService.checkLocation(tareaId.getTarea()) != true ? ResponseEntity.ok(userService.updateValue(principal.getName(), value, id, object)) : ResponseEntity.status(HttpStatus.CONFLICT).body("Esta Tarea ya contine una Ubicación, si desea editar la misma, primero elimine la ubicación existente");
-        }
+        }*/
 
         return userService.isRegistered(value, id) != false ? ResponseEntity.ok(userService.updateValue(principal.getName(), value, id, object)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No hay registro del ID proporcionado de la clase " + value.toUpperCase() + " Por favor, verifique");
     }

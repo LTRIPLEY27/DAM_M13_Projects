@@ -5,6 +5,8 @@ import com.ioc.dam_final_project.model.Tarea;
 import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.model.Ubicacion;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,9 +29,21 @@ import java.util.Optional;
 public interface TareaRepository extends JpaRepository <Tarea, Long> {
 
     List <Tarea> findTareaByTecnico(Tecnico tecnico);
+    List <Tarea> findTareaByAdmin(Admin admin);
     Tarea findTareaByTecnicoAndId(Tecnico tecnico, Long id);
 
     Tarea findTareaByUbicacion(Ubicacion ubicacion);
     Optional <Tarea> findTareaByUbicacion_Id(Long id);
     Tarea findTareaByAdminAndId(Admin admin, Long name);
+
+    /**
+     * Native Query para acceder a Tareas asignadas filtradas por Usuario
+     * */
+    @Query(value = "SELECT *\n" +
+                    "FROM tarea t\n" +
+                    "JOIN user u on t.id = u.id\n" +
+                    "WHERE u.user LIKE 'davidf'", nativeQuery = true)
+    List <Tarea> tareaByUsername(@Param("usuari") String usuari);
+
+
 }

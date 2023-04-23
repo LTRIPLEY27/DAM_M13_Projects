@@ -43,7 +43,9 @@ public class UbicacionDTO {
      */
     public static UbicacionDTO byModel(Ubicacion ubicacion){
         var mapas = new ArrayList<CoordenadaDTO>();
-        ubicacion.getMapa().forEach(mapa -> mapas.add(CoordenadaDTO.byModel(mapa)));
+        if(ubicacion.getMapa() != null){
+            ubicacion.getMapa().forEach(mapa -> mapas.add(CoordenadaDTO.byModel(mapa)));
+        }
 
         return new UbicacionDTO(ubicacion.getId(), ubicacion.getCentroLatitud(), ubicacion.getCentroLongitud(), ubicacion.getZoom(), mapas, ubicacion.getTarea().getId());
     }
