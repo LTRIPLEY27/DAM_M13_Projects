@@ -198,11 +198,17 @@ public class UserController implements Constantes {
      *  </ul>
      */
     @GetMapping(path = "tareas/filterBy/{value}")
-    public ResponseEntity<List <Object>> filterBy(Principal principal, @PathVariable("value") String value, @RequestBody Object object){
+    public ResponseEntity<List <Object>> filterBy(Principal principal, @PathVariable("value") String value, @RequestParam String object){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
         return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByValue(value, object)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
+    /*@GetMapping(path = "tareas/filterBy/{value}")
+    public ResponseEntity<List <Object>> filterBy(Principal principal, @PathVariable("value") String value, @RequestBody Object object){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByValue(value, object)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }*/
 
     /*************************************************************
      *                   UPDATE VALUES FROM A OBJET IN DATABASE

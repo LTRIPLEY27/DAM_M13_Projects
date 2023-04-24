@@ -24,7 +24,7 @@ import java.util.Set;
  *
  *   Atributos:
  *
- * - He declarado los atributos: Prívate, ya que no seran heredados.
+ * - He declarado los atributos: Private, ya que no seran heredados.
  * - Motivado a que la clase Admin, estara en relacion a otras entidades, he declarado los atributos con las notaciones necesarias para tal fin.
  *
  *   Metodos:

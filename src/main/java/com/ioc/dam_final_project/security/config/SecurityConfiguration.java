@@ -12,25 +12,25 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-/********************************************************************************************************
- *                                      *****   CLASE DE CONFIGURACIÓN DE LA SEGURIDAD A APLICAR   *****
- *********************************************************************************************************
- * SERÁ UNA CLASE QUE BÁSICAMENTE PROPORCIONARÁ LA FILTRACIÓN DE RUTAS MEDIANTE 'ROLES' INDICADOS EN OTROS SERVICIOS.
+/**
+ *                                      *****   CLASE DE CONFIGURACION DE LA SEGURIDAD A APLICAR   *****
+ *
+ * SERA UNA CLASE QUE BASICAMENTE PROPORCIONARA LA FILTRACION DE RUTAS MEDIANTE 'ROLES' INDICADOS EN OTROS SERVICIOS.
  *
  *   Notaciones :
- * ****************
- *   - He declarado a la clase como con las notaciones '@Configuration' y '@EnableWebSecurity', para indicar que sea una de las iniciales al lanzarse la aplicación a declarar pues conformará la configuración global de las mismas.
- *   - He usado el Bean para invocar al método SecurityFilterChain para aplicar los filtros a usar en cada AntMatchers
- *   - He usado las notaciones propias de SpringBoot, en combinación a Java 17 y Loombook, para potenciar al máximo la codificación.
+ *
+ *   - He declarado a la clase como con las notaciones '@Configuration' y '@EnableWebSecurity', para indicar que sea una de las iniciales al lanzarse la aplicacion a declarar pues conformara la configuracion global de las mismas.
+ *   - He usado el Bean para invocar al metodo SecurityFilterChain para aplicar los filtros a usar en cada AntMatchers
+ *   - He usado las notaciones propias de SpringBoot, en combinacion a Java 17 y Loombook, para potenciar al maximo la codificacion.
  *
  *   Atributos :
- * * *************
- * - He declarado los atributos : Private final, ya que serán 2 Services alternos que necesitaré instanciar y con ello me aseguro de tal necesidad.
+ *
+ * - He declarado los atributos : Private final, ya que seran 2 Services alternos que necesitare instanciar y con ello me aseguro de tal necesidad.
  * -
  *
- *   Métodos :
+ *   Metodos :
  * * *************
- * - He declarado los métodos de acceso como públicos, ya que la idea inicial de éste controlador es el acceso global y filtrar a los usuarios a partir de la respuesta.
+ * - He declarado los metodos de acceso como publicos, ya que la idea inicial de este controlador es el acceso global y filtrar a los usuarios a partir de la respuesta.
  * */
 
 @Configuration

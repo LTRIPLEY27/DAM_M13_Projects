@@ -50,7 +50,7 @@ public class AuthenticationService {
             System.out.println("ADMIN, BEARER TOKEN  " + jwt);
         } else if (tecnicoRepository.findTecnicoByEmail(request.getEmail()).isPresent()) {
             jwt = jwtService.generateToken(tecnicoRepository.findTecnicoByEmail(request.getEmail()).orElseThrow());
-            System.out.println("TÉCNICO, BEARER TOKEN  " + jwt);
+            System.out.println("TECNICO, BEARER TOKEN  " + jwt);
         }
 
         return AuthenticationResponse.builder().token(jwt).build();

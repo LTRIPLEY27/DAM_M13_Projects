@@ -46,7 +46,7 @@ public interface UserService {
     CoordenadaDTO addNewCoor(Coordenada coordenada, Long ubicacion);
 
     //List<Object> findTaskByTecnic(String username);
-    List<Object> filterByValue(String value, Object object);
+    List<Object> filterByValue(String value, String object);
 
     boolean checkLocation(Long idTarea);
 }

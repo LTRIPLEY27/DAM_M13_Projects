@@ -35,7 +35,7 @@ import java.util.List;
 @Qualifier(value = "tarea")
 public class TareaServiceImpl implements TareaService, Constantes {
 
-    // INYECCIÓN DE DEPENDENCIAS
+    // INYECCION DE DEPENDENCIAS
     /**
      * TecnicoRepository, refiere al repositorio de clase
      */
@@ -83,10 +83,10 @@ public class TareaServiceImpl implements TareaService, Constantes {
      *  <li>TareaDTO: Retorna un Tarea Entity con los valores editados para el formato JSON</li>
      *  </ul>
      */
-    @Override// todo agregar identificación de la fecha de la tarea finalizar
+    @Override// todo agregar identificacion de la fecha de la tarea finalizar
     public TareaDTO saveObject(String username, Long id, Object object) {
         var tarea = mapper.convertValue(object, Tarea.class);
-        var tecnico = tecnicoRepository.findById(id).orElseThrow(); // TODO, VALIDAR QUÉ IDENTIFICACIÓN NOS PASARÁ EL ADMIN PARA EL TECNICO
+        var tecnico = tecnicoRepository.findById(id).orElseThrow(); // TODO, VALIDAR QUE IDENTIFICACION NOS PASARA EL ADMIN PARA EL TECNICO
         var admin = adminRepository.findAdminByEmail(username).orElseThrow();
 
         tarea.setAdmin(admin);
@@ -162,7 +162,7 @@ public class TareaServiceImpl implements TareaService, Constantes {
     }
 
 
-    // TODO, MUY URGENTE, IDENTIFICAR FINALMENTE QUÉ CAMPOS DE TAREA SE HARÁN UPDATE CADA VEZ QUE SE DESEE?
+    // TODO, MUY URGENTE, IDENTIFICAR FINALMENTE QUE CAMPOS DE TAREA SE HARAN UPDATE CADA VEZ QUE SE DESEE?
     /** Metodo updateValue
      * Recibe 2 parametros : el Id de la entidad a actualizar, el valor de la entidad a apuntar dicho cambio, el Objeto con los nuevos valores contenidos. Actualiza un objeto 'Entity' en la base de datos
      * @return <ul>

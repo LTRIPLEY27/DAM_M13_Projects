@@ -53,31 +53,31 @@ public class UserServiceImpl implements UserService, Constantes {
 
     // INYECCION DE DEPENDENCIAS
     /**
-     * Servicio de Tecnico a implementar para retornar valores centralizados en éste services.
+     * Servicio de Tecnico a implementar para retornar valores centralizados en este services.
      */
     private final TecnicoServiceimpl tecnicoServiceimpl;
     /**
-     * Servicio de Admin a implementar para retornar valores centralizados en éste services.
+     * Servicio de Admin a implementar para retornar valores centralizados en este services.
      */
     private final AdminServiceImpl adminService;
     /**
-     * Servicio de Tarea a implementar para retornar valores centralizados en éste services.
+     * Servicio de Tarea a implementar para retornar valores centralizados en este services.
      */
     private final TareaServiceImpl tareaService;
     /**
-     * Servicio de Coordenada a implementar para retornar valores centralizados en éste services.
+     * Servicio de Coordenada a implementar para retornar valores centralizados en este services.
      */
     private final CoordenadaServiceImpl coordenadaService;
     /**
-     * Servicio de Mensaje a implementar para retornar valores centralizados en éste services.
+     * Servicio de Mensaje a implementar para retornar valores centralizados en este services.
      */
     private final MensajeServiceImpl mensajeService;
     /**
-     * Servicio de Ubicacion a implementar para retornar valores centralizados en éste services.
+     * Servicio de Ubicacion a implementar para retornar valores centralizados en este services.
      */
     private final UbicacionServiceImpl ubicacionService;
     /**
-     * Repositorio de User a implementar para retornar valores centralizados en éste services.
+     * Repositorio de User a implementar para retornar valores centralizados en este services.
      */
     private final UserRepository userRepository;
 
@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService, Constantes {
     }
 
     /** Metodo 'addNewUbicacion()'
-     * Recibe 2 parametros : Objeto a crear, Id de la tarea a la que se le asignará para establecer la relación
+     * Recibe 2 parametros : Objeto a crear, Id de la tarea a la que se le asignara para establecer la relacion
      * @return <ul>
      *  <li>Entity : Registro de la ubicacion en la database</li>
      *  </ul>
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService, Constantes {
     }
 
     /** Metodo 'addNewCoor()'
-     * Recibe 2 parametros : Objeto a crear, Id de la ubicacion a la que se le asignará para establecer la relación
+     * Recibe 2 parametros : Objeto a crear, Id de la ubicacion a la que se le asignara para establecer la relacian
      * @return <ul>
      *  <li>Entity : Registro de la coordenada en la database</li>
      *  </ul>
@@ -158,9 +158,9 @@ public class UserServiceImpl implements UserService, Constantes {
      * ***********************************************************/
 
     /** Metodo getProfile
-     * Recibe un parametro que contiene el username del usuario y devuelve un objeto con el perfil de la persona en la sesión autenticada
+     * Recibe un parametro que contiene el username del usuario y devuelve un objeto con el perfil de la persona en la sesion autenticada
      * @return <ul>
-     *  <li>Entity: Según el rol devuelve el perfil del usuario</li>
+     *  <li>Entity: Segun el rol devuelve el perfil del usuario</li>
      *  </ul>
      */
     @Override
@@ -180,9 +180,9 @@ public class UserServiceImpl implements UserService, Constantes {
     }
 
     /** Metodo registers
-     * Recibe 2 parametros : el username del usuario, para validar el rol, y el tipo de entidad a ubicar en la respuesta. Devuelve una lista de elementos contenidos en la base de datos, realiza un switch para devolver la respuesta según cada clase demandada
+     * Recibe 2 parametros : el username del usuario, para validar el rol, y el tipo de entidad a ubicar en la respuesta. Devuelve una lista de elementos contenidos en la base de datos, realiza un switch para devolver la respuesta segun cada clase demandada
      * @return <ul>
-     *  <li>Lista de Entidades: Según el rol administra el acceso a todos los valores contenidos</li>
+     *  <li>Lista de Entidades: Segun el rol administra el acceso a todos los valores contenidos</li>
      *  </ul>
      */
     @Override
@@ -203,7 +203,7 @@ public class UserServiceImpl implements UserService, Constantes {
                 case MENSAJES -> { // todo, corresponde a todos los mensajes contenidos en la base de datos
                     return Collections.singletonList(mensajeService.getAll());
                 }
-                case MENSAJE -> { // todo, éste equivale a la lista de los mensajes que ha realizado el admin
+                case MENSAJE -> { // todo, este equivale a la lista de los mensajes que ha realizado el admin
                     return Collections.singletonList(mensajeService.findMessageByAdmin((Admin) usuari)); // to implementade on message services
                 }
                 case TECNICOS -> {
@@ -255,7 +255,7 @@ public class UserServiceImpl implements UserService, Constantes {
             case MENSAJE -> {
                 return mensajeService.searchById(id);
             }
-            case USER -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER // TODO, VERIFICAR SI LA BÚSQUEDA SE NECESITA ESPECÍFICAR A ADMIN O A TÉCNICO
+            case USER -> {  // CHEQUEAR SI ADMIN PUEDE HACER UPDATE DE USER // TODO, VERIFICAR SI LA BUSQUEDA SE NECESITA ESPECIFICAR A ADMIN O A TECNICO
                 return UserDTO.byEntity(userRepository.findById(id).orElseThrow());
             }
         }
@@ -272,14 +272,13 @@ public class UserServiceImpl implements UserService, Constantes {
      * </ul>
      */
     @Override
-    public List<Object> filterByValue(String value, Object object) {
-        var user = mapper.convertValue(object, UserDTO.class);
+    public List<Object> filterByValue(String value, String object) {
 
-        if (value.equals(USERNAME)) {
-            return Collections.singletonList(tareaService.getTareaByUser(user.getUser()));
+        if (value.equals(USER)) {
+            return Collections.singletonList(tareaService.getTareaByUser(object));
         }
 
-        return Collections.singletonList(tareaService.getTareaByName(user.getNombre()));
+        return Collections.singletonList(tareaService.getTareaByName(object));
     }
 
     /** Metodo 'checkLocation()'
@@ -339,7 +338,7 @@ public class UserServiceImpl implements UserService, Constantes {
         var user = userRepository.findUserByEmail(old).orElseThrow();
 
         switch (user.getRol()){
-            case ADMIN, TECNIC -> { // TODO Aplicar el filtro a update específicos, preguntar qué valores van a editar y difieren
+            case ADMIN, TECNIC -> { // TODO Aplicar el filtro a update especificos, preguntar que valores van a editar y difieren
                 var oldUser = userRepository.findById(user.getId()).orElseThrow();
                 var userNew = mapper.convertValue(userDTO, UserDTO.class);
                 return updateUser(oldUser, User.byDTO(userNew));
@@ -371,7 +370,7 @@ public class UserServiceImpl implements UserService, Constantes {
     private UserDTO updateUser(User oldUser, User newUser) {
         oldUser.setUser(newUser.getUser());
 
-        // CONDICIONAL A ESTABLECER NUEVA CONTRASEÑA EN CASO DE APLICAR.
+        // CONDICIONAL A ESTABLECER NUEVA CONTRASENA EN CASO DE APLICAR.
         if(newUser.getPassword() != null){
             oldUser.setPassword(new BCryptPasswordEncoder().encode(newUser.getPassword()));
         }

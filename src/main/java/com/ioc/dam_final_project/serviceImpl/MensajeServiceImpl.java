@@ -80,7 +80,7 @@ public class MensajeServiceImpl implements MensajeService, Constantes {
      * Metodo que gestionara el posteo de mensajes entre el Admin y el Tecnico a modo de hilo conversacional.
      * Llama a su vez a un metodo privado de clase que actualizara las relaciones de todos los objetos que participan en la accion
      * @param username es la variable que contiene el emisor del mensaje a realizar.
-     * @param mensaje es la instancia de Mensaje a la que se le realizará el hilo.
+     * @param mensaje es la instancia de Mensaje a la que se le realizara el hilo.
      * @return La instancia mensaje conteniendo todas las relaciones de los objetos con los que participa actualizados.
      */
     @Override
@@ -170,7 +170,7 @@ public class MensajeServiceImpl implements MensajeService, Constantes {
 
     /**
      * Metodo que gestionara el posteo de mensajes entre el Admin y el Tecnico a modo de hilo conversacional.
-     * @param mensaje es la instancia de Mensaje a la que se le realizará el hilo.
+     * @param mensaje es la instancia de Mensaje a la que se le realizara el hilo.
      * @param tarea es la instancia de Tarea en la que se adjuntara el mensaje.
      * @param tecnico es la instancia Tecnico que sera el emisor o receptor de ese mensaje sobre esa Tarea.
      * @param admin es la instancia Admin que sera el emisor o receptor de ese mensaje sobre esa Tarea.
