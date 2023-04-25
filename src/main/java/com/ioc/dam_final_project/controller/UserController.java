@@ -231,6 +231,19 @@ public class UserController implements Constantes {
     /**
      * Metodo que recibe 4 parametros y realiza el update correspondiente, validando el rol que realiza la request, el valor de la entidad a la que modificar, el id y el objeto a actualizar
      *
+     * El metodo centraliza en un unico Request  todos los Services de Update aplicados por cada entidad y que administra userService
+     *
+     * @param principal en referencia al Usuario en sesión actual
+     * @param value en referencia a una Entidad definida con la que deseemos especificar el Update, las cuales pueden ser :
+     *              @param Admin en referencia a la Entidad Admin.
+     *              @param Tecnico en referencia a la Entidad Tecnico.
+     *              @param Tarea en referencia a la Entidad Tarea.
+     *              @param Ubicacion en referencia a la Entidad Ubicacion.
+     *              @param Coordenada en referencia a la Entidad Coordenada.
+     *              @param Mensaje en referencia a la Entidad Mensaje.
+     * @param id en referencia al Id especifico de la entidad que se desea actualizar
+     * @param object en referencia al Objeto nuevo que le indicamos en la request con todos los valores a actualizar contenidos
+     *
      * @return <ul>
      * <li>Una entidad: El objeto con todos sus campos actualizados</li>
      * </ul>

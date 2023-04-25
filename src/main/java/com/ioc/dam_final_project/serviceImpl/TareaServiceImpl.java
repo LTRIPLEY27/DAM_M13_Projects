@@ -2,11 +2,8 @@ package com.ioc.dam_final_project.serviceImpl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ioc.dam_final_project.dto.TareaDTO;
-import com.ioc.dam_final_project.model.Admin;
+import com.ioc.dam_final_project.model.*;
 import com.ioc.dam_final_project.model.Enums.Rol;
-import com.ioc.dam_final_project.model.Tarea;
-import com.ioc.dam_final_project.model.Tecnico;
-import com.ioc.dam_final_project.model.User;
 import com.ioc.dam_final_project.repository.*;
 import com.ioc.dam_final_project.service.TareaService;
 import com.ioc.dam_final_project.tools.Constantes;
@@ -14,7 +11,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.SortedSet;
 
 /**
  * Clase TareaServiceImpl
@@ -103,6 +102,10 @@ public class TareaServiceImpl implements TareaService, Constantes {
     @Override
     public List<TareaDTO> total() {
         var object = new ArrayList<TareaDTO>();
+        var objectX = new ArrayList<Tarea>();
+        //tareaRepository.findAll().forEach(tarea -> tarea.getMensaje(SortedSet));
+        //tareaRepository.findAll().forEach(tarea -> object.add((Tarea) tarea.getMensaje().stream().sorted((x1, x2) -> Long.compare(x1.getId(), x1.getId()))));
+        //object.forEach(tarea -> objectA.add(TareaDTO.byModel(tarea)));
         tareaRepository.findAll().forEach(tarea -> object.add(TareaDTO.byModel(tarea)));
         return object;
     }

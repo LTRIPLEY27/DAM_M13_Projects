@@ -7,10 +7,13 @@ import com.ioc.dam_final_project.service.CoordenadaService;
 import com.ioc.dam_final_project.service.MensajeService;
 import com.ioc.dam_final_project.tools.Constantes;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Collections.*;
 
 /**
  * Clase MensajeServiceImpl
@@ -149,9 +152,9 @@ public class MensajeServiceImpl implements MensajeService, Constantes {
      */
     @Override
     public List<MensajeDTO> findMessageByAdmin(Admin admin) {
-        var mensajes = new ArrayList<MensajeDTO>();
+        List<MensajeDTO> mensajes = new ArrayList<>();
         mensajeRepository.findMensajeByAdmin(admin).forEach(mensaje -> mensajes.add(MensajeDTO.byModel(mensaje)));
-        return mensajes;
+        return mensajes; // todo check
     }
 
     /** Metodo 'getAll'
@@ -161,10 +164,12 @@ public class MensajeServiceImpl implements MensajeService, Constantes {
      */
     @Override
     public List<MensajeDTO> getAll() {
-        var messages = new ArrayList<MensajeDTO>();
-        mensajeRepository.findAll().forEach(mensaje -> messages.add(MensajeDTO.byModel(mensaje)));
-
-        return messages;
+        List<MensajeDTO> messages = new ArrayList<MensajeDTO>();
+        //mensajeRepository.findAll().forEach(mensaje -> messages.add(MensajeDTO.byModel(mensaje)));
+       // mensajeRepository.findAll(Sort.by(Sort.Direction.ASC), messages.get(0).getId()).forEach(mensaje -> messages.add(MensajeDTO.byModel(mensaje)));
+       mensajeRepository.findAll().stream().sorted(Comparator.comparingLong(Mensaje::getId))
+               .collect(Collectors.toList()).forEach(mensaje -> messages.add(MensajeDTO.byModel(mensaje)));
+        return  messages;
     }
 
 

@@ -5,6 +5,7 @@ import com.ioc.dam_final_project.model.Admin;
 import com.ioc.dam_final_project.model.Mensaje;
 import com.ioc.dam_final_project.model.Tecnico;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,4 +28,5 @@ public interface MensajeRepository extends JpaRepository <Mensaje, Long> {
 
     List<Mensaje> findMensajeByTecnico(Tecnico tecnico);
     List<Mensaje> findMensajeByAdmin(Admin admin);
+
 }

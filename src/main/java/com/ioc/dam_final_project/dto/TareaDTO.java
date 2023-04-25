@@ -4,10 +4,11 @@ import com.ioc.dam_final_project.model.*;
 import com.ioc.dam_final_project.model.Enums.Estatus;
 import com.ioc.dam_final_project.model.Enums.Tipo_Tarea;
 import lombok.*;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * CLASE TareaDTO
@@ -36,7 +37,7 @@ public class TareaDTO {
     private String tecnico;
     private String admin;
     private Object ubicacion;
-    private Set<MensajeDTO> mensajes;
+    private ArrayList <MensajeDTO> mensajes;
     private Long ubicacionId;
 
     //Metodo publico estatico
@@ -47,10 +48,12 @@ public class TareaDTO {
      *  </ul>
      */
     public static TareaDTO byModel(Tarea tarea){
-        Set<MensajeDTO> mensajes = new HashSet<>();
+       // Set<MensajeDTO> mensajes = new HashSet<>();
+        ArrayList <MensajeDTO> mensajes = new ArrayList<>();
 
         if(tarea.getMensaje() != null){
-            tarea.getMensaje().forEach(mensaje -> mensajes.add(MensajeDTO.byModel(mensaje)));
+            ArrayList <Mensaje> mensaje = tarea.getMensaje().stream().sorted(Comparator.comparing(Mensaje::getId)).collect(Collectors.toCollection(ArrayList::new));
+            mensaje.forEach(mensajer -> mensajes.add(MensajeDTO.byModel(mensajer)));
         }
 
         // VALIDACIONES PARA CONSIDERAR OPCIONES EN NULL
