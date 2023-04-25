@@ -1,4 +1,4 @@
-package com.reseed;
+package com.reseed.fragments;
 
 import android.os.Bundle;
 
@@ -14,8 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
-import com.reseed.util.adapter.requests.SingletonReqQueue;
-import com.reseed.util.adapter.requests.UserUpdateRequest;
+import com.reseed.AppActivity;
+import com.reseed.R;
+import com.reseed.requests.SingletonReqQueue;
+import com.reseed.requests.UserConfigUpdateRequest;
 import com.reseed.util.EncryptUtils;
 import com.reseed.interfaces.VolleyResponseInterface;
 
@@ -196,7 +198,7 @@ public class FragmentUserConfig extends Fragment {
 
 
 
-		UserUpdateRequest userUpdate = new UserUpdateRequest(token, jsonUser, passwordString, requestQueue);
+		UserConfigUpdateRequest userUpdate = new UserConfigUpdateRequest(token, jsonUser, passwordString, requestQueue);
 
 
 		userUpdate.sendRequest(new VolleyResponseInterface() {

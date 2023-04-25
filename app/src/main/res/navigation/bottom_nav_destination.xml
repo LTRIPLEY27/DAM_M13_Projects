@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/fragmentTaskList"
-        android:name="com.reseed.FragmentTaskList"
+        android:name="com.reseed.fragments.FragmentTaskList"
         android:label="fragment_task_list"
         tools:layout="@layout/fragment_task_list" />
     <fragment
         android:id="@+id/fragmentUsersList"
-        android:name="com.reseed.FragmentUsersList"
+        android:name="com.reseed.fragments.FragmentUsersList"
         android:label="fragment_users_list"
         tools:layout="@layout/fragment_users_list" />
     <fragment
         android:id="@+id/fragmentblank"
-        android:name="com.reseed.BlankFragment"
+        android:name="com.reseed.fragments.FragmentBlank"
         android:label="fragment_blank"
         tools:layout="@layout/fragment_blank" />
 </navigation>

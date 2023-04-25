@@ -36,6 +36,7 @@ public class TaskObj {
         setTaskLocation(taskLocation);
         setTaskComments(taskComments);
     }
+
     public String getId() {
         return id;
     }

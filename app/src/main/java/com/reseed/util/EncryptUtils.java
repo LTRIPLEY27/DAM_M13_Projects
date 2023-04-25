@@ -1,5 +1,7 @@
 package com.reseed.util;
 
+import com.reseed.fragments.FragmentUserConfig;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -11,7 +13,7 @@ public class EncryptUtils {
 
 	/**
 	 * Método para encriptar con MD5, usado basicamente para guardar el password en {@link com.reseed.LoginActivity}
-	 * y comprovarlo en {@link com.reseed.FragmentUserConfig}.
+	 * y comprovarlo en {@link FragmentUserConfig}.
 	 * @param originalString String que se quiere encriptar.
 	 * @return devuelve un String encriptado, si no funciona devuelve un String vacio.
 	 */

@@ -18,11 +18,14 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.reseed.fragments.FragmentTaskList;
+import com.reseed.fragments.FragmentUserConfig;
+import com.reseed.fragments.FragmentUsersList;
+import com.reseed.fragments.FragmentTask;
 import com.reseed.interfaces.FragmentTaskListInterface;
-import com.reseed.interfaces.RecyclerViewInterface;
 import com.reseed.objects.UserObj;
 import com.reseed.util.JsonReseedUtils;
-import com.reseed.util.adapter.TaskAdapter;
+import com.reseed.adapter.TaskAdapter;
 import com.reseed.objects.TaskObj;
 import com.google.android.material.navigation.NavigationView;
 
@@ -47,7 +50,7 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 
 	private ArrayList<TaskObj> userTaskObjs;
 
-	private BottomNavigationView bottomNavigationViewTasks;
+	private BottomNavigationView bottomNavigationView;
 
 	private final JsonReseedUtils jsonReseedUtils = new JsonReseedUtils();
 
@@ -74,19 +77,22 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		drawerLayout = findViewById(R.id.drawer_layer);
 		fragmentContainerView = findViewById(R.id.fragmentContainerView);
 
+		this.bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+
 		// TODO hacer la separacion de tipo de usuario.
 
 		if(userObj.getTipoUsuario().equalsIgnoreCase("tecnic")){
 
-			disableAllAdminTaskButtons();
+			disableAllAdminTaskButtons(true);
 
 		} else if (userObj.getTipoUsuario().equalsIgnoreCase("admin")) {
-
+			disableAllAdminTaskButtons(false);
 		}
 
-		BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-		bottomNavigationView.setSelectedItemId(R.id.menu_tasks);
+
+
 
 		bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
 			@Override
@@ -175,7 +181,7 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	/**
 	 * Metodo llamado cuando se hace clic en el menu_lateral de "Acerca de Reseed".
 	 *
-	 * @param item
+	 * @param item menu de donde proviene el click
 	 */
 	public void aboutMenuCall(MenuItem item) {
 		Intent intent = new Intent(this, LoginActivity.class);
@@ -229,7 +235,8 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		FragmentTaskList fragmentTaskList = new FragmentTaskList();
 
 		Bundle bundleArgs = new Bundle();
-		bundleArgs.putString("data", userJSONInfo.toString());
+		//bundleArgs.putString("data", userJSONInfo.toString());
+		bundleArgs.putString("token", userObj.getTokenUsuario());
 		fragmentTaskList.setArguments(bundleArgs);
 
 
@@ -239,7 +246,26 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 				.commit();
 	}
 
-	public void disableAllAdminTaskButtons(){
+	public void disableAllAdminTaskButtons(Boolean option){
+
+		if (option){
+			bottomNavigationView.getMenu().findItem(R.id.menu_users).setChecked(false);
+			bottomNavigationView.getMenu().findItem(R.id.menu_users).setEnabled(false);
+
+			bottomNavigationView.getMenu().findItem(R.id.menu_stadistics).setChecked(false);
+			bottomNavigationView.getMenu().findItem(R.id.menu_stadistics).setEnabled(false);
+
+			bottomNavigationView.setSelectedItemId(R.id.menu_tasks);
+		}else{
+			bottomNavigationView.getMenu().findItem(R.id.menu_users).setChecked(true);
+			bottomNavigationView.getMenu().findItem(R.id.menu_users).setEnabled(true);
+
+			bottomNavigationView.getMenu().findItem(R.id.menu_stadistics).setChecked(true);
+			bottomNavigationView.getMenu().findItem(R.id.menu_stadistics).setEnabled(true);
+
+			bottomNavigationView.setSelectedItemId(R.id.menu_tasks);
+		}
+
 
 	}
 
@@ -253,21 +279,19 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	public void onEnvioDatos(String jsonData) {
 		Log.i("Recycler View Click!!",jsonData);
 
-		TaskFragment taskFragment = new TaskFragment();
+		FragmentTask taskFragment = new FragmentTask();
 
 		Bundle bundleArgs = new Bundle();
-		try {
-			// Datos del item clicado.
-			bundleArgs.putString("data", jsonReseedUtils.extractJsonTasks(userJSONInfo).toString());
-		} catch (JSONException e) {
-			throw new RuntimeException(e);
-		}
+
+		// Datos del item clicado, en este caso json pasado a String.
+		bundleArgs.putString("data", jsonData);
+		bundleArgs.putString("token", userObj.getTokenUsuario());
+
 		taskFragment.setArguments(bundleArgs);
 
 		getSupportFragmentManager().beginTransaction()
 				.setReorderingAllowed(true)
-				.add(R.id.fragmentContainerView, TaskFragment.class, null)
+				.add(R.id.fragmentContainerView, taskFragment, null)
 				.commit();
-
 	}
 }

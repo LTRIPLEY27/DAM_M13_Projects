@@ -1,4 +1,4 @@
-package com.reseed.util.adapter.requests;
+package com.reseed.requests;
 
 import android.util.Log;
 
@@ -12,58 +12,49 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.reseed.interfaces.VolleyResponseInterface;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserUpdateRequest {
+public class UserTaskStatusUpdateRequest {
 
-	private String token, urlPostLogin, passwordString;
+	private String token, idTarea, urlPostLogin;
+
+	JSONObject data;
+
 	private RequestQueue requestQueue;
-	JSONObject jsonObjectUser;
+
+
 
 	/**
 	 * Constructor of the class.
 	 *
-	 * @param passwordString
+	 * @param token
+	 * @param data
 	 * @param requestQueue   created on activity.
 	 */
-	public UserUpdateRequest(String token, JSONObject jsonObjectUser, String passwordString, RequestQueue requestQueue) {
+	public UserTaskStatusUpdateRequest(String token, String idTarea, JSONObject data, RequestQueue requestQueue) {
 		setToken(token);
+		setData(data);
+		setIdTarea(idTarea);
 		setRequestQueue(requestQueue);
-		setJsonObjectUser(jsonObjectUser);
-		setPasswordString(passwordString);
 	}
-
-
 
 
 	public void sendRequest(final VolleyResponseInterface listener) {
 
-		urlPostLogin = "https://t-sunlight-381215.lm.r.appspot.com/update-user";
+		urlPostLogin = "https://t-sunlight-381215.lm.r.appspot.com/update/value/tarea/id/" + getIdTarea();
 
-		JSONObject jsonCallObject = new JSONObject();
-		try {
-			jsonCallObject.put("nombre",getJsonObjectUser().getString("nombre"));
-			jsonCallObject.put("apellido",getJsonObjectUser().getString("apellido"));
-			jsonCallObject.put("user",getJsonObjectUser().getString("user"));
-			jsonCallObject.put("password",getPasswordString());
-			jsonCallObject.put("email",getJsonObjectUser().getString("email"));
-			jsonCallObject.put("telefono",getJsonObjectUser().getString("telefono"));
-			jsonCallObject.put("rol",getJsonObjectUser().getString("rol"));
-		} catch (Exception e) {
-			Log.e("Error user update request: ", e.getMessage());
-		}
 
-		JsonObjectRequest req = new JsonObjectRequest(Request.Method.PUT, urlPostLogin,
-				jsonCallObject, new Response.Listener<JSONObject>() {
+		CustomJSONArrayRequest req = new CustomJSONArrayRequest(Request.Method.PUT, urlPostLogin,
+				getData(), new Response.Listener<JSONArray>(){
 
 			@Override
-			public void onResponse(JSONObject response) {
+			public void onResponse(JSONArray response) {
 				Log.d("Respuesta user info test", response.toString());
 
 				// Enviamos la informacion de la respuesta al FragmentUserConfig.
@@ -109,19 +100,6 @@ public class UserUpdateRequest {
 		getRequestQueue().add(req);
 
 	}
-	private void setPasswordString(String passwordString) {
-		this.passwordString = passwordString;
-	}
-	public String getPasswordString(){
-		return passwordString;
-	}
-	private void setJsonObjectUser(JSONObject jsonObjectUser) {
-		this.jsonObjectUser = jsonObjectUser;
-	}
-
-	private JSONObject getJsonObjectUser() {
-		return jsonObjectUser;
-	}
 
 	public String getToken() {
 		return token;
@@ -138,4 +116,21 @@ public class UserUpdateRequest {
 	public RequestQueue getRequestQueue() {
 		return requestQueue;
 	}
+
+	public JSONObject getData() {
+		return data;
+	}
+
+	public void setData(JSONObject data) {
+		this.data = data;
+	}
+
+	public String getIdTarea() {
+		return idTarea;
+	}
+
+	public void setIdTarea(String idTarea) {
+		this.idTarea = idTarea;
+	}
+
 }

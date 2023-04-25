@@ -11,7 +11,8 @@ public class TaskComment {
      *  "tecnico": "davidf"
      */
 
-    private String id, descripcion, fecha, tarea, tecnico, admin;
+    private String descripcion, fecha, tarea, tecnico, admin;
+    private int id;
 
     /**
      * Constructor de la clase TaskComment, son los comentarios dentro de las tareas.
@@ -21,7 +22,7 @@ public class TaskComment {
      * @param tecnico
      * @param admin
      */
-    public TaskComment(String id, String descripcion, String fecha, String tarea, String tecnico, String admin) {
+    public TaskComment(int id, String descripcion, String fecha, String tarea, String tecnico, String admin) {
         setId(id);
         setDescripcion(descripcion);
         setFecha(fecha);
@@ -29,11 +30,11 @@ public class TaskComment {
         setTecnico(tecnico);
         setAdmin(admin);
     }
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
     public String getDescripcion() {

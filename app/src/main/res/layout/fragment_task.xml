@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/blankFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
     android:orientation="vertical"
-    tools:context=".BlankFragment">
+    tools:context=".fragments.FragmentBlank">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -17,7 +18,7 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="280sp"
-            tools:context=".TaskFragment"
+            tools:context=".fragments.FragmentTask"
             android:contentDescription="Google Maps"/>
     </FrameLayout>
 
@@ -29,7 +30,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/green_200"
+                    android:text="Usuario"
+                    android:layout_marginHorizontal="10sp"
+                    android:layout_marginTop="20sp"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/green_200"
+                    android:text="Estado"
+                    android:layout_marginTop="20sp"
+                    android:layout_marginHorizontal="10sp"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,14 +67,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="TECNICO"
-                    android:layout_margin="10sp"
+                    android:layout_marginHorizontal="10sp"
                     android:textSize="20sp" />
 
                 <Spinner
-                    android:id="@+id/spinner"
+                    android:id="@+id/statusSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:layout_margin="10sp"
+                    android:layout_marginHorizontal="10sp"
                     android:layout_weight="1"
                     android:entries="@array/taskStatus"/>
 
@@ -59,16 +85,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nombre"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:layout_margin="10sp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/green_200"
+                android:text="Fecha finalización"
+                android:layout_marginHorizontal="10sp"
+                android:textSize="20sp" />
             <TextView
                 android:id="@+id/textViewFechaFinalTarea"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Fecha Culminación"
                 android:textSize="20sp"
-                android:layout_margin="10sp"/>
+                android:layout_marginHorizontal="10sp"
+                android:layout_marginBottom="10sp"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/green_200"
+                android:text="Fecha de creación"
+                android:layout_marginHorizontal="10sp"
+                android:textSize="20sp" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -80,7 +123,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Fecha creacion"
-                    android:layout_margin="10sp"
+                    android:layout_marginHorizontal="10sp"
+                    android:layout_marginBottom="10sp"
                     android:textSize="20sp" />
                 <TextView
                     android:id="@+id/textViewNombreAdmin"
@@ -88,10 +132,20 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Admin"
-                    android:layout_margin="10sp"
+                    android:layout_marginHorizontal="10sp"
+                    android:layout_marginBottom="10sp"
                     android:textSize="20sp" />
 
             </LinearLayout>
+                <Button
+                    android:id="@+id/addCommentBtn"
+                    android:layout_margin="10sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Añadir comentario"
+                    android:textAllCaps="false"
+
+                    android:textSize="20sp"/>
 
             <TextView
                 android:layout_width="match_parent"

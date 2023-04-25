@@ -1,4 +1,4 @@
-package com.reseed.util.adapter.requests;
+package com.reseed.requests;
 
 import android.util.Log;
 import com.android.volley.AuthFailureError;

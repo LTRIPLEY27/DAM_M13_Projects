@@ -2,38 +2,39 @@ package com.reseed.objects;
 
 public class MapPoint {
 
-    private String latitude, longitude, id;
+    private float latitude, longitude;
+    private int id;
 
     /**
      * Constructor del objeto MapPoint, donde se guardan los puntos del mapa.
      * @param latitude parametro en forma de String con la latitud.
      * @param longitude parametro en forma de String con la longitud.
      */
-    public MapPoint(String id, String latitude, String longitude){
+    public MapPoint(int id, float latitude, float longitude){
         setId(id);
         setLatitude(latitude);
         setLongitude(longitude);
     }
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
-    public String getLatitude() {
+    public float getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(float latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public float getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(float longitude) {
         this.longitude = longitude;
     }
 }

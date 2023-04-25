@@ -1,6 +1,5 @@
-package com.reseed.util.adapter.requests;
+package com.reseed.requests;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.LruCache;

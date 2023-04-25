@@ -1,4 +1,4 @@
-package com.reseed.util.adapter.requests;
+package com.reseed.requests;
 
 import android.util.Log;
 
@@ -19,7 +19,7 @@ import com.reseed.interfaces.VolleyResponseInterface;
 
 import org.json.JSONObject;
 
-public class UserPpdateRequest {
+public class UserUpdateRequest {
 
 	private String email;
 	private String password;
@@ -32,7 +32,7 @@ public class UserPpdateRequest {
 	 * @param email    email from the user
 	 * @param password password from user
 	 */
-	public UserPpdateRequest(String email, String password, RequestQueue requestQueue) {
+	public UserUpdateRequest(String email, String password, RequestQueue requestQueue) {
 		setEmail(email);
 		setPassword(password);
 		setRequestQueue(requestQueue);

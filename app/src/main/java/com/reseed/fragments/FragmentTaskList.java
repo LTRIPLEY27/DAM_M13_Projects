@@ -1,4 +1,4 @@
-package com.reseed;
+package com.reseed.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,12 +14,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.reseed.R;
 import com.reseed.interfaces.FragmentTaskListInterface;
 import com.reseed.interfaces.RecyclerViewInterface;
+import com.reseed.interfaces.VolleyResponseInterface;
 import com.reseed.objects.TaskObj;
+import com.reseed.requests.SingletonReqQueue;
+import com.reseed.requests.UserInfoRequest;
 import com.reseed.util.JsonReseedUtils;
-import com.reseed.util.adapter.TaskAdapter;
+import com.reseed.adapter.TaskAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +33,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class FragmentTaskList extends Fragment implements RecyclerViewInterface {
+
+
+	RequestQueue requestQueue;
 
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,6 +60,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 	private String mParam1;
 	private String mParam2;
 
+	private String userToken;
 	private RecyclerView recyclerView;
 
 	private ImageView imageViewNoTask;
@@ -61,6 +71,10 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 
 	private ArrayList<TaskObj> listaTareas;
 
+	private JsonReseedUtils jsonReseedUtils;
+
+	private JSONObject jsonObjectUser;
+
 	public FragmentTaskList() {
 		// Required empty public constructor
 	}
@@ -69,13 +83,14 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
-			try {
-				jsonObjectTasks = new JSONObject(getArguments().getString("data"));
-			} catch (JSONException e) {
-				throw new RuntimeException(e);
-			}
+			//jsonObjectTasks = new JSONObject(getArguments().getString("data"));
+			userToken = getArguments().getString("token");
 		}
-		extractTasks(jsonObjectTasks);
+		// instanciamos la requestqueue
+		requestQueue = SingletonReqQueue.getInstance(requireContext()).getRequestQueue();
+
+		jsonReseedUtils = new JsonReseedUtils();
+		listaTareas = new ArrayList<>();
 	}
 
 
@@ -99,7 +114,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 
 
 			recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-			adapter = new TaskAdapter(listaTareas,this);
+			adapter = new TaskAdapter(listaTareas, this);
 
 			recyclerView.setAdapter(adapter);
 		} else {
@@ -107,16 +122,57 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 			recyclerView.setVisibility(View.GONE);
 			textViewNoTareas.setVisibility(View.VISIBLE);
 		}
+
+		requestData(userToken);
+
 		return view;
+
+	}
+
+	private void requestData(String token) {
+
+		UserInfoRequest userInfoRequest = new UserInfoRequest(token, requestQueue, false);
+		JSONObject jsResponse = new JSONObject();
+
+		userInfoRequest.sendRequest(new VolleyResponseInterface() {
+			@Override
+			public void onError(String message) {
+				Log.e("Error login: ", message);
+				Toast toast = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG);
+				toast.show();
+				//changeStatusInputUser(true);
+
+			}
+
+			@Override
+			public boolean onResponse(Object response) {
+				JSONObject jsResponse = (JSONObject) response;
+				Log.i("Respuesta user info", jsResponse.toString());
+				refreshContent(jsResponse);
+				//openAppActivity(jsResponse);
+
+				//refreshContent(jsResponse);
+				return true;
+			}
+		});
+		//This is for Headers If You Needed
+
+	}
+
+	private void refreshContent(JSONObject jsonObject) {
+		this.jsonObjectUser = jsonObject;
+		extractTasks(jsonObject);
+		recyclerView.getAdapter().notifyDataSetChanged();
 	}
 
 	/**
 	 * Metodo para extraer las tareas del JSON.
 	 */
 	private void extractTasks(JSONObject jsonUserInfo) {
+		this.listaTareas.clear();
 		try {
-			JsonReseedUtils jsonReseedUtils = new JsonReseedUtils();
-			this.listaTareas = jsonReseedUtils.convertToTaskObj(jsonUserInfo);
+
+			listaTareas.addAll(jsonReseedUtils.convertToTasksObjects(jsonUserInfo));
 		} catch (JSONException e) {
 			Log.e("Error convertToTaskObj", e.getMessage());
 			//throw new RuntimeException(e);
@@ -125,13 +181,16 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 
 	/**
 	 * Metodo llamado cuando se realiza un clic desde {@link TaskAdapter} donde se añade el listener al objeto.
+	 *
 	 * @param posicion posicion del objeto dentro del array de tareas.
 	 */
 	@Override
 	public void onItemClicked(int posicion) {
 
-
-		fragmentTaskListInterface.onEnvioDatos("Envio de datos.");
-
+		try {
+			fragmentTaskListInterface.onEnvioDatos(jsonReseedUtils.extractJsonTask(jsonObjectUser, posicion).toString());
+		} catch (JSONException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

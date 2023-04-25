@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 public class TaskLocation {
 
-    private String id, latitud, longitud;
-    private String zoom;
+    private String id;
+    private float latitud, longitud;
+    private int zoom;
     private ArrayList<MapPoint> mapPoints;
 
     /**
@@ -16,7 +17,7 @@ public class TaskLocation {
      * @param zoom Zoom inicial del mapa por defecto.
      * @param mapPoints Puntos de geometria del mapa relacionado.
      */
-    public  TaskLocation (String id,String latitud, String longitud, String zoom, ArrayList<MapPoint> mapPoints){
+    public  TaskLocation (String id,Float latitud, Float longitud, int zoom, ArrayList<MapPoint> mapPoints){
         setId(id);
         setLatitud(latitud);
         setLongitud(longitud);
@@ -30,27 +31,27 @@ public class TaskLocation {
     public void setId(String id) {
         this.id = id;
     }
-    public String getLatitud() {
+    public float getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(String latitud) {
+    public void setLatitud(float latitud) {
         this.latitud = latitud;
     }
 
-    public String getLongitud() {
+    public float getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(String longitud) {
+    public void setLongitud(float longitud) {
         this.longitud = longitud;
     }
 
-    public String getZoom() {
+    public int getZoom() {
         return zoom;
     }
 
-    public void setZoom(String zoom) {
+    public void setZoom(int zoom) {
         this.zoom = zoom;
     }
 
@@ -58,8 +59,7 @@ public class TaskLocation {
         return mapPoints;
     }
 
-    public TaskLocation setMapPoints(ArrayList<MapPoint> mapPoints) {
+    public void setMapPoints(ArrayList<MapPoint> mapPoints) {
         this.mapPoints = mapPoints;
-        return this;
     }
 }

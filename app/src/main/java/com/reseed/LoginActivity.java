@@ -13,9 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
-import com.reseed.util.adapter.requests.UserPpdateRequest;
-import com.reseed.util.adapter.requests.SingletonReqQueue;
-import com.reseed.util.adapter.requests.UserInfoRequest;
+import com.reseed.fragments.FragmentUserConfig;
+import com.reseed.requests.UserUpdateRequest;
+import com.reseed.requests.SingletonReqQueue;
+import com.reseed.requests.UserInfoRequest;
 import com.reseed.util.EncryptUtils;
 import com.reseed.interfaces.VolleyResponseInterface;
 
@@ -93,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Metodo usado para realizar el login, se usa la clase {@link UserPpdateRequest}, y sobre ella
+     * Metodo usado para realizar el login, se usa la clase {@link UserUpdateRequest}, y sobre ella
      * se le asigna un listener para el evento de la request.
      *
      * @param email    Email del usuario
@@ -103,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-        UserPpdateRequest login = new UserPpdateRequest(email, password, requestQueue);
+        UserUpdateRequest login = new UserUpdateRequest(email, password, requestQueue);
 
         login.sendRequest(new VolleyResponseInterface() {
             @Override
