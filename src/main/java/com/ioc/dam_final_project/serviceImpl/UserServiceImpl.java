@@ -264,8 +264,10 @@ public class UserServiceImpl implements UserService, Constantes {
 
 
     /**
-     * Metodo 'findTaskByTecnic'
-     * Recibe 1 parametro: Username del tecnico al que se retornara la lista de Tareas asignadas
+     * Metodo 'filterByValue'
+     * Recibe 2 parametros:
+     *
+     * Valor del campo especifico a filtrar (Username / Nombre),  y la cadena especifica de la misma
      *
      * @return <ul>
      * <li>Entity : Registro de la coordenada en la database</li>

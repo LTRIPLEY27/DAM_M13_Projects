@@ -90,15 +90,19 @@ public class UserController implements Constantes {
      *                   CREATING REGISTER INTO DATABASE    -       CREATE
      * ***********************************************************/
 
-    // TODO, centralizar todos los new registers
     // POR ORDEN DE JERARQUÍA EN LA RELACIÓN.
 
     /**
      * Metodo que valida el registro de un usuario, no es accesible fuera del admin
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param request en referencia al valor del objeto a almacenar
      * @return <ul>
      *  <li>Token: Retorna un Token como respuesta de un registro exitoso para la utenticación del usuario/li>
      *  </ul>
      */
+
+
     @PostMapping(value = "register")
     public ResponseEntity<Object> register(Principal principal, @RequestBody RegisterRequest request) {
         var user = userRepository.findUserByEmail(principal.getName()).orElseThrow();
@@ -106,22 +110,50 @@ public class UserController implements Constantes {
         return user.getRol() != Rol.ADMIN ? ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tiene permisos para realizar ésta acción") : ResponseEntity.status(HttpStatus.CREATED).body(serviceAuth.register(request));
     }
 
-    // TODO AGREGAR VALIDATOR PARA OBJETO AGREGADO POR ID, verificador de rol, y dtos de tareas, RESPUESTA DE AGREGADO CORRECTAMENTE
+    /**
+     * Metodo que recibe 3 parametros y realiza el alta correspondiente Tarea en referencia al Tecnico  asignado.
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param idtecnico en referencia al Id especifico del Tecnico  asignado.
+     * @param object en referencia al valor del objeto a almacenar
+     * @return <ul>
+     * <li>Entity: Retorna un UbicacionDTO mostrando el objeto almacenado, HTTPStatus 'CREATED' (201)</li>
+     * </ul>
+     */
     @PostMapping(path = "/tarea/tecnico/{idtecnico}")
-    //public ResponseEntity<Object> newObject(Principal principal, @PathVariable Long idtecnico, @RequestBody Tarea object) {
     public ResponseEntity<Object> newObject(Principal principal, @PathVariable Long idtecnico, @RequestBody Object object) {
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
         return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(USER, idtecnico) != false ? ResponseEntity.status(HttpStatus.CREATED).body(userService.addNewTar(principal.getName(), idtecnico, object)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + TECNICO.toUpperCase() + "  Por favor, verifique");
     }
 
-    @PostMapping(path = "/ubicacion/tarea/{idtarea}")
-    public ResponseEntity<Object> newObject(Principal principal, @RequestBody Ubicacion ubicacion, @PathVariable Long idtarea) {
+    /**
+     * Metodo que recibe 3 parametros y realiza el alta correspondiente Ubicacion en referencia a la Tarea  que pertenece.
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param ubicacion en referencia al valor del objeto a almacenar
+     * @param idTarea en referencia al Id especifico de la entidad a la que pertenece.
+     * @return <ul>
+     * <li>Entity: Retorna un UbicacionDTO mostrando el objeto almacenado, HTTPStatus 'CREATED' (201)</li>
+     * </ul>
+     */
+    @PostMapping(path = "/ubicacion/tarea/{idTarea}")
+    public ResponseEntity<Object> newObject(Principal principal, @RequestBody Ubicacion ubicacion, @PathVariable Long idTarea) {
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(TAREA, idtarea) != false ? ResponseEntity.status(HttpStatus.CREATED).body(userService.addNewUbicacion(ubicacion, idtarea)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + TAREA.toUpperCase() + "  Por favor, verifique");
+        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(TAREA, idTarea) != false ? ResponseEntity.status(HttpStatus.CREATED).body(userService.addNewUbicacion(ubicacion, idTarea)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("Ha habido un error en el alta, verifique sus permisos o la inexistencia de un ID correspondiente a la  clase " + TAREA.toUpperCase() + "  Por favor, verifique");
     }
 
+    /**
+     * Metodo que recibe 3 parametros y realiza el alta correspondiente a Coordenada en referencia a la Ubicacion que pertenece.
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param coordenada en referencia al valor del objeto a almacenar
+     * @param idUbicacion en referencia al Id especifico de la entidad a la que pertenece.
+     * @return <ul>
+     * <li>Entity: Retorna una Coordenada mostrando el objeto almacenado, HTTPStatus 'CREATED' (201)</li>
+     * </ul>
+     */
     @PostMapping(path = "/coordenada/ubicacion/{idUbicacion}")
     public ResponseEntity<Object> newCoordenada(Principal principal, @RequestBody Coordenada coordenada, @PathVariable Long idUbicacion){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
@@ -132,8 +164,10 @@ public class UserController implements Constantes {
     /**
      * Metodo que recibe 2 parametros y realiza el posteo del mensaje correspondiente a la Tarea y Usuario que la realizan.
      *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param mensaje en referencia al valor del objeto a almacenar
      * @return <ul>
-     * <li>String: Con la respuesta de la consulta y según el caso exitoso o no de la eliminacion</li>
+     * <li>Entity: Retorna un MensajeDTO mostrando el objeto almacenado, HTTPStatus 'CREATED' (201)</li>
      * </ul>
      */
     @PostMapping("/post-mensaje")
@@ -146,8 +180,10 @@ public class UserController implements Constantes {
      * ***********************************************************/
     /**
      * Metodo que valida el usuario en Session, no es accesible fuera del admin y solo devuelve el perfil de la persona en session
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
      * @return <ul>
-     *  <li>Entity: Retorna un perfil según la persona que haga la petición y esté loggueada/li>
+     *  <li>Entity: Retorna un perfil según la persona que haga la petición y esté loggueada</li>
      *  </ul>
      */
     @GetMapping(path = "perfil")//TODO : check el endpoint desde el server, verificar si el admin puede acceder al perfil de cualquier usuario
@@ -162,7 +198,17 @@ public class UserController implements Constantes {
 
 
     /** Metodo findById
+     *
      *  Recibe 2 parametros y valida segun el rol y los parametros la respuesta a emitir, en caso contrario, retorna una respuesta por falta de permisos o ID inexistente, segun aplique
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param value en referencia a una Entidad definida con la que deseemos especificar el Listado, las cuales pueden ser :
+     *              @param User en referencia a las Entidadades totales de Admin y Tecnico.
+     *              @param Tarea en referencia a la Entidad Tarea.
+     *              @param Ubicacion en referencia a la Entidad Ubicacion.
+     *              @param Coordenada en referencia a la Entidad Coordenada.
+     *              @param Mensaje en referencia a la Entidad Mensaje.
+     * @param id en referencia al Id especifico de la entidad que se desea obtener.
      * @return <ul>
      *  <li>ResponseEntity: Retorna una entidad segun el parametro indicado, o en caso contrario una respuesta indicando el fallo</li>
      *  </ul>
@@ -178,8 +224,18 @@ public class UserController implements Constantes {
 
     /**
      * Metodo que recibe un parametro y valida segun el rol y el parametro
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param value en referencia a una Entidad definida con la que deseemos especificar el Listado, las cuales pueden ser :
+     *              @param User en referencia a las Entidadades totales de Admin y Tecnico.
+     *              @param Admin en referencia a la Entidad Admin.
+     *              @param Tecnico en referencia a la Entidad Tecnico.
+     *              @param Tarea en referencia a la Entidad Tarea.
+     *              @param Ubicacion en referencia a la Entidad Ubicacion.
+     *              @param Coordenada en referencia a la Entidad Coordenada.
+     *              @param Mensaje en referencia a la Entidad Mensaje.
      * @return <ul>
-     *  <li>Lista de Valores: Retorna una lista segun el parametro indicado</li>
+     *  <li>Lista de Valores: Retorna una lista segun el parametro indicado por entidad</li>
      *  </ul>
      */
     @GetMapping(path = "results/{value}")// todo, controlar mejor la respuesta para devolver errores y resultados vacios
@@ -192,9 +248,14 @@ public class UserController implements Constantes {
 
 
     /**
-     * Metodo FilterBy que recibe un parametro y valida segun el rol y el parametro
+     * Metodo FilterBy recibe un parametro y valida segun el rol y el parametro
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param value en referencia al  filtrao especifico a aplicar
+     * @param object en referencia al valor especifica del filtro
      * @return <ul>
-     *  <li>Lista de Valores: Retorna una lista de tares según el usuario : Tecnico, las que tenga asignadas, Admin, por username del Tecnico</li>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el value : Username Tecnico, las que tenga asignadas, Admin, Listado de Tareas por username del Tecnico</li>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el value : Nombre Tecnico, las que tenga asignadas, Admin, Listado de Tareas por Nombre del Tecnico</li>
      *  </ul>
      */
     @GetMapping(path = "tareas/filterBy/{value}")
@@ -203,12 +264,6 @@ public class UserController implements Constantes {
 
         return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByValue(value, object)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
-    /*@GetMapping(path = "tareas/filterBy/{value}")
-    public ResponseEntity<List <Object>> filterBy(Principal principal, @PathVariable("value") String value, @RequestBody Object object){
-        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
-
-        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByValue(value, object)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
-    }*/
 
     /*************************************************************
      *                   UPDATE VALUES FROM A OBJET IN DATABASE
@@ -217,6 +272,8 @@ public class UserController implements Constantes {
     /**
      * Metodo que recibe 3 parametros y realiza el update correspondiente, validando el rol que realiza la request, el id y el objeto a actualizar
      *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param userDTO en referencia al Objeto nuevo que le indicamos en la request con todos los valores a actualizar contenidos
      * @return <ul>
      * <li>Una entidad: El objeto con todos sus campos actualizados</li>
      * </ul>
@@ -233,7 +290,7 @@ public class UserController implements Constantes {
      *
      * El metodo centraliza en un unico Request  todos los Services de Update aplicados por cada entidad y que administra userService
      *
-     * @param principal en referencia al Usuario en sesión actual
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
      * @param value en referencia a una Entidad definida con la que deseemos especificar el Update, las cuales pueden ser :
      *              @param Admin en referencia a la Entidad Admin.
      *              @param Tecnico en referencia a la Entidad Tecnico.
@@ -245,7 +302,7 @@ public class UserController implements Constantes {
      * @param object en referencia al Objeto nuevo que le indicamos en la request con todos los valores a actualizar contenidos
      *
      * @return <ul>
-     * <li>Una entidad: El objeto con todos sus campos actualizados</li>
+     * <li>Response: El objeto con todos sus campos actualizados, en caso de ser satisfactorio o  un mensaje indicando error</li>
      * </ul>
      */
     @PutMapping(path = "update/value/{value}/id/{id}")
@@ -270,8 +327,19 @@ public class UserController implements Constantes {
     /**
      * Metodo que recibe 3 parametros y realiza el delete correspondiente, validando el rol que realiza la request, la clase a la que refiere la elimincación y la existencia del ID correspondiente a esa clase en la base de datos.
      *
+     * El metodo centraliza en un unico Request  todos los Services de Update aplicados por cada entidad y que administra userService
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param typus en referencia a una Entidad definida con la que deseemos especificar el Delete, las cuales pueden ser :
+     *              @param User en referencia a la Entidad Admin y Tecnico.
+     *              @param Tarea en referencia a la Entidad Tarea.
+     *              @param Ubicacion en referencia a la Entidad Ubicacion.
+     *              @param Coordenada en referencia a la Entidad Coordenada.
+     *              @param Mensaje en referencia a la Entidad Mensaje.
+     * @param id en referencia al Id especifico de la entidad que se desea eliminar
      * @return <ul>
-     * <li>String: Con la respuesta de la consulta y según el caso exitoso o no de la eliminacion</li>
+     * <li>Response: El HTTPStatus con el codigo 'NO_CONTENT' (204), en caso de ser satisfactorio o  un mensaje indicando error</li>
+     * </ul>
      * </ul>
      */
     @DeleteMapping("/delete/typus/{typus}/id/{id}")
