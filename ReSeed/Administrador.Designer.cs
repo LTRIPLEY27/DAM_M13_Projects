@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Administrador));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             panel1 = new Panel();
-            gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             boton_registroCoordenadas = new Button();
             panel2 = new Panel();
             label5 = new Label();
@@ -63,20 +63,23 @@
             panel5 = new Panel();
             button3_ACTUALIZARLISTA = new Button();
             label14 = new Label();
-            button2 = new Button();
-            button1 = new Button();
+            button_ELIMINAR = new Button();
+            button_MODIFICAR = new Button();
             dataGridView_usuarios = new DataGridView();
             id_user = new DataGridViewTextBoxColumn();
             user_name = new DataGridViewTextBoxColumn();
             email = new DataGridViewTextBoxColumn();
             label13 = new Label();
             panel6 = new Panel();
+            textBox_SECRET_ID = new TextBox();
+            label_SECRET_ID = new Label();
+            button_VALIDAMODIFICACION = new Button();
             checkBox_ADMIN = new CheckBox();
             checkBox_TECNIC = new CheckBox();
             label_rol = new Label();
             textBox_user = new TextBox();
             label16 = new Label();
-            button_CANCELAR = new Button();
+            button_CANCELAR_USUARIOS = new Button();
             button_ENVIAR = new Button();
             textBox_PASSWORD_CONFIRM = new TextBox();
             textBox_PASSWORD = new TextBox();
@@ -92,6 +95,23 @@
             label3 = new Label();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
+            tabPage5 = new TabPage();
+            button_MIPERFIL_MODIFICA_PASSWORD = new Button();
+            label18 = new Label();
+            panel7 = new Panel();
+            textBox_CONFIRMA_PASSWORDPERFIL = new TextBox();
+            textBox_PASSWORDPERFIL = new TextBox();
+            textBox_telefonoMIPERFIL = new TextBox();
+            textBox_USUARIOPERFIL = new TextBox();
+            textBox_IDPERFIL = new TextBox();
+            label_CONFIRMAPASSWORD_MIPERFIL = new Label();
+            label_MIPERFIL_PASSWORD = new Label();
+            label_MIPERFIL_TELEFONO = new Label();
+            label_IDMIPERFIL = new Label();
+            label_MIPERFIL = new Label();
+            tabPage6 = new TabPage();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ConfigMapa.SuspendLayout();
@@ -103,6 +123,8 @@
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView_usuarios).BeginInit();
             panel6.SuspendLayout();
+            tabPage5.SuspendLayout();
+            panel7.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
@@ -115,33 +137,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(584, 622);
             panel1.TabIndex = 0;
-            // 
-            // gMapControl1
-            // 
-            gMapControl1.Bearing = 0F;
-            gMapControl1.CanDragMap = true;
-            gMapControl1.EmptyTileColor = Color.Navy;
-            gMapControl1.GrayScaleMode = false;
-            gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            gMapControl1.LevelsKeepInMemory = 5;
-            gMapControl1.Location = new Point(20, 18);
-            gMapControl1.MarkersEnabled = true;
-            gMapControl1.MaxZoom = 2;
-            gMapControl1.MinZoom = 2;
-            gMapControl1.MouseWheelZoomEnabled = true;
-            gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            gMapControl1.Name = "gMapControl1";
-            gMapControl1.NegativeMode = false;
-            gMapControl1.PolygonsEnabled = true;
-            gMapControl1.RetryLoadTile = 0;
-            gMapControl1.RoutesEnabled = true;
-            gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
-            gMapControl1.ShowTileGridLines = false;
-            gMapControl1.Size = new Size(548, 432);
-            gMapControl1.TabIndex = 3;
-            gMapControl1.Zoom = 0D;
-            gMapControl1.MouseDoubleClick += gMapControl1_MouseDoubleClick;
             // 
             // boton_registroCoordenadas
             // 
@@ -218,6 +213,8 @@
             ConfigMapa.Controls.Add(tabPage2);
             ConfigMapa.Controls.Add(tabPage3);
             ConfigMapa.Controls.Add(tabPage4);
+            ConfigMapa.Controls.Add(tabPage5);
+            ConfigMapa.Controls.Add(tabPage6);
             ConfigMapa.Font = new Font("Tahoma", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
             ConfigMapa.Location = new Point(-2, 0);
             ConfigMapa.Name = "ConfigMapa";
@@ -408,6 +405,7 @@
             // comboBox_tareas
             // 
             comboBox_tareas.FormattingEnabled = true;
+            comboBox_tareas.Items.AddRange(new object[] { "LIMPIEZA", "DESBROZAR", "REPLANTAR" });
             comboBox_tareas.Location = new Point(22, 41);
             comboBox_tareas.Name = "comboBox_tareas";
             comboBox_tareas.Size = new Size(154, 24);
@@ -440,14 +438,14 @@
             panel5.BackgroundImageLayout = ImageLayout.Stretch;
             panel5.Controls.Add(button3_ACTUALIZARLISTA);
             panel5.Controls.Add(label14);
-            panel5.Controls.Add(button2);
-            panel5.Controls.Add(button1);
+            panel5.Controls.Add(button_ELIMINAR);
+            panel5.Controls.Add(button_MODIFICAR);
             panel5.Controls.Add(dataGridView_usuarios);
             panel5.Controls.Add(label13);
             panel5.Controls.Add(panel6);
-            panel5.Location = new Point(145, 124);
+            panel5.Location = new Point(145, 89);
             panel5.Name = "panel5";
-            panel5.Size = new Size(839, 515);
+            panel5.Size = new Size(839, 550);
             panel5.TabIndex = 0;
             // 
             // button3_ACTUALIZARLISTA
@@ -471,38 +469,38 @@
             label14.TabIndex = 6;
             label14.Text = "LISTADO DE USUARIOS";
             // 
-            // button2
+            // button_ELIMINAR
             // 
-            button2.Location = new Point(598, 473);
-            button2.Name = "button2";
-            button2.Size = new Size(208, 28);
-            button2.TabIndex = 5;
-            button2.Text = "Eliminar usuario";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            button_ELIMINAR.Location = new Point(598, 473);
+            button_ELIMINAR.Name = "button_ELIMINAR";
+            button_ELIMINAR.Size = new Size(208, 28);
+            button_ELIMINAR.TabIndex = 5;
+            button_ELIMINAR.Text = "Eliminar usuario";
+            button_ELIMINAR.UseVisualStyleBackColor = true;
+            button_ELIMINAR.Click += button2_Click;
             // 
-            // button1
+            // button_MODIFICAR
             // 
-            button1.Location = new Point(598, 439);
-            button1.Name = "button1";
-            button1.Size = new Size(208, 28);
-            button1.TabIndex = 4;
-            button1.Text = "Modificar Usuario";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click_1;
+            button_MODIFICAR.Location = new Point(598, 439);
+            button_MODIFICAR.Name = "button_MODIFICAR";
+            button_MODIFICAR.Size = new Size(208, 28);
+            button_MODIFICAR.TabIndex = 4;
+            button_MODIFICAR.Text = "Modificar Usuario";
+            button_MODIFICAR.UseVisualStyleBackColor = true;
+            button_MODIFICAR.Click += button1_Click_1;
             // 
             // dataGridView_usuarios
             // 
             dataGridView_usuarios.AllowUserToAddRows = false;
             dataGridView_usuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Tahoma", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridView_usuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Tahoma", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dataGridView_usuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dataGridView_usuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView_usuarios.Columns.AddRange(new DataGridViewColumn[] { id_user, user_name, email });
             dataGridView_usuarios.Location = new Point(432, 57);
@@ -537,7 +535,7 @@
             label13.AutoSize = true;
             label13.BackColor = Color.IndianRed;
             label13.Font = new Font("Tahoma", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            label13.Location = new Point(62, 18);
+            label13.Location = new Point(66, 29);
             label13.Name = "label13";
             label13.Size = new Size(312, 19);
             label13.TabIndex = 1;
@@ -546,12 +544,15 @@
             // panel6
             // 
             panel6.BackColor = SystemColors.ActiveCaption;
+            panel6.Controls.Add(textBox_SECRET_ID);
+            panel6.Controls.Add(label_SECRET_ID);
+            panel6.Controls.Add(button_VALIDAMODIFICACION);
             panel6.Controls.Add(checkBox_ADMIN);
             panel6.Controls.Add(checkBox_TECNIC);
             panel6.Controls.Add(label_rol);
             panel6.Controls.Add(textBox_user);
             panel6.Controls.Add(label16);
-            panel6.Controls.Add(button_CANCELAR);
+            panel6.Controls.Add(button_CANCELAR_USUARIOS);
             panel6.Controls.Add(button_ENVIAR);
             panel6.Controls.Add(textBox_PASSWORD_CONFIRM);
             panel6.Controls.Add(textBox_PASSWORD);
@@ -565,15 +566,44 @@
             panel6.Controls.Add(label9);
             panel6.Controls.Add(label8);
             panel6.Controls.Add(label3);
-            panel6.Location = new Point(26, 29);
+            panel6.Location = new Point(23, 40);
             panel6.Name = "panel6";
-            panel6.Size = new Size(380, 392);
+            panel6.Size = new Size(380, 480);
             panel6.TabIndex = 0;
+            // 
+            // textBox_SECRET_ID
+            // 
+            textBox_SECRET_ID.Enabled = false;
+            textBox_SECRET_ID.Location = new Point(75, 20);
+            textBox_SECRET_ID.Name = "textBox_SECRET_ID";
+            textBox_SECRET_ID.Size = new Size(41, 23);
+            textBox_SECRET_ID.TabIndex = 21;
+            textBox_SECRET_ID.Visible = false;
+            // 
+            // label_SECRET_ID
+            // 
+            label_SECRET_ID.AutoSize = true;
+            label_SECRET_ID.Location = new Point(43, 23);
+            label_SECRET_ID.Name = "label_SECRET_ID";
+            label_SECRET_ID.Size = new Size(30, 16);
+            label_SECRET_ID.TabIndex = 20;
+            label_SECRET_ID.Text = "ID :";
+            label_SECRET_ID.Visible = false;
+            // 
+            // button_VALIDAMODIFICACION
+            // 
+            button_VALIDAMODIFICACION.Location = new Point(187, 416);
+            button_VALIDAMODIFICACION.Name = "button_VALIDAMODIFICACION";
+            button_VALIDAMODIFICACION.Size = new Size(151, 41);
+            button_VALIDAMODIFICACION.TabIndex = 19;
+            button_VALIDAMODIFICACION.Text = "VALIDA MODIFICACIÓN";
+            button_VALIDAMODIFICACION.UseVisualStyleBackColor = true;
+            button_VALIDAMODIFICACION.Click += button_VALIDAMODIFICACION_Click;
             // 
             // checkBox_ADMIN
             // 
             checkBox_ADMIN.AutoSize = true;
-            checkBox_ADMIN.Location = new Point(187, 281);
+            checkBox_ADMIN.Location = new Point(187, 300);
             checkBox_ADMIN.Name = "checkBox_ADMIN";
             checkBox_ADMIN.Size = new Size(135, 20);
             checkBox_ADMIN.TabIndex = 18;
@@ -583,7 +613,7 @@
             // checkBox_TECNIC
             // 
             checkBox_TECNIC.AutoSize = true;
-            checkBox_TECNIC.Location = new Point(186, 259);
+            checkBox_TECNIC.Location = new Point(186, 278);
             checkBox_TECNIC.Name = "checkBox_TECNIC";
             checkBox_TECNIC.Size = new Size(69, 20);
             checkBox_TECNIC.TabIndex = 17;
@@ -593,7 +623,7 @@
             // label_rol
             // 
             label_rol.AutoSize = true;
-            label_rol.Location = new Point(45, 259);
+            label_rol.Location = new Point(45, 278);
             label_rol.Name = "label_rol";
             label_rol.Size = new Size(41, 16);
             label_rol.TabIndex = 16;
@@ -601,7 +631,7 @@
             // 
             // textBox_user
             // 
-            textBox_user.Location = new Point(185, 93);
+            textBox_user.Location = new Point(185, 112);
             textBox_user.Name = "textBox_user";
             textBox_user.Size = new Size(154, 23);
             textBox_user.TabIndex = 15;
@@ -609,26 +639,27 @@
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(43, 99);
+            label16.Location = new Point(43, 118);
             label16.Name = "label16";
             label16.Size = new Size(73, 16);
             label16.TabIndex = 14;
             label16.Text = "USUARIO :";
             // 
-            // button_CANCELAR
+            // button_CANCELAR_USUARIOS
             // 
-            button_CANCELAR.Location = new Point(36, 324);
-            button_CANCELAR.Name = "button_CANCELAR";
-            button_CANCELAR.Size = new Size(85, 50);
-            button_CANCELAR.TabIndex = 13;
-            button_CANCELAR.Text = "CANCELAR";
-            button_CANCELAR.UseVisualStyleBackColor = true;
+            button_CANCELAR_USUARIOS.Location = new Point(26, 355);
+            button_CANCELAR_USUARIOS.Name = "button_CANCELAR_USUARIOS";
+            button_CANCELAR_USUARIOS.Size = new Size(119, 102);
+            button_CANCELAR_USUARIOS.TabIndex = 13;
+            button_CANCELAR_USUARIOS.Text = "CANCELAR";
+            button_CANCELAR_USUARIOS.UseVisualStyleBackColor = true;
+            button_CANCELAR_USUARIOS.Click += button_CANCELAR_USUARIOS_Click;
             // 
             // button_ENVIAR
             // 
-            button_ENVIAR.Location = new Point(185, 325);
+            button_ENVIAR.Location = new Point(187, 355);
             button_ENVIAR.Name = "button_ENVIAR";
-            button_ENVIAR.Size = new Size(154, 50);
+            button_ENVIAR.Size = new Size(153, 43);
             button_ENVIAR.TabIndex = 12;
             button_ENVIAR.Text = "GUARDAR";
             button_ENVIAR.UseVisualStyleBackColor = true;
@@ -636,7 +667,7 @@
             // 
             // textBox_PASSWORD_CONFIRM
             // 
-            textBox_PASSWORD_CONFIRM.Location = new Point(186, 227);
+            textBox_PASSWORD_CONFIRM.Location = new Point(186, 246);
             textBox_PASSWORD_CONFIRM.Name = "textBox_PASSWORD_CONFIRM";
             textBox_PASSWORD_CONFIRM.PasswordChar = '*';
             textBox_PASSWORD_CONFIRM.Size = new Size(153, 23);
@@ -644,7 +675,7 @@
             // 
             // textBox_PASSWORD
             // 
-            textBox_PASSWORD.Location = new Point(185, 193);
+            textBox_PASSWORD.Location = new Point(185, 212);
             textBox_PASSWORD.Name = "textBox_PASSWORD";
             textBox_PASSWORD.PasswordChar = '*';
             textBox_PASSWORD.Size = new Size(154, 23);
@@ -652,28 +683,28 @@
             // 
             // textBox_MAIL
             // 
-            textBox_MAIL.Location = new Point(186, 159);
+            textBox_MAIL.Location = new Point(186, 178);
             textBox_MAIL.Name = "textBox_MAIL";
             textBox_MAIL.Size = new Size(154, 23);
             textBox_MAIL.TabIndex = 9;
             // 
             // textBox_TELEFONO
             // 
-            textBox_TELEFONO.Location = new Point(185, 129);
+            textBox_TELEFONO.Location = new Point(185, 148);
             textBox_TELEFONO.Name = "textBox_TELEFONO";
             textBox_TELEFONO.Size = new Size(154, 23);
             textBox_TELEFONO.TabIndex = 8;
             // 
             // textBox_APELLIDO
             // 
-            textBox_APELLIDO.Location = new Point(185, 61);
+            textBox_APELLIDO.Location = new Point(185, 80);
             textBox_APELLIDO.Name = "textBox_APELLIDO";
             textBox_APELLIDO.Size = new Size(154, 23);
             textBox_APELLIDO.TabIndex = 7;
             // 
             // textBox_NOMBRE
             // 
-            textBox_NOMBRE.Location = new Point(185, 28);
+            textBox_NOMBRE.Location = new Point(185, 47);
             textBox_NOMBRE.Name = "textBox_NOMBRE";
             textBox_NOMBRE.Size = new Size(154, 23);
             textBox_NOMBRE.TabIndex = 6;
@@ -681,7 +712,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(43, 230);
+            label12.Location = new Point(43, 249);
             label12.Name = "label12";
             label12.Size = new Size(137, 16);
             label12.TabIndex = 5;
@@ -690,7 +721,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(43, 196);
+            label11.Location = new Point(43, 215);
             label11.Name = "label11";
             label11.Size = new Size(90, 16);
             label11.TabIndex = 4;
@@ -699,7 +730,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(45, 162);
+            label10.Location = new Point(45, 181);
             label10.Name = "label10";
             label10.Size = new Size(49, 16);
             label10.TabIndex = 3;
@@ -708,7 +739,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(45, 132);
+            label9.Location = new Point(45, 151);
             label9.Name = "label9";
             label9.Size = new Size(76, 16);
             label9.TabIndex = 2;
@@ -717,7 +748,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(43, 64);
+            label8.Location = new Point(43, 83);
             label8.Name = "label8";
             label8.Size = new Size(78, 16);
             label8.TabIndex = 1;
@@ -726,7 +757,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(43, 31);
+            label3.Location = new Point(43, 50);
             label3.Name = "label3";
             label3.Size = new Size(68, 16);
             label3.TabIndex = 0;
@@ -752,6 +783,182 @@
             tabPage4.Text = "Comentarios";
             tabPage4.UseVisualStyleBackColor = true;
             // 
+            // tabPage5
+            // 
+            tabPage5.Controls.Add(button_MIPERFIL_MODIFICA_PASSWORD);
+            tabPage5.Controls.Add(label18);
+            tabPage5.Controls.Add(panel7);
+            tabPage5.Location = new Point(4, 25);
+            tabPage5.Name = "tabPage5";
+            tabPage5.Size = new Size(1166, 765);
+            tabPage5.TabIndex = 4;
+            tabPage5.Text = "Mi perfil";
+            tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // button_MIPERFIL_MODIFICA_PASSWORD
+            // 
+            button_MIPERFIL_MODIFICA_PASSWORD.BackColor = Color.RosyBrown;
+            button_MIPERFIL_MODIFICA_PASSWORD.Location = new Point(108, 264);
+            button_MIPERFIL_MODIFICA_PASSWORD.Name = "button_MIPERFIL_MODIFICA_PASSWORD";
+            button_MIPERFIL_MODIFICA_PASSWORD.Size = new Size(412, 59);
+            button_MIPERFIL_MODIFICA_PASSWORD.TabIndex = 11;
+            button_MIPERFIL_MODIFICA_PASSWORD.Text = "MODIFICA";
+            button_MIPERFIL_MODIFICA_PASSWORD.UseVisualStyleBackColor = false;
+            button_MIPERFIL_MODIFICA_PASSWORD.Click += button_MIPERFIL_MODIFICA_PASSWORD_Click;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.BackColor = Color.DarkGray;
+            label18.Location = new Point(104, 37);
+            label18.Name = "label18";
+            label18.Size = new Size(140, 16);
+            label18.TabIndex = 3;
+            label18.Text = "MODIFICAR USUARIO";
+            // 
+            // panel7
+            // 
+            panel7.BackColor = Color.Silver;
+            panel7.Controls.Add(textBox_CONFIRMA_PASSWORDPERFIL);
+            panel7.Controls.Add(textBox_PASSWORDPERFIL);
+            panel7.Controls.Add(textBox_telefonoMIPERFIL);
+            panel7.Controls.Add(textBox_USUARIOPERFIL);
+            panel7.Controls.Add(textBox_IDPERFIL);
+            panel7.Controls.Add(label_CONFIRMAPASSWORD_MIPERFIL);
+            panel7.Controls.Add(label_MIPERFIL_PASSWORD);
+            panel7.Controls.Add(label_MIPERFIL_TELEFONO);
+            panel7.Controls.Add(label_IDMIPERFIL);
+            panel7.Controls.Add(label_MIPERFIL);
+            panel7.Location = new Point(106, 73);
+            panel7.Name = "panel7";
+            panel7.Size = new Size(414, 185);
+            panel7.TabIndex = 0;
+            // 
+            // textBox_CONFIRMA_PASSWORDPERFIL
+            // 
+            textBox_CONFIRMA_PASSWORDPERFIL.Location = new Point(195, 146);
+            textBox_CONFIRMA_PASSWORDPERFIL.Name = "textBox_CONFIRMA_PASSWORDPERFIL";
+            textBox_CONFIRMA_PASSWORDPERFIL.PasswordChar = '*';
+            textBox_CONFIRMA_PASSWORDPERFIL.Size = new Size(151, 23);
+            textBox_CONFIRMA_PASSWORDPERFIL.TabIndex = 9;
+            // 
+            // textBox_PASSWORDPERFIL
+            // 
+            textBox_PASSWORDPERFIL.Location = new Point(195, 115);
+            textBox_PASSWORDPERFIL.Name = "textBox_PASSWORDPERFIL";
+            textBox_PASSWORDPERFIL.PasswordChar = '*';
+            textBox_PASSWORDPERFIL.Size = new Size(151, 23);
+            textBox_PASSWORDPERFIL.TabIndex = 8;
+            // 
+            // textBox_telefonoMIPERFIL
+            // 
+            textBox_telefonoMIPERFIL.Location = new Point(195, 84);
+            textBox_telefonoMIPERFIL.Name = "textBox_telefonoMIPERFIL";
+            textBox_telefonoMIPERFIL.Size = new Size(151, 23);
+            textBox_telefonoMIPERFIL.TabIndex = 7;
+            // 
+            // textBox_USUARIOPERFIL
+            // 
+            textBox_USUARIOPERFIL.Enabled = false;
+            textBox_USUARIOPERFIL.Location = new Point(195, 55);
+            textBox_USUARIOPERFIL.Name = "textBox_USUARIOPERFIL";
+            textBox_USUARIOPERFIL.Size = new Size(151, 23);
+            textBox_USUARIOPERFIL.TabIndex = 6;
+            // 
+            // textBox_IDPERFIL
+            // 
+            textBox_IDPERFIL.Enabled = false;
+            textBox_IDPERFIL.Location = new Point(195, 26);
+            textBox_IDPERFIL.Name = "textBox_IDPERFIL";
+            textBox_IDPERFIL.Size = new Size(151, 23);
+            textBox_IDPERFIL.TabIndex = 5;
+            // 
+            // label_CONFIRMAPASSWORD_MIPERFIL
+            // 
+            label_CONFIRMAPASSWORD_MIPERFIL.AutoSize = true;
+            label_CONFIRMAPASSWORD_MIPERFIL.Location = new Point(14, 149);
+            label_CONFIRMAPASSWORD_MIPERFIL.Name = "label_CONFIRMAPASSWORD_MIPERFIL";
+            label_CONFIRMAPASSWORD_MIPERFIL.Size = new Size(170, 16);
+            label_CONFIRMAPASSWORD_MIPERFIL.TabIndex = 4;
+            label_CONFIRMAPASSWORD_MIPERFIL.Text = "CONFIRMA CONTRASEÑA :";
+            // 
+            // label_MIPERFIL_PASSWORD
+            // 
+            label_MIPERFIL_PASSWORD.AutoSize = true;
+            label_MIPERFIL_PASSWORD.Location = new Point(14, 118);
+            label_MIPERFIL_PASSWORD.Name = "label_MIPERFIL_PASSWORD";
+            label_MIPERFIL_PASSWORD.Size = new Size(100, 16);
+            label_MIPERFIL_PASSWORD.TabIndex = 3;
+            label_MIPERFIL_PASSWORD.Text = "CONTRASEÑA :";
+            // 
+            // label_MIPERFIL_TELEFONO
+            // 
+            label_MIPERFIL_TELEFONO.AutoSize = true;
+            label_MIPERFIL_TELEFONO.Location = new Point(14, 87);
+            label_MIPERFIL_TELEFONO.Name = "label_MIPERFIL_TELEFONO";
+            label_MIPERFIL_TELEFONO.Size = new Size(76, 16);
+            label_MIPERFIL_TELEFONO.TabIndex = 2;
+            label_MIPERFIL_TELEFONO.Text = "TELEFONO :";
+            // 
+            // label_IDMIPERFIL
+            // 
+            label_IDMIPERFIL.AutoSize = true;
+            label_IDMIPERFIL.Location = new Point(14, 29);
+            label_IDMIPERFIL.Name = "label_IDMIPERFIL";
+            label_IDMIPERFIL.Size = new Size(30, 16);
+            label_IDMIPERFIL.TabIndex = 1;
+            label_IDMIPERFIL.Text = "ID :";
+            // 
+            // label_MIPERFIL
+            // 
+            label_MIPERFIL.AutoSize = true;
+            label_MIPERFIL.Location = new Point(14, 58);
+            label_MIPERFIL.Name = "label_MIPERFIL";
+            label_MIPERFIL.Size = new Size(73, 16);
+            label_MIPERFIL.TabIndex = 0;
+            label_MIPERFIL.Text = "USUARIO :";
+            // 
+            // tabPage6
+            // 
+            tabPage6.Location = new Point(4, 25);
+            tabPage6.Name = "tabPage6";
+            tabPage6.Size = new Size(1166, 765);
+            tabPage6.TabIndex = 5;
+            tabPage6.Text = "Gestión Administrador";
+            tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(61, 4);
+            // 
+            // gMapControl1
+            // 
+            gMapControl1.Bearing = 0F;
+            gMapControl1.CanDragMap = true;
+            gMapControl1.EmptyTileColor = Color.Navy;
+            gMapControl1.GrayScaleMode = false;
+            gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            gMapControl1.LevelsKeepInMemory = 5;
+            gMapControl1.Location = new Point(20, 21);
+            gMapControl1.MarkersEnabled = true;
+            gMapControl1.MaxZoom = 2;
+            gMapControl1.MinZoom = 2;
+            gMapControl1.MouseWheelZoomEnabled = true;
+            gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            gMapControl1.Name = "gMapControl1";
+            gMapControl1.NegativeMode = false;
+            gMapControl1.PolygonsEnabled = true;
+            gMapControl1.RetryLoadTile = 0;
+            gMapControl1.RoutesEnabled = true;
+            gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
+            gMapControl1.ShowTileGridLines = false;
+            gMapControl1.Size = new Size(548, 429);
+            gMapControl1.TabIndex = 3;
+            gMapControl1.Zoom = 0D;
+            gMapControl1.MouseDoubleClick += gMapControl1_MouseDoubleClick;
+            // 
             // Administrador
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -760,6 +967,7 @@
             ClientSize = new Size(1115, 790);
             Controls.Add(ConfigMapa);
             Name = "Administrador";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "ADMINISTRADOR";
             panel1.ResumeLayout(false);
             panel2.ResumeLayout(false);
@@ -777,6 +985,10 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView_usuarios).EndInit();
             panel6.ResumeLayout(false);
             panel6.PerformLayout();
+            tabPage5.ResumeLayout(false);
+            tabPage5.PerformLayout();
+            panel7.ResumeLayout(false);
+            panel7.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -826,7 +1038,7 @@
         private Label label8;
         private Label label3;
         private Label label12;
-        private Button button_CANCELAR;
+        private Button button_CANCELAR_USUARIOS;
         private Button button_ENVIAR;
         private Label label13;
         private TextBox textBox_user;
@@ -836,15 +1048,34 @@
         private DataGridViewTextBoxColumn id_user;
         private DataGridViewTextBoxColumn user_name;
         private DataGridViewTextBoxColumn email;
-        private Button button2;
-        private Button button1;
+        private Button button_ELIMINAR;
+        private Button button_MODIFICAR;
         private Label label14;
         private Button button3_ACTUALIZARLISTA;
-        private GMap.NET.WindowsForms.GMapControl gMapControl1;
-        public TextBox textBox_TELEFONO;
-        public TextBox textBox_PASSWORD_CONFIRM;
-        public TextBox textBox_PASSWORD;
         public CheckBox checkBox_ADMIN;
         public CheckBox checkBox_TECNIC;
+        private Button button_VALIDAMODIFICACION;
+        private TextBox textBox_SECRET_ID;
+        private Label label_SECRET_ID;
+        private TabPage tabPage5;
+        private Label label18;
+        private Panel panel7;
+        private Label label_CONFIRMAPASSWORD_MIPERFIL;
+        private Label label_MIPERFIL_PASSWORD;
+        private Label label_MIPERFIL_TELEFONO;
+        private Label label_IDMIPERFIL;
+        private Label label_MIPERFIL;
+        private ContextMenuStrip contextMenuStrip1;
+        private Button button_MIPERFIL_MODIFICA_PASSWORD;
+        private TabPage tabPage6;
+        public TextBox textBox_CONFIRMA_PASSWORDPERFIL;
+        public TextBox textBox_PASSWORDPERFIL;
+        public TextBox textBox_telefonoMIPERFIL;
+        public TextBox textBox_USUARIOPERFIL;
+        public TextBox textBox_IDPERFIL;
+        private TextBox textBox_TELEFONO;
+        private TextBox textBox_PASSWORD_CONFIRM;
+        private TextBox textBox_PASSWORD;
+        private GMap.NET.WindowsForms.GMapControl gMapControl1;
     }
 }

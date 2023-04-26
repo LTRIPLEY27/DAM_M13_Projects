@@ -19,36 +19,61 @@ using Newtonsoft.Json;
 using System.Security.Policy;
 using System.Text.Json.Nodes;
 using System.Text.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ReSeed
 {
     public partial class Administrador : Form
     {
+
         //URLs-END POINT
         private String URL_registrarUsuarios = "https://t-sunlight-381215.lm.r.appspot.com/register";
         private String URL_usuariosRegistrados = "https://t-sunlight-381215.lm.r.appspot.com/results/usuarios";
         private String URL_elimarUsuario = "https://t-sunlight-381215.lm.r.appspot.com/delete/typus/usuario/id/";//A falta de añador a ID del usuario
-        private string URL_modificarUsuario = " https://t-sunlight381215.lm.r.appspot.com/update/value/usuario/id/";
+        private String URL_modificarUsuario = "https://t-sunlight-381215.lm.r.appspot.com/update/value/";//tecnico/id/ o admin/id/
+        private String URL_modificarUsuarioLogueado = "https://t-sunlight-381215.lm.r.appspot.com/update-user";
 
         //VARIABLES GLOBALES MAPAS
-        private GMarkerGoogle marcador;//Instanciamos marcadores
+        //ivate GMarkerGoogle marcador;//Instanciamos marcadores
         private GMapOverlay capaMarcado;//Instanciamos la capa donde se añadirán los marcadores
 
         //OBJETO USUARIO
         private Usuario usuario;
         private Conexion_BD conexion = new Conexion_BD();
+        Utilidades utilidades = new Utilidades();
 
 
         //VARIABLE PARA ALMACENAR TOKEN QUE RECIBO DE LA CLASE Conexion_BD
         private String TOKEN_form3;
+        private String usuarioLogueado;
 
         //PASAMOS AL CONTRUCTOR FORM3 EL STRING QUE RECIBIREMOS
-        public Administrador(String TOKEN_Login)
+        public Administrador(String TOKEN_Login, String usuarioLogin)
         {
             TOKEN_form3 = TOKEN_Login;//Indicamos que el String que recibiremos será igual al
+            usuarioLogueado = usuarioLogin;
 
             InitializeComponent();
+
             //CARGAMOS MAPA Y CARACTERISTICAS AL INICIAR EL FORM
+            mapaInicio();
+
+            //CARGAMOS REGISTRO DE USUARIOS AL ARRANCAR EL FORM
+            mostrarRegistro();
+
+            //CARGAMOS LOS DATOS DEL PERFIL
+            datosPerfil();
+
+            //BOTÓN VALIDA_ACTUALIZACIÓN USUARIO ESTARA DESACTIVADO POR DEFECTO
+            button_VALIDAMODIFICACION.Enabled = false;
+
+        }
+
+        //********************** ALTA TAREAS ************************************
+
+        #region MAPA PRECARGA INICIAL
+        public void mapaInicio()
+        {
             gMapControl1.DragButton = MouseButtons.Left;
             gMapControl1.CanDragMap = true;
             gMapControl1.MapProvider = GMapProviders.GoogleMap;
@@ -58,10 +83,8 @@ namespace ReSeed
             gMapControl1.Zoom = 5;//zoom que inicializaremos por defecto (5- dado que queremos que se centre en España)
             gMapControl1.AutoScroll = true;
             gMapControl1.ShowTileGridLines = false;//Quitamos las lineas de coordenadas
-            //CARGAMOS REGISTRO DE USUARIOS AL ARRANCAR EL FORM
-            mostrarRegistro();
-
         }
+        #endregion
 
         #region BOTÓN CIERRE APLICACIÓN
         /*
@@ -217,6 +240,8 @@ namespace ReSeed
         }
         #endregion
 
+        //******************** GESTIÓN USUARIOS *********************************
+
         #region ALTA DE USUARIOS
         private void button_ENVIAR_Click(object sender, EventArgs e)
         {
@@ -307,7 +332,11 @@ namespace ReSeed
                 String user = listaUsuarios[i].User;
                 String email = listaUsuarios[i].Email;
 
+                //Agregamos Información al Datagrid de usuarios
                 dataGridView_usuarios.Rows.Add(id, user, email);
+
+                //Añadimos los usuarios al Combobox_usuarios para asignarle tareas
+                comboBox_usuarios.Items.Add(id + " " + user);
 
             }
         }
@@ -376,26 +405,282 @@ namespace ReSeed
         #region MODIFICAR USUARIO
         /*
          * Botón para MODIFICAR usuarios
+         * ------------------------------
+         * Esta acción consta de dos botones.
+         * @button1_Click_1 - El usuario seleccionará un usuario del datagrid.
+         * Cuando le de al botón, enviará todos los datos a sus campos correspondientes para que sean
+         * viaualizados.
+         * Hay campos que no estarán activados para que el usuario no modifique por error.
+         * 
+         * Cuando hayamos modificado el dato/s en cuestión, daremos al botón @button_VALIDAMODIFICACION_Click.
+         * Lo que hace este botón es recomponer el usuario con sus modificaciones y enviarlo a su endpoint correpondiente.
+         * Si todo ha ido bien,mostraremos monsaje correspondiente. Si por el contrario no se ha modificado, mostraremos mensaje
+         * tambien correponsiente para que el usuario este informado en todo momento.
+         * 
          */
         private async void button1_Click_1(object sender, EventArgs e)
         {
+            //boolean para salir del bucle
+            Boolean salirLOOP = false;
+
             List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3, URL_usuariosRegistrados);
 
             //Obtenemos la posición en el Datagrid
             int numeroSeleccionado = dataGridView_usuarios.CurrentRow.Index;
             //Creamos variable que almacena POSICION
             int posicionUsuarioEnList = 0;
+
             //Recorremos el listado de Usuarios
-            for (int i = 0; i < listaUsuarios.Count; i++)
+            for (int i = 0; i < listaUsuarios.Count && !salirLOOP; i++)
             {
                 posicionUsuarioEnList = i;//Misma estructuta y posición entre Datagrid y List
 
                 if (posicionUsuarioEnList == numeroSeleccionado)//cuando la posición del Datagrid sea igual a la posición del LIST...
                 {
+                    if (!listaUsuarios[i].Email.Equals(usuarioLogueado))//Si el usuario que queremos modificar no es el usuario logueado...
+                    {
 
+                        //Obtenemos todos los datos del user seleccionado en el datagrid
+                        String id = listaUsuarios[i].Id;
+                        String nombre = listaUsuarios[i].Nombre;
+                        String apellido = listaUsuarios[i].Apellido;
+                        String usuario = listaUsuarios[i].User;
+                        String telefono = listaUsuarios[i].NumeroTelefono;
+                        String email = listaUsuarios[i].Email;
+                        String password = listaUsuarios[i].Password;
+                        String passwordRepetido = password;
+                        String rol = listaUsuarios[i].Rol;
+
+                        //Asignamos cada dato a su campor textbox con la finalidad de mostrar los mismos
+                        textBox_SECRET_ID.Text = id;
+                        textBox_NOMBRE.Text = nombre;
+                        textBox_APELLIDO.Text = apellido;
+                        textBox_user.Text = usuario;
+                        textBox_TELEFONO.Text = telefono;
+                        textBox_MAIL.Text = email;
+                        textBox_PASSWORD.Text = password;
+                        textBox_PASSWORD_CONFIRM.Text = passwordRepetido;
+
+                        //En función del Strin rol que nos llegue, marcaremos el checkbox correspondiente
+                        if (rol.Equals("ADMIN"))
+                        {
+                            checkBox_ADMIN.Checked = true;
+                            checkBox_TECNIC.Checked = false;
+                        }
+                        else
+                        {
+                            checkBox_TECNIC.Checked = true;
+                            checkBox_ADMIN.Checked = false;
+                        }
+
+                        //EL ADMINISTRADOR PODRÁ MODIFICAR EL TEÉFONO Y EL PASSWORD DE TODOS LOS USUARIOS DE LA BASE DE DATOS
+                        textBox_NOMBRE.Enabled = false;
+                        textBox_APELLIDO.Enabled = false;
+                        textBox_user.Enabled = false;
+                        textBox_MAIL.Enabled = false;
+                        checkBox_ADMIN.Enabled = false;
+                        checkBox_TECNIC.Enabled = false;
+
+                        button_ENVIAR.Enabled = false;//Ocultamos botón 
+                        button_VALIDAMODIFICACION.Enabled = true;//botón valida_modificación activado
+
+                        button3_ACTUALIZARLISTA.Enabled = false;
+                        button_ELIMINAR.Enabled = false;
+                        button_MODIFICAR.Enabled = false;
+
+                        textBox_TELEFONO.Enabled = true;
+                        textBox_PASSWORD.Enabled = true;
+                        textBox_PASSWORD_CONFIRM.Enabled = true;
+
+                    }
+                    else//si el usuario que se queire modificar es el logueado, lanzamos mensaje indicanfo que se dirija a su Perfil de usuario
+                    {
+                        MessageBox.Show("No se puede modificar tu perfil de usuario en esta sección. Por favor, dirijase " +
+                        "a la pestaña Perfil Usuario para modificar sus datos, gracias.", "ERROR MODIFICAR USUARIO", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        salirLOOP = true;
+                    }
                 }
+
             }
         }
-            #endregion
+
+        private async void button_VALIDAMODIFICACION_Click(object sender, EventArgs e)
+        {
+            //Objeto json
+            JObject jsonUser = null;
+
+            //OBTENEMOS ID DEL CAMPO QUE OCULTAMOS EN LA INTERFICIE
+            String id = textBox_SECRET_ID.Text;
+
+            //VARIABLES DE OBJETO USER
+            String nombre = textBox_NOMBRE.Text;
+            String apellido = textBox_APELLIDO.Text;
+            String usuario = textBox_user.Text;
+            String telefono = textBox_TELEFONO.Text;
+            String email = textBox_MAIL.Text;
+            String rol = null;
+            String password = textBox_PASSWORD.Text;
+            String confirmarPassword = textBox_PASSWORD_CONFIRM.Text;
+
+            String URL_typeUser = null;//declaramos esta variable para controlar la dirección URL END POINT
+
+            if (checkBox_ADMIN.Checked)
+            {
+                rol = "ADMIN";
+                URL_typeUser = "admin";
+            }
+            else
+            {
+                rol = "TECNIC";
+                URL_typeUser = "tecnico";
+            }
+
+            //si los passwords son iguales
+            if (password.Equals(confirmarPassword))
+            {
+                //si el password no se ha modificado...
+                if (password.Equals(await utilidades.obtenerPassword(email, TOKEN_form3)))
+                {
+                    //Recomponemos el objeto con las modificaciones
+                    Usuario user = new Usuario(nombre, apellido, usuario, password, email, telefono, rol);
+                    //transformamos en objeto json sin password (contraseña va hasheada en base de datos, asi evitamos que se corrompa usuario)
+                    jsonUser = utilidades.JsonUsuario_sinPassword(user);
+
+                }
+                else//sino la contraseña ha sido modificada por el usuario
+                {
+                    //Recomponemos el objeto con las modificaciones
+                    Usuario user = new Usuario(nombre, apellido, usuario, password, email, telefono, rol);
+                    //transformamos en objeto json incluyendo el usuario
+                    jsonUser = utilidades.JsonUsuario_conPassword(user);
+                }
+
+                //ANADIMOS AL END POINT API LA ID DEL USUARIO
+                String URL_modificarUser = URL_modificarUsuario + URL_typeUser + "/id/" + id;
+                //LLAMAMOS AL METODO CORRESPONDIENTE DE Y LE PASAMOS LOS PARAMETROS PARA COMUNICARNOS CON API
+                conexion.modificarUsuarioAsync(URL_modificarUser, TOKEN_form3, jsonUser.ToString());
+
+                //VACIAMOS TEXTBOXES
+                textBox_NOMBRE.Clear();
+                textBox_APELLIDO.Clear();
+                textBox_user.Clear();
+                textBox_TELEFONO.Clear();
+                textBox_MAIL.Clear();
+                checkBox_ADMIN.Enabled = true;//habilitamos checkbox
+                checkBox_TECNIC.Enabled = true;//habilitamos checkbox
+                checkBox_ADMIN.Checked = false;//desmarcamos checkbox
+                checkBox_TECNIC.Checked = false;//desmarcamos checkbox
+                textBox_PASSWORD.Clear();
+                textBox_PASSWORD_CONFIRM.Clear();
+                //GESTIONAMOS VISIBILIDAD BOTONES
+                button_ENVIAR.Enabled = true;
+                button_ELIMINAR.Enabled = true;
+                button3_ACTUALIZARLISTA.Enabled = true;
+                button_MODIFICAR.Enabled = true;
+                button_VALIDAMODIFICACION.Enabled = false;
+
+            }
+            else//si los password no coinciden...hay error..-->mostramos al usuario
+
+            {
+                MessageBox.Show("Error al confirmar contraseña. Rogamos revise y vuelva a interntarlo.",
+                    "ERROR CREDENCIALES", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
+
+        #endregion
+
+        #region FILTRAR BUSQUEDA
+
+
+        #endregion
+
+        #region BOTÓN CANCELAR (USUARIOS)
+        /*
+         * BOTÓN CANCELAR_USUARIOS
+         * -----------------------
+         * Este botón se encargará de limpiar los textbox y de ocultar y activat botones
+         */
+        private void button_CANCELAR_USUARIOS_Click(object sender, EventArgs e)
+        {
+            //VACIAMOS TEXTBOXES
+            textBox_NOMBRE.Clear();
+            textBox_APELLIDO.Clear();
+            textBox_user.Clear();
+            textBox_TELEFONO.Clear();
+            textBox_MAIL.Clear();
+            checkBox_ADMIN.Enabled = false;
+            checkBox_TECNIC.Enabled = false;
+            textBox_PASSWORD.Clear();
+            textBox_PASSWORD_CONFIRM.Clear();
+
+            //GESTIONAMOS VISIBILIDAD BOTONES
+            button_CANCELAR_USUARIOS.Enabled = true;
+            button_ENVIAR.Enabled = true;
+            button_ELIMINAR.Enabled = true;
+            button3_ACTUALIZARLISTA.Enabled = true;
+            button_MODIFICAR.Enabled = true;
+            button_VALIDAMODIFICACION.Enabled = false;
+        }
+
+        #endregion
+
+        //****************** GESTIÓN MI PERFIL **************************
+
+        #region PERFIL USUARIO
+
+        /*
+         * Método que obtiene los datos del usuario logueado y los añade a los textbox
+         * de la pestaña Perfil Usuario
+         */
+        public async void datosPerfil()
+        {
+            Boolean salirBucle = false;
+            //Lista de usuarios
+            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3, URL_usuariosRegistrados);
+
+            //Recorremos lista de usuarios
+            for (int i = 0; i < listaUsuarios.Count && !salirBucle; i++)
+            {
+                if (usuarioLogueado.Equals(listaUsuarios[i].Email))
+                {
+
+                    textBox_IDPERFIL.Text = listaUsuarios[i].Id;
+                    textBox_USUARIOPERFIL.Text = listaUsuarios[i].User;
+                    textBox_telefonoMIPERFIL.Text = listaUsuarios[i].NumeroTelefono;
+                    textBox_PASSWORDPERFIL.Text = listaUsuarios[i].Password;
+                    textBox_CONFIRMA_PASSWORDPERFIL.Text = listaUsuarios[i].Password;
+
+                    salirBucle = true;
+                }
+            }
+            //Por defecto, desactivamos lo que no es posible modificar:
+            textBox_IDPERFIL.Enabled = false;
+            textBox_USUARIOPERFIL.Enabled = false;
+        }
+
+        /*
+        * Botón que modificar password o mail en mi perfil
+        * ------------------------------------------------
+        * Se gestiona  a través del método editarPerfilASYNC de clase Conexion_BD
+        */
+        private async void button_MIPERFIL_MODIFICA_PASSWORD_Click(object sender, EventArgs e)
+        {
+            String id = textBox_IDPERFIL.Text;
+            String user = textBox_USUARIOPERFIL.Text;
+            String telefono = textBox_telefonoMIPERFIL.Text;
+            String password = textBox_PASSWORDPERFIL.Text;
+            String repeatPassword = textBox_CONFIRMA_PASSWORDPERFIL.Text;
+
+            conexion.editarPerfilASYNC(password, telefono, TOKEN_form3, URL_modificarUsuarioLogueado, URL_usuariosRegistrados, id);
+
+        }
+
+        #endregion
+
+
+
+
     }
+}

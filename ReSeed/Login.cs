@@ -14,6 +14,7 @@ namespace ReSeed
         //VARIABLES DE USUARIO
         private String nombreUsuario;
         private String passwordUsuario;
+
         //VARIABLES DE CONEXION_URL
         private static String URL_LOGIN = "https://t-sunlight-381215.lm.r.appspot.com/auth/";
         private Conexion_BD conexion = new Conexion_BD();
@@ -58,8 +59,8 @@ namespace ReSeed
 
             //Añadimos a los datos que introduce el usuario una comilla simple delante y detrás de la cadena
             //Hacemos esto para que el forma JSon de @parametros sea el adecuado y no de errores
-            nombreUsuario = "'" + textBox_usuario.Text.ToString() + "'";
-            passwordUsuario = "'" + textBox_password.Text.ToString() + "'";
+            nombreUsuario = textBox_usuario.Text.ToString();
+            passwordUsuario = textBox_password.Text.ToString();
 
 
             conexion.login(nombreUsuario, passwordUsuario, URL_LOGIN);
