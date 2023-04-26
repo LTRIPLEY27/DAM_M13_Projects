@@ -283,6 +283,23 @@ public class UserServiceImpl implements UserService, Constantes {
         return Collections.singletonList(tareaService.getTareaByName(object));
     }
 
+    // todo, en prueba tea4
+    /**
+     * Metodo 'filterByDates'
+     * Recibe 2 parametros:
+     *
+     * Valor del campo especifico a filtrar (Username / Nombre),  y la cadena especifica de la misma
+     *
+     * @return <ul>
+     * <li>Entity : Registro de la coordenada en la database</li>
+     * </ul>
+     */
+    @Override
+    public List<Object> filterByDates(String date1, String date2) {
+
+        return Collections.singletonList(mensajeService.filteringByDates(date1, date2));
+    }
+
     /** Metodo 'checkLocation()'
      * Recibe 1 parametro: Id de la clase Ubicacion  a la cual se validara la existencia en la base de datos de alguna Tarea, ya que la relaciones 1 : 1
      * @return <ul>

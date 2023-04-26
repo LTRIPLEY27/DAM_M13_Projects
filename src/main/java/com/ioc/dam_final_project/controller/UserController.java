@@ -265,6 +265,25 @@ public class UserController implements Constantes {
         return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByValue(value, object)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
 
+
+    /**
+     * Metodo FilterByDateMessages recibe 2 parametros y valida segun el rol y el parametro
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param value en referencia al  filtrao especifico a aplicar
+     * @param object en referencia al valor especifica del filtro
+     * @return <ul>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el value : Username Tecnico, las que tenga asignadas, Admin, Listado de Tareas por username del Tecnico</li>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el value : Nombre Tecnico, las que tenga asignadas, Admin, Listado de Tareas por Nombre del Tecnico</li>
+     *  </ul>
+     */
+    @GetMapping(path = "mensajes/porRango")
+    public ResponseEntity<List <Object>> filterByDate(Principal principal, @RequestParam String date1, @RequestParam String date2){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByDates(date1, date2)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }
+
     /*************************************************************
      *                   UPDATE VALUES FROM A OBJET IN DATABASE
      * ***********************************************************/

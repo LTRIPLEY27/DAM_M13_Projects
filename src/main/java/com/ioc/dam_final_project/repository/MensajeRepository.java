@@ -7,6 +7,7 @@ import com.ioc.dam_final_project.model.Tecnico;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -29,4 +30,11 @@ public interface MensajeRepository extends JpaRepository <Mensaje, Long> {
     List<Mensaje> findMensajeByTecnico(Tecnico tecnico);
     List<Mensaje> findMensajeByAdmin(Admin admin);
 
+    /**
+     * QUERY'S CON FILTROS ESPECIFICOS
+     */
+    @Query(value = "SELECT  * FROM mensaje\n" +
+                    "WHERE fecha BETWEEN :date1 AND :date2\n" +
+                    "ORDER BY mensaje.id DESC ;", nativeQuery = true)
+    List <Mensaje> filterByDateRange(@PathVariable("date1") String date1, @PathVariable("date2") String date2);
 }

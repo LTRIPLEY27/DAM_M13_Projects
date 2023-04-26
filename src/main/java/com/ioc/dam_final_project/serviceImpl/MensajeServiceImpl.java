@@ -165,13 +165,21 @@ public class MensajeServiceImpl implements MensajeService, Constantes {
     @Override
     public List<MensajeDTO> getAll() {
         List<MensajeDTO> messages = new ArrayList<MensajeDTO>();
-        //mensajeRepository.findAll().forEach(mensaje -> messages.add(MensajeDTO.byModel(mensaje)));
-       // mensajeRepository.findAll(Sort.by(Sort.Direction.ASC), messages.get(0).getId()).forEach(mensaje -> messages.add(MensajeDTO.byModel(mensaje)));
-       mensajeRepository.findAll().stream().sorted(Comparator.comparingLong(Mensaje::getId))
-               .collect(Collectors.toList()).forEach(mensaje -> messages.add(MensajeDTO.byModel(mensaje)));
+        mensajeRepository.findAll().forEach(mensaje -> messages.add(MensajeDTO.byModel(mensaje)));
         return  messages;
     }
 
+    /** Metodo 'filterByDate'
+     * @return <ul>
+     *  <li>List de MensajeDTO: Recorre todos los mensajes contenidos en la base de datos con el rango de Fecha indicado</li>
+     *  </ul>
+     */
+    @Override
+    public List<MensajeDTO> filteringByDates(String date1, String date2) {
+        List<MensajeDTO> messages = new ArrayList<MensajeDTO>();
+        mensajeRepository.filterByDateRange(date1, date2).forEach(mensaje -> messages.add(MensajeDTO.byModel(mensaje)));
+        return  messages;
+    }
 
     /**
      * Metodo que gestionara el posteo de mensajes entre el Admin y el Tecnico a modo de hilo conversacional.

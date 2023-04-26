@@ -100,8 +100,8 @@ public class CoordenadaServiceImpl implements CoordenadaService, Constantes {
      */
     @Override
     public void deleteEntity(Long id) {
-        coordenadaRepository.deleteAll();
-    } // todo validar la eliminacion de las coordenadas por unidad y grupo
+        coordenadaRepository.deleteById(id);
+    }
 
     /** Metodo 'searchById'
      * Recibe un Id y retorna la entidad encontrada en formato DTO.
