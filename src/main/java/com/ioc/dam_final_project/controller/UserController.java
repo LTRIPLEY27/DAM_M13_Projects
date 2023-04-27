@@ -76,8 +76,8 @@ public class UserController implements Constantes {
      *
      * @param userService     servicio del usuario
      * @param serviceAuth     servicio del autenticador
-     * @param tareaRepository
-     * @param userRepository
+     * @param tareaRepository repository de tarea
+     * @param userRepository  repository de user
      */
     public UserController(UserServiceImpl userService, AuthenticationService serviceAuth, TareaRepository tareaRepository, UserRepository userRepository) {
         this.userService = userService;
@@ -282,6 +282,25 @@ public class UserController implements Constantes {
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
         return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByDates(date1, date2)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }
+
+
+    /**
+     * Metodo FilterByDateTareas recibe 2 parametros y valida segun el rol y el parametro
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param value en referencia al  filtrao especifico a aplicar
+     * @param object en referencia al valor especifica del filtro
+     * @return <ul>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el value : Username Tecnico, las que tenga asignadas, Admin, Listado de Tareas por username del Tecnico</li>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el value : Nombre Tecnico, las que tenga asignadas, Admin, Listado de Tareas por Nombre del Tecnico</li>
+     *  </ul>
+     */
+    @GetMapping(path = "tareas/porRango")
+    public ResponseEntity<List <Object>> filterByDateTareas(Principal principal, @RequestParam String date1, @RequestParam String date2){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByTareaDates(date1, date2)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
 
     /*************************************************************

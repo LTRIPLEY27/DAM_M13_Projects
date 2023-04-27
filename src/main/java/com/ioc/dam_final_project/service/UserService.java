@@ -48,6 +48,7 @@ public interface UserService {
     //List<Object> findTaskByTecnic(String username);
     List<Object> filterByValue(String value, String object);
     List<Object> filterByDates(String date1, String date2);
+    List<Object> filterByTareaDates(String date1, String date2);
 
     boolean checkLocation(Long idTarea);
 }

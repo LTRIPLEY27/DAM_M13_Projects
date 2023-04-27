@@ -1,6 +1,7 @@
 package com.ioc.dam_final_project.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ioc.dam_final_project.dto.MensajeDTO;
 import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.model.Tecnico;
 import com.ioc.dam_final_project.model.User;
@@ -24,6 +25,8 @@ public interface TareaService {
 
     void deleteEntity(Long id);
     Object updateValue(Long id, Object object, User user) throws JsonProcessingException;
+
+    List<TareaDTO> filteringByDates(String date1, String date2);
 
     TareaDTO searchById(Long id);
 }

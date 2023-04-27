@@ -1,6 +1,7 @@
 package com.ioc.dam_final_project.serviceImpl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ioc.dam_final_project.dto.MensajeDTO;
 import com.ioc.dam_final_project.dto.TareaDTO;
 import com.ioc.dam_final_project.model.*;
 import com.ioc.dam_final_project.model.Enums.Rol;
@@ -102,12 +103,20 @@ public class TareaServiceImpl implements TareaService, Constantes {
     @Override
     public List<TareaDTO> total() {
         var object = new ArrayList<TareaDTO>();
-        var objectX = new ArrayList<Tarea>();
-        //tareaRepository.findAll().forEach(tarea -> tarea.getMensaje(SortedSet));
-        //tareaRepository.findAll().forEach(tarea -> object.add((Tarea) tarea.getMensaje().stream().sorted((x1, x2) -> Long.compare(x1.getId(), x1.getId()))));
-        //object.forEach(tarea -> objectA.add(TareaDTO.byModel(tarea)));
         tareaRepository.findAll().forEach(tarea -> object.add(TareaDTO.byModel(tarea)));
         return object;
+    }
+
+    /** Metodo 'filterByDate'
+     * @return <ul>
+     *  <li>List de TareaDTO: Recorre todos las Tareas contenidas en la base de datos con el rango de Fecha indicado</li>
+     *  </ul>
+     */
+    @Override
+    public List<TareaDTO> filteringByDates(String date1, String date2) {
+        List<TareaDTO> tareas = new ArrayList<>();
+        tareaRepository.filterByDateRange(date1, date2).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+        return  tareas;
     }
 
     /** Metodo 'getTareaByTecnico'

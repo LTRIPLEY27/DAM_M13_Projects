@@ -1,13 +1,11 @@
 package com.ioc.dam_final_project.repository;
 
-import com.ioc.dam_final_project.model.Admin;
-import com.ioc.dam_final_project.model.Tarea;
-import com.ioc.dam_final_project.model.Tecnico;
-import com.ioc.dam_final_project.model.Ubicacion;
+import com.ioc.dam_final_project.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,13 +35,12 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
     Tarea findTareaByAdminAndId(Admin admin, Long name);
 
     /**
-     * Native Query para acceder a Tareas asignadas filtradas por Usuario
-     * */
-    @Query(value = "SELECT *\n" +
-                    "FROM tarea t\n" +
-                    "JOIN user u on t.id = u.id\n" +
-                    "WHERE u.user LIKE 'davidf'", nativeQuery = true)
-    List <Tarea> tareaByUsername(@Param("usuari") String usuari);
+     * QUERY'S CON FILTROS ESPECIFICOS
+     */
+    @Query(value = "SELECT  * FROM tarea\n" +
+                        "WHERE fecha BETWEEN :date1 AND :date2\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByDateRange(@PathVariable("date1") String date1, @PathVariable("date2") String date2);
 
 
 }
