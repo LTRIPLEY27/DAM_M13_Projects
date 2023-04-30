@@ -984,7 +984,7 @@
             // comboBox_GestionAdmin
             // 
             comboBox_GestionAdmin.FormattingEnabled = true;
-            comboBox_GestionAdmin.Items.AddRange(new object[] { "TECNICOS", "ADMINISTRADORES" });
+            comboBox_GestionAdmin.Items.AddRange(new object[] { "ADMINISTRADORES", "TECNICOS" });
             comboBox_GestionAdmin.Location = new Point(224, 96);
             comboBox_GestionAdmin.Name = "comboBox_GestionAdmin";
             comboBox_GestionAdmin.Size = new Size(280, 24);
@@ -1018,7 +1018,7 @@
             gMapControl1.GrayScaleMode = false;
             gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
             gMapControl1.LevelsKeepInMemory = 5;
-            gMapControl1.Location = new Point(24, 18);
+            gMapControl1.Location = new Point(20, 18);
             gMapControl1.MarkersEnabled = true;
             gMapControl1.MaxZoom = 2;
             gMapControl1.MinZoom = 2;
@@ -1032,7 +1032,7 @@
             gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
             gMapControl1.ShowTileGridLines = false;
-            gMapControl1.Size = new Size(544, 432);
+            gMapControl1.Size = new Size(548, 432);
             gMapControl1.TabIndex = 3;
             gMapControl1.Zoom = 0D;
             gMapControl1.MouseDoubleClick += gMapControl1_MouseDoubleClick;

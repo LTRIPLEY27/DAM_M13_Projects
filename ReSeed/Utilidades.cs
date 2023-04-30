@@ -205,38 +205,45 @@ namespace ReSeed
          * MÉTODO filtraUsuariosPorRolASYNC
          * --------------------------------
          * Muestra los datos del usuario dependiendo de su rol.
-         * Pasamos tres parámetros: @URL,@token,@rol
+         * Pasamos tres parámetros: @URL,@token,@data
          * 
          */
-        public async void filtraUsuariosPorRolASYNC(String URL, String token, String rol)
+        public async void usuariosFiltoRolASYNC (String URL, String token, DataGridView data)
         {
-            //Parametros que necesitamos para el DatagridFiltro
-            String id = null;
-            String usuario = null;
-            String mail = null;
-            String telefono = null;
+            JObject json = null;
 
-            //Obtenemos la lista de usuarios de esta clase
-            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(token, URL);
+            HttpClient client = new HttpClient ();
 
-            //recorremos lista usuarios
-            for (int i = 0; i < listaUsuarios.Count; i++)
+            //autentficar token
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            //enviamos peticion
+            var response = await client.GetAsync(URL);
+            //si la peticion es exitosa
+            if (response.IsSuccessStatusCode)
             {
-                //Si el rol pasado por parametro lo tiene el usuario en posicio [i]...
-                if (rol.Equals(listaUsuarios[i].Rol))
+                //leemos resutado
+                var res = response.Content.ReadAsStringAsync ().Result;
+                //tranformamos el restultado en un array json
+                JArray  jArray = JArray.Parse (res);
+                //recorremos arry json
+                for (int i = 0; i < jArray.First.Count(); i++)
                 {
-                    id = listaUsuarios[i].Id;
-                    usuario = listaUsuarios[i].User;
-                    mail = listaUsuarios[i].Email;
-                    telefono = listaUsuarios[i].NumeroTelefono;
+                    String usuarioJson = jArray[0][i].ToString();//obtenemos el usuario
+                    json = JObject.Parse(usuarioJson);//lo transformamos a objeto json
+                    String id = json.GetValue("id").ToString();//obtenemos id
+                    String user = json.GetValue("user").ToString();//obtenemos user
+                    String email = json.GetValue("email").ToString();//obtenemos mail
+                    String telefono = json.GetValue("telefono").ToString();//obtenemos telefono
+
+                    data.Rows.Add(id,user,email,telefono);//añadimos los datos al datagrid
 
                 }
-
             }
         }
 
         #endregion
 
+        #region RELLENAR COMBOBOX SECCIÓN ADMINISTRACIÓN TAREAS
         /*-------------------------
          * Método @rellenarComboBox
          * ------------------------
@@ -285,6 +292,8 @@ namespace ReSeed
                 }
             }
         }
+
+        #endregion
 
     }
 }

@@ -35,7 +35,9 @@ namespace ReSeed
         private String URL_modificarUsuarioLogueado = "https://reseed-385107.ew.r.appspot.com/update-user";
         private String URL_filtrarPorUsuario = "https://reseed-385107.ew.r.appspot.com/results/";
         private String URL_usuarioLogueadi = "https://reseed-385107.ew.r.appspot.com/perfil";
+        private String URL_filtrarPorAdministradores = "https://reseed-385107.ew.r.appspot.com/results/admins";
         private String URL_filtrarPorTecnicos = "https://reseed-385107.ew.r.appspot.com/results/tecnicos";
+
 
         //VARIABLES GLOBALES MAPAS
         //ivate GMarkerGoogle marcador;//Instanciamos marcadores
@@ -100,9 +102,9 @@ namespace ReSeed
          * Y lo que mostraremos será el id y el user. Usamos para ello el método
          * @rellenarComboBox (String URL,String token, Combobox combobox) de la clase Utilidades
          */
-        public async void mostrarTecnicos ()
+        public async void mostrarTecnicos()
         {
-            utilidades.rellenarComboBox(URL_filtrarPorTecnicos,TOKEN_form3,comboBox_usuarios);
+            utilidades.rellenarComboBox(URL_filtrarPorTecnicos, TOKEN_form3, comboBox_usuarios);
         }
         #endregion
 
@@ -528,7 +530,7 @@ namespace ReSeed
             //Objeto json
             JObject jsonUser = null;
 
-            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3,URL_usuariosRegistrados);
+            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3, URL_usuariosRegistrados);
 
             //OBTENEMOS ID DEL CAMPO QUE OCULTAMOS EN LA INTERFICIE
             String id = textBox_SECRET_ID.Text;
@@ -560,7 +562,7 @@ namespace ReSeed
             if (password.Equals(confirmarPassword))
             {
                 //si el password no se ha modificado...
-                if (password.Equals(utilidades.obtenerPassword(listaUsuarios,id)))
+                if (password.Equals(utilidades.obtenerPassword(listaUsuarios, id)))
                 {
                     //Recomponemos el objeto con las modificaciones
                     Usuario user = new Usuario(nombre, apellido, usuario, password, email, telefono, rol);
@@ -670,7 +672,7 @@ namespace ReSeed
         {
 
             //Obtenemos la lista de usuarios en la base de datos
-            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3,URL_usuariosRegistrados);
+            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3, URL_usuariosRegistrados);
 
             //Recorremos la lista usuarios
             for (int i = 0; i < listaUsuarios.Count; i++)
@@ -700,7 +702,7 @@ namespace ReSeed
         private async void button_MIPERFIL_MODIFICA_PASSWORD_Click(object sender, EventArgs e)
         {
             //lista de usuarios 
-            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3,URL_usuariosRegistrados);
+            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3, URL_usuariosRegistrados);
             //Obtenemos los datos de os textboxes
             String id = textBox_IDPERFIL.Text;
             String user = textBox_USUARIOPERFIL.Text;
@@ -708,19 +710,37 @@ namespace ReSeed
             String password = textBox_PASSWORDPERFIL.Text;
             String repeatPassword = textBox_CONFIRMA_PASSWORDPERFIL.Text;
 
-            conexion.atributosParaPerfil(listaUsuarios,id,telefono,password,URL_modificarUsuarioLogueado,TOKEN_form3);
+            conexion.atributosParaPerfil(listaUsuarios, id, telefono, password, URL_modificarUsuarioLogueado, TOKEN_form3);
 
         }
 
         #endregion
 
+        #region FILTRAR DATOS
 
-
-
-        private void FiltrarUsuarios(object sender, EventArgs e)
+        /*
+       * Combobox filtrar por usuario
+       * ----------------------------
+       * Cuando se selecciona "ADMINISTRADORES", visualizaremos en el Datagrid todos los adminsitradores 
+       * de la bas de datos mediante el método @usuariosFiltoRolASYNC de la clase Utilidades.
+       * Si se selecciona "TECNICOS", pasará lo mismo pero con el rol de tecnicos.
+       */
+        private async void FiltrarUsuarios(object sender, EventArgs e)
         {
-             
+            if (comboBox_GestionAdmin.SelectedIndex == 0)
+            {
+                dataGridViewFILTRAR_USUARIOS.Rows.Clear();
+                utilidades.usuariosFiltoRolASYNC(URL_filtrarPorAdministradores, TOKEN_form3, dataGridViewFILTRAR_USUARIOS);
 
-        } 
+            } else
+            {
+                dataGridViewFILTRAR_USUARIOS.Rows.Clear();
+                utilidades.usuariosFiltoRolASYNC(URL_filtrarPorTecnicos, TOKEN_form3, dataGridViewFILTRAR_USUARIOS);
+            }
+
+        }
+        #endregion
+
+
     }
 }
