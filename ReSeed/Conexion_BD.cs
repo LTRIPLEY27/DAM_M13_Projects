@@ -74,7 +74,7 @@ namespace ReSeed
             content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
             //En @response almacenamos la respuesta del servidor (si se encuentra es TRUE sino es FALSE)
-            response = client.PostAsync(URL, content).Result;  
+            response = client.PostAsync(URL, content).Result;
 
             //Mostraremos por pantalla si la conexión es exitosa o no.
             //Si es exitosa y se loguea un admin, será redirigido a al menu principal admin
@@ -89,22 +89,33 @@ namespace ReSeed
                 json.GetValue("token");
                 String token = (String)json["token"];
 
+                //INSTANCIAMOS CLASE UTILIDADES
                 utilidades = new Utilidades();
-                //Otenemos el rol del usuario que hace LOGIN con el método de la clase Utilidades-@obtenerRolAsync(String usuario, String token);
-                String rol = await utilidades.obtenerRolAsync(usuario, token);
+
+                /*
+                Obtenemos el objeto json del usuario logueado con el método @obtenerDatosUserLogueadoJson de
+                la clase Utilidades. Despúes creamos un String con el valor el nombre del atributo que cuyo valor
+                queremos recuperar. Acto seguido utilizamos el método de la clase Utilidades,@obtenerAtributoPerfil y le
+                pasamos por parámetro el objeto json usuario logueado y el string con el atributo deseado.
+                De esta forma obtendremos el rol del usuario logueado ADMIN o TECNICO
+                */
+                String atributoPerfilDeseado = "rol";
+                JObject perfilUsuario = utilidades.obtenerDatosUserLogueadoJson(token);
+                String rol = utilidades.obtenerAtributoPerfil(perfilUsuario,atributoPerfilDeseado);
+                
                 if (rol.Equals("ADMIN"))
                 {
 
                     MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
                     //MessageBox.Show(TOKEN);
-                    Administrador form3 = new Administrador(token,usuario);//Enviamos el TOKEN al form3
+                    Administrador form3 = new Administrador(token,usuario);//Enviamos el TOKEN al form3 y el usuario logueado
                     Form1 form1 = new Form1();
                     form3.Show();//mostramos menu principal admin
                     form1.Hide();//ocultamos form login
                     
 
                 }
-                else
+                else if (rol.Equals("TECNIC"))
                 {
 
                     MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
@@ -113,16 +124,16 @@ namespace ReSeed
                     form4.Show();//mostramos menu principal tecnico
                     form1.Hide();//ocultamos form login
                     
-
                 }
-
             }
 
             else//sino...
             {
                 MessageBox.Show("Usuario o contraseña incorrectos.", "MENSAJE ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);//Mensaje erro LOGIN
             }
+                
         }
+                
         #endregion
 
         /*-------------------
@@ -250,8 +261,9 @@ namespace ReSeed
         }
         #endregion
 
-        /*
+        /*----------------------------
          * MÉTODO eliminarUsuarioAsync
+         * ---------------------------
          * Recibirá 3 parámetros (@URL, @token, @idUser)
          * Utilizamos nuestro Token de inicio de sesión
          * Enviamos a la API la URL End Point añadiendo el IdUsuario y esperamos respuesta
@@ -273,80 +285,104 @@ namespace ReSeed
 
         #endregion
 
-        public async void editarPerfilASYNC (String newPassword,String newTelefono,String token,String URL_userLogueado,String URL_obtenerRegistro,String id)
+
+        /*-------------------------
+        * Método atributosParaPerfil
+        * ------------------------
+        * -Parametros que recibe:
+        * @listaUsuarios
+        * @id
+        * @nuevoTelefono
+        * @nuevoPassword
+        * @URL
+        * @token
+        * 
+        * Bucaremos por toda la lista de usuarios al usuario con la id pasada por parámetro.
+        * -Si lo encontramos, obtendremos todos sus atributos.
+        * 
+        * Con condicional if:
+        * -Controlamos si se ha modificado o no el teléfono o el password.
+        * -En caso que el password NO se modifique, contruiremos su objeto JSon con el metodo @JsonUsuario_sinPassword
+        * de la clase utilidades. Este objeto no enviará el password a la API para evitar probemas de HASH.
+        * En cualquier otro caso (telefono modificado o no modificado + modificación password --> Enviaremos objeto JSon 
+        * con todos sus datos con el método @JsonUsuario_conPassword de la clase Utilidades.
+        * 
+        * Cada validación del botón lanzará un menjaje al usuario para informarle de lo realizado.
+        * Estos mensajes los sacamos en MessageBox en retrimiento de usar la respues del @response (true or false)
+        *
+        *                     
+        */
+        #region EDITAR PERFIL
+
+        public void atributosParaPerfil(List<Post> listaUsuarios, String id, String nuevoTelefono, String nuevoPassword, String URL, String token)
         {
-            //Booleano de semaforo para salir del LOOP
-            Boolean encontrado = false;
 
-            utilidades = new Utilidades();
-            Usuario usuario;
-            JObject jsonUsuario = null;
+            Usuario user = null;
+            JObject userJSon = null;
+            Boolean usuarioEncontrado = false;
 
-            String nombre = null;
-            String apellido = null;
-            String user = null;
-            String password = null;
-            String email = null;
-            String telefono = null;
-            String rol = null;
-
-            //Obtenemos la lista de usuarios
-            List<Post> listaUsuarios = await this.ObtenerUsuarios(token,URL_obtenerRegistro);
-
-            //Obtenemos el objetoLogin
-            for (int i = 0; i < listaUsuarios.Count && !encontrado; i++)
+            for (int i = 0; i < listaUsuarios.Count && !usuarioEncontrado; i++)
             {
-                if (id.Equals(listaUsuarios[i].Id))
+                if (listaUsuarios[i].Id.Equals(id))
                 {
-                    nombre = listaUsuarios[i].Nombre;
-                    apellido = listaUsuarios[i].Apellido;
-                    user = listaUsuarios[i].User;
-                    password = listaUsuarios[i].Password;
-                    email = listaUsuarios[i].Email;
-                    telefono = listaUsuarios[i].NumeroTelefono;    
-                    rol = listaUsuarios[i].Rol;
+                    String nombre = listaUsuarios[i].Nombre;
+                    String apellido = listaUsuarios[i].Apellido;
+                    String usuario = listaUsuarios[i].User;
+                    String password = listaUsuarios[i].Password;
+                    String email = listaUsuarios[i].Email;
+                    String telefono = listaUsuarios[i].NumeroTelefono;
+                    String rol = listaUsuarios[i].Rol;
 
-                    encontrado = true;
+                    if (!nuevoPassword.Equals(utilidades.obtenerPassword(listaUsuarios, id)))
+                    {
+                        if (!nuevoTelefono.Equals(utilidades.obtenerTelefono(listaUsuarios, id)))
+                        {
+                            user = new Usuario(nombre, apellido, usuario, nuevoPassword, email, nuevoTelefono, rol);
 
+                            userJSon = utilidades.JsonUsuario_conPassword(user);
+                            MessageBox.Show("Teléfono y contraseña modificados correctamente.", "INFORMACION PERFIL", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        }
+                        else
+                        {
+                            user = new Usuario(nombre, apellido, usuario, nuevoPassword, email, telefono, rol);
+                            userJSon = utilidades.JsonUsuario_conPassword(user);
+                            MessageBox.Show("Contraseña modificada correctamente.", "INFORMACION PERFIL", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+
+
+                    }
+                    else if (nuevoPassword.Equals(utilidades.obtenerPassword(listaUsuarios, id)))
+                    {
+                        if (nuevoTelefono.Equals(utilidades.obtenerTelefono(listaUsuarios, id)))
+                        {
+                            MessageBox.Show("No ha hecho ningun cambio en su perfil de usuario.", "INFORMACION PERFIL", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            user = new Usuario(nombre, apellido, usuario, password, email, nuevoTelefono, rol);
+                            userJSon = utilidades.JsonUsuario_sinPassword(user);
+                            MessageBox.Show("Teléfono modificado correctamente.", "INFORMACION PERFIL", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        }
+                    }
                 }
             }
 
+            usuarioEncontrado = true;
 
-            if (password.Equals(newPassword))
-            {
-                telefono = newTelefono;
-                usuario = new Usuario(nombre, apellido, user, password, email, telefono, rol);
-                jsonUsuario = utilidades.JsonUsuario_sinPassword(usuario);
-
-            } else
-
-                {
-                    usuario = new Usuario(nombre, apellido, user, password, email, telefono, rol);
-                    jsonUsuario = utilidades.JsonUsuario_conPassword(usuario);
-                }
-
-            
-
-
-            client = new HttpClient();
-
+            HttpClient client = new HttpClient();
             //autorización TOKEN    
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var content = new StringContent(jsonUsuario.ToString(), Encoding.UTF8,"application/json");
-
-            var response = await client.PutAsync(URL_userLogueado, content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                MessageBox.Show("Usuario se ha modificado correctamente.","MODIFICAR USUARIO",MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } else
-            {
-                MessageBox.Show("Error al intentar modificar usuario.", "MODIFICAR USUARIO--ooops, algo falló!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            var content = new StringContent(userJSon.ToString(), Encoding.UTF8, "application/json");
+            var response = client.PutAsync(URL, content);
 
         }
-       
+
+        #endregion
+
+
     }
 
 }

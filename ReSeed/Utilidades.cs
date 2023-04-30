@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using Xunit.Sdk;
+using System.Net.Http.Headers;
+using System.Security.Policy;
+using System.Net.Http.Json;
 
 namespace ReSeed
 {
@@ -86,37 +89,59 @@ namespace ReSeed
 
         }
 
-        #endregion
 
-
-        /*
-         * Método ASYNC obtenerRolAsync
-         * -----------------------------
-         * -Pasamos dos parámetros (String usuario y String token)
-         * -Buscamos en el registro de usuarios al usuario pasado por paámetro, si se encuentra, obtenemos su rol
-         * y salimos del bucle con la variable de semáforo @usuarioEncontrado. Retornaremos el String
-         */
-        public async Task <String> obtenerRolAsync (String usuario,String token)
+        /*------------------------------------------
+        * Método genérico obtenerDatosUserLogueadoJson
+        * -----------------------------------------
+        * Obtendremos el json del usuario logueado.
+        * Pasaremos como parámetro el @token.
+        * @return es el objeto json
+        */
+        public JObject obtenerDatosUserLogueadoJson(String token)
         {
-            //Variable booleana para poder salir del LOOP FOR
-            Boolean usuarioEncontrado = false;
-            //Variable rol que contendrá el rol del usuario pasado por parámetro
-            String rol = null;
-            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(token,"https://t-sunlight-381215.lm.r.appspot.com/results/usuarios");
-            for (int i = 0; i < listaUsuarios.Count && !usuarioEncontrado; i++)
+            //Declaramos objeto json a null
+            JObject json = null;
+            //URL ENDPOINT perfil
+            String URL_perfil = "https://reseed-385107.ew.r.appspot.com/perfil";
+
+            //Instanciamos objeto HttpClient
+            HttpClient client = new HttpClient();
+
+            //Usamos el token
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            //Enviamos solicitud a la API
+            var response = client.GetAsync(URL_perfil).Result;
+
+            if (response.IsSuccessStatusCode)
             {
-                if (usuario.Equals(listaUsuarios[i].Email))
-                {
+                var res = response.Content.ReadAsStringAsync().Result;
+                json = JObject.Parse(res);
+                return json;
 
-                    rol = listaUsuarios[i].Rol;
-                    usuarioEncontrado = true;
-
-                }
             }
 
-            return rol;
+            return json;
         }
 
+        /*
+         * Método @obtenerAtributoPerfil
+         * -----------------------------
+         * -Pasamos un parámetro (Objeto usuario logueado json--> @usuarioJson)
+         * -Pasamos por parámetro (Strin atributo --> @atributoPerfilDeseado)
+         * -Obtendremos de ese objeto usuario json el atributo pasado por parametro en formato String
+         * El @return será el atributo de ese usuario logueado que hemos pasado por parámetro
+         */
+        public String obtenerAtributoPerfil (JObject usuarioJson, String atributoPerfilDeseado)
+        {
+
+            return (String)usuarioJson.GetValue(atributoPerfilDeseado);
+          
+        }
+
+        #endregion  
+
+        #region MÉTODO QUE RETORNA EL PASSWORD DEL USUARIO PASADO POR PARÁMETRO
         /*
          * Método obtenerPassword
          * -----------------------
@@ -127,20 +152,18 @@ namespace ReSeed
          * Busca en la lista de usuarios al usuario pasado por parámetro y retorna el password.
          * @return password
          */
-        public async Task<String> obtenerPassword (String usuario, String token)
+        public String obtenerPassword (List <Post> listaUsuarios,String id)
         {
-            //Variable booleana para poder salir del LOOP FOR
-            Boolean usuarioEncontrado = false;
+            
             //Variable rol que contendrá el rol del usuario pasado por parámetro
             String password = null;
-            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(token, "https://t-sunlight-381215.lm.r.appspot.com/results/usuarios");
-            for (int i = 0; i < listaUsuarios.Count && !usuarioEncontrado; i++)
+
+            for (int i = 0; i < listaUsuarios.Count; i++)
             {
-                if (usuario.Equals(listaUsuarios[i].Email))
+                if (id.Equals(listaUsuarios[i].Id))
                 {
 
                     password = listaUsuarios[i].Password;
-                    usuarioEncontrado = true;
 
                 }
             }
@@ -148,6 +171,120 @@ namespace ReSeed
             return password;
         }
 
+        /*
+        * Método obtenerTelefono
+        * -----------------------
+        * Recibe 2 parámetros:
+        * @usuario
+        * @token
+        * 
+        * Busca en la lista de usuarios al usuario pasado por parámetro y retorna el telefono.
+        * @return password
+        */
+        public String obtenerTelefono(List<Post> listaUsuarios,String id)
+        {
+         
+            //Variable rol que contendrá el rol del usuario pasado por parámetro
+            String telefono = null;
+
+            for (int i = 0; i < listaUsuarios.Count; i++)
+            {
+                if (id.Equals(listaUsuarios[i].Id))
+                {
+                    telefono = listaUsuarios[i].NumeroTelefono;
+                }
+            }
+
+            return telefono;
+        }
+
+        #endregion
+
+        #region MÉTODO filtraUsuariosPorRolASYNC
+        /*---------------------------------
+         * MÉTODO filtraUsuariosPorRolASYNC
+         * --------------------------------
+         * Muestra los datos del usuario dependiendo de su rol.
+         * Pasamos tres parámetros: @URL,@token,@rol
+         * 
+         */
+        public async void filtraUsuariosPorRolASYNC(String URL, String token, String rol)
+        {
+            //Parametros que necesitamos para el DatagridFiltro
+            String id = null;
+            String usuario = null;
+            String mail = null;
+            String telefono = null;
+
+            //Obtenemos la lista de usuarios de esta clase
+            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(token, URL);
+
+            //recorremos lista usuarios
+            for (int i = 0; i < listaUsuarios.Count; i++)
+            {
+                //Si el rol pasado por parametro lo tiene el usuario en posicio [i]...
+                if (rol.Equals(listaUsuarios[i].Rol))
+                {
+                    id = listaUsuarios[i].Id;
+                    usuario = listaUsuarios[i].User;
+                    mail = listaUsuarios[i].Email;
+                    telefono = listaUsuarios[i].NumeroTelefono;
+
+                }
+
+            }
+        }
+
+        #endregion
+
+        /*-------------------------
+         * Método @rellenarComboBox
+         * ------------------------
+         * Recibe por parámetro:
+         * -@URL
+         * -@token
+         * -@listaTecnicos
+         * 
+         * Solicitamos la lista de técnicos a la API.
+         * Si la respuesta es true,obtendremos el @content.
+         * Ese @content lo convertimos en JArray @arrayTecnicsJson para poder recorrer los usuarios tecnicos.
+         * De cada tecnico nos interesará obtener su id y su user para mostrarlos en combobox.
+         * 
+         * 
+         */
+        public async void rellenarComboBox (String URL, String token, ComboBox listaTecnicos)
+        {
+            List<Post> listaTecnics = null;
+            JObject json;
+           
+            HttpClient client = new HttpClient();
+
+            //autorización TOKEN    
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            //esperamos la respuesta de la API con el ENDPOINT enviado
+            var response = await client.GetAsync(URL);
+
+            //si la respuesta es true...
+            if (response.IsSuccessStatusCode)
+            {
+                //Obtenemos el resultado de la respuesta
+                var content = response.Content.ReadAsStringAsync().Result;
+                //Convertimos la respuesta en un JArray json
+                JArray arrayTecnicsJson = JArray.Parse(content);
+
+                //recorremos LOOP
+                for ( int i = 0; i < arrayTecnicsJson.First.Count() ; i++ )
+                {
+                    String usuarioJson = arrayTecnicsJson[0][i].ToString();
+                    json = JObject.Parse(usuarioJson);
+                    String id = json.GetValue("id").ToString();
+                    String user = json.GetValue("user").ToString();
+
+                    listaTecnicos.Items.Add(id + "  " + user);
+                      
+                }
+            }
+        }
 
     }
 }

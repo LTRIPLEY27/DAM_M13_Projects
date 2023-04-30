@@ -110,7 +110,16 @@
             label_IDMIPERFIL = new Label();
             label_MIPERFIL = new Label();
             tabPage6 = new TabPage();
+            panel8 = new Panel();
+            dataGridViewFILTRAR_USUARIOS = new DataGridView();
+            Column3 = new DataGridViewTextBoxColumn();
+            Column4 = new DataGridViewTextBoxColumn();
+            Column5 = new DataGridViewTextBoxColumn();
+            Column6 = new DataGridViewTextBoxColumn();
+            comboBox_GestionAdmin = new ComboBox();
+            label15 = new Label();
             contextMenuStrip1 = new ContextMenuStrip(components);
+            iD = new DataGridViewTextBoxColumn();
             gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -125,6 +134,9 @@
             panel6.SuspendLayout();
             tabPage5.SuspendLayout();
             panel7.SuspendLayout();
+            tabPage6.SuspendLayout();
+            panel8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewFILTRAR_USUARIOS).BeginInit();
             SuspendLayout();
             // 
             // panel1
@@ -920,6 +932,7 @@
             // 
             // tabPage6
             // 
+            tabPage6.Controls.Add(panel8);
             tabPage6.Location = new Point(4, 25);
             tabPage6.Name = "tabPage6";
             tabPage6.Size = new Size(1166, 765);
@@ -927,10 +940,75 @@
             tabPage6.Text = "Gestión Administrador";
             tabPage6.UseVisualStyleBackColor = true;
             // 
+            // panel8
+            // 
+            panel8.BackColor = Color.MediumSeaGreen;
+            panel8.Controls.Add(dataGridViewFILTRAR_USUARIOS);
+            panel8.Controls.Add(comboBox_GestionAdmin);
+            panel8.Controls.Add(label15);
+            panel8.Location = new Point(253, 78);
+            panel8.Name = "panel8";
+            panel8.Size = new Size(568, 435);
+            panel8.TabIndex = 0;
+            // 
+            // dataGridViewFILTRAR_USUARIOS
+            // 
+            dataGridViewFILTRAR_USUARIOS.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewFILTRAR_USUARIOS.Columns.AddRange(new DataGridViewColumn[] { Column3, Column4, Column5, Column6 });
+            dataGridViewFILTRAR_USUARIOS.Location = new Point(59, 135);
+            dataGridViewFILTRAR_USUARIOS.Name = "dataGridViewFILTRAR_USUARIOS";
+            dataGridViewFILTRAR_USUARIOS.RowTemplate.Height = 25;
+            dataGridViewFILTRAR_USUARIOS.Size = new Size(445, 173);
+            dataGridViewFILTRAR_USUARIOS.TabIndex = 2;
+            // 
+            // Column3
+            // 
+            Column3.HeaderText = "Id";
+            Column3.Name = "Column3";
+            // 
+            // Column4
+            // 
+            Column4.HeaderText = "Usuario";
+            Column4.Name = "Column4";
+            // 
+            // Column5
+            // 
+            Column5.HeaderText = "Mail";
+            Column5.Name = "Column5";
+            // 
+            // Column6
+            // 
+            Column6.HeaderText = "Telefono";
+            Column6.Name = "Column6";
+            // 
+            // comboBox_GestionAdmin
+            // 
+            comboBox_GestionAdmin.FormattingEnabled = true;
+            comboBox_GestionAdmin.Items.AddRange(new object[] { "TECNICOS", "ADMINISTRADORES" });
+            comboBox_GestionAdmin.Location = new Point(224, 96);
+            comboBox_GestionAdmin.Name = "comboBox_GestionAdmin";
+            comboBox_GestionAdmin.Size = new Size(280, 24);
+            comboBox_GestionAdmin.TabIndex = 1;
+            comboBox_GestionAdmin.SelectedIndexChanged += FiltrarUsuarios;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(59, 99);
+            label15.Name = "label15";
+            label15.Size = new Size(159, 16);
+            label15.TabIndex = 0;
+            label15.Text = "FILTRAR POR USUARIOS";
+            // 
             // contextMenuStrip1
             // 
             contextMenuStrip1.Name = "contextMenuStrip1";
             contextMenuStrip1.Size = new Size(61, 4);
+            // 
+            // iD
+            // 
+            iD.HeaderText = "iD";
+            iD.Name = "iD";
             // 
             // gMapControl1
             // 
@@ -940,7 +1018,7 @@
             gMapControl1.GrayScaleMode = false;
             gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
             gMapControl1.LevelsKeepInMemory = 5;
-            gMapControl1.Location = new Point(20, 21);
+            gMapControl1.Location = new Point(24, 18);
             gMapControl1.MarkersEnabled = true;
             gMapControl1.MaxZoom = 2;
             gMapControl1.MinZoom = 2;
@@ -954,7 +1032,7 @@
             gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
             gMapControl1.ShowTileGridLines = false;
-            gMapControl1.Size = new Size(548, 429);
+            gMapControl1.Size = new Size(544, 432);
             gMapControl1.TabIndex = 3;
             gMapControl1.Zoom = 0D;
             gMapControl1.MouseDoubleClick += gMapControl1_MouseDoubleClick;
@@ -989,6 +1067,10 @@
             tabPage5.PerformLayout();
             panel7.ResumeLayout(false);
             panel7.PerformLayout();
+            tabPage6.ResumeLayout(false);
+            panel8.ResumeLayout(false);
+            panel8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewFILTRAR_USUARIOS).EndInit();
             ResumeLayout(false);
         }
 
@@ -1076,6 +1158,15 @@
         private TextBox textBox_TELEFONO;
         private TextBox textBox_PASSWORD_CONFIRM;
         private TextBox textBox_PASSWORD;
+        private Panel panel8;
+        private DataGridView dataGridViewFILTRAR_USUARIOS;
+        private DataGridViewTextBoxColumn Column3;
+        private DataGridViewTextBoxColumn Column4;
+        private DataGridViewTextBoxColumn Column5;
+        private DataGridViewTextBoxColumn Column6;
+        private ComboBox comboBox_GestionAdmin;
+        private Label label15;
+        private DataGridViewTextBoxColumn iD;
         private GMap.NET.WindowsForms.GMapControl gMapControl1;
     }
 }

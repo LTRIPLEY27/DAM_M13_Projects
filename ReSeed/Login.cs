@@ -16,8 +16,8 @@ namespace ReSeed
         private String passwordUsuario;
 
         //VARIABLES DE CONEXION_URL
-        private static String URL_LOGIN = "https://t-sunlight-381215.lm.r.appspot.com/auth/";
-        private Conexion_BD conexion = new Conexion_BD();
+        private static String URL_LOGIN = "https://reseed-385107.ew.r.appspot.com/auth/";
+        private Conexion_BD conexion = new Conexion_BD ();
 
         public Form1()
         {

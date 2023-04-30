@@ -20,6 +20,7 @@ using System.Security.Policy;
 using System.Text.Json.Nodes;
 using System.Text.Json;
 using Newtonsoft.Json.Linq;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 
 namespace ReSeed
 {
@@ -27,11 +28,14 @@ namespace ReSeed
     {
 
         //URLs-END POINT
-        private String URL_registrarUsuarios = "https://t-sunlight-381215.lm.r.appspot.com/register";
-        private String URL_usuariosRegistrados = "https://t-sunlight-381215.lm.r.appspot.com/results/usuarios";
-        private String URL_elimarUsuario = "https://t-sunlight-381215.lm.r.appspot.com/delete/typus/usuario/id/";//A falta de añador a ID del usuario
-        private String URL_modificarUsuario = "https://t-sunlight-381215.lm.r.appspot.com/update/value/";//tecnico/id/ o admin/id/
-        private String URL_modificarUsuarioLogueado = "https://t-sunlight-381215.lm.r.appspot.com/update-user";
+        private String URL_registrarUsuarios = "https://reseed-385107.ew.r.appspot.com/register";
+        private String URL_usuariosRegistrados = "https://reseed-385107.ew.r.appspot.com/results/usuarios";
+        private String URL_elimarUsuario = "https://reseed-385107.ew.r.appspot.com/delete/typus/usuario/id/";//A falta de añador a ID del usuario
+        private String URL_modificarUsuario = "https://reseed-385107.ew.r.appspot.com/update/value/";//tecnico/id/ o admin/id/
+        private String URL_modificarUsuarioLogueado = "https://reseed-385107.ew.r.appspot.com/update-user";
+        private String URL_filtrarPorUsuario = "https://reseed-385107.ew.r.appspot.com/results/";
+        private String URL_usuarioLogueadi = "https://reseed-385107.ew.r.appspot.com/perfil";
+        private String URL_filtrarPorTecnicos = "https://reseed-385107.ew.r.appspot.com/results/tecnicos";
 
         //VARIABLES GLOBALES MAPAS
         //ivate GMarkerGoogle marcador;//Instanciamos marcadores
@@ -45,18 +49,22 @@ namespace ReSeed
 
         //VARIABLE PARA ALMACENAR TOKEN QUE RECIBO DE LA CLASE Conexion_BD
         private String TOKEN_form3;
-        private String usuarioLogueado;
+        //VARIABLE PARA ALMACENAR EL STRING USUARIO DEL USUARIO LOGUEADO
+        String usuarioLogueado;
 
         //PASAMOS AL CONTRUCTOR FORM3 EL STRING QUE RECIBIREMOS
-        public Administrador(String TOKEN_Login, String usuarioLogin)
+        public Administrador(String TOKEN_Login, String userLogueado)
         {
-            TOKEN_form3 = TOKEN_Login;//Indicamos que el String que recibiremos será igual al
-            usuarioLogueado = usuarioLogin;
+            TOKEN_form3 = TOKEN_Login;//Indicamos que el String que recibiremos será igual al String que recibimos de la clase Conexion_BD
+            usuarioLogueado = userLogueado;//Indicamos que el String userLogueado será igual al String que recibimos de la clase Conexion_BD
 
             InitializeComponent();
 
             //CARGAMOS MAPA Y CARACTERISTICAS AL INICIAR EL FORM
             mapaInicio();
+
+            //CARGAMOS EL COMBOBOX_LIS DE USUARIOS TECNICOS PARA ASIGNARLES TAREAS
+            mostrarTecnicos();
 
             //CARGAMOS REGISTRO DE USUARIOS AL ARRANCAR EL FORM
             mostrarRegistro();
@@ -83,6 +91,18 @@ namespace ReSeed
             gMapControl1.Zoom = 5;//zoom que inicializaremos por defecto (5- dado que queremos que se centre en España)
             gMapControl1.AutoScroll = true;
             gMapControl1.ShowTileGridLines = false;//Quitamos las lineas de coordenadas
+        }
+        #endregion
+
+        #region PRECARGA TECNICOS --> MOSTRAMOS TÉCNICOS EN LISTA DESPLEGABLE COMBOBOX (PARA ASIGNAR TAREAS)
+        /*
+         * Método mostrar solo usuarios técnicos.
+         * Y lo que mostraremos será el id y el user. Usamos para ello el método
+         * @rellenarComboBox (String URL,String token, Combobox combobox) de la clase Utilidades
+         */
+        public async void mostrarTecnicos ()
+        {
+            utilidades.rellenarComboBox(URL_filtrarPorTecnicos,TOKEN_form3,comboBox_usuarios);
         }
         #endregion
 
@@ -306,6 +326,8 @@ namespace ReSeed
 
                 checkBox_ADMIN.Checked = false;
                 checkBox_TECNIC.Checked = false;
+                checkBox_ADMIN.Enabled = true;
+                checkBox_TECNIC.Enabled = true;
 
             }
             else
@@ -334,9 +356,6 @@ namespace ReSeed
 
                 //Agregamos Información al Datagrid de usuarios
                 dataGridView_usuarios.Rows.Add(id, user, email);
-
-                //Añadimos los usuarios al Combobox_usuarios para asignarle tareas
-                comboBox_usuarios.Items.Add(id + " " + user);
 
             }
         }
@@ -509,6 +528,8 @@ namespace ReSeed
             //Objeto json
             JObject jsonUser = null;
 
+            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3,URL_usuariosRegistrados);
+
             //OBTENEMOS ID DEL CAMPO QUE OCULTAMOS EN LA INTERFICIE
             String id = textBox_SECRET_ID.Text;
 
@@ -539,7 +560,7 @@ namespace ReSeed
             if (password.Equals(confirmarPassword))
             {
                 //si el password no se ha modificado...
-                if (password.Equals(await utilidades.obtenerPassword(email, TOKEN_form3)))
+                if (password.Equals(utilidades.obtenerPassword(listaUsuarios,id)))
                 {
                     //Recomponemos el objeto con las modificaciones
                     Usuario user = new Usuario(nombre, apellido, usuario, password, email, telefono, rol);
@@ -610,10 +631,21 @@ namespace ReSeed
             textBox_user.Clear();
             textBox_TELEFONO.Clear();
             textBox_MAIL.Clear();
-            checkBox_ADMIN.Enabled = false;
-            checkBox_TECNIC.Enabled = false;
+            checkBox_ADMIN.Checked = false;
+            checkBox_TECNIC.Checked = false;
             textBox_PASSWORD.Clear();
             textBox_PASSWORD_CONFIRM.Clear();
+
+            //DEJAMOS ACTIVOS, PARA PODER HACER EDICIÓN SI LO REQUERIMOS
+            textBox_NOMBRE.Enabled = true;
+            textBox_APELLIDO.Enabled = true;
+            textBox_user.Enabled = true;
+            textBox_TELEFONO.Enabled = true;
+            textBox_MAIL.Enabled = true;
+            checkBox_ADMIN.Enabled = true;
+            checkBox_TECNIC.Enabled = true;
+            textBox_PASSWORD.Enabled = true;
+            textBox_PASSWORD_CONFIRM.Enabled = true;
 
             //GESTIONAMOS VISIBILIDAD BOTONES
             button_CANCELAR_USUARIOS.Enabled = true;
@@ -636,44 +668,47 @@ namespace ReSeed
          */
         public async void datosPerfil()
         {
-            Boolean salirBucle = false;
-            //Lista de usuarios
-            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3, URL_usuariosRegistrados);
 
-            //Recorremos lista de usuarios
-            for (int i = 0; i < listaUsuarios.Count && !salirBucle; i++)
+            //Obtenemos la lista de usuarios en la base de datos
+            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3,URL_usuariosRegistrados);
+
+            //Recorremos la lista usuarios
+            for (int i = 0; i < listaUsuarios.Count; i++)
             {
+                //cuando encontremos al usuario logueado
                 if (usuarioLogueado.Equals(listaUsuarios[i].Email))
                 {
-
+                    //Mostramos sus datos en los textboxes correspondiente
                     textBox_IDPERFIL.Text = listaUsuarios[i].Id;
                     textBox_USUARIOPERFIL.Text = listaUsuarios[i].User;
                     textBox_telefonoMIPERFIL.Text = listaUsuarios[i].NumeroTelefono;
                     textBox_PASSWORDPERFIL.Text = listaUsuarios[i].Password;
                     textBox_CONFIRMA_PASSWORDPERFIL.Text = listaUsuarios[i].Password;
-
-                    salirBucle = true;
                 }
             }
-            //Por defecto, desactivamos lo que no es posible modificar:
+
+            //estos campos no se podrán editar
             textBox_IDPERFIL.Enabled = false;
             textBox_USUARIOPERFIL.Enabled = false;
         }
 
         /*
-        * Botón que modificar password o mail en mi perfil
+        * Botón que modificar teléfono o password en mi perfil
         * ------------------------------------------------
         * Se gestiona  a través del método editarPerfilASYNC de clase Conexion_BD
         */
         private async void button_MIPERFIL_MODIFICA_PASSWORD_Click(object sender, EventArgs e)
         {
+            //lista de usuarios 
+            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(TOKEN_form3,URL_usuariosRegistrados);
+            //Obtenemos los datos de os textboxes
             String id = textBox_IDPERFIL.Text;
             String user = textBox_USUARIOPERFIL.Text;
             String telefono = textBox_telefonoMIPERFIL.Text;
             String password = textBox_PASSWORDPERFIL.Text;
             String repeatPassword = textBox_CONFIRMA_PASSWORDPERFIL.Text;
 
-            conexion.editarPerfilASYNC(password, telefono, TOKEN_form3, URL_modificarUsuarioLogueado, URL_usuariosRegistrados, id);
+            conexion.atributosParaPerfil(listaUsuarios,id,telefono,password,URL_modificarUsuarioLogueado,TOKEN_form3);
 
         }
 
@@ -682,5 +717,10 @@ namespace ReSeed
 
 
 
+        private void FiltrarUsuarios(object sender, EventArgs e)
+        {
+             
+
+        } 
     }
 }
