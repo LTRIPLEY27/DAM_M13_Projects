@@ -32,7 +32,7 @@ public class JsonReseedUtils {
 	 * @return devuelve el objeto UserObj, null en caso de error y muestra log error.
 	 */
 	//TODO finalizar la clase para convertir el objeto request en UserObj
-	public UserObj convertToUserObj(JSONObject jsonProfileObject, String token) {
+	public UserObj convertToUserObj(JSONObject jsonProfileObject) {
 
 		try {
 			userJSONInfo = jsonProfileObject;
@@ -44,7 +44,6 @@ public class JsonReseedUtils {
 					userJSONInfo.getString("apellido"),
 					userJSONInfo.getString("email"),
 					userJSONInfo.getString("telefono"),
-					token,
 					userJSONInfo.getString("rol"));
 
 		} catch (JSONException e) {
@@ -54,6 +53,44 @@ public class JsonReseedUtils {
 		}
 
 		return userObj;
+	}
+
+	/**
+	 * Metodo para convertir el JSON de la request de usuarios a un arraylist de usuarios.
+	 * @param jsonArray objeto de respuesta de la request.
+	 * @return devuelve un Arraylist de usuarios.
+	 */
+	public ArrayList<UserObj> convertJsonArrayToUserList(JSONArray jsonArray){
+		JSONArray jsonArrayUsers;
+
+		ArrayList<UserObj> userObjs = new ArrayList<>();
+
+		try {
+			jsonArrayUsers = jsonArray.getJSONArray(0);
+		} catch (JSONException e) {
+			throw new RuntimeException(e);
+		}
+
+		for (int i = 0; i < jsonArrayUsers.length(); i++) {
+
+
+			try {
+				userObjs.add(i, new UserObj(
+						jsonArrayUsers.getJSONObject(i).getString("id"),
+						jsonArrayUsers.getJSONObject(i).getString("user"),
+						jsonArrayUsers.getJSONObject(i).getString("nombre"),
+						jsonArrayUsers.getJSONObject(i).getString("apellido"),
+						jsonArrayUsers.getJSONObject(i).getString("email"),
+						jsonArrayUsers.getJSONObject(i).getString("telefono"),
+						jsonArrayUsers.getJSONObject(i).getString("rol")
+				));
+			} catch (JSONException e) {
+				throw new RuntimeException(e);
+			}
+
+		}
+
+		return userObjs;
 	}
 
 	/**
@@ -159,7 +196,7 @@ public class JsonReseedUtils {
 	 * @param jsonArrayComments Objeto json array los comentarios de la tarea.
 	 * @return Devolvemos un Arraylist de objetos comentario.
 	 */
-	private ArrayList<TaskComment> extractComments(JSONArray jsonArrayComments) throws JSONException {
+	public ArrayList<TaskComment> extractComments(JSONArray jsonArrayComments) throws JSONException {
 
 		ArrayList<TaskComment> arrayListComments = new ArrayList<>();
 

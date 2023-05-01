@@ -9,7 +9,7 @@
     app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="0dp"
     app:contentPadding="5dp"
-    android:id="@+id/card_task">
+    android:id="@+id/card_user">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,18 +18,28 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="80dp"
-            android:contentDescription="treeImage"
+            android:contentDescription="faceImage"
             android:layout_weight="1"
             app:srcCompat="@drawable/baseline_face_24"/>
-
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="3"
+        android:layout_gravity="center">
         <TextView
-            android:id="@+id/user_name_textText"
+            android:id="@+id/user_name_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
             android:textSize="20sp"
-            android:layout_gravity="center"
             android:text="Nombre"/>
+        <TextView
+            android:id="@+id/user_email_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Email"/>
+    </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

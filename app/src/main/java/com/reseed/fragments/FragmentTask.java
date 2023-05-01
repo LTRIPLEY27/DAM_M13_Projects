@@ -28,11 +28,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.reseed.R;
 import com.reseed.comparators.CommentComparator;
 import com.reseed.interfaces.VolleyResponseInterface;
 import com.reseed.objects.TaskComment;
 import com.reseed.objects.TaskObj;
+import com.reseed.requests.AdminTaskStatusUpdateRequest;
 import com.reseed.requests.SingletonReqQueue;
 import com.reseed.requests.UserAddCommentRequest;
 import com.reseed.requests.UserTaskStatusUpdateRequest;
@@ -52,7 +54,7 @@ public class FragmentTask extends Fragment {
 	Spinner statusSpinner;
 
 	UserAddCommentRequest sendCommentRequest;
-	String userToken;
+	String userToken, tipoUsuario;
 	RequestQueue requestQueue;
 
 	Button addCommentBtn;
@@ -73,6 +75,7 @@ public class FragmentTask extends Fragment {
 				throw new RuntimeException(e);
 			}
 			userToken = getArguments().getString("token");
+			tipoUsuario = getArguments().getString("tipoUsuario");
 
 			firstLoad = true;
 
@@ -120,6 +123,29 @@ public class FragmentTask extends Fragment {
 			}
 			// Colocamos la camara en la posición de la tarea.
 			googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centroMapa, taskObj.getTaskLocation().getZoom()));
+
+			// Comprovamos si hay algun poligono y lo mostramos en el mapa.
+
+			int numberPoints = taskObj.getTaskLocation().getMapPoints().size();
+
+			if (numberPoints > 0){
+				PolygonOptions polygonMap = new PolygonOptions();
+
+				for (int i = 0; i < numberPoints; i++) {
+
+					polygonMap.add(
+							new LatLng(
+									taskObj.getTaskLocation().getMapPoints().get(i).getLatitude(),
+									taskObj.getTaskLocation().getMapPoints().get(i).getLongitude())
+					);
+				}
+				googleMap.addPolygon(polygonMap);
+			}
+
+
+
+
+
 		}
 	};
 
@@ -235,7 +261,8 @@ public class FragmentTask extends Fragment {
 	}
 
 	/**
-	 * Metodo papra realizar la request usando {@link UserAddCommentRequest}
+	 * Metodo papra realizar la request usando {@link UserAddCommentRequest} y
+	 * añadir el comentario a la lista de estos.
 	 *
 	 * @param textComment
 	 */
@@ -266,37 +293,63 @@ public class FragmentTask extends Fragment {
 
 				//Si la respuesta
 				JSONObject jsResponse = (JSONObject) response;
+				addComment(jsResponse);
 
 				Toast toast = Toast.makeText(requireContext(), "Comentario añadido.", Toast.LENGTH_LONG);
 				toast.show();
 
 				// Leemos los comentarios del objeto tarea
-				textViewComentarios.setText(readComents(taskObj.getTaskComments()));
+				//textViewComentarios.setText(readComents(taskObj.getTaskComments()));
+
 				return true;
 
 			}
 		});
 
+	}
 
+	/**
+	 * Metodo para actualizar el campo de comentarios de la tarea.
+	 * @param jsonObject
+	 */
+	private void addComment(JSONObject jsonObject){
+
+		StringBuilder comments = new StringBuilder();
+
+		comments.append(textViewComentarios.getText());
+
+		try {
+			comments.append(jsonObject.getString("descripcion")).append("\n");
+			comments.append(jsonObject.getString("tecnico")).append("\n");
+			comments.append(jsonObject.getString("fecha")).append("\n");
+			comments.append("----------").append("\n");
+		} catch (JSONException e) {
+			throw new RuntimeException(e);
+		}
+
+		textViewComentarios.setText(comments);
 	}
 
 	private void actualizarEstatusTarea(int selectedItemPosition) {
-		/*
-		{
-		"name": "restauración del jardín de la asamblea",
-		"fecha_culminacion": "2023-04-18",
-		"tarea": "LIMPIEZA",
-		"estatus": "NEW",
-		"tecnico": "davidf",
-		"admin": "eduard",
-		"ubicacionId" : 7
-		}
-		 */
+
 
 		JSONObject requestJson = new JSONObject();
 
+
+		//todo hacer que como admin tambien se pueda cambiar els estado de la tarea.
+
 		try {
 			requestJson.put("name", taskObj.getName());
+
+
+			if(tipoUsuario.contentEquals("ADMIN")){
+				if(taskObj.getFecha_culminacion().contentEquals("null")){
+					requestJson.put("fecha_culminacion", null);
+				}else{
+					requestJson.put("fecha_culminacion", taskObj.getFecha_culminacion());
+				}
+
+			}
 			requestJson.put("tarea", taskObj.getTarea());
 			requestJson.put("estatus", convertStatus(selectedItemPosition));
 			requestJson.put("tecnico", taskObj.getTecnico());
@@ -307,45 +360,91 @@ public class FragmentTask extends Fragment {
 			throw new RuntimeException(e);
 		}
 
-		UserTaskStatusUpdateRequest userStatusUpdateComment = new UserTaskStatusUpdateRequest(userToken, taskObj.getId(), requestJson, requestQueue);
+		if(tipoUsuario.contentEquals("ADMIN")){
+			//
+			// Si es un admin se usa esta request.
+			//
 
-		userStatusUpdateComment.sendRequest(new VolleyResponseInterface() {
-			@Override
-			public void onError(String message) {
-				/**/
-				Log.e("Error login: ", message);
+			AdminTaskStatusUpdateRequest adminStatusUpdateComment = new AdminTaskStatusUpdateRequest(userToken, taskObj.getId(), requestJson, requestQueue);
+			adminStatusUpdateComment.sendRequest(new VolleyResponseInterface() {
+				@Override
+				public void onError(String message) {
+					Log.e("Error login: ", message);
 
-				if (message.contains("403")) {
-					Toast toast = Toast.makeText(requireContext(), "Update incorrecto.", Toast.LENGTH_LONG);
-					toast.show();
-				} else {
-					Toast toast = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG);
-					toast.show();
+					if (message.contains("403")) {
+						Toast toast = Toast.makeText(requireContext(), "Update incorrecto.", Toast.LENGTH_LONG);
+						toast.show();
+					} else {
+						Toast toast = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG);
+						toast.show();
+					}
 				}
-				//Todo make disable the addComent when is making the request.
-				//changeStatusInputUserPasswd(true);
-			}
 
-			@Override
-			public boolean onResponse(Object response) {
-
-				//Si la respuesta
-				JSONArray jsResponse = (JSONArray) response;
+				@Override
+				public boolean onResponse(Object response) {
+					//Si la respuesta
+					JSONObject jsResponse = (JSONObject) response;
 
 
-				Toast toast = Toast.makeText(requireContext(), "Estatus cambiado.", Toast.LENGTH_LONG);
-				toast.show();
+					Toast toast = Toast.makeText(requireContext(), "Estatus cambiado.", Toast.LENGTH_LONG);
+					toast.show();
 
-				// Leemos los comentarios del objeto tarea
-				textViewComentarios.setText(readComents(taskObj.getTaskComments()));
-				return true;
-			}
-		});
+					// Leemos los comentarios del objeto tarea
+					textViewComentarios.setText(readComents(taskObj.getTaskComments()));
+					return true;
+				}
+			});
+
+		}else{
+			//
+			// Si es un tecnico se usa esta request.
+			//
+
+			UserTaskStatusUpdateRequest userStatusUpdateComment = new UserTaskStatusUpdateRequest(userToken, taskObj.getId(), requestJson, requestQueue);
+
+			userStatusUpdateComment.sendRequest(new VolleyResponseInterface() {
+				@Override
+				public void onError(String message) {
+					/**/
+					Log.e("Error login: ", message);
+
+					if (message.contains("403")) {
+						Toast toast = Toast.makeText(requireContext(), "Update incorrecto.", Toast.LENGTH_LONG);
+						toast.show();
+					} else {
+						Toast toast = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG);
+						toast.show();
+					}
+					//Todo make disable the addComent when is making the request.
+					//changeStatusInputUserPasswd(true);
+				}
+
+				@Override
+				public boolean onResponse(Object response) {
+
+					//Si la respuesta
+					JSONArray jsResponse = (JSONArray) response;
+
+
+					Toast toast = Toast.makeText(requireContext(), "Estatus cambiado.", Toast.LENGTH_LONG);
+					toast.show();
+
+					// Leemos los comentarios del objeto tarea
+					textViewComentarios.setText(readComents(taskObj.getTaskComments()));
+					return true;
+				}
+			});
+		}
+
 
 
 	}
 
-
+	/**
+	 * Metodo para calcular el estado de la tarea,
+	 * @param status string del estatus de la tarea.
+	 * @return devuelve un int que se usa en la posicion del desplegable.
+	 */
 	private int calculateStatus(String status) {
 
 		if (status.contentEquals("IN_PROGRESS")) {
@@ -372,6 +471,12 @@ public class FragmentTask extends Fragment {
 
 	}
 
+	/**
+	 * Metodo que a partir de la posicion, devuelve el tipo de estado de forma de String
+	 * para hacer la request de cambio de estado.
+	 * @param position
+	 * @return
+	 */
 	private String convertStatus(int position) {
 
 

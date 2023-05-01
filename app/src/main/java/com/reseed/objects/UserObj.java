@@ -11,7 +11,7 @@ public class UserObj {
     private String apellido;
     private String email;
     private String telefono;
-    private String tokenUsuario;
+    //private String tokenUsuario;
     private String tipoUsuario;
 
     // Lista de tareas del usuario.
@@ -26,10 +26,9 @@ public class UserObj {
      * @param surname apellido del usuario
      * @param email correo electronico del usuario
      * @param phone telefono del usuario
-     * @param userToken token del usuario al iniciar sesión
      * @param userType tipo de usuario
      */
-    public UserObj(String id, String user,String name, String surname, String email, String phone, String userToken, String userType){
+    public UserObj(String id, String user,String name, String surname, String email, String phone, String userType){
 
         setId(id);
         setUser(user);
@@ -37,7 +36,7 @@ public class UserObj {
         setApellido(surname);
         setEmail(email);
         setTelefono(phone);
-        setTokenUsuario(userToken);
+        //setTokenUsuario(userToken);
         setTipoUsuario(userType);
     }
 
@@ -89,13 +88,13 @@ public class UserObj {
         this.telefono = telefono;
     }
 
-    public String getTokenUsuario() {
+    /*public String getTokenUsuario() {
         return tokenUsuario;
-    }
+    }*/
 
-    public void setTokenUsuario(String tokenUsuario) {
+    /*public void setTokenUsuario(String tokenUsuario) {
         this.tokenUsuario = tokenUsuario;
-    }
+    }*/
 
     public String getTipoUsuario() {
         return tipoUsuario;

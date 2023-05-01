@@ -101,11 +101,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 		View view = inflater.inflate(R.layout.fragment_task_list, container, false);
 		recyclerView = view.findViewById(R.id.recyclerTask);
 		textViewNoTareas = view.findViewById(R.id.textNoTareas);
-		//imageViewNoTask = (ImageView) view.findViewById(R.id.no_task_img);
 
-
-		// Si no hay tareas se hace visible el text view.
-		//todo canviar el textview por algo más sugerente.
 
 		if (listaTareas != null) {
 
@@ -131,7 +127,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 
 	private void requestData(String token) {
 
-		UserInfoRequest userInfoRequest = new UserInfoRequest(token, requestQueue, false);
+		UserInfoRequest userInfoRequest = new UserInfoRequest(token, requestQueue);
 		JSONObject jsResponse = new JSONObject();
 
 		userInfoRequest.sendRequest(new VolleyResponseInterface() {

@@ -16,57 +16,44 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.reseed.interfaces.VolleyResponseInterface;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserAddCommentRequest {
+public class AdminTaskStatusUpdateRequest {
 
-	private String token, urlPostLogin, description, tarea, tecnico, admin;
+	private String token, idTarea, urlPostLogin;
+
+	JSONObject data;
+
 	private RequestQueue requestQueue;
-	JSONObject jsonObjectUser;
+
+
 
 	/**
-	 * Constructor de la clase.
+	 * Constructor of the class.
 	 *
-	 * @param token Token proporcionado al iniciar sesión.
-	 * @param description Cuerpo del mensaje.
-	 * @param tarea id de tarea con la que se relaciona.
-	 * @param tecnico tecnico que escribe el mensaje.
-	 * @param admin administrador de la tarea.
+	 * @param token
+	 * @param data
 	 * @param requestQueue   created on activity.
 	 */
-	public UserAddCommentRequest(String token, String description, String tarea, String tecnico, String admin, RequestQueue requestQueue) {
+	public AdminTaskStatusUpdateRequest(String token, String idTarea, JSONObject data, RequestQueue requestQueue) {
 		setToken(token);
+		setData(data);
+		setIdTarea(idTarea);
 		setRequestQueue(requestQueue);
-
-		setDescription(description);
-		setTarea(tarea);
-		setTecnico(tecnico);
-		setAdmin(admin);
-
 	}
-
-
 
 
 	public void sendRequest(final VolleyResponseInterface listener) {
 
-		urlPostLogin = "https://reseed-385107.ew.r.appspot.com/post-mensaje";
+		urlPostLogin = "https://reseed-385107.ew.r.appspot.com/update/value/tarea/id/" + getIdTarea();
 
-		JSONObject jsonCallObject = new JSONObject();
-		try {
-			jsonCallObject.put("descripcion",getDescription());
-			jsonCallObject.put("tarea",getTarea());
-			jsonCallObject.put("tecnico",getTecnico());
-			jsonCallObject.put("admin",getAdmin());
-		} catch (Exception e) {
-			Log.e("Error user update request: ", e.getMessage());
-		}
 
-		JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, urlPostLogin,
-				jsonCallObject, new Response.Listener<JSONObject>() {
+		JsonObjectRequest req = new JsonObjectRequest(Request.Method.PUT, urlPostLogin,
+				getData(), new Response.Listener<JSONObject>(){
 
 			@Override
 			public void onResponse(JSONObject response) {
@@ -111,7 +98,6 @@ public class UserAddCommentRequest {
 				return headers;
 			}
 		};
-
 		// Politica de la request
 		int TIMEOUT_MS = 10000;      //10 segundos
 
@@ -122,14 +108,6 @@ public class UserAddCommentRequest {
 
 		getRequestQueue().add(req);
 
-	}
-
-	private void setJsonObjectUser(JSONObject jsonObjectUser) {
-		this.jsonObjectUser = jsonObjectUser;
-	}
-
-	private JSONObject getJsonObjectUser() {
-		return jsonObjectUser;
 	}
 
 	public String getToken() {
@@ -148,38 +126,20 @@ public class UserAddCommentRequest {
 		return requestQueue;
 	}
 
-	public String getDescription() {
-		return description;
+	public JSONObject getData() {
+		return data;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setData(JSONObject data) {
+		this.data = data;
 	}
 
-	public String getTarea() {
-		return tarea;
+	public String getIdTarea() {
+		return idTarea;
 	}
 
-	public void setTarea(String tarea) {
-		this.tarea = tarea;
-
+	public void setIdTarea(String idTarea) {
+		this.idTarea = idTarea;
 	}
 
-	public String getTecnico() {
-		return tecnico;
-	}
-
-	public void setTecnico(String tecnico) {
-		this.tecnico = tecnico;
-
-	}
-
-	public String getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(String admin) {
-		this.admin = admin;
-
-	}
 }

@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.reseed.fragments.FragmentTaskList;
 import com.reseed.fragments.FragmentUserConfig;
@@ -36,22 +37,18 @@ import java.util.ArrayList;
 
 public class AppActivity extends AppCompatActivity implements FragmentTaskListInterface {
 
-	TaskAdapter adapter;
 	DrawerLayout drawerLayout;
 	UserObj userObj;
-	ImageView image_menu_btn;
 	TextView textViewUsername, textViewEmail;
 	FragmentContainerView fragmentContainerView;
 	// NavigationView del menu_lateral lateral.
 	NavigationView navigationView;
 	Integer bottomMenuSelected;
-	String encryptedPasswd;
+	Boolean popUpMenuVisible;
+	String encryptedPasswd, tokenUsuario;
 	private JSONObject userJSONInfo;
-
-	private ArrayList<TaskObj> userTaskObjs;
-
 	private BottomNavigationView bottomNavigationView;
-
+	private FloatingActionButton floatingMenuButton,floatingCreateButton, floatingModifyButton, floatingDeleteButton;
 	private final JsonReseedUtils jsonReseedUtils = new JsonReseedUtils();
 
 	@Override
@@ -77,7 +74,14 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		drawerLayout = findViewById(R.id.drawer_layer);
 		fragmentContainerView = findViewById(R.id.fragmentContainerView);
 
+		// Navegacion inferior
 		this.bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+		// Botones flotantes para el menu admin de edicion.
+		this.floatingMenuButton = findViewById(R.id.floatingMenuButton);
+		this.floatingCreateButton = findViewById(R.id.floatingCreateButton);
+		this.floatingModifyButton = findViewById(R.id.floatingModifButton);
+		this.floatingDeleteButton = findViewById(R.id.floatingDeleteButton);
 
 
 		// TODO hacer la separacion de tipo de usuario.
@@ -90,10 +94,7 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 			disableAllAdminTaskButtons(false);
 		}
 
-
-
-
-
+		// Listener de la navegación inferior.
 		bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
 			@Override
 			public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -117,8 +118,62 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 			}
 		});
 
+		floatingMenuButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				Log.i("Boton flotante","click!");
+				popUpEditMenu();
+
+
+			}
+		});
+
+		floatingCreateButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				popUpEditMenu();
+			}
+		});
+
+		floatingModifyButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				popUpEditMenu();
+			}
+		});
+
+
+		floatingDeleteButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				popUpEditMenu();
+			}
+		});
+
+
+
+
 		setUserDataToNavMenu();
 		tasksFragmentCall(null);
+	}
+
+	/**
+	 * Metodo que controla la visivilidad del menu de edición del admin.
+	 */
+	private void popUpEditMenu() {
+		if(popUpMenuVisible){
+			floatingDeleteButton.setVisibility(View.GONE);
+			floatingModifyButton.setVisibility(View.GONE);
+			floatingCreateButton.setVisibility(View.GONE);
+			popUpMenuVisible = false;
+		}else{
+			floatingDeleteButton.setVisibility(View.VISIBLE);
+			floatingModifyButton.setVisibility(View.VISIBLE);
+			floatingCreateButton.setVisibility(View.VISIBLE);
+			popUpMenuVisible = true;
+		}
+
 	}
 
 	/**
@@ -132,9 +187,9 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		try {
 			convertJson = new JSONObject(getIntent().getStringExtra("jsonObject"));
 			this.userJSONInfo = convertJson;
-			String userToken = getIntent().getStringExtra("token");
+			this.tokenUsuario = getIntent().getStringExtra("token");
 
-			this.userObj = jsonReseedUtils.convertToUserObj(convertJson, userToken);
+			this.userObj = jsonReseedUtils.convertToUserObj(convertJson);
 		} catch (JSONException e) {
 			throw new RuntimeException(e);
 		}
@@ -197,7 +252,7 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 
 		Bundle bundleArgs = new Bundle();
 		bundleArgs.putString("data", userJSONInfo.toString());
-		bundleArgs.putString("token", userObj.getTokenUsuario());
+		bundleArgs.putString("token", tokenUsuario);
 		bundleArgs.putString("encryptedPasswd", encryptedPasswd);
 		fragmentUserConfig.setArguments(bundleArgs);
 
@@ -214,12 +269,18 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	 * @param item el menu_lateral de donde proviene.
 	 */
 	public void usersFragmentCall(MenuItem item) {
-		bottomMenuSelected = 0;
+
+		FragmentUsersList fragmentUsersList = new FragmentUsersList();
+
+		Bundle bundleArgs = new Bundle();
+		//bundleArgs.putString("data", userJSONInfo.toString());
+		bundleArgs.putString("token", tokenUsuario);
+		fragmentUsersList.setArguments(bundleArgs);
 
 		//fragmentContainerView.removeAllViewsInLayout();
 		getSupportFragmentManager().beginTransaction()
 				.setReorderingAllowed(true)
-				.add(R.id.fragmentContainerView, FragmentUsersList.class, null)
+				.add(R.id.fragmentContainerView, fragmentUsersList, null)
 				.commit();
 	}
 
@@ -229,14 +290,13 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	 * @param item el menu_lateral de donde proviene.
 	 */
 	public void tasksFragmentCall(@Nullable MenuItem item) {
-		bottomMenuSelected = 1;
 
 		//fragmentContainerView.removeAllViewsInLayout();
 		FragmentTaskList fragmentTaskList = new FragmentTaskList();
 
 		Bundle bundleArgs = new Bundle();
 		//bundleArgs.putString("data", userJSONInfo.toString());
-		bundleArgs.putString("token", userObj.getTokenUsuario());
+		bundleArgs.putString("token", tokenUsuario);
 		fragmentTaskList.setArguments(bundleArgs);
 
 
@@ -256,12 +316,17 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 			bottomNavigationView.getMenu().findItem(R.id.menu_stadistics).setEnabled(false);
 
 			bottomNavigationView.setSelectedItemId(R.id.menu_tasks);
+			floatingMenuButton.setVisibility(View.GONE);
 		}else{
 			bottomNavigationView.getMenu().findItem(R.id.menu_users).setChecked(true);
 			bottomNavigationView.getMenu().findItem(R.id.menu_users).setEnabled(true);
 
 			bottomNavigationView.getMenu().findItem(R.id.menu_stadistics).setChecked(true);
 			bottomNavigationView.getMenu().findItem(R.id.menu_stadistics).setEnabled(true);
+
+			// Visivilidad del menu de edicion.
+			floatingMenuButton.setVisibility(View.VISIBLE);
+			popUpMenuVisible = false;
 
 			bottomNavigationView.setSelectedItemId(R.id.menu_tasks);
 		}
@@ -285,7 +350,8 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 
 		// Datos del item clicado, en este caso json pasado a String.
 		bundleArgs.putString("data", jsonData);
-		bundleArgs.putString("token", userObj.getTokenUsuario());
+		bundleArgs.putString("tipoUsuario", userObj.getTipoUsuario());
+		bundleArgs.putString("token", tokenUsuario);
 
 		taskFragment.setArguments(bundleArgs);
 

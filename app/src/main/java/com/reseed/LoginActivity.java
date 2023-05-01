@@ -164,7 +164,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getUserInfo(String token) {
-        UserInfoRequest userInfoRequest = new UserInfoRequest(token, requestQueue,false);
+        UserInfoRequest userInfoRequest = new UserInfoRequest(token, requestQueue);
 
         userInfoRequest.sendRequest(new VolleyResponseInterface() {
             @Override

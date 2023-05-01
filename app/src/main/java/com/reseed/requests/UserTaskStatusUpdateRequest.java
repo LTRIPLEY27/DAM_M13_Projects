@@ -3,6 +3,7 @@ package com.reseed.requests;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
@@ -47,7 +48,7 @@ public class UserTaskStatusUpdateRequest {
 
 	public void sendRequest(final VolleyResponseInterface listener) {
 
-		urlPostLogin = "https://t-sunlight-381215.lm.r.appspot.com/update/value/tarea/id/" + getIdTarea();
+		urlPostLogin = "https://reseed-385107.ew.r.appspot.com/update/value/tarea/id/" + getIdTarea();
 
 
 		CustomJSONArrayRequest req = new CustomJSONArrayRequest(Request.Method.PUT, urlPostLogin,
@@ -96,6 +97,14 @@ public class UserTaskStatusUpdateRequest {
 				return headers;
 			}
 		};
+
+		// Politica de la request
+		int TIMEOUT_MS = 10000;      //10 segundos
+
+		req.setRetryPolicy(new DefaultRetryPolicy(
+				TIMEOUT_MS,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
 		getRequestQueue().add(req);
 

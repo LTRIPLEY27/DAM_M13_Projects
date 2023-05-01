@@ -40,7 +40,7 @@ public class UserUpdateRequest {
 
 	public void sendRequest(final VolleyResponseInterface listener) {
 
-		urlPostLogin = "https://t-sunlight-381215.lm.r.appspot.com/auth/";
+		urlPostLogin = "https://reseed-385107.ew.r.appspot.com/auth/";
 
 		JSONObject jsonCallObject = new JSONObject();
 		try {
@@ -91,9 +91,11 @@ public class UserUpdateRequest {
 				});
 
 		//creamos la retry policy para definir los intentos y el tiempo de la request.
+		int TIMEOUT_MS = 10000;      //10 seconds
+
 		req.setRetryPolicy(new DefaultRetryPolicy(
-				2500,
-				0,
+				TIMEOUT_MS,
+				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
 				DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
 		getRequestQueue().add(req);
