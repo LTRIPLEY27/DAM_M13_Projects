@@ -22,11 +22,13 @@ import com.reseed.interfaces.FragmentTaskListInterface;
 import com.reseed.interfaces.RecyclerViewInterface;
 import com.reseed.interfaces.VolleyResponseInterface;
 import com.reseed.objects.TaskObj;
+import com.reseed.requests.JsonArrayGetRequest;
 import com.reseed.requests.SingletonReqQueue;
-import com.reseed.requests.UserInfoRequest;
+import com.reseed.requests.JsonGetRequest;
 import com.reseed.util.JsonReseedUtils;
 import com.reseed.adapter.TaskAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -60,7 +62,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 	private String mParam1;
 	private String mParam2;
 
-	private String userToken;
+	private String userToken, typeUser;
 	private RecyclerView recyclerView;
 
 	private ImageView imageViewNoTask;
@@ -85,6 +87,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 		if (getArguments() != null) {
 			//jsonObjectTasks = new JSONObject(getArguments().getString("data"));
 			userToken = getArguments().getString("token");
+			typeUser = getArguments().getString("typeUser");
 		}
 		// instanciamos la requestqueue
 		requestQueue = SingletonReqQueue.getInstance(requireContext()).getRequestQueue();
@@ -119,15 +122,24 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 			textViewNoTareas.setVisibility(View.VISIBLE);
 		}
 
-		requestData(userToken);
+		if(typeUser.contentEquals("ADMIN")){
+
+			requestAdminData(userToken);
+
+		}else{
+			requestUserData(userToken);
+		}
 
 		return view;
 
 	}
 
-	private void requestData(String token) {
+	private void requestUserData(String token) {
+		String url = "";
 
-		UserInfoRequest userInfoRequest = new UserInfoRequest(token, requestQueue);
+		url = "https://reseed-385107.ew.r.appspot.com/perfil";
+
+		JsonGetRequest userInfoRequest = new JsonGetRequest(token, requestQueue,url);
 		JSONObject jsResponse = new JSONObject();
 
 		userInfoRequest.sendRequest(new VolleyResponseInterface() {
@@ -144,7 +156,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 			public boolean onResponse(Object response) {
 				JSONObject jsResponse = (JSONObject) response;
 				Log.i("Respuesta user info", jsResponse.toString());
-				refreshContent(jsResponse);
+				refreshUserContent(jsResponse);
 				//openAppActivity(jsResponse);
 
 				//refreshContent(jsResponse);
@@ -155,16 +167,76 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 
 	}
 
-	private void refreshContent(JSONObject jsonObject) {
+	private void requestAdminData(String token) {
+		String url = "";
+
+		url = "https://reseed-385107.ew.r.appspot.com/results/tareas";
+
+		JsonArrayGetRequest userInfoRequest = new JsonArrayGetRequest(token, requestQueue,url);
+		JSONObject jsResponse = new JSONObject();
+
+		userInfoRequest.sendRequest(new VolleyResponseInterface() {
+			@Override
+			public void onError(String message) {
+				Log.e("Error login: ", message);
+				Toast toast = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG);
+				toast.show();
+				//changeStatusInputUser(true);
+
+			}
+
+			@Override
+			public boolean onResponse(Object response) {
+				JSONArray jsResponse = (JSONArray) response;
+				Log.i("Respuesta user info", jsResponse.toString());
+				extractAdminTasks(jsResponse);
+				//openAppActivity(jsResponse);
+
+				//refreshContent(jsResponse);
+				return true;
+			}
+		});
+		//This is for Headers If You Needed
+
+	}
+
+	private void refreshAdminContent(JSONArray jsonArray) {
+
+		extractAdminTasks(jsonArray);
+		recyclerView.getAdapter().notifyDataSetChanged();
+	}
+
+	// todo hacer que cuando entra el admin vea todas las tareas de todos.
+	private void extractAdminTasks(JSONArray jsonArray) {
+		this.listaTareas.clear();
+		int numTareas = 0;
+
+		try {
+			numTareas = jsonArray.getJSONArray(0).length();
+
+			for (int i = 0; i < numTareas; i++) {
+				if(!jsonArray.getJSONArray(0).getJSONObject(i).isNull("ubicacion")){
+					listaTareas.add(jsonReseedUtils.convertToTaskObject(jsonArray.getJSONArray(0).getJSONObject(i)));
+				}
+			}
+
+		} catch (JSONException e) {
+			Log.e("Error convertToTaskObj", e.getMessage());
+		}
+	}
+
+
+	private void refreshUserContent(JSONObject jsonObject) {
 		this.jsonObjectUser = jsonObject;
-		extractTasks(jsonObject);
+
+		extractUserTasks(jsonObject);
 		recyclerView.getAdapter().notifyDataSetChanged();
 	}
 
 	/**
 	 * Metodo para extraer las tareas del JSON.
 	 */
-	private void extractTasks(JSONObject jsonUserInfo) {
+	private void extractUserTasks(JSONObject jsonUserInfo) {
 		this.listaTareas.clear();
 		try {
 

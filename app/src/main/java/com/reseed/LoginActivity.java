@@ -16,7 +16,7 @@ import com.android.volley.RequestQueue;
 import com.reseed.fragments.FragmentUserConfig;
 import com.reseed.requests.UserUpdateRequest;
 import com.reseed.requests.SingletonReqQueue;
-import com.reseed.requests.UserInfoRequest;
+import com.reseed.requests.JsonGetRequest;
 import com.reseed.util.EncryptUtils;
 import com.reseed.interfaces.VolleyResponseInterface;
 
@@ -164,7 +164,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getUserInfo(String token) {
-        UserInfoRequest userInfoRequest = new UserInfoRequest(token, requestQueue);
+
+        String url = "https://reseed-385107.ew.r.appspot.com/perfil";
+
+        JsonGetRequest userInfoRequest = new JsonGetRequest(token, requestQueue, url);
 
         userInfoRequest.sendRequest(new VolleyResponseInterface() {
             @Override

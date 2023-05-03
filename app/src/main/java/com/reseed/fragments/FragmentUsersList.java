@@ -15,18 +15,15 @@ import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.reseed.R;
-import com.reseed.adapter.TaskAdapter;
 import com.reseed.adapter.UserAdapter;
 import com.reseed.interfaces.RecyclerViewInterface;
 import com.reseed.interfaces.VolleyResponseInterface;
 import com.reseed.objects.UserObj;
 import com.reseed.requests.SingletonReqQueue;
-import com.reseed.requests.UserInfoRequest;
 import com.reseed.requests.UserListRequest;
 import com.reseed.util.JsonReseedUtils;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

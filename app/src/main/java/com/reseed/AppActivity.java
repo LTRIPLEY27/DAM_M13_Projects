@@ -122,7 +122,9 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 			@Override
 			public void onClick(View v) {
 
+
 				Log.i("Boton flotante","click!");
+				Log.i("Boton flotante",getSupportFragmentManager().getPrimaryNavigationFragment().getClass().toString());
 				popUpEditMenu();
 
 
@@ -297,6 +299,8 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		Bundle bundleArgs = new Bundle();
 		//bundleArgs.putString("data", userJSONInfo.toString());
 		bundleArgs.putString("token", tokenUsuario);
+		bundleArgs.putString("typeUser", userObj.getTipoUsuario());
+
 		fragmentTaskList.setArguments(bundleArgs);
 
 

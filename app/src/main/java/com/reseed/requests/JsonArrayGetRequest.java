@@ -1,6 +1,7 @@
 package com.reseed.requests;
 
 import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
@@ -12,40 +13,40 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.reseed.interfaces.VolleyResponseInterface;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserInfoRequest {
+public class JsonArrayGetRequest {
 
     private String token;
     private RequestQueue requestQueue;
-    private String urlPostLogin;
+    private final String urlPost;
 
     /**
      * Constructor of the class.
      * @param token email from the user
      * @param requestQueue created on activity.
      */
-    public UserInfoRequest(String token, RequestQueue requestQueue){
+    public JsonArrayGetRequest(String token, RequestQueue requestQueue, String url){
         setToken(token);
         setRequestQueue(requestQueue);
+        this.urlPost = url;
     }
 
     public void sendRequest(final VolleyResponseInterface listener){
 
-
-        urlPostLogin = "https://reseed-385107.ew.r.appspot.com/perfil";
-
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.GET,urlPostLogin,
-                null, new Response.Listener<JSONObject>() {
+        JsonArrayRequest req = new JsonArrayRequest(Request.Method.GET,urlPost,
+                null, new Response.Listener<JSONArray>() {
 
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray response) {
                 Log.d("Respuesta user info request", response.toString());
 
                 // Enviamos la informacion de la respuesta al LoginActivity.
