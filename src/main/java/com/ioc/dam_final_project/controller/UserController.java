@@ -108,6 +108,7 @@ public class UserController implements Constantes {
         var user = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
         return user.getRol() != Rol.ADMIN ? ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tiene permisos para realizar ésta acción") : ResponseEntity.status(HttpStatus.CREATED).body(serviceAuth.register(request));
+        //return ResponseEntity.status(HttpStatus.CREATED).body(serviceAuth.register(request));
     }
 
     /**
@@ -297,10 +298,18 @@ public class UserController implements Constantes {
      *  </ul>
      */
     @GetMapping(path = "tareas/porRango")
-    public ResponseEntity<List <Object>> filterByDateTareas(Principal principal, @RequestParam String date1, @RequestParam String date2){
+    public ResponseEntity<List <Object>> filterByDateTareas(Principal principal, @RequestParam Object fecha, @RequestParam String date1, @RequestParam String date2){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByTareaDates(date1, date2)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByTareaDates(fecha, date1, date2)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }
+
+
+    @GetMapping(path = "tareas/porEstatus")
+    public ResponseEntity<List <Object>> filterByEstatusTareas(Principal principal, @RequestParam String estatus){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.getTaskByStatus(estatus)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
 
     /*************************************************************
@@ -379,12 +388,12 @@ public class UserController implements Constantes {
      * <li>Response: El HTTPStatus con el codigo 'NO_CONTENT' (204), en caso de ser satisfactorio o  un mensaje indicando error</li>
      * </ul>
      * </ul>
-     */
+     */// todo, preguntar si el usuario y el admin pueden eliminar mensajes !!!!!
     @DeleteMapping("/delete/typus/{typus}/id/{id}")
     public ResponseEntity<Object> deleteById(Principal principal, @PathVariable String typus, @PathVariable Long id){
-        var userOnSession = principal.getName();
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return userService.isRegistered(typus, id) != false ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(userService.deleteRegister(userOnSession, typus, id)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No hay registro del ID proporcionado de la clase " + typus.toUpperCase() + " Por favor, verifique");
+        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(typus, id) != false ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(userService.deleteRegister(userOnSession.getUser(), typus, id)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No hay registro del ID proporcionado de la clase " + typus.toUpperCase() + " Por favor, verifique");
     }
 
 }

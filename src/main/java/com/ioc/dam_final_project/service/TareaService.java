@@ -26,7 +26,9 @@ public interface TareaService {
     void deleteEntity(Long id);
     Object updateValue(Long id, Object object, User user) throws JsonProcessingException;
 
-    List<TareaDTO> filteringByDates(String date1, String date2);
+    List<TareaDTO> filteringByDates(Object fecha, String date1, String date2);
+
+    List<Object> getByTecnicsAndStatus(String estatus);
 
     TareaDTO searchById(Long id);
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -37,10 +38,24 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
     /**
      * QUERY'S CON FILTROS ESPECIFICOS
      */
-    @Query(value = "SELECT  * FROM tarea\n" +
-                        "WHERE fecha BETWEEN :date1 AND :date2\n" +
-                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
-    List <Tarea> filterByDateRange(@PathVariable("date1") String date1, @PathVariable("date2") String date2);
 
+
+    /*@Query(value = "SELECT  *\n" +
+                        "FROM tarea \n" +
+                        "WHERE :fecha BETWEEN :date1 AND :date2\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)*/
+    @Query(value = "SELECT  *\n" +
+            "    FROM tarea\n" +
+            "    WHERE REPLACE(:fecha, '\"\"', '') BETWEEN :date1 AND :date2\n" +
+            "    ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByDateRange(@Param("fecha") Object fecha, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
+
+    @Query(value = "SELECT B.nombre AS 'Técnico',  COUNT(*) AS 'Cantidad'\n" +
+                        "FROM tarea A\n" +
+                        "JOIN user B on B.id = A.tecnico\n" +
+                            "WHERE A.estatus LIKE :estatus\n" +
+                        "GROUP BY A.tecnico\n" +
+                        "LIMIT 10;", nativeQuery = true)
+    List<Map<String, Integer>> quantityTaskByStatusAndUser(@Param("estatus") String estatus);
 
 }

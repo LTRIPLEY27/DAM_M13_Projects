@@ -48,10 +48,10 @@ public class SecurityConfiguration  {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**").permitAll()
-               // .requestMatchers("/**").permitAll()
+                //.requestMatchers("/auth/**").permitAll()
+               .requestMatchers("/**").permitAll()
                  // --> OK
-                .requestMatchers("/register/**").permitAll()  // --> OK
+                //.requestMatchers("/register/**").permitAll()  // --> OK
                 //.requestMatchers("/register/**").hasAuthority("ADMIN")
                 //.requestMatchers("/tecnico/**").hasAuthority("TECNIC")
                 //.requestMatchers("/admin/**").permitAll() // --to restart users
