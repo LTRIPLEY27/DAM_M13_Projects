@@ -33,15 +33,20 @@ namespace ReSeed
         private String URL_elimarUsuario = "https://reseed-385107.ew.r.appspot.com/delete/typus/usuario/id/";//A falta de añador a ID del usuario
         private String URL_modificarUsuario = "https://reseed-385107.ew.r.appspot.com/update/value/";//tecnico/id/ o admin/id/
         private String URL_modificarUsuarioLogueado = "https://reseed-385107.ew.r.appspot.com/update-user";
-        private String URL_filtrarPorUsuario = "https://reseed-385107.ew.r.appspot.com/results/";
-        private String URL_usuarioLogueadi = "https://reseed-385107.ew.r.appspot.com/perfil";
         private String URL_filtrarPorAdministradores = "https://reseed-385107.ew.r.appspot.com/results/admins";
         private String URL_filtrarPorTecnicos = "https://reseed-385107.ew.r.appspot.com/results/tecnicos";
+        private String URL_crearTareas = "https://reseed-385107.ew.r.appspot.com/tarea/tecnico/";//pasar id técnico
+        private String URL_crearUbicacion = " https://reseed-385107.ew.r.appspot.com/ubicacion/tarea/";//pasar id Tarea
+        private String URL_crearCoordenadas = "https://reseed-385107.ew.r.appspot.com/coordenada/ubicacion/";//pasar idUbicacion
+        private String URL_mensajes = "https://reseed-385107.ew.r.appspot.com/post-mensaje";
 
 
         //VARIABLES GLOBALES MAPAS
         //ivate GMarkerGoogle marcador;//Instanciamos marcadores
         private GMapOverlay capaMarcado;//Instanciamos la capa donde se añadirán los marcadores
+
+        //UBICACION FIJADA EN ESPAÑA
+        private String ubicacion = "{\"centroLatitud\": 40.463667, \"centroLongitud\": -3.74922,\"zoom\" : 5}";
 
         //OBJETO USUARIO
         private Usuario usuario;
@@ -79,7 +84,7 @@ namespace ReSeed
 
         }
 
-        //********************** ALTA TAREAS ************************************
+        //********************** GESTION MAPAS ************************************
 
         #region MAPA PRECARGA INICIAL
         public void mapaInicio()
@@ -129,7 +134,7 @@ namespace ReSeed
         private void btn_cancelar_Click(object sender, EventArgs e)
         {
 
-            calendario.ResetText();//reseteamos el dia configurado. Se configura al dia actual
+            fecha_culmincacion.ResetText();//reseteamos el dia configurado. Se configura al dia actual
 
             textBox_latitud.ResetText();//borramos latitud
             textBox_longitud.ResetText();//borramos longitud
@@ -260,6 +265,140 @@ namespace ReSeed
                 capaMarcado.Clear();//borramos capa de dibujo poligono
             }
         }
+        #endregion
+
+        //***************************GESTION TAREAS***************************************//
+
+        #region CREAR TAREA
+
+        /*-------------------
+         *  btn_enviar_Click
+         *  -----------------
+         *  Este botón enviara todo el objeto tarea a la base de datos.
+         *  Para ello, necesitaremos crear un json con los datos básicos de tarea:
+         *  @name --> Pqueña introduccion del administrado a la tarea a realizar en un textbox
+         *  @tarea--> Lo obtenemos cuando el administrador lo selecciona del combobox
+         *  @fechaculminacion -- Lo obtenemos cuando el administrador selecciona la fecha (la transformamos en dato válido para vase de datos (formato))
+         *  @status --> Lo obtenemos cuando el administrador lo selecciona del combobox
+         *  
+         *  -Usamos la URL del ENDPOINT correspondiente añadiendo a la URL el idTecnico obtenido del combobox Usuarios
+         *  -La @jsonTarea será el json (name,tarea,fechaculminacion,satatus)
+         *  -@token es el token de administrado con el que estamos autentificados en BD
+         *  -La @ubicacion es una variable que siempre sera la misma (coordendas españa).
+         *  -La URL END POINT de ubicacion
+         *  -La URL END POINT de coordenadas
+         *  -@listaCoordendas que es una lista que contiene objetos de Coordenda
+         *  
+         *  Utilizaremos estos parámetros en el método @crearTarea de la clase Conexion_BD
+         *  
+         *  ---AÑADIMOS LOS MENSAJES AL DESTINATARIO---
+         *  Usamos los metodos de la clase Utilidades para obter el user del remitente a traves de su mail, y el user 
+         *  del técnico a través de su id.
+         *  Asi pues, pasaremos tambien URL_ENDPOINT mensaje, el String con el mensaje, el String con el remitente y
+         *  el String con el destinatario.
+         *  
+         *  Por último,limpiaremos todos los campos
+         *  
+         */
+        private async void btn_enviar_Click(object sender, EventArgs e)
+        {
+            String tecnicoSeleccionado = comboBox_usuarios.SelectedItem.ToString();
+            String[] partes = tecnicoSeleccionado.Split("-");
+            String idTecnico = partes[0];
+
+
+            int posTareasSeleccionada = comboBox_tareas.SelectedIndex;
+            String tarea = null;
+
+            int posEstatusSeleccionado = comboBox_ESTATUS.SelectedIndex;
+            String estatus = null;
+
+            DateTimePicker fechaCulminacion = fecha_culmincacion;
+            String fecha_culminacion = fechaCulminacion.Value.ToString("yyyy-MM-dd");
+
+            String name = textBox_INFOTAREA.Text;
+
+            switch (posTareasSeleccionada)
+            {
+                case 0:
+                    tarea = comboBox_tareas.SelectedItem.ToString();
+                    break;
+
+                case 1:
+                    tarea = comboBox_tareas.SelectedItem.ToString();
+                    break;
+
+                case 2:
+                    tarea = comboBox_tareas.SelectedItem.ToString();
+                    break;
+            }
+
+            switch (posEstatusSeleccionado)
+            {
+                case 0:
+                    estatus = comboBox_ESTATUS.SelectedItem.ToString();
+                    break;
+                case 1:
+                    estatus = comboBox_ESTATUS.SelectedItem.ToString();
+                    break;
+                case 2:
+                    estatus = comboBox_ESTATUS.SelectedItem.ToString();
+                    break;
+                case 3:
+                    estatus = comboBox_ESTATUS.SelectedItem.ToString();
+                    break;
+                case 4:
+                    estatus = comboBox_ESTATUS.SelectedItem.ToString();
+                    break;
+            }
+
+            //MessageBox.Show(id + " " + name + " " + tarea + " " + estatus + " " + fecha_culminacion);
+
+            //Creamos el objeto json que será la creación tarea inicial
+            JObject jsonTarea = new JObject();
+            jsonTarea.Add("name", name);
+            jsonTarea.Add("fecha_culminacion", fecha_culminacion);
+            jsonTarea.Add("tarea", tarea);
+            jsonTarea.Add("estatus", estatus);
+
+            //URL_tarea que incluiremos el id del técnico
+            String URL_tareaTecnico = URL_crearTareas + idTecnico;
+
+            //Recooremos las coordenadas del Datagrid y añadimos las mismas a un List de coordendas
+            Coordenada coordenada = null;
+            List<Coordenada> coordenadas = new List<Coordenada>();
+            for (int i = 0; i < registroCoordenadas.Rows.Count - 1; i++)//Restamos una posición dado que por defecto aparece una coordenada en pos (0,0)
+            {
+                double latitud = Convert.ToDouble(registroCoordenadas.Rows[i].Cells[0].Value);
+                double longitud = Convert.ToDouble(registroCoordenadas.Rows[i].Cells[1].Value);
+
+                coordenada = new Coordenada(latitud, longitud);
+                coordenadas.Add(coordenada);
+            }
+
+            String mensaje = textBox_comentarios.Text;
+
+            String remitente = await utilidades.mensajesRemitenteASYNC(usuarioLogueado, TOKEN_form3, URL_usuariosRegistrados);
+            String destinatario = await utilidades.mensajeDestinatarioASYNC(idTecnico, TOKEN_form3, URL_usuariosRegistrados);
+
+            conexion.crearTarea(URL_tareaTecnico, TOKEN_form3, jsonTarea.ToString(), ubicacion, URL_crearUbicacion,
+                URL_crearCoordenadas, coordenadas, URL_mensajes, mensaje, remitente, destinatario);
+
+            //Limpiamos los campos
+            fecha_culmincacion.ResetText();//reseteamos el dia configurado. Se configura al dia actual
+
+            textBox_latitud.ResetText();//borramos latitud
+            textBox_longitud.ResetText();//borramos longitud
+            textBox_comentarios.ResetText();//borramos comentarios
+
+            comboBox_tareas.ResetText();//borramos tareas
+            comboBox_usuarios.ResetText();//borramos usuarios
+
+            registroCoordenadas.Rows.Clear();//borramos todas las coordenadas del datagrid
+            capaMarcado.Clear();//eliminamos la capa poligono que dibujamos en el mapa
+
+        }
+
         #endregion
 
         //******************** GESTIÓN USUARIOS *********************************
@@ -419,7 +558,10 @@ namespace ReSeed
         private void button3_ACTUALIZARLISTA_Click(object sender, EventArgs e)
         {
             dataGridView_usuarios.Rows.Clear();
+            comboBox_usuarios.Items.Clear();
             mostrarRegistro();
+            mostrarTecnicos();
+
         }
         #endregion
 
@@ -732,7 +874,8 @@ namespace ReSeed
                 dataGridViewFILTRAR_USUARIOS.Rows.Clear();
                 utilidades.usuariosFiltoRolASYNC(URL_filtrarPorAdministradores, TOKEN_form3, dataGridViewFILTRAR_USUARIOS);
 
-            } else
+            }
+            else
             {
                 dataGridViewFILTRAR_USUARIOS.Rows.Clear();
                 utilidades.usuariosFiltoRolASYNC(URL_filtrarPorTecnicos, TOKEN_form3, dataGridViewFILTRAR_USUARIOS);

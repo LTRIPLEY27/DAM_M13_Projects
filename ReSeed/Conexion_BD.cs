@@ -302,14 +302,13 @@ namespace ReSeed
         * 
         * Con condicional if:
         * -Controlamos si se ha modificado o no el teléfono o el password.
-        * -En caso que el password NO se modifique, contruiremos su objeto JSon con el metodo @JsonUsuario_sinPassword
-        * de la clase utilidades. Este objeto no enviará el password a la API para evitar probemas de HASH.
-        * En cualquier otro caso (telefono modificado o no modificado + modificación password --> Enviaremos objeto JSon 
-        * con todos sus datos con el método @JsonUsuario_conPassword de la clase Utilidades.
-        * 
+        * -En caso que el password NO se modifique, contruiremos su objeto JSon con los parámetros
+        * que requiere el envío al ENDPOINT.
+        * En este caso no enviaremos la contraseña por problemas que puedan haber con el hash.
+        * En cualquier otro caso (telefono modificado o no modificado + modificación password --> Enviaremos el Json
+        * incluyendo los datos del password.
         * Cada validación del botón lanzará un menjaje al usuario para informarle de lo realizado.
-        * Estos mensajes los sacamos en MessageBox en retrimiento de usar la respues del @response (true or false)
-        *
+        * Estos mensajes los sacamos en MessageBox despues de confirmar el resultado del @response         *
         *                     
         */
         #region EDITAR PERFIL
@@ -317,9 +316,15 @@ namespace ReSeed
         public void atributosParaPerfil(List<Post> listaUsuarios, String id, String nuevoTelefono, String nuevoPassword, String URL, String token)
         {
 
-            Usuario user = null;
             JObject userJSon = null;
+            String jsonContent = null;
+            Usuario user = null;
+
             Boolean usuarioEncontrado = false;
+
+            HttpClient client = new HttpClient();
+            //autorización TOKEN    
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             for (int i = 0; i < listaUsuarios.Count && !usuarioEncontrado; i++)
             {
@@ -327,61 +332,199 @@ namespace ReSeed
                 {
                     String nombre = listaUsuarios[i].Nombre;
                     String apellido = listaUsuarios[i].Apellido;
-                    String usuario = listaUsuarios[i].User;
-                    String password = listaUsuarios[i].Password;
-                    String email = listaUsuarios[i].Email;
+                    String usuario = listaUsuarios[i].User;                 
                     String telefono = listaUsuarios[i].NumeroTelefono;
+                    String email = listaUsuarios[i].Email;
+                    String password = listaUsuarios[i].Password;
                     String rol = listaUsuarios[i].Rol;
 
-                    if (!nuevoPassword.Equals(utilidades.obtenerPassword(listaUsuarios, id)))
+                    if (password.Equals(nuevoPassword))
                     {
-                        if (!nuevoTelefono.Equals(utilidades.obtenerTelefono(listaUsuarios, id)))
+                        if (telefono.Equals(nuevoTelefono))
                         {
-                            user = new Usuario(nombre, apellido, usuario, nuevoPassword, email, nuevoTelefono, rol);
+                            MessageBox.Show("No ha modificado ningún dato de perfil.","INFORMACION PERFIL",
+                                MessageBoxButtons.OK,MessageBoxIcon.Information);
+                        } else
+                        {
+                            user = new Usuario(nombre, apellido, usuario, nuevoTelefono, email, password, rol);
+                            userJSon = new JObject();
+                            userJSon.Add("nombre", nombre);
+                            userJSon.Add("apellido", apellido);
+                            userJSon.Add("user", usuario);
+                            userJSon.Add("email", email);
+                            userJSon.Add("telefono", nuevoTelefono);
+                            userJSon.Add("rol", rol);
 
-                            userJSon = utilidades.JsonUsuario_conPassword(user);
-                            MessageBox.Show("Teléfono y contraseña modificados correctamente.", "INFORMACION PERFIL", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            jsonContent = userJSon.ToString();
+                            
+                            var content = new StringContent(jsonContent,Encoding.UTF8,"application/json");
+                            var response = client.PutAsync(URL, content).Result;
+
+                            if (response.IsSuccessStatusCode)
+                            {
+
+                                MessageBox.Show("Número de teléfono modificado correctamente.", "INFORMACION PERFIL",
+                                   MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
 
                         }
-                        else
-                        {
-                            user = new Usuario(nombre, apellido, usuario, nuevoPassword, email, telefono, rol);
-                            userJSon = utilidades.JsonUsuario_conPassword(user);
-                            MessageBox.Show("Contraseña modificada correctamente.", "INFORMACION PERFIL", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
+ 
 
-
-                    }
-                    else if (nuevoPassword.Equals(utilidades.obtenerPassword(listaUsuarios, id)))
+                    } else if (!password.Equals(nuevoPassword))
                     {
-                        if (nuevoTelefono.Equals(utilidades.obtenerTelefono(listaUsuarios, id)))
+                        if (!telefono.Equals(nuevoTelefono))
                         {
-                            MessageBox.Show("No ha hecho ningun cambio en su perfil de usuario.", "INFORMACION PERFIL", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                        else
-                        {
-                            user = new Usuario(nombre, apellido, usuario, password, email, nuevoTelefono, rol);
-                            userJSon = utilidades.JsonUsuario_sinPassword(user);
-                            MessageBox.Show("Teléfono modificado correctamente.", "INFORMACION PERFIL", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            user = new Usuario(nombre, apellido, usuario, nuevoTelefono, email, nuevoPassword, rol);
+                            userJSon = new JObject();
+                            userJSon.Add("nombre", nombre);
+                            userJSon.Add("apellido", apellido);
+                            userJSon.Add("user", usuario);
+                            userJSon.Add("email", email);
+                            userJSon.Add("telefono", nuevoTelefono);
+                            userJSon.Add("password", nuevoPassword);
+                            userJSon.Add("rol", rol);
 
+                            jsonContent = userJSon.ToString();
+
+                            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                            var response = client.PutAsync(URL,content).Result;
+
+                            if (response.IsSuccessStatusCode)
+                            {
+                                MessageBox.Show("Número de teléfono y contraseña, modificados correctamente.", "INFORMACION PERFIL",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            
+
+                        } else
+                        {
+                            user = new Usuario(nombre, apellido, usuario, telefono, email, nuevoPassword, rol);
+                            userJSon = new JObject();
+                            userJSon.Add("nombre", nombre);
+                            userJSon.Add("apellido", apellido);
+                            userJSon.Add("user", usuario);
+                            userJSon.Add("email", email);
+                            userJSon.Add("telefono", telefono);
+                            userJSon.Add("password", nuevoPassword);
+                            userJSon.Add("rol", rol);
+
+                            jsonContent = userJSon.ToString();
+
+                            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                            var response = client.PutAsync(URL, content).Result;
+
+                            if (response.IsSuccessStatusCode)
+                            {
+                                MessageBox.Show("Contraseña modificada correctamente.", "INFORMACION PERFIL",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            } 
                         }
                     }
-                }
+                    usuarioEncontrado = true;
+                }  
             }
+        }
+        #endregion
 
-            usuarioEncontrado = true;
-
+        //****************************************************************************************************//
+        //******************************         TAREAS       ************************************************//
+        /*
+         * --------------Método crearTarea-------------
+         * Recibe como 7 parámetros:
+         * @String URL_tarea
+         * @String token
+         * @String json
+         * @String ubicacionJson
+         * @String URL_ubicacion
+         * @String URL_Coordenadas
+         * @List<Coordenada>coordenadas
+         * 
+         * 1-Primero obtenedremos el idTarea enviando el @json a @URL_tarea.
+         * 2-Despúes pasaremos  @ubicacionJson al END POINT @String URL_ubicacion+idTarea. La respuesta de la base de datos la
+         * deserializaremos en nuestro objeto Ubicacion y obtendremos idUbicacion.
+         * 3-De cada coordenada de la lista de coordenadas:
+         * -Transformaremos lada coordenda (latitud/longitud) en un objeto json que enviaremos al ENDPOINT URL_Coordenadas+idUbicacion.
+         * -Esto lo que hará es añadir todos las coordendas de la lista (longitud,latitud) a variable (mapa []) de la base de datos.
+         */
+        public async void crearTarea (String URL_tarea, String token, String json, String ubicacionJson,
+            String URL_ubicacion,String URL_Coordenadas, List<Coordenada>coordenadas, String URL_mensajes,String mensaje,
+            String remitente,String destinatario)
+        {
+           
             HttpClient client = new HttpClient();
             //autorización TOKEN    
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var content = new StringContent(userJSon.ToString(), Encoding.UTF8, "application/json");
-            var response = client.PutAsync(URL, content);
+            //Creamos el contenido que enviaremos a la URL
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            //Enviamos el contenido
+            var response = client.PostAsync(URL_tarea, content).Result;   
+            //Si la respuesta es true...
+            if (response.IsSuccessStatusCode)
+            {
+                //Mostramos mensaje al usuario
+                //MessageBox.Show("Tarea creada correctamente.","INFORMACION TAREAS",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                //Almacenamos la respuesta en un String
+                String respuesta = await response.Content.ReadAsStringAsync();
+                //Convertimos la respuesta JSON en objeto Tarea
+                Tarea tareaUser = JsonConvert.DeserializeObject<Tarea>(respuesta);
+                //Obtenemos la Id de tarea
+                String idTarea = tareaUser.Id;
+                //MessageBox.Show("ID TAREA = " + idTarea);--> OBTENCIÓN IDTAREA EXITOSA
 
+                //URL que será el ENDPOINT pasado por parámetro con la idTarea
+                String URL_crearUbicacionConId = URL_ubicacion + idTarea;
+                //Creamos el content de ubicacion (String ubicacion pasado por parámetro)
+                var contentUbicacion = new StringContent(ubicacionJson, Encoding.UTF8, "application/json");
+                //Enviamos al contentUbicacion a al ENDPOINT/idTarea
+                var responseUbicacion = client.PostAsync(URL_crearUbicacionConId,contentUbicacion).Result;
+                //Si la respuesta es true
+                if (responseUbicacion.IsSuccessStatusCode)
+                {
+                    //Mostramos mensaje al usuario
+                    //MessageBox.Show("Ubicacion añadida correctamente.", "INFORMACION TAREAS", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //Mostramos la respuesta
+                    String respuestaUbicacion = await responseUbicacion.Content.ReadAsStringAsync();
+                    //Convertimos la respuesta en objeto Ubicacion
+                    Ubicacion ubicacion = JsonConvert.DeserializeObject<Ubicacion>(respuestaUbicacion);
+                    //Obtenmos la id de Ubicacion
+                    String idUbicacion = ubicacion.Id;
+                    //Añadimos a la URL_Coordenas el idUbicacion
+                    String URL_crearCoordenadas = URL_Coordenadas + idUbicacion;
+                    //Recorremos la lista de coordenadas 
+                    for (int i = 0; i < coordenadas.Count; i++)
+                    {
+                        Coordenada coordenada = coordenadas[i];
+
+                        JObject jsonCoordendas = new JObject();
+                        jsonCoordendas.Add("latitud",coordenada.Latitud);
+                        jsonCoordendas.Add("longitud",coordenada.Longitud);
+
+                        var contentCoordendas = new StringContent(jsonCoordendas.ToString(),Encoding.UTF8,"application/json");
+                        var responseCoordendas = client.PostAsync(URL_crearCoordenadas, contentCoordendas);
+
+                    }
+
+                }
+                //creamos el json para enviar mensajes al usuario con su EN POINT correspondiente
+                JObject jsonMensaje = new JObject();
+                jsonMensaje.Add("descripcion",mensaje);
+                jsonMensaje.Add("tarea", idTarea);
+                jsonMensaje.Add("tecnico",destinatario);
+                jsonMensaje.Add("admin",remitente);
+
+                var contentMensaje = new StringContent(jsonMensaje.ToString(),Encoding.UTF8,"application/json");
+                var responseMensaje = client.PostAsync(URL_mensajes,contentMensaje);
+
+                MessageBox.Show("Tarea registrada correctamente en base de datos.", "INFORMACION CREAR TAREA", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                
+            } else
+            {
+                MessageBox.Show("Error al crear tarea.");
+            }
+            
         }
-
-        #endregion
-
 
     }
 

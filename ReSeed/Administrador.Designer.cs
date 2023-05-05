@@ -30,8 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Administrador));
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panel1 = new Panel();
+            gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             boton_registroCoordenadas = new Button();
             panel2 = new Panel();
             label5 = new Label();
@@ -44,7 +45,7 @@
             btn_dibujarpoligono = new Button();
             btn_eliminarTodasLasCoordenadas = new Button();
             btn_eliminarCoordenada = new Button();
-            calendario = new DateTimePicker();
+            fecha_culmincacion = new DateTimePicker();
             registroCoordenadas = new DataGridView();
             Column1 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
@@ -55,6 +56,10 @@
             textBox_comentarios = new TextBox();
             label7 = new Label();
             panel3 = new Panel();
+            textBox_INFOTAREA = new TextBox();
+            label19 = new Label();
+            comboBox_ESTATUS = new ComboBox();
+            label17 = new Label();
             comboBox_usuarios = new ComboBox();
             label6 = new Label();
             comboBox_tareas = new ComboBox();
@@ -120,7 +125,7 @@
             label15 = new Label();
             contextMenuStrip1 = new ContextMenuStrip(components);
             iD = new DataGridViewTextBoxColumn();
-            gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
+            label20 = new Label();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ConfigMapa.SuspendLayout();
@@ -149,6 +154,33 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(584, 622);
             panel1.TabIndex = 0;
+            // 
+            // gMapControl1
+            // 
+            gMapControl1.Bearing = 0F;
+            gMapControl1.CanDragMap = true;
+            gMapControl1.EmptyTileColor = Color.Navy;
+            gMapControl1.GrayScaleMode = false;
+            gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            gMapControl1.LevelsKeepInMemory = 5;
+            gMapControl1.Location = new Point(20, 22);
+            gMapControl1.MarkersEnabled = true;
+            gMapControl1.MaxZoom = 2;
+            gMapControl1.MinZoom = 2;
+            gMapControl1.MouseWheelZoomEnabled = true;
+            gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            gMapControl1.Name = "gMapControl1";
+            gMapControl1.NegativeMode = false;
+            gMapControl1.PolygonsEnabled = true;
+            gMapControl1.RetryLoadTile = 0;
+            gMapControl1.RoutesEnabled = true;
+            gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
+            gMapControl1.ShowTileGridLines = false;
+            gMapControl1.Size = new Size(548, 428);
+            gMapControl1.TabIndex = 3;
+            gMapControl1.Zoom = 0D;
+            gMapControl1.MouseDoubleClick += gMapControl1_MouseDoubleClick;
             // 
             // boton_registroCoordenadas
             // 
@@ -238,10 +270,11 @@
             // 
             tabPage1.BackgroundImage = (Image)resources.GetObject("tabPage1.BackgroundImage");
             tabPage1.BackgroundImageLayout = ImageLayout.Stretch;
+            tabPage1.Controls.Add(label20);
             tabPage1.Controls.Add(btn_dibujarpoligono);
             tabPage1.Controls.Add(btn_eliminarTodasLasCoordenadas);
             tabPage1.Controls.Add(btn_eliminarCoordenada);
-            tabPage1.Controls.Add(calendario);
+            tabPage1.Controls.Add(fecha_culmincacion);
             tabPage1.Controls.Add(registroCoordenadas);
             tabPage1.Controls.Add(btn_salir);
             tabPage1.Controls.Add(btn_enviar);
@@ -261,9 +294,9 @@
             // 
             btn_dibujarpoligono.BackColor = Color.OliveDrab;
             btn_dibujarpoligono.ImageAlign = ContentAlignment.MiddleLeft;
-            btn_dibujarpoligono.Location = new Point(961, 104);
+            btn_dibujarpoligono.Location = new Point(962, 87);
             btn_dibujarpoligono.Name = "btn_dibujarpoligono";
-            btn_dibujarpoligono.Size = new Size(124, 70);
+            btn_dibujarpoligono.Size = new Size(124, 43);
             btn_dibujarpoligono.TabIndex = 11;
             btn_dibujarpoligono.Text = "DIBUJAR POLÍGONO";
             btn_dibujarpoligono.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -273,9 +306,9 @@
             // btn_eliminarTodasLasCoordenadas
             // 
             btn_eliminarTodasLasCoordenadas.BackColor = Color.OliveDrab;
-            btn_eliminarTodasLasCoordenadas.Location = new Point(961, 277);
+            btn_eliminarTodasLasCoordenadas.Location = new Point(962, 188);
             btn_eliminarTodasLasCoordenadas.Name = "btn_eliminarTodasLasCoordenadas";
-            btn_eliminarTodasLasCoordenadas.Size = new Size(124, 65);
+            btn_eliminarTodasLasCoordenadas.Size = new Size(124, 57);
             btn_eliminarTodasLasCoordenadas.TabIndex = 10;
             btn_eliminarTodasLasCoordenadas.Text = "ELIMINAR TODAS LAS COORDENADAS";
             btn_eliminarTodasLasCoordenadas.UseVisualStyleBackColor = false;
@@ -284,32 +317,32 @@
             // btn_eliminarCoordenada
             // 
             btn_eliminarCoordenada.BackColor = Color.OliveDrab;
-            btn_eliminarCoordenada.Location = new Point(962, 193);
+            btn_eliminarCoordenada.Location = new Point(962, 136);
             btn_eliminarCoordenada.Name = "btn_eliminarCoordenada";
-            btn_eliminarCoordenada.Size = new Size(124, 68);
+            btn_eliminarCoordenada.Size = new Size(124, 46);
             btn_eliminarCoordenada.TabIndex = 9;
             btn_eliminarCoordenada.Text = "ELIMINAR COORDENADA SELECCIONADA";
             btn_eliminarCoordenada.UseVisualStyleBackColor = false;
             btn_eliminarCoordenada.Click += btn_eliminarCoordenada_Click;
             // 
-            // calendario
+            // fecha_culmincacion
             // 
-            calendario.ImeMode = ImeMode.NoControl;
-            calendario.Location = new Point(711, 59);
-            calendario.Name = "calendario";
-            calendario.Size = new Size(374, 23);
-            calendario.TabIndex = 8;
-            calendario.Value = new DateTime(2023, 3, 14, 15, 37, 16, 0);
+            fecha_culmincacion.ImeMode = ImeMode.NoControl;
+            fecha_culmincacion.Location = new Point(712, 47);
+            fecha_culmincacion.Name = "fecha_culmincacion";
+            fecha_culmincacion.Size = new Size(374, 23);
+            fecha_culmincacion.TabIndex = 8;
+            fecha_culmincacion.Value = new DateTime(2023, 5, 5, 0, 0, 0, 0);
             // 
             // registroCoordenadas
             // 
             registroCoordenadas.BackgroundColor = SystemColors.ActiveCaption;
             registroCoordenadas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             registroCoordenadas.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2 });
-            registroCoordenadas.Location = new Point(712, 102);
+            registroCoordenadas.Location = new Point(712, 87);
             registroCoordenadas.Name = "registroCoordenadas";
             registroCoordenadas.RowTemplate.Height = 25;
-            registroCoordenadas.Size = new Size(243, 240);
+            registroCoordenadas.Size = new Size(243, 158);
             registroCoordenadas.TabIndex = 7;
             // 
             // Column1
@@ -346,6 +379,7 @@
             btn_enviar.Text = "ENVIAR";
             btn_enviar.TextImageRelation = TextImageRelation.TextAboveImage;
             btn_enviar.UseVisualStyleBackColor = false;
+            btn_enviar.Click += btn_enviar_Click;
             // 
             // btn_cancelar
             // 
@@ -363,9 +397,9 @@
             panel4.BackColor = SystemColors.ActiveCaption;
             panel4.Controls.Add(textBox_comentarios);
             panel4.Controls.Add(label7);
-            panel4.Location = new Point(713, 448);
+            panel4.Location = new Point(714, 501);
             panel4.Name = "panel4";
-            panel4.Size = new Size(373, 199);
+            panel4.Size = new Size(373, 166);
             panel4.TabIndex = 3;
             // 
             // textBox_comentarios
@@ -373,7 +407,7 @@
             textBox_comentarios.Location = new Point(17, 30);
             textBox_comentarios.Multiline = true;
             textBox_comentarios.Name = "textBox_comentarios";
-            textBox_comentarios.Size = new Size(340, 149);
+            textBox_comentarios.Size = new Size(340, 116);
             textBox_comentarios.TabIndex = 1;
             // 
             // label7
@@ -388,19 +422,58 @@
             // panel3
             // 
             panel3.BackColor = SystemColors.ActiveCaption;
+            panel3.Controls.Add(textBox_INFOTAREA);
+            panel3.Controls.Add(label19);
+            panel3.Controls.Add(comboBox_ESTATUS);
+            panel3.Controls.Add(label17);
             panel3.Controls.Add(comboBox_usuarios);
             panel3.Controls.Add(label6);
             panel3.Controls.Add(comboBox_tareas);
             panel3.Controls.Add(label4);
-            panel3.Location = new Point(712, 348);
+            panel3.Location = new Point(712, 249);
             panel3.Name = "panel3";
-            panel3.Size = new Size(374, 94);
+            panel3.Size = new Size(374, 246);
             panel3.TabIndex = 2;
+            // 
+            // textBox_INFOTAREA
+            // 
+            textBox_INFOTAREA.Location = new Point(20, 35);
+            textBox_INFOTAREA.Multiline = true;
+            textBox_INFOTAREA.Name = "textBox_INFOTAREA";
+            textBox_INFOTAREA.Size = new Size(337, 57);
+            textBox_INFOTAREA.TabIndex = 7;
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Location = new Point(17, 12);
+            label19.Name = "label19";
+            label19.Size = new Size(142, 16);
+            label19.TabIndex = 6;
+            label19.Text = "INFORMACIÓN TAREA";
+            // 
+            // comboBox_ESTATUS
+            // 
+            comboBox_ESTATUS.FormattingEnabled = true;
+            comboBox_ESTATUS.Items.AddRange(new object[] { "IN_PROGRESS", "NEW", "DONE", "TO_DO", "ON_HOLD" });
+            comboBox_ESTATUS.Location = new Point(25, 198);
+            comboBox_ESTATUS.Name = "comboBox_ESTATUS";
+            comboBox_ESTATUS.Size = new Size(152, 24);
+            comboBox_ESTATUS.TabIndex = 5;
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new Point(22, 177);
+            label17.Name = "label17";
+            label17.Size = new Size(57, 16);
+            label17.TabIndex = 4;
+            label17.Text = "ESTADO";
             // 
             // comboBox_usuarios
             // 
             comboBox_usuarios.FormattingEnabled = true;
-            comboBox_usuarios.Location = new Point(207, 41);
+            comboBox_usuarios.Location = new Point(208, 145);
             comboBox_usuarios.Name = "comboBox_usuarios";
             comboBox_usuarios.Size = new Size(151, 24);
             comboBox_usuarios.TabIndex = 3;
@@ -408,7 +481,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(207, 13);
+            label6.Location = new Point(208, 117);
             label6.Name = "label6";
             label6.Size = new Size(64, 16);
             label6.TabIndex = 2;
@@ -417,8 +490,8 @@
             // comboBox_tareas
             // 
             comboBox_tareas.FormattingEnabled = true;
-            comboBox_tareas.Items.AddRange(new object[] { "LIMPIEZA", "DESBROZAR", "REPLANTAR" });
-            comboBox_tareas.Location = new Point(22, 41);
+            comboBox_tareas.Items.AddRange(new object[] { "REPLANTAR", "LIMPIEZA ", "ANALISIS" });
+            comboBox_tareas.Location = new Point(23, 145);
             comboBox_tareas.Name = "comboBox_tareas";
             comboBox_tareas.Size = new Size(154, 24);
             comboBox_tareas.TabIndex = 1;
@@ -426,7 +499,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(16, 13);
+            label4.Location = new Point(17, 117);
             label4.Name = "label4";
             label4.Size = new Size(50, 16);
             label4.TabIndex = 0;
@@ -505,14 +578,14 @@
             // 
             dataGridView_usuarios.AllowUserToAddRows = false;
             dataGridView_usuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.TopCenter;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Tahoma", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dataGridView_usuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Tahoma", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView_usuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView_usuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView_usuarios.Columns.AddRange(new DataGridViewColumn[] { id_user, user_name, email });
             dataGridView_usuarios.Location = new Point(432, 57);
@@ -1010,32 +1083,14 @@
             iD.HeaderText = "iD";
             iD.Name = "iD";
             // 
-            // gMapControl1
+            // label20
             // 
-            gMapControl1.Bearing = 0F;
-            gMapControl1.CanDragMap = true;
-            gMapControl1.EmptyTileColor = Color.Navy;
-            gMapControl1.GrayScaleMode = false;
-            gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            gMapControl1.LevelsKeepInMemory = 5;
-            gMapControl1.Location = new Point(20, 18);
-            gMapControl1.MarkersEnabled = true;
-            gMapControl1.MaxZoom = 2;
-            gMapControl1.MinZoom = 2;
-            gMapControl1.MouseWheelZoomEnabled = true;
-            gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            gMapControl1.Name = "gMapControl1";
-            gMapControl1.NegativeMode = false;
-            gMapControl1.PolygonsEnabled = true;
-            gMapControl1.RetryLoadTile = 0;
-            gMapControl1.RoutesEnabled = true;
-            gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
-            gMapControl1.ShowTileGridLines = false;
-            gMapControl1.Size = new Size(548, 432);
-            gMapControl1.TabIndex = 3;
-            gMapControl1.Zoom = 0D;
-            gMapControl1.MouseDoubleClick += gMapControl1_MouseDoubleClick;
+            label20.AutoSize = true;
+            label20.Location = new Point(713, 28);
+            label20.Name = "label20";
+            label20.Size = new Size(158, 16);
+            label20.TabIndex = 12;
+            label20.Text = "FECHA DE CULMINACIÓN";
             // 
             // Administrador
             // 
@@ -1052,6 +1107,7 @@
             panel2.PerformLayout();
             ConfigMapa.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
+            tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)registroCoordenadas).EndInit();
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
@@ -1108,7 +1164,7 @@
         private Button boton_registroCoordenadas;
         private Button btn_eliminarTodasLasCoordenadas;
         private Button btn_eliminarCoordenada;
-        private DateTimePicker calendario;
+        private DateTimePicker fecha_culmincacion;
         private Button btn_dibujarpoligono;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
@@ -1168,5 +1224,10 @@
         private Label label15;
         private DataGridViewTextBoxColumn iD;
         private GMap.NET.WindowsForms.GMapControl gMapControl1;
+        private TextBox textBox_INFOTAREA;
+        private Label label19;
+        private ComboBox comboBox_ESTATUS;
+        private Label label17;
+        private Label label20;
     }
 }

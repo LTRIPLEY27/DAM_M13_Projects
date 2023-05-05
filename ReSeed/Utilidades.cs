@@ -48,6 +48,8 @@ namespace ReSeed
 
         /*
          * MÉTODO QUE TRANSFORMA UN OBJETO USUARIO EN Objeto JSon (sin password)
+         * --> Este uso es exlusivo para MODIFICAR USUARIOS.
+         * Ello se debe a que la API precisa de un json con unos parámetros específicos
          */
         public JObject JsonUsuario_sinPassword(Usuario usuario)
         {
@@ -64,6 +66,8 @@ namespace ReSeed
 
         /*
          * MÉTODO QUE TRANSFORMA UN OBJETO USUARIO EN Objeto JSon (con password)
+         * --> Este uso es exlusivo para MODIFICAR USUARIOS
+         * Ello se debe a que la API precisa de un json con unos parámetros específicos
          */
         public JObject JsonUsuario_conPassword(Usuario usuario)
         {
@@ -88,7 +92,6 @@ namespace ReSeed
             return jsonUsuario;
 
         }
-
 
         /*------------------------------------------
         * Método genérico obtenerDatosUserLogueadoJson
@@ -154,16 +157,18 @@ namespace ReSeed
          */
         public String obtenerPassword (List <Post> listaUsuarios,String id)
         {
-            
+            //Variable booleana para salida LOOP
+            Boolean semaforo = false;
             //Variable rol que contendrá el rol del usuario pasado por parámetro
             String password = null;
 
-            for (int i = 0; i < listaUsuarios.Count; i++)
+            for (int i = 0; i < listaUsuarios.Count && !semaforo; i++)
             {
                 if (id.Equals(listaUsuarios[i].Id))
                 {
 
                     password = listaUsuarios[i].Password;
+                    semaforo = true;
 
                 }
             }
@@ -287,7 +292,7 @@ namespace ReSeed
                     String id = json.GetValue("id").ToString();
                     String user = json.GetValue("user").ToString();
 
-                    listaTecnicos.Items.Add(id + "  " + user);
+                    listaTecnicos.Items.Add(id + "-" + user);
                       
                 }
             }
@@ -295,5 +300,54 @@ namespace ReSeed
 
         #endregion
 
+        /*
+         * @mensajesRemitenteSYNC
+         * Obtiene como parámetris un Strin mail, un String token y un String URL
+         * -1 Obtenemos la lista de usuarios registrados en la base de datos a través del método @ObtenerUsuarios
+         * de la clase Conexion_BD
+         * 2-Recorremos la lista de usuarios, si encontramos un usuario con el @mail pasado por parametro, saldremos del bucle
+         * con @encontrado (Boolean) y obtendremos su user, el cual devolveremos @return
+         */
+        public async Task <String> mensajesRemitenteASYNC (String mail, String token,String URL)
+        {
+            Boolean encontrado = false;
+            String remitente = null;
+            List <Post> listaUsuarios = await conexion.ObtenerUsuarios(token,URL);
+
+            for ( int i = 0;i<listaUsuarios.Count && !encontrado; i++ )
+            {
+                if (mail.Equals(listaUsuarios[i].Email))
+                {
+                    remitente = listaUsuarios[i].User;
+                    encontrado = true;
+                }
+            }
+            return remitente;
+        }
+
+        /*
+      * @mensajesDestinatarioSYNC
+      * Obtiene como parámetris un Strin id, un String token y un String URL
+      * -1 Obtenemos la lista de usuarios registrados en la base de datos a través del método @ObtenerUsuarios
+      * de la clase Conexion_BD
+      * 2-Recorremos la lista de usuarios, si encontramos un usuario con el @id pasado por parametro, saldremos del bucle
+      * con @encontrado (Boolean) y obtendremos su user, el cual devolveremos @return
+      */
+        public async Task<String> mensajeDestinatarioASYNC(String id, String token, String URL)
+        {
+            Boolean encontrado = false;
+            String destinatario = null;
+            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(token, URL);
+
+            for (int i = 0; i < listaUsuarios.Count && !encontrado; i++)
+            {
+                if (id.Equals(listaUsuarios[i].Id))
+                {
+                    destinatario = listaUsuarios[i].User;
+                    encontrado = true;
+                }
+            }
+            return destinatario;
+        }
     }
 }
