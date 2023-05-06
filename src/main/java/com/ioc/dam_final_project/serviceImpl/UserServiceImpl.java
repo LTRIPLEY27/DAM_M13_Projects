@@ -469,7 +469,14 @@ public class UserServiceImpl implements UserService, Constantes {
             }
         }
         else {
-              return Collections.singletonList(tareaService.updateValue(id, object, user));
+            switch (value) {
+                case TAREA -> {
+                    return tareaService.updateValue(id, object, user);
+                }
+                case MENSAJE -> {
+                    return mensajeService.updateValue(id, object); // to implementade on message services
+                }
+            }
         }
 
         return null;
