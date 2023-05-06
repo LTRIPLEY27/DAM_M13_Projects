@@ -58,7 +58,7 @@ public class UserAddCommentRequest {
 		JSONObject jsonCallObject = new JSONObject();
 		try {
 			jsonCallObject.put("descripcion",getDescription());
-			jsonCallObject.put("tarea",getTarea());
+			jsonCallObject.put("tarea",Integer.valueOf(getTarea()));
 			jsonCallObject.put("tecnico",getTecnico());
 			jsonCallObject.put("admin",getAdmin());
 		} catch (Exception e) {

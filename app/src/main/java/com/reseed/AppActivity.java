@@ -124,7 +124,6 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 
 
 				Log.i("Boton flotante","click!");
-				Log.i("Boton flotante",getSupportFragmentManager().getPrimaryNavigationFragment().getClass().toString());
 				popUpEditMenu();
 
 
@@ -134,6 +133,12 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		floatingCreateButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
+				NavHostFragment navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host);
+				navHostFragment.getChildFragmentManager().getFragments().get(0);
+
+				getSupportFragmentManager().findFragmentById(R.id.fragmentTaskList).isVisible()
+
 				popUpEditMenu();
 			}
 		});
@@ -155,10 +160,10 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 
 
 
-
 		setUserDataToNavMenu();
 		tasksFragmentCall(null);
 	}
+
 
 	/**
 	 * Metodo que controla la visivilidad del menu de edición del admin.
@@ -355,6 +360,7 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		// Datos del item clicado, en este caso json pasado a String.
 		bundleArgs.putString("data", jsonData);
 		bundleArgs.putString("tipoUsuario", userObj.getTipoUsuario());
+		bundleArgs.putString("nombreUsuario", userObj.getUser());
 		bundleArgs.putString("token", tokenUsuario);
 
 		taskFragment.setArguments(bundleArgs);

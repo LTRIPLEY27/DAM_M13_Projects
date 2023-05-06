@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,6 +66,8 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 	private String userToken, typeUser;
 	private RecyclerView recyclerView;
 
+	private ProgressBar progressBarTasks;
+
 	private ImageView imageViewNoTask;
 
 	private TaskAdapter adapter;
@@ -76,6 +79,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 	private JsonReseedUtils jsonReseedUtils;
 
 	private JSONObject jsonObjectUser;
+	private  JSONArray jsonObjectAdmin, jsonArrayAdminTasks;
 
 	public FragmentTaskList() {
 		// Required empty public constructor
@@ -93,6 +97,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 		requestQueue = SingletonReqQueue.getInstance(requireContext()).getRequestQueue();
 
 		jsonReseedUtils = new JsonReseedUtils();
+		jsonArrayAdminTasks = new JSONArray();
 		listaTareas = new ArrayList<>();
 	}
 
@@ -104,7 +109,18 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 		View view = inflater.inflate(R.layout.fragment_task_list, container, false);
 		recyclerView = view.findViewById(R.id.recyclerTask);
 		textViewNoTareas = view.findViewById(R.id.textNoTareas);
+		progressBarTasks = view.findViewById(R.id.progressBarTasks);
 
+		// Se controla el tipo de usuario.
+		if(typeUser.contentEquals("ADMIN")){
+
+			requestAdminData(userToken);
+
+		}else{
+			requestUserData(userToken);
+		}
+
+		// Una vez hecha la request se actualiza la lista de tarea.
 
 		if (listaTareas != null) {
 
@@ -122,14 +138,6 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 			textViewNoTareas.setVisibility(View.VISIBLE);
 		}
 
-		if(typeUser.contentEquals("ADMIN")){
-
-			requestAdminData(userToken);
-
-		}else{
-			requestUserData(userToken);
-		}
-
 		return view;
 
 	}
@@ -142,13 +150,15 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 		JsonGetRequest userInfoRequest = new JsonGetRequest(token, requestQueue,url);
 		JSONObject jsResponse = new JSONObject();
 
+		activateProgressBar(true);
+
 		userInfoRequest.sendRequest(new VolleyResponseInterface() {
 			@Override
 			public void onError(String message) {
 				Log.e("Error login: ", message);
 				Toast toast = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG);
 				toast.show();
-				//changeStatusInputUser(true);
+				activateProgressBar(false);
 
 			}
 
@@ -156,14 +166,24 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 			public boolean onResponse(Object response) {
 				JSONObject jsResponse = (JSONObject) response;
 				Log.i("Respuesta user info", jsResponse.toString());
+				activateProgressBar(false);
 				refreshUserContent(jsResponse);
-				//openAppActivity(jsResponse);
-
-				//refreshContent(jsResponse);
 				return true;
 			}
 		});
-		//This is for Headers If You Needed
+
+	}
+
+	/**
+	 * Metodo para activar o desactivar la barra de progreso, durante la request.
+	 * @param b boolen para activar o no la barra de progreso.
+	 */
+	private void activateProgressBar(boolean b){
+		if(b){
+			progressBarTasks.setVisibility(View.VISIBLE);
+		}else {
+			progressBarTasks.setVisibility(View.GONE);
+		}
 
 	}
 
@@ -175,6 +195,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 		JsonArrayGetRequest userInfoRequest = new JsonArrayGetRequest(token, requestQueue,url);
 		JSONObject jsResponse = new JSONObject();
 
+		activateProgressBar(true);
 		userInfoRequest.sendRequest(new VolleyResponseInterface() {
 			@Override
 			public void onError(String message) {
@@ -182,6 +203,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 				Toast toast = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG);
 				toast.show();
 				//changeStatusInputUser(true);
+				activateProgressBar(false);
 
 			}
 
@@ -189,7 +211,8 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 			public boolean onResponse(Object response) {
 				JSONArray jsResponse = (JSONArray) response;
 				Log.i("Respuesta user info", jsResponse.toString());
-				extractAdminTasks(jsResponse);
+				refreshAdminContent(jsResponse);
+				activateProgressBar(false);
 				//openAppActivity(jsResponse);
 
 				//refreshContent(jsResponse);
@@ -202,6 +225,8 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 
 	private void refreshAdminContent(JSONArray jsonArray) {
 
+		this.jsonObjectAdmin = jsonArray;
+
 		extractAdminTasks(jsonArray);
 		recyclerView.getAdapter().notifyDataSetChanged();
 	}
@@ -210,13 +235,18 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 	private void extractAdminTasks(JSONArray jsonArray) {
 		this.listaTareas.clear();
 		int numTareas = 0;
+		int positionJsonArray = 0;
 
 		try {
 			numTareas = jsonArray.getJSONArray(0).length();
 
 			for (int i = 0; i < numTareas; i++) {
 				if(!jsonArray.getJSONArray(0).getJSONObject(i).isNull("ubicacion")){
+
+					jsonArrayAdminTasks.put(positionJsonArray,jsonArray.getJSONArray(0).getJSONObject(i));
+
 					listaTareas.add(jsonReseedUtils.convertToTaskObject(jsonArray.getJSONArray(0).getJSONObject(i)));
+					positionJsonArray++;
 				}
 			}
 
@@ -255,10 +285,21 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 	@Override
 	public void onItemClicked(int posicion) {
 
-		try {
-			fragmentTaskListInterface.onEnvioDatos(jsonReseedUtils.extractJsonTask(jsonObjectUser, posicion).toString());
-		} catch (JSONException e) {
-			throw new RuntimeException(e);
+		if(typeUser.contentEquals("ADMIN")){
+			try {
+				fragmentTaskListInterface.onEnvioDatos(jsonArrayAdminTasks.getJSONObject(posicion).toString());
+			} catch (JSONException e) {
+				throw new RuntimeException(e);
+			}
+		}else{
+
+			try {
+				fragmentTaskListInterface.onEnvioDatos(jsonReseedUtils.extractJsonTask(jsonObjectUser, posicion).toString());
+			} catch (JSONException e) {
+				throw new RuntimeException(e);
+			}
 		}
+
+
 	}
 }

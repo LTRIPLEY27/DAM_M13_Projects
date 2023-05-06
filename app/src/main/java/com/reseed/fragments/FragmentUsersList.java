@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 public class FragmentUsersList extends Fragment implements RecyclerViewInterface {
 
     private String userToken;
+    private ProgressBar progressBarUsers;
     private RequestQueue requestQueue;
     private JsonReseedUtils jsonReseedUtils;
     private JSONArray jsonUserList;
@@ -61,6 +63,7 @@ public class FragmentUsersList extends Fragment implements RecyclerViewInterface
 
         recyclerView = view.findViewById(R.id.recyclerUser);
         textViewNoUsers = view.findViewById(R.id.textNoUsers);
+        progressBarUsers = view.findViewById(R.id.progressBarUsers);
 
         if(listaUsuarios != null){
             recyclerView.setVisibility(View.VISIBLE);
@@ -85,10 +88,12 @@ public class FragmentUsersList extends Fragment implements RecyclerViewInterface
         UserListRequest userListRequest = new UserListRequest(userToken,null, requestQueue);
         JSONObject jsResponse = new JSONObject();
 
+        activateProgressBar(true);
         userListRequest.sendRequest(new VolleyResponseInterface() {
             @Override
             public void onError(String message) {
                 Log.e("Error login: ", message);
+                activateProgressBar(false);
                 Toast toast = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG);
                 toast.show();
             }
@@ -98,10 +103,23 @@ public class FragmentUsersList extends Fragment implements RecyclerViewInterface
                 JSONArray jsResponse = (JSONArray) response;
                 Log.i("Respuesta user info", jsResponse.toString());
                 refreshContent(jsResponse);
-
+                activateProgressBar(false);
                 return true;
             }
         });
+
+    }
+
+    /**
+     * Metodo para activar o desactivar la barra de progreso, durante la request.
+     * @param b boolen para activar o no la barra de progreso.
+     */
+    private void activateProgressBar(boolean b){
+        if(b){
+            progressBarUsers.setVisibility(View.VISIBLE);
+        }else {
+            progressBarUsers.setVisibility(View.GONE);
+        }
 
     }
 

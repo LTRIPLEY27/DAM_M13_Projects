@@ -54,7 +54,7 @@ public class FragmentTask extends Fragment {
 	Spinner statusSpinner;
 
 	UserAddCommentRequest sendCommentRequest;
-	String userToken, tipoUsuario;
+	String userToken, tipoUsuario, nombreUsuario;
 	RequestQueue requestQueue;
 
 	Button addCommentBtn;
@@ -76,6 +76,7 @@ public class FragmentTask extends Fragment {
 			}
 			userToken = getArguments().getString("token");
 			tipoUsuario = getArguments().getString("tipoUsuario");
+			nombreUsuario = getArguments().getString("nombreUsuario");
 
 			firstLoad = true;
 
@@ -268,7 +269,14 @@ public class FragmentTask extends Fragment {
 	 */
 	private void addComent(String textComment) {
 
-		UserAddCommentRequest userAddComment = new UserAddCommentRequest(userToken, textComment, taskObj.getId(), taskObj.getTecnico(), taskObj.getAdmin(), requestQueue);
+		UserAddCommentRequest userAddComment;
+
+		if(tipoUsuario.contentEquals("ADMIN")){
+			userAddComment = new UserAddCommentRequest(userToken, textComment, taskObj.getId(), taskObj.getTecnico(), this.nombreUsuario, requestQueue);
+		}else {
+			userAddComment = new UserAddCommentRequest(userToken, textComment, taskObj.getId(), taskObj.getTecnico(), taskObj.getAdmin(), requestQueue);
+		}
+
 
 
 		userAddComment.sendRequest(new VolleyResponseInterface() {

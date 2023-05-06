@@ -136,18 +136,24 @@ public class JsonReseedUtils {
 	 */
 	public TaskObj convertToTaskObject(JSONObject jsonTaskObject) throws JSONException {
 
-		return new TaskObj(
-				jsonTaskObject.getString("id"),
-				jsonTaskObject.getString("name"),
-				jsonTaskObject.getString("tarea"),
-				jsonTaskObject.getString("fecha_culminacion"),
-				jsonTaskObject.getString("fecha_creacion"),
-				jsonTaskObject.getString("estatus"),
-				jsonTaskObject.getString("tecnico"),
-				jsonTaskObject.getString("admin"),
-				extractLocation(jsonTaskObject.getJSONObject("ubicacion")),
-				extractComments(jsonTaskObject.getJSONArray("mensajes"))
-		);
+		if(!jsonTaskObject.isNull("ubicacion")){
+			if (!jsonTaskObject.isNull("mensajes")){
+				return new TaskObj(
+						jsonTaskObject.getString("id"),
+						jsonTaskObject.getString("name"),
+						jsonTaskObject.getString("tarea"),
+						jsonTaskObject.getString("fecha_culminacion"),
+						jsonTaskObject.getString("fecha_creacion"),
+						jsonTaskObject.getString("estatus"),
+						jsonTaskObject.getString("tecnico"),
+						jsonTaskObject.getString("admin"),
+						extractLocation(jsonTaskObject.getJSONObject("ubicacion")),
+						extractComments(jsonTaskObject.getJSONArray("mensajes"))
+				);
+			}
+
+		}
+		return null;
 	}
 
 	/**
@@ -179,13 +185,16 @@ public class JsonReseedUtils {
 
 		for (int i = 0; i < mapa.length(); i++) {
 
-			MapPoint mapPoint = new MapPoint(
-					mapa.getJSONObject(i).getInt("id"),
-					Float.parseFloat(mapa.getJSONObject(i).getString("latitud")),
-					Float.parseFloat(mapa.getJSONObject(i).getString("longitud")));
+			if(!mapa.getJSONObject(i).isNull("latitud")){
+				if(!mapa.getJSONObject(i).isNull("longitud")){
+					MapPoint mapPoint = new MapPoint(
+							mapa.getJSONObject(i).getInt("id"),
+							Float.parseFloat(mapa.getJSONObject(i).getString("latitud")),
+							Float.parseFloat(mapa.getJSONObject(i).getString("longitud")));
 
-			mapPoints.add(mapPoint);
-
+					mapPoints.add(mapPoint);
+				}
+			}
 		}
 		return mapPoints;
 	}
