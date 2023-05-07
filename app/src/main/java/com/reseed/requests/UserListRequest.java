@@ -35,7 +35,7 @@ public class UserListRequest {
     /**
      * Constructor de la clase
      * @param token token del usuario
-     * @param filter filtro de tipo de usuario, puede ser null, "usuarios", "tecnicos".
+     * @param filter filtro de tipo de usuario, puede ser null, "admins", "tecnicos".
      * @param requestQueue creada en el fragment/actividad.
      */
     public UserListRequest(String token, @Nullable String filter, RequestQueue requestQueue){

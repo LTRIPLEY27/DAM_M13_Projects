@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,29 +14,27 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
+import com.reseed.fragments.FragmentTaskCreationOne;
+import com.reseed.fragments.FragmentTaskCreationTwo;
 import com.reseed.fragments.FragmentTaskList;
 import com.reseed.fragments.FragmentUserConfig;
 import com.reseed.fragments.FragmentUsersList;
 import com.reseed.fragments.FragmentTask;
+import com.reseed.interfaces.FragmentCreateTaskInterface;
 import com.reseed.interfaces.FragmentTaskListInterface;
 import com.reseed.objects.UserObj;
 import com.reseed.util.JsonReseedUtils;
-import com.reseed.adapter.TaskAdapter;
-import com.reseed.objects.TaskObj;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-public class AppActivity extends AppCompatActivity implements FragmentTaskListInterface {
+public class AppActivity extends AppCompatActivity implements FragmentTaskListInterface, FragmentCreateTaskInterface {
 
 	DrawerLayout drawerLayout;
 	UserObj userObj;
@@ -43,8 +42,12 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	FragmentContainerView fragmentContainerView;
 	// NavigationView del menu_lateral lateral.
 	NavigationView navigationView;
-	Integer bottomMenuSelected;
+
+	// int que controla que menu esta seleccionado, 1- user menu , 2 - tasks menu, 3 - stadistics
+	int bottomMenuSelected;
 	Boolean popUpMenuVisible;
+
+	FragmentManager fragmentManager;
 	String encryptedPasswd, tokenUsuario;
 	private JSONObject userJSONInfo;
 	private BottomNavigationView bottomNavigationView;
@@ -63,9 +66,8 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		//Extraemos UserObj del userJSONInfo.
 		extractUser();
 
-		// Menu seleccionado por defecto.
-
-		bottomMenuSelected = 1;
+		// Creamos el fragment manager
+		fragmentManager = getSupportFragmentManager();
 
 		// Iniciamos el layout de activity_app.
 		setContentView(R.layout.activity_app);
@@ -133,13 +135,12 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		floatingCreateButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
-				NavHostFragment navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host);
-				navHostFragment.getChildFragmentManager().getFragments().get(0);
-
-				getSupportFragmentManager().findFragmentById(R.id.fragmentTaskList).isVisible()
-
 				popUpEditMenu();
+
+				if(bottomMenuSelected == 2){
+					tasksCreateFragmentCall();
+				}
+
 			}
 		});
 
@@ -175,9 +176,14 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 			floatingCreateButton.setVisibility(View.GONE);
 			popUpMenuVisible = false;
 		}else{
+			floatingDeleteButton.show();
+			floatingModifyButton.show();
+			floatingCreateButton.show();
+
 			floatingDeleteButton.setVisibility(View.VISIBLE);
 			floatingModifyButton.setVisibility(View.VISIBLE);
 			floatingCreateButton.setVisibility(View.VISIBLE);
+
 			popUpMenuVisible = true;
 		}
 
@@ -264,7 +270,7 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		fragmentUserConfig.setArguments(bundleArgs);
 
 		//fragmentContainerView.removeAllViewsInLayout();
-		getSupportFragmentManager().beginTransaction()
+		fragmentManager.beginTransaction()
 				.setReorderingAllowed(true)
 				.add(R.id.fragmentContainerView, fragmentUserConfig, null)
 				.commit();
@@ -277,6 +283,8 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	 */
 	public void usersFragmentCall(MenuItem item) {
 
+		bottomMenuSelected = 1;
+
 		FragmentUsersList fragmentUsersList = new FragmentUsersList();
 
 		Bundle bundleArgs = new Bundle();
@@ -285,7 +293,7 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		fragmentUsersList.setArguments(bundleArgs);
 
 		//fragmentContainerView.removeAllViewsInLayout();
-		getSupportFragmentManager().beginTransaction()
+		fragmentManager.beginTransaction()
 				.setReorderingAllowed(true)
 				.add(R.id.fragmentContainerView, fragmentUsersList, null)
 				.commit();
@@ -298,6 +306,9 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	 */
 	public void tasksFragmentCall(@Nullable MenuItem item) {
 
+		bottomMenuSelected = 2;
+
+
 		//fragmentContainerView.removeAllViewsInLayout();
 		FragmentTaskList fragmentTaskList = new FragmentTaskList();
 
@@ -309,9 +320,56 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		fragmentTaskList.setArguments(bundleArgs);
 
 
-		getSupportFragmentManager().beginTransaction()
+		fragmentManager.beginTransaction()
 				.setReorderingAllowed(true)
 				.add(R.id.fragmentContainerView, fragmentTaskList, null)
+				.commit();
+	}
+
+	/**
+	 * Metodo usado para llamar al fragmento de lista de usuarios.
+	 *
+	 * @param item el menu_lateral de donde proviene.
+	 */
+	public void stadisticsFragmentCall(MenuItem item) {
+
+		bottomMenuSelected = 3;
+
+		/*FragmentUsersList fragmentUsersList = new FragmentUsersList();
+
+		Bundle bundleArgs = new Bundle();
+		//bundleArgs.putString("data", userJSONInfo.toString());
+		bundleArgs.putString("token", tokenUsuario);
+		fragmentUsersList.setArguments(bundleArgs);
+
+		//fragmentContainerView.removeAllViewsInLayout();
+		fragmentManager.beginTransaction()
+				.setReorderingAllowed(true)
+				.add(R.id.fragmentContainerView, fragmentUsersList, null)
+				.commit();*/
+	}
+
+	/**
+	 * Metodo usado para llamar al fragmento de creación de tareas.
+	 *
+	 */
+	public void tasksCreateFragmentCall() {
+
+		bottomMenuSelected = 0;
+
+		//fragmentContainerView.removeAllViewsInLayout();
+		FragmentTaskCreationOne fragmentTaskCreate = new FragmentTaskCreationOne();
+
+		Bundle bundleArgs = new Bundle();
+		//bundleArgs.putString("data", userJSONInfo.toString());
+		bundleArgs.putString("token", tokenUsuario);
+		bundleArgs.putString("typeUser", userObj.getTipoUsuario());
+
+		fragmentTaskCreate.setArguments(bundleArgs);
+
+		fragmentManager.beginTransaction()
+				.setReorderingAllowed(true)
+				.add(R.id.fragmentContainerView, fragmentTaskCreate, null)
 				.commit();
 	}
 
@@ -350,7 +408,7 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	 * en {@link JsonReseedUtils}.
 	 */
 	@Override
-	public void onEnvioDatos(String jsonData) {
+	public void onEnvioDatosTarea(String jsonData) {
 		Log.i("Recycler View Click!!",jsonData);
 
 		FragmentTask taskFragment = new FragmentTask();
@@ -365,9 +423,33 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 
 		taskFragment.setArguments(bundleArgs);
 
-		getSupportFragmentManager().beginTransaction()
+		fragmentManager.beginTransaction()
 				.setReorderingAllowed(true)
 				.add(R.id.fragmentContainerView, taskFragment, null)
 				.commit();
+	}
+
+	@Override
+	public void onEnvioCrearTarea(String data) {
+
+		Log.i("Creacion tarea next!!",data);
+
+		FragmentTaskCreationTwo fragmentTaskCreationTwo = new FragmentTaskCreationTwo();
+
+		Bundle bundleArgs = new Bundle();
+
+		// Datos del item clicado, en este caso json pasado a String.
+		bundleArgs.putString("data", data);
+		bundleArgs.putString("tipoUsuario", userObj.getTipoUsuario());
+		bundleArgs.putString("nombreUsuario", userObj.getUser());
+		bundleArgs.putString("token", tokenUsuario);
+
+		fragmentTaskCreationTwo.setArguments(bundleArgs);
+
+		fragmentManager.beginTransaction()
+				.setReorderingAllowed(true)
+				.add(R.id.fragmentContainerView, fragmentTaskCreationTwo, null)
+				.commit();
+
 	}
 }

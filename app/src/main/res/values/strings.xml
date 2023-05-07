@@ -10,4 +10,9 @@
         <item>Por hacer</item>
         <item>En espera</item>
     </array>
+    <array name="tipoTarea">
+        <item>ANALISIS</item>
+        <item>REPLANTAR</item>
+        <item>LIMPIEZA</item>
+    </array>
 </resources>

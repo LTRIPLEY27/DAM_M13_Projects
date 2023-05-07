@@ -107,7 +107,6 @@ public class FragmentUsersList extends Fragment implements RecyclerViewInterface
                 return true;
             }
         });
-
     }
 
     /**

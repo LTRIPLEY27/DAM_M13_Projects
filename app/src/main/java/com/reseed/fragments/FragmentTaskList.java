@@ -287,14 +287,14 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 
 		if(typeUser.contentEquals("ADMIN")){
 			try {
-				fragmentTaskListInterface.onEnvioDatos(jsonArrayAdminTasks.getJSONObject(posicion).toString());
+				fragmentTaskListInterface.onEnvioDatosTarea(jsonArrayAdminTasks.getJSONObject(posicion).toString());
 			} catch (JSONException e) {
 				throw new RuntimeException(e);
 			}
 		}else{
 
 			try {
-				fragmentTaskListInterface.onEnvioDatos(jsonReseedUtils.extractJsonTask(jsonObjectUser, posicion).toString());
+				fragmentTaskListInterface.onEnvioDatosTarea(jsonReseedUtils.extractJsonTask(jsonObjectUser, posicion).toString());
 			} catch (JSONException e) {
 				throw new RuntimeException(e);
 			}
