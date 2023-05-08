@@ -40,22 +40,35 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
      */
 
 
-    /*@Query(value = "SELECT  *\n" +
-                        "FROM tarea \n" +
-                        "WHERE :fecha BETWEEN :date1 AND :date2\n" +
-                        "ORDER BY tarea.id DESC ;", nativeQuery = true)*/
     @Query(value = "SELECT  *\n" +
-            "    FROM tarea\n" +
-            "    WHERE REPLACE(:fecha, '\"\"', '') BETWEEN :date1 AND :date2\n" +
-            "    ORDER BY tarea.id DESC ;", nativeQuery = true)
-    List <Tarea> filterByDateRange(@Param("fecha") Object fecha, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
+                        "FROM tarea\n" +
+                        "WHERE fecha_creacion BETWEEN :date1 AND :date2\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByCreationDateRange(@PathVariable("date1") String date1, @PathVariable("date2") String date2);
 
-    @Query(value = "SELECT B.nombre AS 'Técnico',  COUNT(*) AS 'Cantidad'\n" +
+
+    @Query(value = "SELECT  *\n" +
+                        "FROM tarea\n" +
+                        "WHERE fecha_culminacion BETWEEN :date1 AND :date2\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByEndingDateRange(@PathVariable("date1") String date1, @PathVariable("date2") String date2);
+
+
+   //cantidad de tareas por estatus, y agrupadas por técnico (admin)
+    @Query(value = "SELECT B.nombre AS 'Técnico',  CAST(COUNT(*) AS NCHAR) AS 'Cantidad', A.estatus As 'Estatus'\n" +
                         "FROM tarea A\n" +
                         "JOIN user B on B.id = A.tecnico\n" +
                             "WHERE A.estatus LIKE :estatus\n" +
-                        "GROUP BY A.tecnico\n" +
+                        "GROUP BY A.tecnico, A.estatus\n" +
                         "LIMIT 10;", nativeQuery = true)
-    List<Map<String, Integer>> quantityTaskByStatusAndUser(@Param("estatus") String estatus);
+    List<Map<String, String>> quantityTaskByStatusAndUser(@Param("estatus") String estatus);
 
+    //cantidad de tareas por estatus, y agrupadas por técnico (tecnico logueado)
+    @Query(value = "SELECT B.user AS 'Técnico',  CAST(COUNT(*) AS NCHAR) AS 'Cantidad', A.estatus As 'Estatus'\n" +
+                        "FROM tarea A\n" +
+                        "JOIN user B on B.id = A.tecnico\n" +
+                        "WHERE A.estatus LIKE :estatus AND B.user LIKE :user\n" +
+                        "GROUP BY A.tecnico, A.estatus\n" +
+                        "LIMIT 10;", nativeQuery = true)
+    List<Map<String, String>> quantityTaskByLoginUserAndStatus(@Param("user") String user, @Param("estatus") String estatus);
 }

@@ -113,9 +113,13 @@ public class TareaServiceImpl implements TareaService, Constantes {
      *  </ul>
      */
     @Override
-    public List<TareaDTO> filteringByDates(Object fecha, String date1, String date2) {
+    public List<TareaDTO> filteringByDates(String fecha, String date1, String date2) {
         List<TareaDTO> tareas = new ArrayList<>();
-        tareaRepository.filterByDateRange(fecha, date1, date2).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+        switch (fecha){
+            case STARTING -> tareaRepository.filterByCreationDateRange(date1, date2).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+            case ENDING -> tareaRepository.filterByEndingDateRange(date1, date2).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+        }
+
         return  tareas;
     }
 
@@ -128,6 +132,18 @@ public class TareaServiceImpl implements TareaService, Constantes {
     public List<Object> getByTecnicsAndStatus(String estatus) {
         List<Object> tareas = new ArrayList<>();
         tareaRepository.quantityTaskByStatusAndUser(estatus).forEach(tarea -> tareas.add(tarea));
+        return tareas;
+    }
+
+    /** Metodo 'getByTecnicsAndStatus'
+     * @return <ul>
+     *  <li>List de TareaDTO: Recorre todos las Tareas contenidas en la base de datos y las agrupa por tecnico y estatus</li>
+     *  </ul>
+     */
+    @Override
+    public List<Object> getByLoginTecnicsAndStatus(String tecnico, String estatus) {
+        List<Object> tareas = new ArrayList<>();
+        tareaRepository.quantityTaskByLoginUserAndStatus(tecnico, estatus).forEach(tarea -> tareas.add(tarea));
         return tareas;
     }
 

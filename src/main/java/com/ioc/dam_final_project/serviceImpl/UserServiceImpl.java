@@ -312,20 +312,20 @@ public class UserServiceImpl implements UserService, Constantes {
      * </ul>
      */
     @Override
-    public List<Object> filterByTareaDates(Object fecha, String date1, String date2) {
+    public List<Object> filterByTareaDates(String fecha, String date1, String date2) {
 
         return Collections.singletonList(tareaService.filteringByDates(fecha, date1, date2));
     }
 
 
     /**
-     * Metodo 'filterByTareaDates'
-     * Recibe 2 parametros:
+     * Metodo 'getTaskByStatus'
+     * Recibe 1 parametro:
      *
-     * Valor del campo especifico a filtrar (fecha1 / fecha2),  y la cadena especifica de la misma
+     * Valor del campo especifico a filtrar (Estatus),  y la cadena especifica de la misma
      *
      * @return <ul>
-     * <li>List : Registro las Tareas en ese rango de fecha</li>
+     * <li>List : Registro de tareas en ese estatus, por tecnico y cantidad</li>
      * </ul>
      */
     @Override
@@ -333,6 +333,22 @@ public class UserServiceImpl implements UserService, Constantes {
 
         return Collections.singletonList(tareaService.getByTecnicsAndStatus(estatus));
     }
+
+    /**
+     * Metodo 'getTaskByStatus'
+     * Recibe 1 parametro:
+     *
+     * Valor del campo especifico a filtrar (Estatus),  y la cadena especifica de la misma
+     *
+     * @return <ul>
+     * <li>List : Registro de tareas en ese estatus, por tecnico y cantidad</li>
+     * </ul>
+     */
+    @Override
+    public List<Object> getTaskByStatusAndTecnic(String tecnico, String estatus) {
+        return Collections.singletonList(tareaService.getByLoginTecnicsAndStatus(tecnico, estatus));
+    }
+
     /** Metodo 'checkLocation()'
      * Recibe 1 parametro: Id de la clase Ubicacion  a la cual se validara la existencia en la base de datos de alguna Tarea, ya que la relaciones 1 : 1
      * @return <ul>

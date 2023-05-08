@@ -290,7 +290,7 @@ public class UserController implements Constantes {
      * Metodo FilterByDateTareas recibe 2 parametros y valida segun el rol y el parametro
      *
      * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
-     * @param value en referencia al  filtrao especifico a aplicar
+     * @param value en referencia al  filtrado especifico a aplicar
      * @param object en referencia al valor especifica del filtro
      * @return <ul>
      *  <li>Lista de Valores: Retorna una lista de tareas según el value : Username Tecnico, las que tenga asignadas, Admin, Listado de Tareas por username del Tecnico</li>
@@ -298,18 +298,44 @@ public class UserController implements Constantes {
      *  </ul>
      */
     @GetMapping(path = "tareas/porRango")
-    public ResponseEntity<List <Object>> filterByDateTareas(Principal principal, @RequestParam Object fecha, @RequestParam String date1, @RequestParam String date2){
+    public ResponseEntity<List <Object>> filterByDateTareas(Principal principal, @RequestParam String fecha, @RequestParam String date1, @RequestParam String date2){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
         return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByTareaDates(fecha, date1, date2)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
 
 
+    /**
+     * Metodo filterByEstatusTareas recibe 1 parametro y valida segun el rol y el parametro
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param estatus en referencia al  filtrado especifico a aplicar, en este caso, a un Estatus
+     * @return <ul>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el Estatus : Username Tecnico, Cantidad las que tenga asignadas, Estatus especifico</li>
+     *  </ul>
+     */
     @GetMapping(path = "tareas/porEstatus")
     public ResponseEntity<List <Object>> filterByEstatusTareas(Principal principal, @RequestParam String estatus){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
         return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.getTaskByStatus(estatus)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }
+
+
+    /**
+     * Metodo filterByEstatusTareasTecnico recibe 2 parametros y valida segun el rol y el parametro
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param estatus en referencia al  filtrado especifico a aplicar, en este caso, a un Estatus
+     * @return <ul>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el Estatus : Username Tecnico, Cantidad las que tenga asignadas, Estatus especifico</li>
+     *  </ul>
+     */
+    @GetMapping(path = "tareas/porEstatusAndTecnic")
+    public ResponseEntity<List <Object>> filterByEstatusTareasTecnico(Principal principal, @RequestParam String estatus){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.getRol() == Rol.TECNIC ? ResponseEntity.ok(userService.getTaskByStatusAndTecnic(userOnSession.getUser(), estatus)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
 
     /*************************************************************
@@ -393,7 +419,7 @@ public class UserController implements Constantes {
     public ResponseEntity<Object> deleteById(Principal principal, @PathVariable String typus, @PathVariable Long id){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(typus, id) != false ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(userService.deleteRegister(userOnSession.getUser(), typus, id)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No hay registro del ID proporcionado de la clase " + typus.toUpperCase() + " Por favor, verifique");
+        return userOnSession.getRol() == Rol.ADMIN && userService.isRegistered(typus, id) != false ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(userService.deleteRegister(userOnSession.getEmail(), typus, id)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body("No hay registro del ID proporcionado de la clase " + typus.toUpperCase() + " Por favor, verifique");
     }
 
 }
