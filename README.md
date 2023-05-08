@@ -6,7 +6,7 @@
 
 - Isabel Calzadilla.
 - Eduard Falcón.
-- David Farrel.
+- David Farell.
 
 <!-- TOP ANCHOR WITH ID TO CALL -->
 <a href="#top" id="top"></a>
