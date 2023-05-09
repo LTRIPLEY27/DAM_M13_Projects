@@ -168,7 +168,7 @@ public class JsonReseedUtils {
 		return new TaskLocation(
 				jsonObject.getString("id"),
 				Float.parseFloat(jsonObject.getString("centroLatitud")),
-				Float.parseFloat(jsonObject.getString("centroLatitud")),
+				Float.parseFloat(jsonObject.getString("centroLongitud")),
 				jsonObject.getInt("zoom"),
 				extractMap(jsonObject.getJSONArray("mapa")));
 	}

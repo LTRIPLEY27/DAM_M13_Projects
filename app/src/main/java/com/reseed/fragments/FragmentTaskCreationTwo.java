@@ -93,8 +93,6 @@ public class FragmentTaskCreationTwo extends Fragment {
 				public void onMapClick(@NonNull LatLng latLng) {
 					Log.i("Map clic",latLng.toString());
 
-
-
 					//markerOptionsList.add(new MarkerOptions().position(latLng).draggable(true));
 
 					markerList.add(googleMap.addMarker(new MarkerOptions()
