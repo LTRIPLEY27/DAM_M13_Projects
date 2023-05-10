@@ -37,9 +37,13 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
 
     /**
      * QUERY'S CON FILTROS ESPECIFICOS
+     *
+     * Metodo ByCreationDate
+     * Recibe 2 parametros: Fecha Inicio y fecha Fin para filtrar en la base de datos ese valor de creacion especifico
+     * @return <ul>
+     *  <li>Listado de Tareas : Registro de todas las Tareas en la Base de Datos contenidas en ese rango de fechas</li>
+     *  </ul>
      */
-
-
     @Query(value = "SELECT  *\n" +
                         "FROM tarea\n" +
                         "WHERE fecha_creacion BETWEEN :date1 AND :date2\n" +
@@ -47,14 +51,150 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
     List <Tarea> filterByCreationDateRange(@PathVariable("date1") String date1, @PathVariable("date2") String date2);
 
 
+    /**
+     * Metodo filterByEndingDateRange
+     * Recibe 2 parametros: Fecha Inicio y fecha Fin para filtrar en la base de datos ese valor de finalizacion especifico
+     * @return <ul>
+     *  <li>Listado de Tareas : Registro de todas las Tareas en la Base de Datos contenidas en ese rango de fechas</li>
+     *  </ul>
+     */
     @Query(value = "SELECT  *\n" +
                         "FROM tarea\n" +
                         "WHERE fecha_culminacion BETWEEN :date1 AND :date2\n" +
                         "ORDER BY tarea.id DESC ;", nativeQuery = true)
     List <Tarea> filterByEndingDateRange(@PathVariable("date1") String date1, @PathVariable("date2") String date2);
 
+    /**
+     * Metodo filterByCreationDateRangeAndAdmin
+     * Recibe 3 parametros: Id del Usuario, Fecha Inicio y fecha Fin para filtrar en la base de datos ese valor de Creacion especifico
+     * @return <ul>
+     *  <li>Listado de Tareas : Registro de todas las Tareas en la Base de Datos contenidas en ese rango de fechas y relativas a ese usuario especifico</li>
+     *  </ul>
+     */
+    @Query(value = "SELECT  *\n" +
+                        "FROM tarea\n" +
+                        "WHERE admin = :admin AND fecha_creacion BETWEEN :date1 AND :date2\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByCreationDateRangeAndAdmin(@PathVariable("admin") Long id, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
 
-   //cantidad de tareas por estatus, y agrupadas por técnico (admin)
+    /**
+     * Metodo filterByEndingDateRangeAndAdmin
+     * Recibe 3 parametros: Id del Usuario, Fecha Inicio y fecha Fin para filtrar en la base de datos ese valor de finalizacion especifico
+     * @return <ul>
+     *  <li>Listado de Tareas : Registro de todas las Tareas en la Base de Datos contenidas en ese rango de fechas y relativas a ese usuario especifico</li>
+     *  </ul>
+     */
+    @Query(value = "SELECT  *\n" +
+                        "FROM tarea\n" +
+                        "WHERE admin = :admin AND fecha_culminacion BETWEEN :date1 AND :date2\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByEndingDateRangeAndAdmin(@PathVariable("admin") Long id, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
+
+    /**
+     * Metodo filterByCreationDateRangeAndTecnic
+     * Recibe 3 parametros: Id del Usuario, Fecha Inicio y fecha Fin para filtrar en la base de datos ese valor de Creacion especifico
+     * @return <ul>
+     *  <li>Listado de Tareas : Registro de todas las Tareas en la Base de Datos contenidas en ese rango de fechas y relativas a ese usuario especifico</li>
+     *  </ul>
+     */
+    @Query(value = "SELECT  *\n" +
+                        "FROM tarea\n" +
+                        "WHERE tecnico = :tecnico AND fecha_creacion BETWEEN :date1 AND :date2\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByCreationDateRangeAndTecnic(@PathVariable("tecnico") Long id, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
+
+    /**
+     * Metodo filterByEndingDateRangeAndTecnic
+     * Recibe 3 parametros: Id del Usuario, Fecha Inicio y fecha Fin para filtrar en la base de datos ese valor de Finalizacion especifico
+     * @return <ul>
+     *  <li>Listado de Tareas : Registro de todas las Tareas en la Base de Datos contenidas en ese rango de fechas y relativas a ese usuario especifico</li>
+     *  </ul>
+     */
+    @Query(value = "SELECT  *\n" +
+                        "FROM tarea\n" +
+                        "WHERE tecnico = :tecnico AND fecha_culminacion BETWEEN :date1 AND :date2\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByEndingDateRangeAndTecnic(@PathVariable("tecnico") Long id, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
+
+    /**
+     * Metodo filterByStatusAndTecnic
+     * Recibe 2 parametros: Id del Usuario, y el Estatus especifico a aplicar para filtrar las tareas
+     * @return <ul>
+     *  <li>Listado de Tareas : Registro de todas las Tareas en la Base de Datos contenidas con ese Estatus y relativas a ese usuario especifico</li>
+     *  </ul>
+     */
+    @Query(value = "SELECT  *\n" +
+                        "FROM tarea\n" +
+                        "WHERE tecnico = :tecnico AND estatus LIKE :estatus\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByStatusAndTecnic(@PathVariable("tecnico") Long id, @PathVariable("estatus") String estatus);
+
+    /**
+     * Metodo filterByStatusAndAdmin
+     * Recibe 2 parametros: Id del Usuario, y el Estatus especifico a aplicar para filtrar las tareas
+     * @return <ul>
+     *  <li>Listado de Tareas : Registro de todas las Tareas en la Base de Datos contenidas con ese Estatus y relativas a ese usuario especifico</li>
+     *  </ul>
+     */
+    @Query(value = "SELECT  *\n" +
+                        "FROM tarea\n" +
+                        "WHERE admin = :admin AND estatus LIKE :estatus\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByStatusAndAdmin(@PathVariable("admin") Long id, @PathVariable("estatus") String estatus);
+
+    /**
+     * Metodo filterByStatus
+     * Recibe 1 parametro: Estatus especifico a aplicar para filtrar las tareas (Solo ADMIN)
+     * @return <ul>
+     *  <li>Listado de Tareas : Registro de todas las Tareas en la Base de Datos contenidas con ese Estatus</li>
+     *  </ul>
+     */
+    @Query(value = "SELECT  *\n" +
+                        "FROM tarea\n" +
+                        "WHERE estatus LIKE :estatus\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByStatus(@PathVariable("estatus") String estatus);
+
+    /**
+     * Metodo filterByTareaTypeAndAdmin
+     * Recibe 2 parametros: Id del Usuario, y el Tipo de Tarea especifico a aplicar para filtrar las tareas
+     * @return <ul>
+     *  <li>Listado de Tareas : Registro de todas las Tareas en la Base de Datos contenidas con ese Tipo de Tarea y relativas a ese usuario especifico</li>
+     *  </ul>
+     */
+    @Query(value = "SELECT  *\n" +
+                        "FROM tarea\n" +
+                        "WHERE admin = :admin AND tarea LIKE :tarea\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByTareaTypeAndAdmin(@PathVariable("admin") Long id, @PathVariable("tarea") String tarea);
+
+    /**
+     * Metodo filterByTareaTypeAndTecnic
+     * Recibe 2 parametros: Id del Usuario, y el Tipo de Tarea especifico a aplicar para filtrar las tareas
+     * @return <ul>
+     *  <li>Listado de Tareas : Registro de todas las Tareas en la Base de Datos contenidas con ese Tipo de Tarea y relativas a ese usuario especifico</li>
+     *  </ul>
+     */
+    @Query(value = "SELECT  *\n" +
+                        "FROM tarea\n" +
+                        "WHERE tecnico = :tecnico AND tarea LIKE :tarea\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByTareaTypeAndTecnic(@PathVariable("tecnico") Long id, @PathVariable("tarea") String tarea);
+
+    /**
+     * Metodo filterByTareaType
+     * Recibe 1 parametro: Tipo de Tarea especifico a aplicar para filtrar las tareas (Solo ADMIN)
+     * @return <ul>
+     *  <li>Listado de Tareas : Registro de todas las Tareas en la Base de Datos contenidas con ese Tipo de Tarea</li>
+     *  </ul>
+     */
+    @Query(value = "SELECT  *\n" +
+                        "FROM tarea\n" +
+                        "WHERE tarea LIKE :tarea\n" +
+                        "ORDER BY tarea.id DESC ;", nativeQuery = true)
+    List <Tarea> filterByTareaType(@PathVariable("tarea") String tarea);
+
+    //cantidad de tareas por estatus, y agrupadas por técnico (admin)
     @Query(value = "SELECT B.nombre AS 'Técnico',  CAST(COUNT(*) AS NCHAR) AS 'Cantidad', A.estatus As 'Estatus'\n" +
                         "FROM tarea A\n" +
                         "JOIN user B on B.id = A.tecnico\n" +

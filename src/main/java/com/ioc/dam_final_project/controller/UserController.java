@@ -268,13 +268,13 @@ public class UserController implements Constantes {
 
 
     /**
-     * Metodo FilterByDateMessages recibe 2 parametros y valida segun el rol y el parametro
+     * Metodo FilterByDate recibe 2 parametros y valida segun el rol y el parametro
      *
      * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
      * @param date1 en referencia a la fecha inicial
      * @param date2 en en referencia a la fecha final
      * @return <ul>
-     *  <li>Caso Correcto = Lista de Valores: Retorna una lista de tareas según los filtros : User, los que haya  emitido, Admin, los que haya  emitido</li>
+     *  <li>Caso Correcto = Lista de Valores: Retorna una lista de tareas según los filtros : Todos los Mensajes contenidos en la base de Datos bajo esos parametros de fechas</li>
      *  <li>Caso Incorrecto = Mensaje de Excepcion : "Por favor, verifique, es probable que no tengas permisos para esta opcion."</li>
      *  </ul>
      */

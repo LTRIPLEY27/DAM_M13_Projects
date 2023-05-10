@@ -28,6 +28,8 @@ public interface TareaService {
 
     List<TareaDTO> filteringByDates(String fecha, String date1, String date2);
 
+    List<TareaDTO> filteringByDatesAndRol(User user, String fecha, String date1, String date2);
+
     List<Object> getByTecnicsAndStatus(String estatus);
     List<Object> getByLoginTecnicsAndStatus(String tecnico, String estatus);
 

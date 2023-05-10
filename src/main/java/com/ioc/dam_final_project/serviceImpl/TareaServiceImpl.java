@@ -123,6 +123,29 @@ public class TareaServiceImpl implements TareaService, Constantes {
         return  tareas;
     }
 
+    /** Metodo 'filteringByDatesAndRol'
+     * @return <ul>
+     *  <li>List de TareaDTO: Recorre todos las Tareas contenidas en la base de datos con el rango de Fecha indicado y relativas a un usuario especifico</li>
+     *  </ul>
+     */
+    @Override
+    public List<TareaDTO> filteringByDatesAndRol(User user, String fecha, String date1, String date2) {
+        List<TareaDTO> tareas = new ArrayList<>();
+        if(user.getRol() != Rol.ADMIN){
+            switch (fecha){
+                case STARTING -> tareaRepository.filterByCreationDateRangeAndTecnic(user.getId(), date1, date2).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+                case ENDING -> tareaRepository.filterByEndingDateRangeAndTecnic(user.getId(), date1, date2).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+            }
+        }
+
+        switch (fecha){
+            case STARTING -> tareaRepository.filterByCreationDateRangeAndAdmin(user.getId(), date1, date2).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+            case ENDING -> tareaRepository.filterByEndingDateRangeAndAdmin(user.getId(), date1, date2).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+        }
+
+        return  tareas;
+    }
+
     /** Metodo 'getByTecnicsAndStatus'
      * @return <ul>
      *  <li>List de TareaDTO: Recorre todos las Tareas contenidas en la base de datos y las agrupa por tecnico y estatus</li>
