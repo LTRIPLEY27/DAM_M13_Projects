@@ -37,4 +37,17 @@ public interface MensajeRepository extends JpaRepository <Mensaje, Long> {
                     "WHERE fecha BETWEEN :date1 AND :date2\n" +
                     "ORDER BY mensaje.id DESC ;", nativeQuery = true)
     List <Mensaje> filterByDateRange(@PathVariable("date1") String date1, @PathVariable("date2") String date2);
+
+    @Query(value = "SELECT  *\n" +
+                        "FROM mensaje\n" +
+                        "WHERE id_tecnico = :tecnico AND fecha BETWEEN :date1 AND :date2\n" +
+                        "ORDER BY mensaje.id DESC ;", nativeQuery = true)
+    List <Mensaje> filterByDateRangeAndTecnic(@PathVariable("tecnico") Long tecnico, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
+
+
+    @Query(value = "SELECT  *\n" +
+                        "FROM mensaje\n" +
+                        "WHERE id_admin = :admin AND fecha BETWEEN :date1 AND :date2\n" +
+                        "ORDER BY mensaje.id DESC ;", nativeQuery = true)
+    List <Mensaje> filterByDateRangeAndAdmin(@PathVariable("admin") Long admin, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
 }

@@ -27,6 +27,8 @@ public interface MensajeService {
     List<MensajeDTO> findMessageByTecnic(Tecnico tecnico);
     List<MensajeDTO> findMessageByAdmin(Admin admin);
     List<MensajeDTO> filteringByDates(String date1, String date2);
+    List<MensajeDTO> filteringByDatesAndTecnic(Long id, String date1, String date2);
+    List<MensajeDTO> filteringByDatesAndAdmin(Long  id, String date1, String date2);
 
     List<MensajeDTO> getAll();
 }

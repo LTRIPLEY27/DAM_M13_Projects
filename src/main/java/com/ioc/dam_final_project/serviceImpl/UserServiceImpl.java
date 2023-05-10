@@ -317,6 +317,25 @@ public class UserServiceImpl implements UserService, Constantes {
         return Collections.singletonList(tareaService.filteringByDates(fecha, date1, date2));
     }
 
+    /**
+     * Metodo 'filterByMensajeDatesAndRol'
+     * Recibe 3 parametros:
+     *
+     * Valor del Usuario especifico a filtrar por Rol, valor del campo especifico a filtrar (fecha1 / fecha2),  y la cadena especifica de la misma
+     *
+     * @return <ul>
+     * <li>List : Registro las Mensajes por Usuario en ese rango de fecha</li>
+     * </ul>
+     */
+    @Override
+    public List<Object> filterByMensajeDatesAndRol(User user, String date1, String date2) {
+
+        if(user.getRol() != Rol.ADMIN){
+            return Collections.singletonList(mensajeService.filteringByDatesAndTecnic(user.getId(), date1, date2));
+        }
+
+        return Collections.singletonList(mensajeService.filteringByDatesAndAdmin(user.getId(), date1, date2));
+    }
 
     /**
      * Metodo 'getTaskByStatus'

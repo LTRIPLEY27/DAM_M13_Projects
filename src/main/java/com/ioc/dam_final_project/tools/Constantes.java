@@ -37,4 +37,10 @@ public interface Constantes {
     String ADMINS = "admins";
     String TECNICOS = "tecnicos";
     String USERS = "usuarios";
+
+
+    // filter's
+
+    String STARTING = "fecha_creacion";
+    String ENDING = "fecha_culminacion";
 }

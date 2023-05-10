@@ -145,6 +145,19 @@ public class MensajeServiceImpl implements MensajeService, Constantes {
         return mensajes;
     }
 
+    /** Metodo 'filteringByDatesAndTecnic'
+     * @return <ul>
+     *  <li>List de MensajeDTO: Recorre los mensajes del tecnico con rangos de fecha, los cuales retorna</li>
+     *  </ul>
+     */
+    @Override
+    public List<MensajeDTO> filteringByDatesAndTecnic(Long  id, String date1, String date2) {
+        var mensajes = new ArrayList<MensajeDTO>();
+        mensajeRepository.filterByDateRangeAndTecnic(id, date1, date2).forEach(mensaje -> mensajes.add(MensajeDTO.byModel(mensaje)));
+
+        return mensajes;
+    }
+
     /** Metodo 'findMessageByAdmin'
      * @return <ul>
      *  <li>List de MensajeDTO: Recorre los mensajes del admin, los cuales retorna</li>
@@ -154,9 +167,20 @@ public class MensajeServiceImpl implements MensajeService, Constantes {
     public List<MensajeDTO> findMessageByAdmin(Admin admin) {
         List<MensajeDTO> mensajes = new ArrayList<>();
         mensajeRepository.findMensajeByAdmin(admin).forEach(mensaje -> mensajes.add(MensajeDTO.byModel(mensaje)));
-        return mensajes; // todo check
+        return mensajes;
     }
 
+    /** Metodo 'filteringByDatesAndAdmin'
+     * @return <ul>
+     *  <li>List de MensajeDTO: Recorre los mensajes del admin con el rango de fecha especifico, los cuales retorna</li>
+     *  </ul>
+     */
+    @Override
+    public List<MensajeDTO> filteringByDatesAndAdmin(Long  id, String date1, String date2) {
+        List<MensajeDTO> mensajes = new ArrayList<>();
+        mensajeRepository.filterByDateRangeAndAdmin(id, date1, date2).forEach(mensaje -> mensajes.add(MensajeDTO.byModel(mensaje)));
+        return mensajes;
+    }
     /** Metodo 'getAll'
      * @return <ul>
      *  <li>List de MensajeDTO: Recorre todos los mensajes contenidos en la base de datos</li>

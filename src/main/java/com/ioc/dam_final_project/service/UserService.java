@@ -7,6 +7,7 @@ import com.ioc.dam_final_project.dto.UbicacionDTO;
 import com.ioc.dam_final_project.dto.UserDTO;
 import com.ioc.dam_final_project.model.Coordenada;
 import com.ioc.dam_final_project.model.Ubicacion;
+import com.ioc.dam_final_project.model.User;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public interface UserService {
     List<Object> filterByValue(String value, String object);
     List<Object> filterByDates(String date1, String date2);
     List<Object> filterByTareaDates(String fecha, String date1, String date2);
+    List<Object> filterByMensajeDatesAndRol(User user, String date1, String date2);
 
     List<Object> getTaskByStatus(String estatus);
     List<Object> getTaskByStatusAndTecnic(String tecnico, String estatus);

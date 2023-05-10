@@ -271,11 +271,11 @@ public class UserController implements Constantes {
      * Metodo FilterByDateMessages recibe 2 parametros y valida segun el rol y el parametro
      *
      * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
-     * @param value en referencia al  filtrao especifico a aplicar
-     * @param object en referencia al valor especifica del filtro
+     * @param date1 en referencia a la fecha inicial
+     * @param date2 en en referencia a la fecha final
      * @return <ul>
-     *  <li>Lista de Valores: Retorna una lista de tareas según el value : Username Tecnico, las que tenga asignadas, Admin, Listado de Tareas por username del Tecnico</li>
-     *  <li>Lista de Valores: Retorna una lista de tareas según el value : Nombre Tecnico, las que tenga asignadas, Admin, Listado de Tareas por Nombre del Tecnico</li>
+     *  <li>Caso Correcto = Lista de Valores: Retorna una lista de tareas según los filtros : User, los que haya  emitido, Admin, los que haya  emitido</li>
+     *  <li>Caso Incorrecto = Mensaje de Excepcion : "Por favor, verifique, es probable que no tengas permisos para esta opcion."</li>
      *  </ul>
      */
     @GetMapping(path = "mensajes/porRango")
@@ -285,6 +285,23 @@ public class UserController implements Constantes {
         return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByDates(date1, date2)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
 
+    /**
+     * Metodo FilterByDateMessages recibe 3 parametros y valida segun el rol y las fechas del mensaje
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param date1 en referencia a la fecha inicial
+     * @param date2 en en referencia a la fecha final
+     * @return <ul>
+     *  <li>Caso Correcto = Lista de Valores: Retorna una lista de tareas según los filtros : User, los que haya  emitido, Admin, los que haya  emitido</li>
+     *  <li>Caso Incorrecto = Mensaje de Excepcion : "Por favor, verifique, es probable que no tengas permisos para esta opcion."</li>
+     *  </ul>
+     */
+    @GetMapping(path = "mensajes/porRangoYrol")
+    public ResponseEntity<List <Object>> filterByDateAndRol(Principal principal, @RequestParam String date1, @RequestParam String date2){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.isEnabled() ? ResponseEntity.ok(userService.filterByMensajeDatesAndRol(userOnSession, date1, date2)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }
 
     /**
      * Metodo FilterByDateTareas recibe 2 parametros y valida segun el rol y el parametro
