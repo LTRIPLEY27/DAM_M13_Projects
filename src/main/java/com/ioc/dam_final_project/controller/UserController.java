@@ -285,6 +285,7 @@ public class UserController implements Constantes {
         return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByDates(date1, date2)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
 
+
     /**
      * Metodo FilterByDateMessages recibe 3 parametros y valida segun el rol y las fechas del mensaje
      *
@@ -321,6 +322,91 @@ public class UserController implements Constantes {
         return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.filterByTareaDates(fecha, date1, date2)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
 
+    /**
+     * Metodo filterByDateTareasAndRol recibe 3 parametros y valida segun el rol y los parametros
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param fecha en referencia al tipo de Fecha a filtrar en la Tarea
+     * @param date1 en referencia a la fecha inicial
+     * @param date2 en en referencia a la fecha final
+     * @return <ul>
+     *  <li>Caso Correcto = Lista de Valores: Retorna una lista de tareas según los filtros : User, los que esten destinados a la Tarea, Admin, los que esten destinados a la Tarea</li>
+     *  <li>Caso Incorrecto = Mensaje de Excepcion : "Por favor, verifique, es probable que no tengas permisos para esta opcion."</li>
+     *  </ul>
+     */
+    @GetMapping(path = "tareas/porRangoYrol")
+    public ResponseEntity<List <Object>> filterByDateTareasAndRol(Principal principal, @RequestParam String fecha, @RequestParam String date1, @RequestParam String date2){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.isEnabled() ? ResponseEntity.ok(userService.filterByTareaDatesAndRol(userOnSession, fecha, date1, date2)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }
+
+
+    /**
+     * Metodo filterByEstatusTareasAndRol recibe 1 parametro y valida segun el rol y el parametro
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param estatus en referencia al  filtrado especifico a aplicar, en este caso, a un Estatus
+     * @return <ul>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el Estatus :  Cantidad las que tenga asignadas, Estatus especifico</li>
+     *  </ul>
+     */
+    @GetMapping(path = "tareas/porEstatusAndRol")
+    public ResponseEntity<List <Object>> filterByEstatusTareasAndRol(Principal principal, @RequestParam String estatus){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.isEnabled()  ? ResponseEntity.ok(userService.filteringByStatusAndRol(userOnSession, estatus)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }
+
+    /**
+     * Metodo filterByEstatusAllTareas recibe 1 parametro y valida segun el rol y el parametro
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param estatus en referencia al  filtrado especifico a aplicar, en este caso, a un Estatus
+     * @return <ul>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el Estatus : Todas las Tareas almacenadas en la base de datos con ese Estatus especifico</li>
+     *  </ul>
+     */
+    @GetMapping(path = "tareas/porEstatus-all")
+    public ResponseEntity<List <Object>> filterByEstatusAllTareas(Principal principal, @RequestParam String estatus){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.getAllTaskByStatus(estatus)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }
+
+    /**
+     * Metodo filteringByTaskTypeAndRol recibe 1 parametro y valida segun el rol y el parametro
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param tarea en referencia al  filtrado especifico a aplicar, en este caso, a un Tipo Tarea
+     * @return <ul>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el Tipo Tarea : Cantidad las que tenga asignadas, Tipo Tarea especifico</li>
+     *  </ul>
+     */
+    @GetMapping(path = "tareas/porTipoTareaAndRol")
+    public ResponseEntity<List <Object>> filteringByTaskTypeAndRol(Principal principal, @RequestParam String tarea){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.isEnabled()  ? ResponseEntity.ok(userService.filteringByTaskTypeAndRol(userOnSession, tarea)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }
+
+    /**
+     * Metodo filterByEstatusAllTareas recibe 1 parametro y valida segun el rol y el parametro
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param estatus en referencia al  filtrado especifico a aplicar, en este caso, a un Estatus
+     * @return <ul>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el Estatus : Todas las Tareas almacenadas en la base de datos con ese Estatus especifico</li>
+     *  </ul>
+     */
+    @GetMapping(path = "tareas/porTipoTarea-All")
+    public ResponseEntity<List <Object>> filterByTareaTypeAll(Principal principal, @RequestParam String tarea){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.getByAllByTareaType(tarea)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }
+
+    // ESTADISTICS
 
     /**
      * Metodo filterByEstatusTareas recibe 1 parametro y valida segun el rol y el parametro
@@ -337,7 +423,6 @@ public class UserController implements Constantes {
 
         return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.getTaskByStatus(estatus)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
-
 
     /**
      * Metodo filterByEstatusTareasTecnico recibe 2 parametros y valida segun el rol y el parametro

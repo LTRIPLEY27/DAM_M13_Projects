@@ -318,6 +318,22 @@ public class UserServiceImpl implements UserService, Constantes {
     }
 
     /**
+     * Metodo 'filterByTareaDatesAndRol'
+     * Recibe 4 parametros:
+     *
+     * Valor del Usuario, tipo de fecha, campo especifico a filtrar (fecha1 / fecha2),  y la cadena especifica de la misma
+     *
+     * @return <ul>
+     * <li>List : Registro de las Tareas en ese rango de fecha y en relación al Usuario especifico</li>
+     * </ul>
+     */
+    @Override
+    public List<Object> filterByTareaDatesAndRol(User user, String fecha, String date1, String date2) {
+
+        return Collections.singletonList(tareaService.filteringByDatesAndRol(user, fecha, date1, date2));
+    }
+
+    /**
      * Metodo 'filterByMensajeDatesAndRol'
      * Recibe 3 parametros:
      *
@@ -351,6 +367,70 @@ public class UserServiceImpl implements UserService, Constantes {
     public List<Object> getTaskByStatus(String estatus) {
 
         return Collections.singletonList(tareaService.getByTecnicsAndStatus(estatus));
+    }
+
+    /**
+     * Metodo 'getAllTaskByStatus'
+     * Recibe 1 parametro:
+     *
+     * Valor del campo especifico a filtrar (Estatus),  y la cadena especifica de la misma
+     *
+     * @return <ul>
+     * <li>List : Registro de todas las tareas en ese estatus</li>
+     * </ul>
+     */
+    @Override
+    public List<Object> getAllTaskByStatus(String estatus) {
+
+        return Collections.singletonList(tareaService.getByTaskByStatus(estatus));
+    }
+
+    /**
+     * Metodo 'filteringByStatusAndRol'
+     * Recibe 2 parametros:
+     *
+     * Valor del Usuario Logueado, valor del campo especifico a filtrar (Estatus),  y la cadena especifica de la misma
+     *
+     * @return <ul>
+     * <li>List : Registro de tareas en ese estatus, relativo al Usuario que se encuentre Logueado</li>
+     * </ul>
+     */
+    @Override
+    public List<Object> filteringByStatusAndRol(User user, String estatus) {
+
+        return Collections.singletonList(tareaService.filteringByStatusAndRol(user, estatus));
+    }
+
+    /**
+     * Metodo 'filteringByTaskTypeAndRol'
+     * Recibe 2 parametros:
+     *
+     * Valor del Usuario Logueado, valor del campo especifico a filtrar (Tipo Tarea),  y la cadena especifica de la misma
+     *
+     * @return <ul>
+     * <li>List : Registro de tareas en ese Tipo Tarea, relativas al Usuario que se encuentre Logueado</li>
+     * </ul>
+     */
+    @Override
+    public List<Object> filteringByTaskTypeAndRol(User user, String task){
+
+        return Collections.singletonList(tareaService.filteringByTaskTypeAndRol(user, task));
+    }
+
+    /**
+     * Metodo 'getByAllByTareaType'
+     * Recibe 1 parametro:
+     *
+     * Valor del campo especifico a filtrar (Tipo Tarea),  y la cadena especifica de la misma
+     *
+     * @return <ul>
+     * <li>List : Registro de todas las tareas en ese Tipo Tarea</li>
+     * </ul>
+     */
+    @Override
+    public List<Object> getByAllByTareaType(String task) {
+
+        return Collections.singletonList(tareaService.getByTaskByTareaType(task));
     }
 
     /**

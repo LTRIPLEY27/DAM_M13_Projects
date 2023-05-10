@@ -1,10 +1,7 @@
 package com.ioc.dam_final_project.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ioc.dam_final_project.dto.CoordenadaDTO;
-import com.ioc.dam_final_project.dto.MensajeDTO;
-import com.ioc.dam_final_project.dto.UbicacionDTO;
-import com.ioc.dam_final_project.dto.UserDTO;
+import com.ioc.dam_final_project.dto.*;
 import com.ioc.dam_final_project.model.Coordenada;
 import com.ioc.dam_final_project.model.Ubicacion;
 import com.ioc.dam_final_project.model.User;
@@ -51,8 +48,13 @@ public interface UserService {
     List<Object> filterByDates(String date1, String date2);
     List<Object> filterByTareaDates(String fecha, String date1, String date2);
     List<Object> filterByMensajeDatesAndRol(User user, String date1, String date2);
+    List<Object> filterByTareaDatesAndRol(User user, String fecha, String date1, String date2);
 
     List<Object> getTaskByStatus(String estatus);
+    List<Object> getAllTaskByStatus(String estatus);
+    List<Object> getByAllByTareaType(String task);
+    List<Object> filteringByStatusAndRol(User user, String estatus);
+    List<Object> filteringByTaskTypeAndRol(User user, String task);
     List<Object> getTaskByStatusAndTecnic(String tecnico, String estatus);
 
     boolean checkLocation(Long idTarea);

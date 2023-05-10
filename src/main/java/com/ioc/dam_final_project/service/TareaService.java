@@ -30,6 +30,12 @@ public interface TareaService {
 
     List<TareaDTO> filteringByDatesAndRol(User user, String fecha, String date1, String date2);
 
+    List<TareaDTO> filteringByStatusAndRol(User user, String estatus);
+
+    List<TareaDTO> filteringByTaskTypeAndRol(User user, String task);
+    List<TareaDTO> getByTaskByStatus(String estatus);
+    List<TareaDTO> getByTaskByTareaType(String task);
+
     List<Object> getByTecnicsAndStatus(String estatus);
     List<Object> getByLoginTecnicsAndStatus(String tecnico, String estatus);
 

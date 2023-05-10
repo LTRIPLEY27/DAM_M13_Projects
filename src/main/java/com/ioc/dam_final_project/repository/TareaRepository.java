@@ -73,9 +73,9 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
      */
     @Query(value = "SELECT  *\n" +
                         "FROM tarea\n" +
-                        "WHERE admin = :admin AND fecha_creacion BETWEEN :date1 AND :date2\n" +
+                        "WHERE admin = :admin AND fecha_culminacion BETWEEN :date1 AND :date2\n" +
                         "ORDER BY tarea.id DESC ;", nativeQuery = true)
-    List <Tarea> filterByCreationDateRangeAndAdmin(@PathVariable("admin") Long id, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
+    List <Tarea> filterByCreationDateRangeAndAdmin(@PathVariable("admin") Long admin, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
 
     /**
      * Metodo filterByEndingDateRangeAndAdmin
@@ -88,7 +88,7 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
                         "FROM tarea\n" +
                         "WHERE admin = :admin AND fecha_culminacion BETWEEN :date1 AND :date2\n" +
                         "ORDER BY tarea.id DESC ;", nativeQuery = true)
-    List <Tarea> filterByEndingDateRangeAndAdmin(@PathVariable("admin") Long id, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
+    List <Tarea> filterByEndingDateRangeAndAdmin(@PathVariable("admin") Long admin, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
 
     /**
      * Metodo filterByCreationDateRangeAndTecnic
@@ -101,7 +101,7 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
                         "FROM tarea\n" +
                         "WHERE tecnico = :tecnico AND fecha_creacion BETWEEN :date1 AND :date2\n" +
                         "ORDER BY tarea.id DESC ;", nativeQuery = true)
-    List <Tarea> filterByCreationDateRangeAndTecnic(@PathVariable("tecnico") Long id, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
+    List <Tarea> filterByCreationDateRangeAndTecnic(@PathVariable("tecnico") Long tecnico, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
 
     /**
      * Metodo filterByEndingDateRangeAndTecnic
@@ -114,7 +114,7 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
                         "FROM tarea\n" +
                         "WHERE tecnico = :tecnico AND fecha_culminacion BETWEEN :date1 AND :date2\n" +
                         "ORDER BY tarea.id DESC ;", nativeQuery = true)
-    List <Tarea> filterByEndingDateRangeAndTecnic(@PathVariable("tecnico") Long id, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
+    List <Tarea> filterByEndingDateRangeAndTecnic(@PathVariable("tecnico") Long tecnico, @PathVariable("date1") String date1, @PathVariable("date2") String date2);
 
     /**
      * Metodo filterByStatusAndTecnic
@@ -127,7 +127,7 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
                         "FROM tarea\n" +
                         "WHERE tecnico = :tecnico AND estatus LIKE :estatus\n" +
                         "ORDER BY tarea.id DESC ;", nativeQuery = true)
-    List <Tarea> filterByStatusAndTecnic(@PathVariable("tecnico") Long id, @PathVariable("estatus") String estatus);
+    List <Tarea> filterByStatusAndTecnic(@PathVariable("tecnico") Long tecnico, @PathVariable("estatus") String estatus);
 
     /**
      * Metodo filterByStatusAndAdmin
@@ -140,7 +140,7 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
                         "FROM tarea\n" +
                         "WHERE admin = :admin AND estatus LIKE :estatus\n" +
                         "ORDER BY tarea.id DESC ;", nativeQuery = true)
-    List <Tarea> filterByStatusAndAdmin(@PathVariable("admin") Long id, @PathVariable("estatus") String estatus);
+    List <Tarea> filterByStatusAndAdmin(@PathVariable("admin") Long admin, @PathVariable("estatus") String estatus);
 
     /**
      * Metodo filterByStatus
@@ -166,7 +166,7 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
                         "FROM tarea\n" +
                         "WHERE admin = :admin AND tarea LIKE :tarea\n" +
                         "ORDER BY tarea.id DESC ;", nativeQuery = true)
-    List <Tarea> filterByTareaTypeAndAdmin(@PathVariable("admin") Long id, @PathVariable("tarea") String tarea);
+    List <Tarea> filterByTareaTypeAndAdmin(@PathVariable("admin") Long admin, @PathVariable("tarea") String tarea);
 
     /**
      * Metodo filterByTareaTypeAndTecnic
@@ -179,7 +179,7 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
                         "FROM tarea\n" +
                         "WHERE tecnico = :tecnico AND tarea LIKE :tarea\n" +
                         "ORDER BY tarea.id DESC ;", nativeQuery = true)
-    List <Tarea> filterByTareaTypeAndTecnic(@PathVariable("tecnico") Long id, @PathVariable("tarea") String tarea);
+    List <Tarea> filterByTareaTypeAndTecnic(@PathVariable("tecnico") Long tecnico, @PathVariable("tarea") String tarea);
 
     /**
      * Metodo filterByTareaType

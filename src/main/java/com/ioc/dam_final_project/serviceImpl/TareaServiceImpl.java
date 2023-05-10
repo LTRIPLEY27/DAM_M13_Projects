@@ -146,6 +146,66 @@ public class TareaServiceImpl implements TareaService, Constantes {
         return  tareas;
     }
 
+    /** Metodo 'filteringByStatusAndRol'
+     * @return <ul>
+     *  <li>List de TareaDTO: Recorre todos las Tareas contenidas en la base de datos con el estatus y relativas a un usuario especifico</li>
+     *  </ul>
+     */
+    @Override
+    public List<TareaDTO> filteringByStatusAndRol(User user, String estatus) {
+        List<TareaDTO> tareas = new ArrayList<>();
+
+        switch (user.getRol()){
+            case ADMIN -> tareaRepository.filterByStatusAndAdmin(user.getId(), estatus).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+            case TECNIC -> tareaRepository.filterByStatusAndTecnic(user.getId(), estatus).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+        }
+
+        return  tareas;
+    }
+
+    /** Metodo 'getByTaskByStatus'
+     * @return <ul>
+     *  <li>List de TareaDTO: Recorre todos las Tareas contenidas en la base de datos con el estatus indicado</li>
+     *  </ul>
+     */
+    @Override
+    public List<TareaDTO> getByTaskByStatus(String estatus) {
+        List<TareaDTO> tareas = new ArrayList<>();
+        tareaRepository.filterByStatus(estatus).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+
+        return  tareas;
+    }
+
+    /** Metodo 'getByTaskByTareaType'
+     * @return <ul>
+     *  <li>List de TareaDTO: Recorre todos las Tareas contenidas en la base de datos con el estatus indicado</li>
+     *  </ul>
+     */
+    @Override
+    public List<TareaDTO> getByTaskByTareaType(String task) {
+        List<TareaDTO> tareas = new ArrayList<>();
+        tareaRepository.filterByTareaType(task).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+
+        return  tareas;
+    }
+
+    /** Metodo 'filteringByTaskTypeAndRol'
+     * @return <ul>
+     *  <li>List de TareaDTO: Recorre todos las Tareas contenidas en la base de datos con el Tipo de Tarea y relativas a un usuario especifico</li>
+     *  </ul>
+     */
+    @Override
+    public List<TareaDTO> filteringByTaskTypeAndRol(User user, String task) {
+        List<TareaDTO> tareas = new ArrayList<>();
+
+        switch (user.getRol()){
+            case ADMIN -> tareaRepository.filterByTareaTypeAndAdmin(user.getId(), task).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+            case TECNIC -> tareaRepository.filterByTareaTypeAndTecnic(user.getId(), task).forEach(tarea -> tareas.add(TareaDTO.byModel(tarea)));
+        }
+
+        return  tareas;
+    }
+
     /** Metodo 'getByTecnicsAndStatus'
      * @return <ul>
      *  <li>List de TareaDTO: Recorre todos las Tareas contenidas en la base de datos y las agrupa por tecnico y estatus</li>
