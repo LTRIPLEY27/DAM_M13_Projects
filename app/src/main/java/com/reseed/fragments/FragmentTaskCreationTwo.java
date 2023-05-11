@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,6 +40,8 @@ public class FragmentTaskCreationTwo extends Fragment {
 	PolygonOptions polygonOptions;
 
 	List<Marker> markerList = new ArrayList<>();
+
+	Button crearPoligonoBtn, guardarTareaBtn;
 
 	public FragmentTaskCreationTwo() {
 		// Required empty public constructor
@@ -95,9 +98,20 @@ public class FragmentTaskCreationTwo extends Fragment {
 
 					//markerOptionsList.add(new MarkerOptions().position(latLng).draggable(true));
 
+					googleMap.clear();
+
+
+					for (int i = 0; i < markerList.size(); i++) {
+						googleMap.addMarker(new MarkerOptions().position(markerList.get(i).getPosition()).draggable(true).title(String.valueOf(i)));
+						markerList.get(i).showInfoWindow();
+					}
+
 					markerList.add(googleMap.addMarker(new MarkerOptions()
 							.position(latLng)
 							.draggable(true)));
+					markerList.get(markerList.size()-1).showInfoWindow();
+
+					//polygonOptions.add(markerList.get(markerList.size() - 1).getPosition());
 
 					googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
 						@Override
@@ -118,13 +132,14 @@ public class FragmentTaskCreationTwo extends Fragment {
 
 					if(markerList.size() > 2){
 
-						for (Marker marker:
+						/*for (Marker marker:
 						     markerList) {
 
-							polygonOptions.add(marker.getPosition());
+							//polygonOptions.add(marker.getPosition());
+							polygon = googleMap.addPolygon(polygonOptions);
+						}*/
 
-						}
-						polygon = googleMap.addPolygon(polygonOptions);
+						//googleMap.addPolygon(polygonOptions);
 						//polygon = googleMap.addPolygon(new PolygonOptions().addAll(markerList.));
 						//googleMap.addPolygon(polygon);
 						//googleMap.addPolygon(polygonOptions.add(latLng));
@@ -162,7 +177,22 @@ public class FragmentTaskCreationTwo extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_task_creation_two, container, false);
+
+		View view = inflater.inflate(R.layout.fragment_task_creation_two, container, false);
+
+		crearPoligonoBtn = view.findViewById(R.id.crearAreaBtn);
+		guardarTareaBtn = view.findViewById(R.id.crearTareaSaveBtn);
+
+		// Listeners de los botones.
+
+		crearPoligonoBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+			}
+		});
+
+		return view;
 	}
 
 	@Override
