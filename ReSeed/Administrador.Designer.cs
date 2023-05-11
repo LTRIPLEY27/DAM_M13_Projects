@@ -30,9 +30,8 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Administrador));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             panel1 = new Panel();
-            gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             boton_registroCoordenadas = new Button();
             panel2 = new Panel();
             label5 = new Label();
@@ -42,6 +41,7 @@
             label1 = new Label();
             ConfigMapa = new TabControl();
             tabPage1 = new TabPage();
+            label20 = new Label();
             btn_dibujarpoligono = new Button();
             btn_eliminarTodasLasCoordenadas = new Button();
             btn_eliminarCoordenada = new Button();
@@ -99,6 +99,14 @@
             label8 = new Label();
             label3 = new Label();
             tabPage3 = new TabPage();
+            panel9 = new Panel();
+            button_ELIMINARTAREA = new Button();
+            button_ACTUALIZARTAREA = new Button();
+            button_CARGARTAREA = new Button();
+            listBox_listadoTAREAS = new ListBox();
+            label22 = new Label();
+            comboBox_ListaTecnicos_GESTIONTAREAS = new ComboBox();
+            label21 = new Label();
             tabPage4 = new TabPage();
             tabPage5 = new TabPage();
             button_MIPERFIL_MODIFICA_PASSWORD = new Button();
@@ -125,7 +133,7 @@
             label15 = new Label();
             contextMenuStrip1 = new ContextMenuStrip(components);
             iD = new DataGridViewTextBoxColumn();
-            label20 = new Label();
+            gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ConfigMapa.SuspendLayout();
@@ -137,6 +145,8 @@
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView_usuarios).BeginInit();
             panel6.SuspendLayout();
+            tabPage3.SuspendLayout();
+            panel9.SuspendLayout();
             tabPage5.SuspendLayout();
             panel7.SuspendLayout();
             tabPage6.SuspendLayout();
@@ -154,33 +164,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(584, 622);
             panel1.TabIndex = 0;
-            // 
-            // gMapControl1
-            // 
-            gMapControl1.Bearing = 0F;
-            gMapControl1.CanDragMap = true;
-            gMapControl1.EmptyTileColor = Color.Navy;
-            gMapControl1.GrayScaleMode = false;
-            gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            gMapControl1.LevelsKeepInMemory = 5;
-            gMapControl1.Location = new Point(20, 22);
-            gMapControl1.MarkersEnabled = true;
-            gMapControl1.MaxZoom = 2;
-            gMapControl1.MinZoom = 2;
-            gMapControl1.MouseWheelZoomEnabled = true;
-            gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            gMapControl1.Name = "gMapControl1";
-            gMapControl1.NegativeMode = false;
-            gMapControl1.PolygonsEnabled = true;
-            gMapControl1.RetryLoadTile = 0;
-            gMapControl1.RoutesEnabled = true;
-            gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
-            gMapControl1.ShowTileGridLines = false;
-            gMapControl1.Size = new Size(548, 428);
-            gMapControl1.TabIndex = 3;
-            gMapControl1.Zoom = 0D;
-            gMapControl1.MouseDoubleClick += gMapControl1_MouseDoubleClick;
             // 
             // boton_registroCoordenadas
             // 
@@ -289,6 +272,15 @@
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Asignación de Tareas";
             tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label20
+            // 
+            label20.AutoSize = true;
+            label20.Location = new Point(713, 28);
+            label20.Name = "label20";
+            label20.Size = new Size(158, 16);
+            label20.TabIndex = 12;
+            label20.Text = "FECHA DE CULMINACIÓN";
             // 
             // btn_dibujarpoligono
             // 
@@ -578,14 +570,14 @@
             // 
             dataGridView_usuarios.AllowUserToAddRows = false;
             dataGridView_usuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopCenter;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Tahoma", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridView_usuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Tahoma", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dataGridView_usuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dataGridView_usuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView_usuarios.Columns.AddRange(new DataGridViewColumn[] { id_user, user_name, email });
             dataGridView_usuarios.Location = new Point(432, 57);
@@ -850,13 +842,94 @@
             // 
             // tabPage3
             // 
+            tabPage3.Controls.Add(panel9);
             tabPage3.Location = new Point(4, 25);
             tabPage3.Name = "tabPage3";
             tabPage3.Padding = new Padding(3);
             tabPage3.Size = new Size(1166, 765);
             tabPage3.TabIndex = 2;
-            tabPage3.Text = "Gestión de Tareas";
+            tabPage3.Text = "Gestión de Tareas Técnico";
             tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // panel9
+            // 
+            panel9.BackColor = Color.DarkSeaGreen;
+            panel9.Controls.Add(button_ELIMINARTAREA);
+            panel9.Controls.Add(button_ACTUALIZARTAREA);
+            panel9.Controls.Add(button_CARGARTAREA);
+            panel9.Controls.Add(listBox_listadoTAREAS);
+            panel9.Controls.Add(label22);
+            panel9.Controls.Add(comboBox_ListaTecnicos_GESTIONTAREAS);
+            panel9.Controls.Add(label21);
+            panel9.Location = new Point(6, 6);
+            panel9.Name = "panel9";
+            panel9.Size = new Size(1102, 753);
+            panel9.TabIndex = 0;
+            // 
+            // button_ELIMINARTAREA
+            // 
+            button_ELIMINARTAREA.Location = new Point(14, 352);
+            button_ELIMINARTAREA.Name = "button_ELIMINARTAREA";
+            button_ELIMINARTAREA.Size = new Size(1070, 63);
+            button_ELIMINARTAREA.TabIndex = 6;
+            button_ELIMINARTAREA.Text = "ELIMINAR TAREA";
+            button_ELIMINARTAREA.UseVisualStyleBackColor = true;
+            button_ELIMINARTAREA.Click += button_ELIMINARTAREA_Click;
+            // 
+            // button_ACTUALIZARTAREA
+            // 
+            button_ACTUALIZARTAREA.Location = new Point(14, 283);
+            button_ACTUALIZARTAREA.Name = "button_ACTUALIZARTAREA";
+            button_ACTUALIZARTAREA.Size = new Size(1070, 63);
+            button_ACTUALIZARTAREA.TabIndex = 5;
+            button_ACTUALIZARTAREA.Text = "ACTUALIZAR TAREA";
+            button_ACTUALIZARTAREA.UseVisualStyleBackColor = true;
+            // 
+            // button_CARGARTAREA
+            // 
+            button_CARGARTAREA.Location = new Point(14, 111);
+            button_CARGARTAREA.Name = "button_CARGARTAREA";
+            button_CARGARTAREA.Size = new Size(191, 166);
+            button_CARGARTAREA.TabIndex = 4;
+            button_CARGARTAREA.Text = "CARGAR TAREA";
+            button_CARGARTAREA.UseVisualStyleBackColor = true;
+            button_CARGARTAREA.Click += button_CARGARTAREA_Click;
+            // 
+            // listBox_listadoTAREAS
+            // 
+            listBox_listadoTAREAS.FormattingEnabled = true;
+            listBox_listadoTAREAS.ItemHeight = 16;
+            listBox_listadoTAREAS.Location = new Point(211, 81);
+            listBox_listadoTAREAS.Name = "listBox_listadoTAREAS";
+            listBox_listadoTAREAS.ScrollAlwaysVisible = true;
+            listBox_listadoTAREAS.Size = new Size(873, 196);
+            listBox_listadoTAREAS.TabIndex = 3;
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(569, 62);
+            label22.Name = "label22";
+            label22.Size = new Size(140, 16);
+            label22.TabIndex = 2;
+            label22.Text = "SELECCIONAR TAREA";
+            // 
+            // comboBox_ListaTecnicos_GESTIONTAREAS
+            // 
+            comboBox_ListaTecnicos_GESTIONTAREAS.FormattingEnabled = true;
+            comboBox_ListaTecnicos_GESTIONTAREAS.Location = new Point(14, 81);
+            comboBox_ListaTecnicos_GESTIONTAREAS.Name = "comboBox_ListaTecnicos_GESTIONTAREAS";
+            comboBox_ListaTecnicos_GESTIONTAREAS.Size = new Size(191, 24);
+            comboBox_ListaTecnicos_GESTIONTAREAS.TabIndex = 1;
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Location = new Point(14, 62);
+            label21.Name = "label21";
+            label21.Size = new Size(149, 16);
+            label21.TabIndex = 0;
+            label21.Text = "SELECCIONAR TÉCNICO";
             // 
             // tabPage4
             // 
@@ -1019,16 +1092,16 @@
             panel8.Controls.Add(dataGridViewFILTRAR_USUARIOS);
             panel8.Controls.Add(comboBox_GestionAdmin);
             panel8.Controls.Add(label15);
-            panel8.Location = new Point(253, 78);
+            panel8.Location = new Point(3, 3);
             panel8.Name = "panel8";
-            panel8.Size = new Size(568, 435);
+            panel8.Size = new Size(531, 382);
             panel8.TabIndex = 0;
             // 
             // dataGridViewFILTRAR_USUARIOS
             // 
             dataGridViewFILTRAR_USUARIOS.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewFILTRAR_USUARIOS.Columns.AddRange(new DataGridViewColumn[] { Column3, Column4, Column5, Column6 });
-            dataGridViewFILTRAR_USUARIOS.Location = new Point(59, 135);
+            dataGridViewFILTRAR_USUARIOS.Location = new Point(36, 122);
             dataGridViewFILTRAR_USUARIOS.Name = "dataGridViewFILTRAR_USUARIOS";
             dataGridViewFILTRAR_USUARIOS.RowTemplate.Height = 25;
             dataGridViewFILTRAR_USUARIOS.Size = new Size(445, 173);
@@ -1058,7 +1131,7 @@
             // 
             comboBox_GestionAdmin.FormattingEnabled = true;
             comboBox_GestionAdmin.Items.AddRange(new object[] { "ADMINISTRADORES", "TECNICOS" });
-            comboBox_GestionAdmin.Location = new Point(224, 96);
+            comboBox_GestionAdmin.Location = new Point(201, 83);
             comboBox_GestionAdmin.Name = "comboBox_GestionAdmin";
             comboBox_GestionAdmin.Size = new Size(280, 24);
             comboBox_GestionAdmin.TabIndex = 1;
@@ -1067,7 +1140,7 @@
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(59, 99);
+            label15.Location = new Point(36, 86);
             label15.Name = "label15";
             label15.Size = new Size(159, 16);
             label15.TabIndex = 0;
@@ -1083,14 +1156,32 @@
             iD.HeaderText = "iD";
             iD.Name = "iD";
             // 
-            // label20
+            // gMapControl1
             // 
-            label20.AutoSize = true;
-            label20.Location = new Point(713, 28);
-            label20.Name = "label20";
-            label20.Size = new Size(158, 16);
-            label20.TabIndex = 12;
-            label20.Text = "FECHA DE CULMINACIÓN";
+            gMapControl1.Bearing = 0F;
+            gMapControl1.CanDragMap = true;
+            gMapControl1.EmptyTileColor = Color.Navy;
+            gMapControl1.GrayScaleMode = false;
+            gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            gMapControl1.LevelsKeepInMemory = 5;
+            gMapControl1.Location = new Point(20, 22);
+            gMapControl1.MarkersEnabled = true;
+            gMapControl1.MaxZoom = 2;
+            gMapControl1.MinZoom = 2;
+            gMapControl1.MouseWheelZoomEnabled = true;
+            gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            gMapControl1.Name = "gMapControl1";
+            gMapControl1.NegativeMode = false;
+            gMapControl1.PolygonsEnabled = true;
+            gMapControl1.RetryLoadTile = 0;
+            gMapControl1.RoutesEnabled = true;
+            gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
+            gMapControl1.ShowTileGridLines = false;
+            gMapControl1.Size = new Size(548, 424);
+            gMapControl1.TabIndex = 3;
+            gMapControl1.Zoom = 0D;
+            gMapControl1.MouseDoubleClick += gMapControl1_MouseDoubleClick;
             // 
             // Administrador
             // 
@@ -1119,6 +1210,9 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView_usuarios).EndInit();
             panel6.ResumeLayout(false);
             panel6.PerformLayout();
+            tabPage3.ResumeLayout(false);
+            panel9.ResumeLayout(false);
+            panel9.PerformLayout();
             tabPage5.ResumeLayout(false);
             tabPage5.PerformLayout();
             panel7.ResumeLayout(false);
@@ -1223,11 +1317,19 @@
         private ComboBox comboBox_GestionAdmin;
         private Label label15;
         private DataGridViewTextBoxColumn iD;
-        private GMap.NET.WindowsForms.GMapControl gMapControl1;
         private TextBox textBox_INFOTAREA;
         private Label label19;
         private ComboBox comboBox_ESTATUS;
         private Label label17;
         private Label label20;
+        private Panel panel9;
+        private ComboBox comboBox_ListaTecnicos_GESTIONTAREAS;
+        private Label label21;
+        private ListBox listBox_listadoTAREAS;
+        private Label label22;
+        private Button button_ELIMINARTAREA;
+        private Button button_ACTUALIZARTAREA;
+        private Button button_CARGARTAREA;
+        private GMap.NET.WindowsForms.GMapControl gMapControl1;
     }
 }

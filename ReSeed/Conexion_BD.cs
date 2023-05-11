@@ -58,7 +58,7 @@ namespace ReSeed
         #region MÉTODO LOGIN
         public async void login(String usuario, String password, String URL)
         {
-           
+
             //objeto de la clase HTTPCLIENT
             client = new HttpClient();
 
@@ -66,7 +66,7 @@ namespace ReSeed
             JObject json = new JObject();
             json.Add("email", usuario);
             json.Add("password", password);
-            
+
             //Convertimos el obejot json en String
             String jsonString = json.ToString();
 
@@ -101,18 +101,18 @@ namespace ReSeed
                 */
                 String atributoPerfilDeseado = "rol";
                 JObject perfilUsuario = utilidades.obtenerDatosUserLogueadoJson(token);
-                String rol = utilidades.obtenerAtributoPerfil(perfilUsuario,atributoPerfilDeseado);
-                
+                String rol = utilidades.obtenerAtributoPerfil(perfilUsuario, atributoPerfilDeseado);
+
                 if (rol.Equals("ADMIN"))
                 {
 
                     MessageBox.Show("Sesión iniciada correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);//Mensaje sesión validada
                     //MessageBox.Show(TOKEN);
-                    Administrador form3 = new Administrador(token,usuario);//Enviamos el TOKEN al form3 y el usuario logueado
+                    Administrador form3 = new Administrador(token, usuario);//Enviamos el TOKEN al form3 y el usuario logueado
                     Form1 form1 = new Form1();
                     form3.Show();//mostramos menu principal admin
                     form1.Hide();//ocultamos form login
-                    
+
 
                 }
                 else if (rol.Equals("TECNIC"))
@@ -123,7 +123,7 @@ namespace ReSeed
                     Form1 form1 = new Form1();
                     form4.Show();//mostramos menu principal tecnico
                     form1.Hide();//ocultamos form login
-                    
+
                 }
             }
 
@@ -131,9 +131,9 @@ namespace ReSeed
             {
                 MessageBox.Show("Usuario o contraseña incorrectos.", "MENSAJE ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);//Mensaje erro LOGIN
             }
-                
+
         }
-                
+
         #endregion
 
         /*-------------------
@@ -147,7 +147,7 @@ namespace ReSeed
          * la respuesta sea false,mostraremos el mensaje oportuno.
          */
         #region MÉTODO ALTA USUARIO
-        public async void altaUsuario (Usuario usuario, String token, String URL)
+        public async void altaUsuario(Usuario usuario, String token, String URL)
         {
             //Creación Usuario en json
             JsonObject json = new JsonObject();
@@ -158,20 +158,21 @@ namespace ReSeed
             json.Add("email", usuario.Mail);
             json.Add("telefono", usuario.NumeroTelefono);
             json.Add("rol", usuario.Rol);
-           
+
             //var json = JsonConvert.SerializeObject(usuario).ToLower();
             HttpClient client = new HttpClient();
 
             //autorización TOKEN    
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var content = new StringContent (json.ToString(),Encoding.UTF8, "application/json");
+            var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
             var response = await client.PostAsync(URL, content);
 
             if (response.IsSuccessStatusCode)
             {
                 MessageBox.Show("Usuario registrado correctamente.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } else
+            }
+            else
             {
                 MessageBox.Show("Error al dar de alta un usuario.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -189,26 +190,26 @@ namespace ReSeed
          * @return se devuelve la lista de objetos de usuarios
          */
         #region MÉTODO ASÍNCRONO OBTENER USUARIO
-        public async Task <List<Post>> ObtenerUsuarios (String token, String URL)
+        public async Task<List<Post>> ObtenerUsuarios(String token, String URL)
         {
             //Lista dónde almacenaremos los usuarios de respuesta EndPoint
-            List <Post> usuariosRegistrados = new List <Post> ();
+            List<Post> usuariosRegistrados = new List<Post>();
 
             HttpClient client = new HttpClient();
 
             //autorización TOKEN    
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             //respuesta de la petición (true or false)
-            var respuesta = await client.GetAsync (URL);
+            var respuesta = await client.GetAsync(URL);
 
             if (respuesta.IsSuccessStatusCode)
             {
                 //variable String que recibe el resultado de la petición
                 var content = respuesta.Content.ReadAsStringAsync().Result;
                 //Transformamos esta respuesta en Array
-                JArray listaUsuarios = JArray.Parse (content);
+                JArray listaUsuarios = JArray.Parse(content);
                 //Recorremos todo el Array (es bidimensoinal pero solo tiene una fila por eso solo un LOOP FOR)
-                for (int i = 0; i < listaUsuarios.First.Count();i++)
+                for (int i = 0; i < listaUsuarios.First.Count(); i++)
                 {
                     String usuarioJson = listaUsuarios[0][i].ToString();//@usuarioJson almacena usuario en posición [0][i]
 
@@ -218,10 +219,11 @@ namespace ReSeed
 
                 }
 
-            } else
+            }
+            else
 
             {
-                MessageBox.Show("Error al conectar con el Servidor. Intentelo más tarde.","INFORMACIÓN",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                MessageBox.Show("Error al conectar con el Servidor. Intentelo más tarde.", "INFORMACIÓN", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
             return usuariosRegistrados;
@@ -237,7 +239,7 @@ namespace ReSeed
          * Tras utilizar nuestro token enviamos el @content junto con @URL a la Api y esperamos respuesta
          */
         #region MÉTODO ASÍNCRONO MODIFICAR USUARIO
-        public async void modificarUsuarioAsync (String URL,String token,String json)
+        public async void modificarUsuarioAsync(String URL, String token, String json)
         {
             //declaramos objeto client
             client = new HttpClient();
@@ -246,14 +248,16 @@ namespace ReSeed
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             //fromamos el contenido que enviaremos al end point
-            var content = new StringContent(json.ToString(),Encoding.UTF8, "application/json");
+            var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json");
             //respuesta
-            var response = await client.PutAsync(URL,content);
+            var response = await client.PutAsync(URL, content);
 
-            if (response.IsSuccessStatusCode) {
+            if (response.IsSuccessStatusCode)
+            {
                 MessageBox.Show("Usuario modificado correctamente", "MODIFICAR", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            } else
+            }
+            else
             {
                 MessageBox.Show("Error al intentar modifciar usuario.", "ERROR MODIFICAR", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -269,9 +273,9 @@ namespace ReSeed
          * Enviamos a la API la URL End Point añadiendo el IdUsuario y esperamos respuesta
          */
         #region MÉTODO ELIMINAR USUARIO
-        public async void eliminarUsuarioAsync (String URL, String token,String idUser)
+        public async void eliminarUsuarioAsync(String URL, String token, String idUser)
         {
-           
+
             HttpClient client = new HttpClient();
 
             //autorización TOKEN    
@@ -279,7 +283,7 @@ namespace ReSeed
 
             //borramos en la apirest a razón de su endpount con la id correspondiente del usuario
             var response = await client.DeleteAsync(URL + idUser);
-           
+
 
         }
 
@@ -313,7 +317,8 @@ namespace ReSeed
         */
         #region EDITAR PERFIL
 
-        public void atributosParaPerfil(List<Post> listaUsuarios, String id, String nuevoTelefono, String nuevoPassword, String URL, String token)
+        public void atributosParaPerfil(List<Post> listaUsuarios, String id, String nuevoTelefono,
+            String nuevoPassword, String confirmaPassword, String URL, String token)
         {
 
             JObject userJSon = null;
@@ -332,7 +337,7 @@ namespace ReSeed
                 {
                     String nombre = listaUsuarios[i].Nombre;
                     String apellido = listaUsuarios[i].Apellido;
-                    String usuario = listaUsuarios[i].User;                 
+                    String usuario = listaUsuarios[i].User;
                     String telefono = listaUsuarios[i].NumeroTelefono;
                     String email = listaUsuarios[i].Email;
                     String password = listaUsuarios[i].Password;
@@ -342,9 +347,10 @@ namespace ReSeed
                     {
                         if (telefono.Equals(nuevoTelefono))
                         {
-                            MessageBox.Show("No ha modificado ningún dato de perfil.","INFORMACION PERFIL",
-                                MessageBoxButtons.OK,MessageBoxIcon.Information);
-                        } else
+                            MessageBox.Show("No ha modificado ningún dato de perfil.", "INFORMACION PERFIL",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
                         {
                             user = new Usuario(nombre, apellido, usuario, nuevoTelefono, email, password, rol);
                             userJSon = new JObject();
@@ -356,8 +362,8 @@ namespace ReSeed
                             userJSon.Add("rol", rol);
 
                             jsonContent = userJSon.ToString();
-                            
-                            var content = new StringContent(jsonContent,Encoding.UTF8,"application/json");
+
+                            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
                             var response = client.PutAsync(URL, content).Result;
 
                             if (response.IsSuccessStatusCode)
@@ -368,9 +374,10 @@ namespace ReSeed
                             }
 
                         }
- 
 
-                    } else if (!password.Equals(nuevoPassword))
+
+                    }
+                    else if (!password.Equals(nuevoPassword) && nuevoPassword.Equals(confirmaPassword))
                     {
                         if (!telefono.Equals(nuevoTelefono))
                         {
@@ -387,16 +394,17 @@ namespace ReSeed
                             jsonContent = userJSon.ToString();
 
                             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-                            var response = client.PutAsync(URL,content).Result;
+                            var response = client.PutAsync(URL, content).Result;
 
                             if (response.IsSuccessStatusCode)
                             {
                                 MessageBox.Show("Número de teléfono y contraseña, modificados correctamente.", "INFORMACION PERFIL",
                                MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
-                            
 
-                        } else
+
+                        }
+                        else
                         {
                             user = new Usuario(nombre, apellido, usuario, telefono, email, nuevoPassword, rol);
                             userJSon = new JObject();
@@ -417,11 +425,16 @@ namespace ReSeed
                             {
                                 MessageBox.Show("Contraseña modificada correctamente.", "INFORMACION PERFIL",
                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            } 
+                            }
                         }
                     }
+                    else
+                    {
+                        MessageBox.Show("Las contraseñas no coinciden. Por favor, introduzca nuevamente la contraseña.Gracias",
+                            "INFORMACION PERFIL", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                     usuarioEncontrado = true;
-                }  
+                }
             }
         }
         #endregion
@@ -446,11 +459,11 @@ namespace ReSeed
          * -Transformaremos lada coordenda (latitud/longitud) en un objeto json que enviaremos al ENDPOINT URL_Coordenadas+idUbicacion.
          * -Esto lo que hará es añadir todos las coordendas de la lista (longitud,latitud) a variable (mapa []) de la base de datos.
          */
-        public async void crearTarea (String URL_tarea, String token, String json, String ubicacionJson,
-            String URL_ubicacion,String URL_Coordenadas, List<Coordenada>coordenadas, String URL_mensajes,String mensaje,
-            String remitente,String destinatario)
+        public async void crearTarea(String URL_tarea, String token, String json, String ubicacionJson,
+            String URL_ubicacion, String URL_Coordenadas, List<Coordenada> coordenadas, String URL_mensajes, String mensaje,
+            String remitente, String destinatario)
         {
-           
+
             HttpClient client = new HttpClient();
             //autorización TOKEN    
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -458,7 +471,7 @@ namespace ReSeed
             //Creamos el contenido que enviaremos a la URL
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             //Enviamos el contenido
-            var response = client.PostAsync(URL_tarea, content).Result;   
+            var response = client.PostAsync(URL_tarea, content).Result;
             //Si la respuesta es true...
             if (response.IsSuccessStatusCode)
             {
@@ -477,7 +490,7 @@ namespace ReSeed
                 //Creamos el content de ubicacion (String ubicacion pasado por parámetro)
                 var contentUbicacion = new StringContent(ubicacionJson, Encoding.UTF8, "application/json");
                 //Enviamos al contentUbicacion a al ENDPOINT/idTarea
-                var responseUbicacion = client.PostAsync(URL_crearUbicacionConId,contentUbicacion).Result;
+                var responseUbicacion = client.PostAsync(URL_crearUbicacionConId, contentUbicacion).Result;
                 //Si la respuesta es true
                 if (responseUbicacion.IsSuccessStatusCode)
                 {
@@ -497,10 +510,10 @@ namespace ReSeed
                         Coordenada coordenada = coordenadas[i];
 
                         JObject jsonCoordendas = new JObject();
-                        jsonCoordendas.Add("latitud",coordenada.Latitud);
-                        jsonCoordendas.Add("longitud",coordenada.Longitud);
+                        jsonCoordendas.Add("latitud", coordenada.Latitud);
+                        jsonCoordendas.Add("longitud", coordenada.Longitud);
 
-                        var contentCoordendas = new StringContent(jsonCoordendas.ToString(),Encoding.UTF8,"application/json");
+                        var contentCoordendas = new StringContent(jsonCoordendas.ToString(), Encoding.UTF8, "application/json");
                         var responseCoordendas = client.PostAsync(URL_crearCoordenadas, contentCoordendas);
 
                     }
@@ -508,31 +521,136 @@ namespace ReSeed
                 }
                 //creamos el json para enviar mensajes al usuario con su EN POINT correspondiente
                 JObject jsonMensaje = new JObject();
-                jsonMensaje.Add("descripcion",mensaje);
+                jsonMensaje.Add("descripcion", mensaje);
                 jsonMensaje.Add("tarea", idTarea);
-                jsonMensaje.Add("tecnico",destinatario);
-                jsonMensaje.Add("admin",remitente);
+                jsonMensaje.Add("tecnico", destinatario);
+                jsonMensaje.Add("admin", remitente);
 
-                var contentMensaje = new StringContent(jsonMensaje.ToString(),Encoding.UTF8,"application/json");
-                var responseMensaje = client.PostAsync(URL_mensajes,contentMensaje);
+                var contentMensaje = new StringContent(jsonMensaje.ToString(), Encoding.UTF8, "application/json");
+                var responseMensaje = client.PostAsync(URL_mensajes, contentMensaje);
 
                 MessageBox.Show("Tarea registrada correctamente en base de datos.", "INFORMACION CREAR TAREA", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
-                
-            } else
+
+            }
+            else
             {
                 MessageBox.Show("Error al crear tarea.");
             }
-            
+
+        }
+
+        /*--------------
+         * @listaTareASYNC
+         * -------------
+         * Método asyncrono que recibe un String @token y un String @URL.
+         * Obtendremos el array de tareas Json. Recooreremos este array y poda objeto json
+         * lo deserializaremos en objeto Tarea y lo añadiremos al list de tareas.
+         * @return será el listado de objetos Tarea
+         */
+        public async Task<List<Tarea>> listaTareASYNC(String token, String URL)
+        {
+            List<Tarea> listaTareas = new List<Tarea>();
+
+            HttpClient client = new HttpClient();
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = client.GetAsync(URL).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+
+                var resultado = response.Content.ReadAsStringAsync().Result;
+
+                JArray jsonTareas = JArray.Parse(resultado);
+
+                for (int i = 0; i < jsonTareas.First.Count(); i++)
+                {
+
+                    String jsonTarea = jsonTareas[0][i].ToString();
+
+                    Tarea tarea = JsonConvert.DeserializeObject<Tarea>(jsonTarea);
+
+                    listaTareas.Add(tarea);
+
+                }
+            }
+
+            return listaTareas;
+
+        }
+
+        /*
+         * ------------------------
+         * Método cargarTareasASYNC
+         * ------------------------
+         * Este método recorre el listado de tareas.
+         * Si en este listado encontramos al usuario pasador por parámetro, obtenemos su tipo de tarea, la descripción
+         * tarea y la fecha fin de tarea.
+         * Estos datos los mostraremos en el listBox pasado por parámetro.
+         */
+        public async void cargarTareasASYNC(String usuario, String token, String URL, ListBox listBoxTareas)
+        {
+
+            List<Tarea> listaTareas = await this.listaTareASYNC(token, URL);
+
+            for (int i = 0; i < listaTareas.Count; i++)
+
+            {
+                if (usuario.Equals(listaTareas[i].Tecnico))
+                {
+                    String idTarea = listaTareas[i].Id;
+                    String tipoTarea = listaTareas[i].TArea;
+                    String descripcion = listaTareas[i].Name;
+                    String fecha_finalizacion = listaTareas[i].Fecha_culminacion;
+
+                    listBoxTareas.Items.Add(idTarea + "--" + "TIPO: " + tipoTarea + "--" + "DESCRIPCIÓN : " + descripcion +
+                        "--" + "FECHA LÍMITE: " + fecha_finalizacion);
+
+                }
+
+            }
+
+        }
+
+        public async void eliminarTarea(String token, String URL, String idTarea)
+        {
+
+            List <Tarea> listaTareas = await this.listaTareASYNC (token, URL);
+
+            HttpClient client = new HttpClient();
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.DeleteAsync(URL);
+
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Tarea eliminada de la base de datos correctamente.", "INFORMACIÓN TAREAS", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } else {
+                MessageBox.Show("No se ha podido eliminar la tarea de la base de datos", "INFORMACIÓN TAREAS", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            //Borramos la la Tarea con ID pasada por parámetro de la lista de tareas
+            foreach (Tarea tarea in listaTareas)
+            {
+                if (tarea.Id.Equals(idTarea))
+                {
+                    listaTareas.Remove(tarea);
+                }
+            }
         }
 
     }
+
+
 
 }
 
 
 
-    
 
-    
+
+
 

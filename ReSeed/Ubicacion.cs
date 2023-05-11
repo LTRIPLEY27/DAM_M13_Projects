@@ -14,11 +14,11 @@ namespace ReSeed
         private String centroLatitud;
         private String centroLongitud;
         private String zoom;
-        private String [] mapa;
+        private Coordenada [] mapa;
         private String tarea;
 
         //CONSTRUCTOR
-        public Ubicacion(String id, String centroLatitud, String centroLongitud, String zoom, String[] mapa, 
+        public Ubicacion(String id, String centroLatitud, String centroLongitud, String zoom, Coordenada [] mapa, 
             String tarea) { 
 
             this.id = id;
@@ -35,7 +35,7 @@ namespace ReSeed
         public String CentroLatitud { get {  return centroLatitud; } set {  centroLatitud = value; }}
         public String CentroLongitud { get { return centroLongitud; } set { centroLongitud = value; }}
         public String Zoom { get { return zoom; } set { zoom = value; }}
-        public String [] Mapa { get {  return mapa; } set {  mapa = value; }}
+        public Coordenada [] Mapa { get {  return mapa; } set {  mapa = value; }}
         public String Tarea { get { return tarea; } set { tarea = value; }}
 
        

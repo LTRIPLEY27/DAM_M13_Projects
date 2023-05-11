@@ -349,5 +349,86 @@ namespace ReSeed
             }
             return destinatario;
         }
+
+        /*
+         * FILTRAR POR TIPO DE TAREAS-COMBOBOX
+         */
+        public String filtrarTareas (ComboBox comboTareas,String tipoTarea)
+        {
+            int index = comboTareas.SelectedIndex;
+
+            switch (index)
+            {
+                case 0:
+                    tipoTarea = "REPLANTAR";
+                    break;
+
+                    case 1:
+                    tipoTarea = "LIMPIEZA";
+                    break;
+
+                    case 2:
+                    tipoTarea = "ANALISIS";
+                    break;
+
+                default : 
+                    break;
+            }
+
+            return tipoTarea;
+        }
+
+        /*
+        * FILTRAR POR ESTADO DE TAREAS-COMBOBOX
+        */
+        public String  filtrarEstado(ComboBox comboTareas, String estadoTarea)
+        {
+
+            int index = comboTareas.SelectedIndex;
+
+            switch (index)
+            {
+                case 0:
+                    estadoTarea = "IN_PROGRESS";
+                    break;
+
+                case 1:
+                    estadoTarea = "NEW";
+                    break;
+
+                case 2:
+                    estadoTarea = "DONE";
+                    break;
+
+                case 3:
+                    estadoTarea = "TO_DO";
+                    break;
+
+                case 4:
+                    estadoTarea = "ON_HOLD";
+                    break;
+
+                efault:
+                    break;
+            }
+
+            return estadoTarea;
+        }
+
+        public async void filtrarTareaPorTipoASYNC (String tipoTarea, String token, String URL, ListBox listadoTareas)
+        {
+            List<Tarea> listaTareas = await conexion.listaTareASYNC(token,URL);
+
+            foreach (Tarea tarea in listaTareas)
+            {
+                String descripcion = tarea.Name;
+                String fechaFin = tarea.Fecha_culminacion;
+
+                listadoTareas.Items.Add("DESCRIPCIÓN : " + descripcion +
+                        "--" + "FECHA LÍMITE: " + fechaFin);
+            }
+        }
+
+        
     }
 }

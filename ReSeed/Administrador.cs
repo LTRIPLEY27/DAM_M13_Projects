@@ -39,6 +39,8 @@ namespace ReSeed
         private String URL_crearUbicacion = " https://reseed-385107.ew.r.appspot.com/ubicacion/tarea/";//pasar id Tarea
         private String URL_crearCoordenadas = "https://reseed-385107.ew.r.appspot.com/coordenada/ubicacion/";//pasar idUbicacion
         private String URL_mensajes = "https://reseed-385107.ew.r.appspot.com/post-mensaje";
+        private String URL_obtenerTareas = "https://reseed-385107.ew.r.appspot.com/results/tareas";
+        private String eliminarTarea = "https://reseed-385107.ew.r.appspot.com/delete/typus/tarea/id/";//AÑADIR ID TAREA
 
 
         //VARIABLES GLOBALES MAPAS
@@ -66,6 +68,9 @@ namespace ReSeed
             usuarioLogueado = userLogueado;//Indicamos que el String userLogueado será igual al String que recibimos de la clase Conexion_BD
 
             InitializeComponent();
+
+            //CARGAMOS EN DATETIME PICKER LA FECHA ACTUAL
+            fecha_culmincacion.Value = DateTime.Now;
 
             //CARGAMOS MAPA Y CARACTERISTICAS AL INICIAR EL FORM
             mapaInicio();
@@ -109,7 +114,8 @@ namespace ReSeed
          */
         public async void mostrarTecnicos()
         {
-            utilidades.rellenarComboBox(URL_filtrarPorTecnicos, TOKEN_form3, comboBox_usuarios);
+            utilidades.rellenarComboBox(URL_filtrarPorTecnicos, TOKEN_form3, comboBox_usuarios);//PESTAÑA CREAR TAREA
+            utilidades.rellenarComboBox(URL_filtrarPorTecnicos, TOKEN_form3, comboBox_ListaTecnicos_GESTIONTAREAS);//PESTAÑA GESTION TAREAS
         }
         #endregion
 
@@ -401,6 +407,35 @@ namespace ReSeed
 
         #endregion
 
+        #region CARGAR TAREAS
+        private void button_CARGARTAREA_Click(object sender, EventArgs e)
+        {
+            listBox_listadoTAREAS.Items.Clear();
+            String idTecnicoCombo = comboBox_ListaTecnicos_GESTIONTAREAS.SelectedItem.ToString();
+            String[] separar = idTecnicoCombo.Split("-");
+            String nameUserTecnico = separar[1];
+
+            conexion.cargarTareasASYNC(nameUserTecnico, TOKEN_form3, URL_obtenerTareas, listBox_listadoTAREAS);
+        }
+
+        #endregion
+
+        #region ELIMINAR TAREAS
+        private void button_ELIMINARTAREA_Click(object sender, EventArgs e)
+        {
+            String tareaSeleccionada = listBox_listadoTAREAS.SelectedItem.ToString();
+            String[] partesTarea = tareaSeleccionada.Split("--");
+            String idTarea = partesTarea[0];
+
+            String URLconIDtarea = eliminarTarea + idTarea;
+
+            conexion.eliminarTareaASYNC (TOKEN_form3, URLconIDtarea, idTarea);
+
+
+
+        }
+        #endregion
+
         //******************** GESTIÓN USUARIOS *********************************
 
         #region ALTA DE USUARIOS
@@ -553,12 +588,13 @@ namespace ReSeed
         #region ACTUALIZAR USUARIOS
         /*
          * Botón ACTUALIZAR
-         * Limpia por completo el registro datagrid y carga nuevamente todos los usuarios de la base de datos
+         * Limpia por completo los registros de usuario y carga nuevamente todos los usuarios de la base de datos
          */
         private void button3_ACTUALIZARLISTA_Click(object sender, EventArgs e)
         {
             dataGridView_usuarios.Rows.Clear();
             comboBox_usuarios.Items.Clear();
+            comboBox_ListaTecnicos_GESTIONTAREAS.Items.Clear();
             mostrarRegistro();
             mostrarTecnicos();
 
@@ -852,7 +888,7 @@ namespace ReSeed
             String password = textBox_PASSWORDPERFIL.Text;
             String repeatPassword = textBox_CONFIRMA_PASSWORDPERFIL.Text;
 
-            conexion.atributosParaPerfil(listaUsuarios, id, telefono, password, URL_modificarUsuarioLogueado, TOKEN_form3);
+            conexion.atributosParaPerfil(listaUsuarios, id, telefono, password, repeatPassword, URL_modificarUsuarioLogueado, TOKEN_form3);
 
         }
 
@@ -882,7 +918,9 @@ namespace ReSeed
             }
 
         }
+
         #endregion
+
 
 
     }

@@ -117,6 +117,7 @@
             button1.TabIndex = 9;
             button1.Text = "ENVIAR";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // textBox3
             // 
@@ -325,13 +326,13 @@
             label5.TabIndex = 0;
             label5.Text = "TELÉFONO";
             // 
-            // Form4
+            // Tecnico
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1070, 705);
             Controls.Add(tabControl1);
-            Name = "Form4";
+            Name = "Tecnico";
             Text = "TÉCNICO";
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);

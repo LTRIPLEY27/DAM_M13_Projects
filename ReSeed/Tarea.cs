@@ -18,12 +18,12 @@ namespace ReSeed
         private String tecnico;
         private String admin;
         private Ubicacion ubicacion;
-        private String[] mensajes;
+        private Mensaje [] mensajes;
         private String ubicacionId;
 
         //CONTRUCTOR
         public Tarea (String id,String name, String fecha_creacion, String fecha_culminacion, String tarea, String estatus, String tecnico,
-            String admin, Ubicacion ubicacion, String[] mensajes, String ubicacionId) { 
+            String admin, Ubicacion ubicacion, Mensaje [] mensajes, String ubicacionId) { 
         
             this.id = id;
             this.name = name;
@@ -76,7 +76,7 @@ namespace ReSeed
             get { return ubicacion; }
             set { ubicacion = value; }
         }
-        public String[] Mensajes {
+        public Mensaje [] Mensajes {
             get { return mensajes; }
             set { mensajes = value; }
         }

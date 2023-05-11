@@ -18,7 +18,7 @@ namespace ReSeed
         {
             TOKEN_Login = token;//la variable que recibimos ser igual a la que hemos creado @TOKEN_Login
             InitializeComponent();
-            
+
         }
 
         /*
@@ -30,6 +30,9 @@ namespace ReSeed
             Application.Exit();
         }
 
-        
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
