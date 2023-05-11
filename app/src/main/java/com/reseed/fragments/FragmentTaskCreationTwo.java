@@ -1,6 +1,7 @@
 package com.reseed.fragments;
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,16 +10,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -36,13 +33,12 @@ public class FragmentTaskCreationTwo extends Fragment {
 
 
 	Polygon polygon;
-
+	private GoogleMap googleMap2;
 	PolygonOptions polygonOptions;
 
 	List<Marker> markerList = new ArrayList<>();
 
-	Button crearPoligonoBtn, guardarTareaBtn;
-
+	Button crearPoligonoBtn, guardarTareaBtn, limpiarMapaBtn;
 	public FragmentTaskCreationTwo() {
 		// Required empty public constructor
 	}
@@ -70,9 +66,12 @@ public class FragmentTaskCreationTwo extends Fragment {
 		@Override
 		public void onMapReady(GoogleMap googleMap) {
 
+			googleMap2 = googleMap;
+
 			//LatLng centroMapa = new LatLng(taskObj.getTaskLocation().getLatitud(), taskObj.getTaskLocation().getLongitud());
 
 			// Comprovamos si tenemos los permisos requeridos. Si no los tenemos los pide.
+
 			if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
 					== PackageManager.PERMISSION_GRANTED
 					|| ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -96,82 +95,49 @@ public class FragmentTaskCreationTwo extends Fragment {
 				public void onMapClick(@NonNull LatLng latLng) {
 					Log.i("Map clic",latLng.toString());
 
-					//markerOptionsList.add(new MarkerOptions().position(latLng).draggable(true));
+					markerList.add(googleMap.addMarker(new MarkerOptions()
+							.position(latLng)));
 
 					googleMap.clear();
 
+					addMarkers(googleMap, markerList);
 
-					for (int i = 0; i < markerList.size(); i++) {
-						googleMap.addMarker(new MarkerOptions().position(markerList.get(i).getPosition()).draggable(true).title(String.valueOf(i)));
-						markerList.get(i).showInfoWindow();
-					}
-
-					markerList.add(googleMap.addMarker(new MarkerOptions()
-							.position(latLng)
-							.draggable(true)));
-					markerList.get(markerList.size()-1).showInfoWindow();
-
-					//polygonOptions.add(markerList.get(markerList.size() - 1).getPosition());
-
-					googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-						@Override
-						public void onMarkerDrag(@NonNull Marker marker) {
-
-						}
-
-						@Override
-						public void onMarkerDragEnd(@NonNull Marker marker) {
-
-						}
-
-						@Override
-						public void onMarkerDragStart(@NonNull Marker marker) {
-
-						}
-					});
-
-					if(markerList.size() > 2){
-
-						/*for (Marker marker:
-						     markerList) {
-
-							//polygonOptions.add(marker.getPosition());
-							polygon = googleMap.addPolygon(polygonOptions);
-						}*/
-
-						//googleMap.addPolygon(polygonOptions);
-						//polygon = googleMap.addPolygon(new PolygonOptions().addAll(markerList.));
-						//googleMap.addPolygon(polygon);
-						//googleMap.addPolygon(polygonOptions.add(latLng));
-					}
-
-					//googleMap.addPolygon(polygonOptions.add(latLng));
 				}
 			});
-			// Colocamos la camara en la posición de la tarea.
-			//googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centroMapa, taskObj.getTaskLocation().getZoom()));
-
-			// Comprovamos si hay algun poligono y lo mostramos en el mapa.
-
-			//int numberPoints = taskObj.getTaskLocation().getMapPoints().size();
-
-			/*if (numberPoints > 0){
-				PolygonOptions polygonMap = new PolygonOptions();
-
-				for (int i = 0; i < numberPoints; i++) {
-
-					polygonMap.add(
-							new LatLng(
-									taskObj.getTaskLocation().getMapPoints().get(i).getLatitude(),
-									taskObj.getTaskLocation().getMapPoints().get(i).getLongitude())
-					);
-				}
-				googleMap.addPolygon(polygonMap);
-			}*/
-
-
 		}
 	};
+
+	private void limpiarDatos(GoogleMap googleMap){
+		googleMap.clear();
+		markerList.clear();
+		try {
+			polygonOptions.getPoints().clear();
+		}catch (NullPointerException exception){
+			Log.e("Poligon null",exception.getMessage());
+		}
+
+	}
+
+	private void addPoligono(GoogleMap googleMap, PolygonOptions polygonOptions, List<Marker> markerList){
+		polygonOptions.getPoints().clear();
+
+		for (Marker marker:
+				markerList) {
+			polygonOptions.add(marker.getPosition());
+		}
+
+		polygonOptions.strokeWidth(0);
+		polygonOptions.fillColor(Color.argb(0.45f,0,255,60));
+
+		polygon = googleMap.addPolygon(polygonOptions);
+	}
+
+	private void addMarkers(GoogleMap googleMap, List<Marker> markerList){
+
+		for (int i = 0; i < markerList.size(); i++) {
+			googleMap.addMarker(new MarkerOptions().position(markerList.get(i).getPosition()).title(String.valueOf(i)));
+		}
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -181,6 +147,7 @@ public class FragmentTaskCreationTwo extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_task_creation_two, container, false);
 
 		crearPoligonoBtn = view.findViewById(R.id.crearAreaBtn);
+		limpiarMapaBtn = view.findViewById(R.id.limpiarMapaBtn);
 		guardarTareaBtn = view.findViewById(R.id.crearTareaSaveBtn);
 
 		// Listeners de los botones.
@@ -189,6 +156,23 @@ public class FragmentTaskCreationTwo extends Fragment {
 			@Override
 			public void onClick(View v) {
 
+				polygonOptions.getPoints().clear();
+
+				for (Marker marker:
+						markerList) {
+					polygonOptions = polygonOptions.add(marker.getPosition());
+				}
+
+				polygonOptions.strokeWidth(0);
+				polygonOptions.fillColor(Color.argb(0.45f,0,255,60));
+				polygon = googleMap2.addPolygon(polygonOptions);
+			}
+		});
+
+		limpiarMapaBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				limpiarDatos(googleMap2);
 			}
 		});
 
