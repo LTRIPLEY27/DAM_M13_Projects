@@ -614,7 +614,22 @@ namespace ReSeed
 
         }
 
-        public async void eliminarTarea(String token, String URL, String idTarea)
+        /*
+         * ------------------
+         * Método eliminarTareaASYNC
+         * -----------------
+         * Recibe 3 parámetros:
+         * -String @token
+         * -String @URLusuario
+         * -String @idTarea
+         * 
+         * El método eliminará la tarea del ENDPOINT pasado @URL(la URL apunta ya el la idTarea seleccionado en la 
+         * clase Administrador.
+         * El uso del parámetro @idTarea es para recorrer la lista de tareas y si encontramos la idTarea
+         * pasada por parámetro.la eliminamos.
+         * De esta forma, eliminamos la tarea de la base de datos y de la lista de tareas
+         */
+        public async void eliminarTareaASYNC(String token, String URLusuario, String idTarea)
         {
 
             List <Tarea> listaTareas = await this.listaTareASYNC (token, URL);
@@ -623,7 +638,7 @@ namespace ReSeed
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await client.DeleteAsync(URL);
+            var response = await client.DeleteAsync(URLusuario);
 
             if (response.IsSuccessStatusCode)
             {
