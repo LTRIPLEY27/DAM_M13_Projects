@@ -26,6 +26,9 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.reseed.R;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +38,9 @@ public class FragmentTaskCreationTwo extends Fragment {
 	Polygon polygon;
 	private GoogleMap googleMap2;
 	PolygonOptions polygonOptions;
-
 	List<Marker> markerList = new ArrayList<>();
+	JSONObject taskJson, mapLocation, mapCoordenada;
+
 
 	Button crearPoligonoBtn, guardarTareaBtn, limpiarMapaBtn;
 	public FragmentTaskCreationTwo() {
@@ -47,6 +51,8 @@ public class FragmentTaskCreationTwo extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
+
+			getArguments().getString()
 
 		}
 		this.polygonOptions = new PolygonOptions();
@@ -65,6 +71,8 @@ public class FragmentTaskCreationTwo extends Fragment {
 		 */
 		@Override
 		public void onMapReady(GoogleMap googleMap) {
+			// Activamos los botones.
+			enableButtons(true);
 
 			googleMap2 = googleMap;
 
@@ -150,6 +158,10 @@ public class FragmentTaskCreationTwo extends Fragment {
 		limpiarMapaBtn = view.findViewById(R.id.limpiarMapaBtn);
 		guardarTareaBtn = view.findViewById(R.id.crearTareaSaveBtn);
 
+		// desactivamos los botones.
+		enableButtons(false);
+
+
 		// Listeners de los botones.
 
 		crearPoligonoBtn.setOnClickListener(new View.OnClickListener() {
@@ -166,6 +178,12 @@ public class FragmentTaskCreationTwo extends Fragment {
 				polygonOptions.strokeWidth(0);
 				polygonOptions.fillColor(Color.argb(0.45f,0,255,60));
 				polygon = googleMap2.addPolygon(polygonOptions);
+
+
+
+				final LatLngBounds latLngBounds = getPolygonLatLngBounds(polygon);
+				googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, POLYGON_PADDING_PREFERENCE));
+
 			}
 		});
 
@@ -188,4 +206,11 @@ public class FragmentTaskCreationTwo extends Fragment {
 			mapFragment.getMapAsync(callback);
 		}
 	}
+
+	private void enableButtons(Boolean status){
+		crearPoligonoBtn.setEnabled(status);
+		guardarTareaBtn.setEnabled(status);
+		limpiarMapaBtn.setEnabled(status);
+	}
+
 }
