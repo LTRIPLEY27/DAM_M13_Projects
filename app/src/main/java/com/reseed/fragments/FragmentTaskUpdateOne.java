@@ -31,6 +31,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -48,6 +49,7 @@ public class FragmentTaskUpdateOne extends Fragment {
     String[] stringsName;
 
     int userid;
+    long dateTimeCalendar;
 
     EditText editTextTitleTask;
 
@@ -110,6 +112,17 @@ public class FragmentTaskUpdateOne extends Fragment {
         // deshabilitamos el boton siguiente
         buttonCreateTaskNext.setEnabled(false);
 
+
+        // listener del calendario, para guardar la fecha.
+        calendarViewTask.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                Calendar c = Calendar.getInstance();
+                c.set(year, month, dayOfMonth);
+                dateTimeCalendar = c.getTimeInMillis();
+            }
+        });
+
         // listener del boton siguiente
         buttonCreateTaskNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +161,11 @@ public class FragmentTaskUpdateOne extends Fragment {
 
         // Preparamos la informacion de la fecha.
         Date date = new Date();
-        date.setTime(calendarViewTask.getDate());
+
+        long longCalendar = dateTimeCalendar;
+
+        date.setTime(longCalendar);
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String dateString = dateFormat.format(date);
 

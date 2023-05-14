@@ -22,7 +22,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -34,12 +33,12 @@ import com.reseed.R;
 import com.reseed.interfaces.VolleyResponseInterface;
 import com.reseed.objects.MapPoint;
 import com.reseed.objects.TaskObj;
-import com.reseed.requests.JsonGetRequest;
+import com.reseed.requests.JsonDeleteRequest;
 import com.reseed.requests.JsonPostRequest;
+import com.reseed.requests.JsonPutRequest;
 import com.reseed.requests.SingletonReqQueue;
 import com.reseed.util.JsonReseedUtils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,6 +50,7 @@ public class FragmentTaskUpdateTwo extends Fragment {
 
     Polygon polygon;
     TaskObj taskObj;
+    Boolean datosModificados;
     private GoogleMap googleMap2;
     PolygonOptions polygonOptions;
     List<Marker> markerList = new ArrayList<>();
@@ -154,6 +154,7 @@ public class FragmentTaskUpdateTwo extends Fragment {
             });
 
             if (cargarDatosMapa()){
+                datosModificados = false;
                 enableButtons(true);
                 crearPoligonoBtn.setEnabled(false);
             }else {
@@ -211,6 +212,8 @@ public class FragmentTaskUpdateTwo extends Fragment {
             @Override
             public void onClick(View v) {
 
+                datosModificados = true;
+
                 polygonOptions.getPoints().clear();
 
                 for (Marker marker :
@@ -258,7 +261,7 @@ public class FragmentTaskUpdateTwo extends Fragment {
                 prepararDatos();
 
                 // Hacemos la request para crear la tarea.
-                salvarTarea(token,idUsuario);
+                updateTarea(token,taskObj.getId());
             }
         });
 
@@ -326,16 +329,16 @@ public class FragmentTaskUpdateTwo extends Fragment {
      * Medodo para realizar los POST request para guardar la tarea.
      *
      * @param token token del usuario.
-     * @param idUsuario el id del usuario para poder realizar la request.
+     * @param idTarea el id de la tarea para poder realizar la request.
      */
-    private void salvarTarea(String token, int idUsuario) {
+    private void updateTarea(String token, String idTarea) {
 
         enableButtons(false);
 
-        String url = "https://reseed-385107.ew.r.appspot.com/tarea/tecnico/";
-        url = url.concat(String.valueOf(idUsuario));
+        String url = "https://reseed-385107.ew.r.appspot.com/update/value/tarea/id/";
+        url = url.concat(idTarea);
 
-        JsonPostRequest saveTaskRequest = new JsonPostRequest(token, taskJson, url, requestQueue);
+        JsonPutRequest saveTaskRequest = new JsonPutRequest(token, url, taskJson, requestQueue);
 
         saveTaskRequest.sendRequest(new VolleyResponseInterface() {
             @Override
@@ -352,16 +355,51 @@ public class FragmentTaskUpdateTwo extends Fragment {
                 JSONObject jsResponse = (JSONObject) response;
                 Log.i("Respuesta user info", jsResponse.toString());
 
-                Toast toast = Toast.makeText(requireContext(), "Guardado parte 1 de 3", Toast.LENGTH_SHORT);
-                toast.show();
 
-                try {
-                    salvarUbicacionMapa(token,jsResponse.getInt("id"));
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                if(datosModificados){
+
+                    Toast toast = Toast.makeText(requireContext(), "Guardado parte 1 de 3", Toast.LENGTH_SHORT);
+                    toast.show();
+
+                    // Realizamos la siguiente request (eliminar la ubicacion).
+                    eliminarUbicacion(token, Integer.parseInt(taskObj.getTaskLocation().getId()));
+
+                }else{
+                    // Llamamos a la lista de tareas de nuevo.
+                    ((AppActivity)requireActivity()).tasksFragmentCall(null);
                 }
 
                 return false;
+            }
+        });
+    }
+
+    private void eliminarUbicacion(String token, int idUbicacion) {
+
+        String url = "https://reseed-385107.ew.r.appspot.com/delete/typus/ubicacion/id/";
+        url = url.concat(String.valueOf(idUbicacion));
+
+        JsonDeleteRequest saveTaskRequest = new JsonDeleteRequest(token, url, requestQueue);
+        saveTaskRequest.sendRequest(new VolleyResponseInterface() {
+            @Override
+            public void onError(String message) {
+                /**/
+                Log.e("Error login: ", message);
+                Toast toast = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG);
+                toast.show();
+            }
+
+            @Override
+            public boolean onResponse(Object response) {
+                //JSONObject jsResponse = (JSONObject) response;
+                String responseString = (String) response;
+                Log.i("Respuesta user info", responseString.toString());
+
+                Toast toast = Toast.makeText(requireContext(), "Eliminando ubicacion.", Toast.LENGTH_SHORT);
+                toast.show();
+
+                salvarUbicacionMapa(token,Integer.parseInt(taskObj.getId()));
+                return true;
             }
         });
     }
@@ -386,7 +424,7 @@ public class FragmentTaskUpdateTwo extends Fragment {
                 JSONObject jsResponse = (JSONObject) response;
                 Log.i("Respuesta user info", jsResponse.toString());
 
-                Toast toast = Toast.makeText(requireContext(), "Guardado parte 2 de 3", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(requireContext(), "Guardado ubicación parte 2 de 3", Toast.LENGTH_SHORT);
                 toast.show();
 
                 try {

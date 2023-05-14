@@ -55,6 +55,7 @@ public class FragmentTaskCreationOne extends Fragment {
     String userToken, typeUser;
 
     int userid;
+    long dateTimeCalendar;
 
     EditText editTextTitleTask;
 
@@ -131,6 +132,16 @@ public class FragmentTaskCreationOne extends Fragment {
             }
         });
 
+        // listener del calendario, para guardar la fecha.
+        calendarViewTask.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                Calendar c = Calendar.getInstance();
+                c.set(year, month, dayOfMonth);
+                dateTimeCalendar = c.getTimeInMillis();
+            }
+        });
+
         return view;
     }
 
@@ -149,7 +160,7 @@ public class FragmentTaskCreationOne extends Fragment {
 
         // Preparamos la informacion de la fecha.
         Date date = new Date();
-        date.setTime(calendarViewTask.getDate());
+        date.setTime(this.dateTimeCalendar);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         String dateString = dateFormat.format(date);
 

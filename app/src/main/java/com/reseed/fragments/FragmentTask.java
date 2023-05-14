@@ -230,6 +230,7 @@ public class FragmentTask extends Fragment {
 
 				builder.setTitle("Añadir comentario");
 
+
 				builder.setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {

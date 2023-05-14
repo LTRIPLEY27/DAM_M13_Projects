@@ -2,18 +2,21 @@ package com.reseed;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -169,6 +172,7 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 				floatingMenuSelection = 1;
 
 				popUpEditMenu();
+
 			}
 		});
 
@@ -461,11 +465,38 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 					.add(R.id.fragmentContainerView, taskFragment, null)
 					.commit();
 		} else if (floatingMenuSelection == 1) {
+			// si el floatingMenuSelection es 1 lanza eliminar la tarea.
+
+			AlertDialog.Builder builder1 = new AlertDialog.Builder(AppActivity.this);
+			builder1.setMessage("Write your message here.");
+			builder1.setCancelable(true);
+
+			/*builder1.setPositiveButton(
+					"Yes",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+						}
+					});
+
+			builder1.setNegativeButton(
+					"No",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+						}
+					});
+*/
+			AlertDialog alert11 = builder1.create();
+			alert11.show();
+
+
+
 
 
 		} else if (floatingMenuSelection == 2) {
 
-			// si el floatingMenuSelection es 2 lanza el visor de la tarea.
+			// si el floatingMenuSelection es 2 lanza el editor de la tarea.
 
 			Log.i("Recycler View Click!!",jsonData);
 
@@ -485,8 +516,6 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 					.setReorderingAllowed(true)
 					.add(R.id.fragmentContainerView, taskUpdateFragment, null)
 					.commit();
-
-		} else if (floatingMenuSelection == 3) {
 
 		}
 
@@ -538,5 +567,8 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 				.setReorderingAllowed(true)
 				.add(R.id.fragmentContainerView, fragmentTaskUpdateTwo, null)
 				.commit();
+	}
+	public void deleteTask(){
+
 	}
 }
