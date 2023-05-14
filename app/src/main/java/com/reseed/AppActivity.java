@@ -468,11 +468,11 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 			// si el floatingMenuSelection es 1 lanza eliminar la tarea.
 
 			AlertDialog.Builder builder1 = new AlertDialog.Builder(AppActivity.this);
-			builder1.setMessage("Write your message here.");
+			builder1.setMessage("Queres eliminar la tarea?");
 			builder1.setCancelable(true);
 
-			/*builder1.setPositiveButton(
-					"Yes",
+			builder1.setPositiveButton(
+					"Aceptar",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 							dialog.cancel();
@@ -480,13 +480,13 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 					});
 
 			builder1.setNegativeButton(
-					"No",
+					"Cancelar",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 							dialog.cancel();
 						}
 					});
-*/
+
 			AlertDialog alert11 = builder1.create();
 			alert11.show();
 
