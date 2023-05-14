@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,7 +69,10 @@ public class FragmentTask extends Fragment {
 		//inicializamos el JsonReseedUtils
 		jsonReseedUtils = new JsonReseedUtils();
 
+
+
 		if (getArguments() != null) {
+
 			try {
 				taskObj = jsonReseedUtils.convertToTaskObject(new JSONObject(getArguments().getString("data")));
 			} catch (JSONException e) {
@@ -132,6 +136,9 @@ public class FragmentTask extends Fragment {
 			if (numberPoints > 0){
 				PolygonOptions polygonMap = new PolygonOptions();
 
+				polygonMap.strokeWidth(0);
+				polygonMap.fillColor(Color.argb(0.45f, 0, 255, 60));
+
 				for (int i = 0; i < numberPoints; i++) {
 
 					polygonMap.add(
@@ -139,6 +146,7 @@ public class FragmentTask extends Fragment {
 									taskObj.getTaskLocation().getMapPoints().get(i).getLatitude(),
 									taskObj.getTaskLocation().getMapPoints().get(i).getLongitude())
 					);
+
 				}
 				googleMap.addPolygon(polygonMap);
 			}

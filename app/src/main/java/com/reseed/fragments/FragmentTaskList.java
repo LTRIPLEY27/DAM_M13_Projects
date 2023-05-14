@@ -210,7 +210,8 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 			@Override
 			public boolean onResponse(Object response) {
 				JSONArray jsResponse = (JSONArray) response;
-				Log.i("Respuesta user info", jsResponse.toString());
+
+				String jresponseString = jsResponse.toString();
 				refreshAdminContent(jsResponse);
 				activateProgressBar(false);
 				//openAppActivity(jsResponse);
@@ -243,6 +244,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 			for (int i = 0; i < numTareas; i++) {
 				if(!jsonArray.getJSONArray(0).getJSONObject(i).isNull("ubicacion")){
 
+					Log.i("Tareas lista", jsonArray.getJSONArray(0).getJSONObject(i).toString());
 					jsonArrayAdminTasks.put(positionJsonArray,jsonArray.getJSONArray(0).getJSONObject(i));
 
 					listaTareas.add(jsonReseedUtils.convertToTaskObject(jsonArray.getJSONArray(0).getJSONObject(i)));
@@ -253,6 +255,7 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 		} catch (JSONException e) {
 			Log.e("Error convertToTaskObj", e.getMessage());
 		}
+
 	}
 
 

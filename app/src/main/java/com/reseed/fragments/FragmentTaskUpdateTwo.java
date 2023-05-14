@@ -32,9 +32,12 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.reseed.AppActivity;
 import com.reseed.R;
 import com.reseed.interfaces.VolleyResponseInterface;
+import com.reseed.objects.MapPoint;
+import com.reseed.objects.TaskObj;
 import com.reseed.requests.JsonGetRequest;
 import com.reseed.requests.JsonPostRequest;
 import com.reseed.requests.SingletonReqQueue;
+import com.reseed.util.JsonReseedUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,22 +46,24 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentTaskCreationTwo extends Fragment {
+public class FragmentTaskUpdateTwo extends Fragment {
 
 
     Polygon polygon;
+    TaskObj taskObj;
     private GoogleMap googleMap2;
     PolygonOptions polygonOptions;
     List<Marker> markerList = new ArrayList<>();
-    JSONObject taskJson, mapLocation;
-    String tarea, tipoUsuario, nombreUsuario, token;
+    JSONObject taskJson,oldJsonTask, mapLocation;
+    String tarea,anteriorTarea, tipoUsuario, nombreUsuario, token;
     int idUsuario;
+    JsonReseedUtils jsonReseedUtils;
     RequestQueue requestQueue;
     List<JSONObject> mapCoordenadas;
 
     Button crearPoligonoBtn, guardarTareaBtn, limpiarMapaBtn;
 
-    public FragmentTaskCreationTwo() {
+    public FragmentTaskUpdateTwo() {
         // Required empty public constructor
     }
 
@@ -69,9 +74,13 @@ public class FragmentTaskCreationTwo extends Fragment {
         // instanciamos la requestqueue
         requestQueue = SingletonReqQueue.getInstance(requireContext()).getRequestQueue();
 
+        // inicializamos reseedUtils.
+        this.jsonReseedUtils = new JsonReseedUtils();
+
         // recuperamos la informacion del FragmentTaskCreationOne.
         if (getArguments() != null) {
             this.tarea = getArguments().getString("data");
+            this.anteriorTarea = getArguments().getString("oldData");
             this.tipoUsuario = getArguments().getString("tipoUsuario");
             this.nombreUsuario = getArguments().getString("nombreUsuario");
             this.token = getArguments().getString("token");
@@ -79,9 +88,16 @@ public class FragmentTaskCreationTwo extends Fragment {
         }
         try {
             taskJson = new JSONObject(tarea);
+            oldJsonTask = new JSONObject(anteriorTarea);
+
+            // convertimos la antigua tarea a objeto tarea.
+            taskObj = jsonReseedUtils.convertToTaskObject(oldJsonTask);
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
+
         this.polygonOptions = new PolygonOptions();
     }
 
@@ -98,10 +114,6 @@ public class FragmentTaskCreationTwo extends Fragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            // Activamos los botones.
-            enableButtons(true);
-            crearPoligonoBtn.setEnabled(false);
-            guardarTareaBtn.setEnabled(false);
 
             googleMap2 = googleMap;
 
@@ -136,11 +148,24 @@ public class FragmentTaskCreationTwo extends Fragment {
                             .position(latLng)));
 
                     googleMap.clear();
-
                     addMarkers(googleMap, markerList);
 
                 }
             });
+
+            if (cargarDatosMapa()){
+                enableButtons(true);
+                crearPoligonoBtn.setEnabled(false);
+            }else {
+                // Activamos los botones.
+                enableButtons(true);
+                crearPoligonoBtn.setEnabled(false);
+                guardarTareaBtn.setEnabled(false);
+            }
+
+
+
+
         }
     };
 
@@ -170,7 +195,7 @@ public class FragmentTaskCreationTwo extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_task_creation_two, container, false);
+        View view = inflater.inflate(R.layout.fragment_task_update_two, container, false);
 
         crearPoligonoBtn = view.findViewById(R.id.crearAreaBtn);
         limpiarMapaBtn = view.findViewById(R.id.limpiarMapaBtn);
@@ -382,7 +407,7 @@ public class FragmentTaskCreationTwo extends Fragment {
 
 
     private void salvarPuntosMapa(String token, int idMapa, JSONObject jsonObject, int totalPuntos, int numPunto) {
-        
+
         String url = "https://reseed-385107.ew.r.appspot.com/coordenada/ubicacion/";
         url = url.concat(String.valueOf(idMapa));
 
@@ -403,9 +428,9 @@ public class FragmentTaskCreationTwo extends Fragment {
 
                 Toast toast = Toast.makeText(requireContext(),
                         "Puntos guardados: ".
-                        concat(String.valueOf(numPunto)).
-                        concat(" de ").
-                        concat(String.valueOf(totalPuntos)), Toast.LENGTH_SHORT);
+                                concat(String.valueOf(numPunto)).
+                                concat(" de ").
+                                concat(String.valueOf(totalPuntos)), Toast.LENGTH_SHORT);
                 toast.show();
 
                 if(totalPuntos == numPunto){
@@ -415,5 +440,64 @@ public class FragmentTaskCreationTwo extends Fragment {
                 return true;
             }
         });
+
+
+    }
+
+    /**
+     * Metodo para cargar los datos del mapa de la tarea.
+     * @return devuelve true si se cargan correctamente, false si no se cargan.
+     */
+    private boolean cargarDatosMapa(){
+
+        // limpiamos los puntos del mapa.
+        markerList.clear();
+
+        ArrayList<MapPoint> mapPoints = taskObj.getTaskLocation().getMapPoints();
+
+        // si hay puntos en el mapa los cargamos.
+        if(mapPoints.size() > 0){
+
+
+            for (int i = 0; i < mapPoints.size(); i++) {
+                // cargamos los puntos.
+                LatLng latLngPoint = new LatLng(mapPoints.get(i).getLatitude(),mapPoints.get(i).getLongitude());
+
+                markerList.add(googleMap2.addMarker(new MarkerOptions()
+                        .position(latLngPoint)));
+            }
+
+        }
+
+        if(markerList.size() > 0){
+            polygonOptions.getPoints().clear();
+
+            for (Marker marker :
+                    markerList) {
+                polygonOptions = polygonOptions.add(marker.getPosition());
+            }
+
+            polygonOptions.strokeWidth(0);
+            polygonOptions.fillColor(Color.argb(0.45f, 0, 255, 60));
+            polygon = googleMap2.addPolygon(polygonOptions);
+
+            // Create the bounds object
+
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+            for (int i = 0; i < markerList.size(); i++) {
+                builder.include(markerList.get(i).getPosition());
+            }
+            LatLngBounds latLngBoundsPolygon = builder.build();
+            LatLng polygonCenter = latLngBoundsPolygon.getCenter();
+
+            googleMap2.animateCamera(CameraUpdateFactory.newLatLngZoom(polygonCenter, taskObj.getTaskLocation().getZoom()));
+
+            // guardamos la informacion del mapa para posterior uso
+            guardarCoordMapa(polygonCenter, googleMap2.getCameraPosition().zoom);
+
+            return true;
+        }
+        return false;
     }
 }

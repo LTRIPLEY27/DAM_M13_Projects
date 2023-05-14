@@ -22,6 +22,8 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.reseed.fragments.FragmentTaskCreationOne;
 import com.reseed.fragments.FragmentTaskCreationTwo;
 import com.reseed.fragments.FragmentTaskList;
+import com.reseed.fragments.FragmentTaskUpdateOne;
+import com.reseed.fragments.FragmentTaskUpdateTwo;
 import com.reseed.fragments.FragmentUserConfig;
 import com.reseed.fragments.FragmentUsersList;
 import com.reseed.fragments.FragmentTask;
@@ -43,8 +45,9 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	// NavigationView del menu_lateral lateral.
 	NavigationView navigationView;
 
-	// int que controla que menu esta seleccionado, 1- user menu , 2 - tasks menu, 3 - stadistics
-	int bottomMenuSelected;
+	// int bottomMenuSelected que controla que menu esta seleccionado, 1- user menu , 2 - tasks menu, 3 - stadistics
+	// int floatingMenuSelection controla el menu flotante seleccionado, 0- nada , 1- eliminar, 2- modificar, 3- crear
+	int bottomMenuSelected, floatingMenuSelection;
 	Boolean popUpMenuVisible;
 
 	FragmentManager fragmentManager;
@@ -59,6 +62,9 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		super.onCreate(savedInstanceState);
 
 		supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+
+		// menu flotante en posicion neutra.
+		floatingMenuSelection = 0;
 
 		// Guardamos el password encriptado para posterior uso
 		encryptedPasswd = getIntent().getStringExtra("encryptedPasswd");
@@ -135,6 +141,8 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		floatingCreateButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				// activamos la seleccion de creacion
+				floatingMenuSelection = 3;
 				popUpEditMenu();
 
 				if(bottomMenuSelected == 2){
@@ -147,6 +155,8 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		floatingModifyButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				// activamos la seleccion de motificacion
+				floatingMenuSelection = 2;
 				popUpEditMenu();
 			}
 		});
@@ -155,6 +165,9 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		floatingDeleteButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				// activamos la seleccion de eliminacion
+				floatingMenuSelection = 1;
+
 				popUpEditMenu();
 			}
 		});
@@ -186,7 +199,6 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 
 			popUpMenuVisible = true;
 		}
-
 	}
 
 	/**
@@ -259,6 +271,9 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	}
 
 	public void configMenuCall(MenuItem item) {
+
+		// todo disable pop up menu
+
 		drawerLayout.closeDrawer(GravityCompat.START);
 
 		FragmentUserConfig fragmentUserConfig = new FragmentUserConfig();
@@ -283,6 +298,8 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	 */
 	public void usersFragmentCall(MenuItem item) {
 
+		// todo disable pop up menu
+
 		bottomMenuSelected = 1;
 
 		FragmentUsersList fragmentUsersList = new FragmentUsersList();
@@ -305,6 +322,10 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	 * @param item el menu_lateral de donde proviene.
 	 */
 	public void tasksFragmentCall(@Nullable MenuItem item) {
+
+
+		// ponemos la seleccion en neutro.
+		floatingMenuSelection = 0;
 
 		bottomMenuSelected = 2;
 
@@ -354,6 +375,11 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	 *
 	 */
 	public void tasksCreateFragmentCall() {
+
+		// activamos la seleccion neutra
+		floatingMenuSelection = 0;
+
+		// todo disable pop up menu
 
 		bottomMenuSelected = 0;
 
@@ -410,27 +436,64 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 	@Override
 	public void onEnvioDatosTarea(String jsonData) {
 		Log.i("Recycler View Click!!",jsonData);
+		Log.i("FloatingMenuSelection!!",String.valueOf(floatingMenuSelection));
 
-		FragmentTask taskFragment = new FragmentTask();
 
-		Bundle bundleArgs = new Bundle();
 
-		// Datos del item clicado, en este caso json pasado a String.
-		bundleArgs.putString("data", jsonData);
-		bundleArgs.putString("tipoUsuario", userObj.getTipoUsuario());
-		bundleArgs.putString("nombreUsuario", userObj.getUser());
-		bundleArgs.putString("token", tokenUsuario);
+		if(floatingMenuSelection == 0){
 
-		taskFragment.setArguments(bundleArgs);
+			// si el floatingMenuSelection es 0 lanza el visor de la tarea.
 
-		fragmentManager.beginTransaction()
-				.setReorderingAllowed(true)
-				.add(R.id.fragmentContainerView, taskFragment, null)
-				.commit();
+			FragmentTask taskFragment = new FragmentTask();
+
+			Bundle bundleArgs = new Bundle();
+
+			// Datos del item clicado, en este caso json pasado a String.
+			bundleArgs.putString("data", jsonData);
+			bundleArgs.putString("tipoUsuario", userObj.getTipoUsuario());
+			bundleArgs.putString("nombreUsuario", userObj.getUser());
+			bundleArgs.putString("token", tokenUsuario);
+
+			taskFragment.setArguments(bundleArgs);
+
+			fragmentManager.beginTransaction()
+					.setReorderingAllowed(true)
+					.add(R.id.fragmentContainerView, taskFragment, null)
+					.commit();
+		} else if (floatingMenuSelection == 1) {
+
+
+		} else if (floatingMenuSelection == 2) {
+
+			// si el floatingMenuSelection es 2 lanza el visor de la tarea.
+
+			Log.i("Recycler View Click!!",jsonData);
+
+			FragmentTaskUpdateOne taskUpdateFragment = new FragmentTaskUpdateOne();
+
+			Bundle bundleArgs = new Bundle();
+
+			// Datos del item clicado, en este caso json pasado a String.
+			bundleArgs.putString("data", jsonData);
+			bundleArgs.putString("tipoUsuario", userObj.getTipoUsuario());
+			bundleArgs.putString("nombreUsuario", userObj.getUser());
+			bundleArgs.putString("token", tokenUsuario);
+
+			taskUpdateFragment.setArguments(bundleArgs);
+
+			fragmentManager.beginTransaction()
+					.setReorderingAllowed(true)
+					.add(R.id.fragmentContainerView, taskUpdateFragment, null)
+					.commit();
+
+		} else if (floatingMenuSelection == 3) {
+
+		}
+
 	}
 
 	@Override
-	public void onEnvioCrearTarea(String data) {
+	public void onEnvioCrearTarea(String data, int idUsuario) {
 
 		Log.i("Creacion tarea next!!",data);
 
@@ -443,6 +506,7 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 		bundleArgs.putString("tipoUsuario", userObj.getTipoUsuario());
 		bundleArgs.putString("nombreUsuario", userObj.getUser());
 		bundleArgs.putString("token", tokenUsuario);
+		bundleArgs.putInt("idUsuario",idUsuario);
 
 		fragmentTaskCreationTwo.setArguments(bundleArgs);
 
@@ -451,5 +515,28 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 				.add(R.id.fragmentContainerView, fragmentTaskCreationTwo, null)
 				.commit();
 
+	}
+
+	public void llamadaFragmentUpdateTwo(String data, int idUsuario, String oldData){
+		Log.i("Creacion tarea next!!",data);
+
+		FragmentTaskUpdateTwo fragmentTaskUpdateTwo = new FragmentTaskUpdateTwo();
+
+		Bundle bundleArgs = new Bundle();
+
+		// Datos del item clicado, en este caso json pasado a String.
+		bundleArgs.putString("data", data);
+		bundleArgs.putString("oldData", oldData);
+		bundleArgs.putString("tipoUsuario", userObj.getTipoUsuario());
+		bundleArgs.putString("nombreUsuario", userObj.getUser());
+		bundleArgs.putString("token", tokenUsuario);
+		bundleArgs.putInt("idUsuario",idUsuario);
+
+		fragmentTaskUpdateTwo.setArguments(bundleArgs);
+
+		fragmentManager.beginTransaction()
+				.setReorderingAllowed(true)
+				.add(R.id.fragmentContainerView, fragmentTaskUpdateTwo, null)
+				.commit();
 	}
 }

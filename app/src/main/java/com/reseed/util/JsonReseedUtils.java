@@ -28,7 +28,6 @@ public class JsonReseedUtils {
 	 * Classe para convertir de JsonObject a TaskObj
 	 *
 	 * @param jsonProfileObject objeto request de la peticion de informacion del user
-	 * @param token             token del usuario para añadir al UserObj
 	 * @return devuelve el objeto UserObj, null en caso de error y muestra log error.
 	 */
 	//TODO finalizar la clase para convertir el objeto request en UserObj
