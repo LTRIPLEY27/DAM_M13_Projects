@@ -23,7 +23,6 @@ public interface UserService {
 
     Object getProfile(String username);
 
-
     List<Object> registers(String username, String value);
 
     Object update(String old, Object userDTO);
@@ -36,7 +35,6 @@ public interface UserService {
 
     Object searchById(String value, Long id);
 
-   // Object addNew(String user, String tipo, Long valor, Object object);
     Object addNewTar(String username, Long id, Object object);
 
     UbicacionDTO addNewUbicacion(Ubicacion ubicacion, Long id);
@@ -53,6 +51,8 @@ public interface UserService {
     List<Object> getTaskByStatus(String estatus);
     List<Object> getAllTaskByStatus(String estatus);
     List<Object> getByAllByTareaType(String task);
+    List<Object> getByAllByTareaTypeQuantity(String task);
+    List<Object> getByAllByTareaTypeQuantityAndUserLogin(User user, String task);
     List<Object> filteringByStatusAndRol(User user, String estatus);
     List<Object> filteringByTaskTypeAndRol(User user, String task);
     List<Object> getTaskByStatusAndTecnic(String tecnico, String estatus);

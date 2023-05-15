@@ -230,6 +230,30 @@ public class TareaServiceImpl implements TareaService, Constantes {
         return tareas;
     }
 
+    /** Metodo 'getByTecnicsAndSTaskType'
+     * @return <ul>
+     *  <li>List de TareaDTO: Recorre todos las Tareas contenidas en la base de datos y las agrupa por tecnico y tipo de Tarea en Cantidad estadistica</li>
+     *  </ul>
+     */
+    @Override
+    public List<Object> getByTecnicsAndSTaskType(String tipo) {
+        List<Object> tareas = new ArrayList<>();
+        tareaRepository.quantityTaskByUserAndType(tipo).forEach(tarea -> tareas.add(tarea));
+        return tareas;
+    }
+
+    /** Metodo 'getByTecnicsAndSTaskType'
+     * @return <ul>
+     *  <li>List de TareaDTO: Recorre todos las Tareas contenidas en la base de datos y las agrupa por tecnico y tipo de Tarea en Cantidad estadistica, segun el usuario logueado</li>
+     *  </ul>
+     */
+    @Override
+    public List<Object> getByLoginTecnicsAndTaskType(String user, String tipo) {
+        List<Object> tareas = new ArrayList<>();
+        tareaRepository.quantityTaskByLoginUserAndType(tipo, user).forEach(tarea -> tareas.add(tarea));
+        return tareas;
+    }
+
     /** Metodo 'getTareaByTecnico'
      * @return <ul>
      *  <li>List de TareaDTO: Recorre las Tareas del tecnico, los cuales retorna</li>

@@ -37,7 +37,9 @@ public interface TareaService {
     List<TareaDTO> getByTaskByTareaType(String task);
 
     List<Object> getByTecnicsAndStatus(String estatus);
+    List<Object> getByTecnicsAndSTaskType(String tarea);
     List<Object> getByLoginTecnicsAndStatus(String tecnico, String estatus);
+    List<Object> getByLoginTecnicsAndTaskType(String tecnico, String tarea);
 
     TareaDTO searchById(Long id);
 }

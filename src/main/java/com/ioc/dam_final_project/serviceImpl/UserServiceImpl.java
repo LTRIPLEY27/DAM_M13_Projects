@@ -434,6 +434,38 @@ public class UserServiceImpl implements UserService, Constantes {
     }
 
     /**
+     * Metodo 'getByAllByTareaTypeQuantity'
+     * Recibe 1 parametro:
+     *
+     * Valor del campo especifico a filtrar (Tipo Tarea),  y la cadena especifica de la misma
+     *
+     * @return <ul>
+     * <li>List : Registro de todas las tareas en ese Tipo Tarea, agrupadas por cantidad y tecnico</li>
+     * </ul>
+     */
+    @Override
+    public List<Object> getByAllByTareaTypeQuantity(String task) {
+
+        return Collections.singletonList(tareaService.getByTecnicsAndSTaskType(task));
+    }
+
+    /**
+     * Metodo 'getByAllByTareaTypeQuantity'
+     * Recibe 1 parametro:
+     *
+     * Valor del campo especifico a filtrar (Tipo Tarea),  y la cadena especifica de la misma
+     *
+     * @return <ul>
+     * <li>List : Registro de todas las tareas en ese Tipo Tarea, agrupadas por cantidad y tecnico</li>
+     * </ul>
+     */
+    @Override
+    public List<Object> getByAllByTareaTypeQuantityAndUserLogin(User user, String task) {
+
+        return Collections.singletonList(tareaService.getByLoginTecnicsAndTaskType(user.getUser(), task));
+    }
+
+    /**
      * Metodo 'getTaskByStatus'
      * Recibe 1 parametro:
      *

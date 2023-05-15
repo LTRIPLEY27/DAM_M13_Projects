@@ -33,7 +33,7 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
 
     Tarea findTareaByUbicacion(Ubicacion ubicacion);
     Optional <Tarea> findTareaByUbicacion_Id(Long id);
-    Tarea findTareaByAdminAndId(Admin admin, Long name);
+    Tarea findTareaByAdminAndId(Admin admin, Long id);
 
     /**
      * QUERY'S CON FILTROS ESPECIFICOS
@@ -200,6 +200,7 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
                         "JOIN user B on B.id = A.tecnico\n" +
                             "WHERE A.estatus LIKE :estatus\n" +
                         "GROUP BY A.tecnico, A.estatus\n" +
+                        "ORDER BY Cantidad DESC\n" +
                         "LIMIT 10;", nativeQuery = true)
     List<Map<String, String>> quantityTaskByStatusAndUser(@Param("estatus") String estatus);
 
@@ -211,4 +212,26 @@ public interface TareaRepository extends JpaRepository <Tarea, Long> {
                         "GROUP BY A.tecnico, A.estatus\n" +
                         "LIMIT 10;", nativeQuery = true)
     List<Map<String, String>> quantityTaskByLoginUserAndStatus(@Param("user") String user, @Param("estatus") String estatus);
+
+
+    //cantidad de tareas por tipo de Tarea, y agrupadas por técnico (tecnico logueado)
+    @Query(value = "SELECT B.user AS 'Técnico',  CAST(COUNT(*) AS NCHAR) AS 'Cantidad', A.tarea As 'Tarea'\n" +
+                        "FROM tarea A\n" +
+                        "JOIN user B on B.id = A.tecnico\n" +
+                        "WHERE A.tarea LIKE :tarea AND B.user LIKE :user\n" +
+                        "GROUP BY A.tecnico, A.tarea\n" +
+                        "LIMIT 10;", nativeQuery = true)
+    List<Map<String, String>> quantityTaskByLoginUserAndType(@Param("tarea") String tarea, @Param("user") String user);
+
+
+    //cantidad de tareas por tipo de Tarea, y agrupadas por técnico (Admin, todo)
+    @Query(value = "SELECT B.user AS 'Técnico',  CAST(COUNT(*) AS NCHAR) AS 'Cantidad', A.tarea As 'Tarea'\n" +
+                        "FROM tarea A\n" +
+                        "JOIN user B on B.id = A.tecnico\n" +
+                        "WHERE A.tarea LIKE :tarea\n" +
+                        "GROUP BY A.tecnico, A.tarea\n" +
+                        "ORDER BY Cantidad DESC\n" +
+                        "LIMIT 10;", nativeQuery = true)
+    List<Map<String, String>> quantityTaskByUserAndType(@Param("tarea") String tarea);
+
 }

@@ -387,7 +387,7 @@ public class UserController implements Constantes {
     public ResponseEntity<List <Object>> filteringByTaskTypeAndRol(Principal principal, @RequestParam String tarea){
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
-        return userOnSession.isEnabled()  ? ResponseEntity.ok(userService.filteringByTaskTypeAndRol(userOnSession, tarea)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+        return userOnSession.isEnabled() ? ResponseEntity.ok(userService.filteringByTaskTypeAndRol(userOnSession, tarea)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
 
     /**
@@ -438,6 +438,38 @@ public class UserController implements Constantes {
         var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
 
         return userOnSession.getRol() == Rol.TECNIC ? ResponseEntity.ok(userService.getTaskByStatusAndTecnic(userOnSession.getUser(), estatus)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }
+
+    /**
+     * Metodo filterByTipoTareas recibe 1 parametro y valida segun el rol y el parametro
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param tarea en referencia al  filtrado especifico a aplicar, en este caso, al tipo de tarea que se desea conocer estadisticamente
+     * @return <ul>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el Tipo Tarea : Username Tecnico, Cantidad las que tenga asignadas, Tipo Tarea especifico</li>
+     *  </ul>
+     */
+    @GetMapping(path = "tareas/porTipo-tarea")
+    public ResponseEntity<List <Object>> filterByTipoTareas(Principal principal, @RequestParam String tarea){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.getRol() == Rol.ADMIN ? ResponseEntity.ok(userService.getByAllByTareaTypeQuantity(tarea)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
+    }
+
+    /**
+     * Metodo filterByTipoTareasLoginUser recibe 1 parametro y valida segun el rol y el parametro
+     *
+     * @param principal en referencia al Usuario en sesión actual y que generara los filtro mediante roles
+     * @param tarea en referencia al  filtrado especifico a aplicar, en este caso, al tipo de tarea que se desea conocer estadisticamente
+     * @return <ul>
+     *  <li>Lista de Valores: Retorna una lista de tareas según el Tipo Tarea : Username Tecnico, Cantidad las que tenga asignadas, Tipo Tarea especifico</li>
+     *  </ul>
+     */
+    @GetMapping(path = "tareas/porTipo-tarea-ByUser")
+    public ResponseEntity<List <Object>> filterByTipoTareasLoginUser(Principal principal, @RequestParam String tarea){
+        var userOnSession = userRepository.findUserByEmail(principal.getName()).orElseThrow();
+
+        return userOnSession.isEnabled() ? ResponseEntity.ok(userService.getByAllByTareaTypeQuantityAndUserLogin(userOnSession, tarea)) : ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonList("Por favor, verifique, es probable que no tengas permisos para esta opcion."));
     }
 
     /*************************************************************
