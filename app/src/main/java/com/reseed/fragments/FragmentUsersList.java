@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.reseed.AppActivity;
 import com.reseed.R;
 import com.reseed.adapter.UserAdapter;
 import com.reseed.interfaces.RecyclerViewInterface;
@@ -140,8 +141,14 @@ public class FragmentUsersList extends Fragment implements RecyclerViewInterface
         listaUsuarios.addAll(jsonReseedUtils.convertJsonArrayToUserList(jsonUserList));
     }
 
+    /**
+     * Metodo que llama a {@link AppActivity} a un metodo para eliminar usuarios.
+     * @param posicion posicion en la lista de usuarios.
+     */
     @Override
     public void onItemClicked(int posicion) {
+
+        ((AppActivity)requireActivity()).userListOtions(listaUsuarios.get(posicion));
 
     }
 }

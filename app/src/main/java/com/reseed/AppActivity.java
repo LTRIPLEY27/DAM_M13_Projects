@@ -29,6 +29,7 @@ import com.reseed.fragments.FragmentTaskList;
 import com.reseed.fragments.FragmentTaskUpdateOne;
 import com.reseed.fragments.FragmentTaskUpdateTwo;
 import com.reseed.fragments.FragmentUserConfig;
+import com.reseed.fragments.FragmentUserUpdate;
 import com.reseed.fragments.FragmentUsersList;
 import com.reseed.fragments.FragmentTask;
 import com.reseed.interfaces.FragmentCreateTaskInterface;
@@ -615,5 +616,87 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
             }
         });
 
+    }
+
+    /**
+     * Metodo que se usa para realizar las acciones con los usuarios, eliminar y modificar, segun el
+     * valor de floatingMenuSelection, 1 para eliminar, 2 para modificar usuario.
+     *
+     * @param userObj
+     */
+    public void userListOtions(UserObj userObj) {
+
+       if (floatingMenuSelection == 1) {
+            // si el floatingMenuSelection es 1 lanza eliminar la tarea.
+
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(AppActivity.this);
+            builder1.setMessage("Queres eliminar el usuario?");
+            builder1.setCancelable(true);
+
+            builder1.setPositiveButton(
+                    "Aceptar",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            deleteUser(userObj);
+                            dialog.cancel();
+                        }
+                    });
+
+            builder1.setNegativeButton(
+                    "Cancelar",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            builder1.show();
+
+        } else if (floatingMenuSelection == 2) {
+
+            FragmentUserUpdate fragmentUserUpdate = new FragmentUserUpdate();
+
+            Bundle bundleArgs = new Bundle();
+
+
+            fragmentUserUpdate.setArguments(bundleArgs);
+
+            fragmentManager.beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragmentContainerView, fragmentUserUpdate, null)
+                    .commit();
+        }
+
+    }
+
+    private void deleteUser(UserObj userObj) {
+
+        int idUser = Integer.parseInt(userObj.getId());
+
+        String url = "https://reseed-385107.ew.r.appspot.com/delete/typus/usuario/id/";
+        url = url.concat(String.valueOf(idUser));
+
+        JsonDeleteRequest saveTaskRequest = new JsonDeleteRequest(tokenUsuario, url, requestQueue);
+        saveTaskRequest.sendRequest(new VolleyResponseInterface() {
+            @Override
+            public void onError(String message) {
+
+                Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
+                toast.show();
+            }
+
+            @Override
+            public boolean onResponse(Object response) {
+                //JSONObject jsResponse = (JSONObject) response;
+                String responseString = (String) response;
+                Log.i("Respuesta user info", responseString.toString());
+
+                Toast toast = Toast.makeText(getApplicationContext(), "Usuario eliminado.", Toast.LENGTH_SHORT);
+                toast.show();
+
+                usersFragmentCall(null);
+
+                return true;
+            }
+        });
     }
 }
