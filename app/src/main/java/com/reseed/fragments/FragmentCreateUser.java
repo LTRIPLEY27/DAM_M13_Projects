@@ -1,59 +1,65 @@
 package com.reseed.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.reseed.R;
+import com.reseed.interfaces.VolleyResponseInterface;
+import com.reseed.requests.JsonPostRequest;
+import com.reseed.requests.SingletonReqQueue;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentCreateUser#newInstance} factory method to
- * create an instance of this fragment.
- */
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 public class FragmentCreateUser extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    String nombre, apellido, user, email, telefono, rol, userToken;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    Boolean esAdmin;
+
+    EditText editTextApellido, editTextUser, editTextEmail, editTextTelefono, editTextRol, editTextPass, editTextPassRepeat;
+
+    TextInputEditText editTextNombre;
+
+    TextInputLayout editTextNombreError;
+
+    Button buttonGuardar;
+
+    CheckBox checkBoxAdmin;
+
+    RequestQueue requestQueue;
+
+    JSONObject userJson;
 
     public FragmentCreateUser() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentCreateUser.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentCreateUser newInstance(String param1, String param2) {
-        FragmentCreateUser fragment = new FragmentCreateUser();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // instanciamos la requestqueue
+        requestQueue = SingletonReqQueue.getInstance(requireContext()).getRequestQueue();
+
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            userToken = getArguments().getString("token");
         }
     }
 
@@ -61,6 +67,144 @@ public class FragmentCreateUser extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_create_user, container, false);
+
+        /*{
+                "nombre" : "Steffy",
+                "apellido" : "Steffasson",
+                "user" : "steffy",
+                "password" : "steffy2323",
+                "email" : "steffy@fantasymail.com",
+                "telefono" : "33-999-999",
+                "rol" : "ADMIN"
+        }*/
+
+        editTextNombre = view.findViewById(R.id.nombreEditText);
+        editTextApellido = view.findViewById(R.id.apellidoEditText);
+        editTextEmail = view.findViewById(R.id.emailEditText);
+        editTextTelefono = view.findViewById(R.id.telefonoEditText);
+        checkBoxAdmin = view.findViewById(R.id.checkAdministrador);
+        buttonGuardar = view.findViewById(R.id.buttonSave);
+
+        editTextNombreError = view.findViewById(R.id.nombreEditTextError);
+
+
+        /**
+         * Listeners de los botones.
+         */
+        buttonGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(validarDatos(view)){
+                    nombre = editTextNombre.getText().toString();
+                    apellido = editTextApellido.getText().toString();
+                    email = editTextEmail.getText().toString();
+                    telefono = editTextTelefono.getText().toString();
+                    esAdmin = checkBoxAdmin.isSelected();
+
+                    // nombre de user, suma parte del nombre con el apellido.
+                    user = nombre.toLowerCase().substring(2,3).concat(apellido.toLowerCase());
+                }
+
+
+                if(createUserJson(view)){
+
+                }
+            }
+        });
+
+        return view;
     }
+
+    private boolean createUserJson(View view){
+
+        userJson = new JSONObject();
+        
+
+            /*userJson.put("nombre",this.nombre);
+            userJson.put("apellido",this.apellido);
+            userJson.put("user",this.user);
+
+            userJson.put("password",);
+            userJson.put("email",);
+            userJson.put("telefono",);
+            userJson.put("rol",);*/
+
+
+        
+
+        return false;
+    }
+
+    private boolean validarDatos(View view) {
+
+        if(editTextNombre.getText().length() == 0){
+            editTextNombreError.setError("Nombre invalido");
+            return false;
+        }else{
+            editTextNombreError.setError(null);
+        }
+        if (editTextApellido.getText().length() == 0){
+            editTextApellido.setBackgroundColor(Color.RED);
+            return false;
+        }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(editTextEmail.getText().toString()).matches()){
+            editTextEmail.setBackgroundColor(Color.RED);
+            return false;
+        }
+
+        if (user.length() < 4){
+            return false;
+        }
+
+        if (editTextTelefono.getText().length() == 0){
+            editTextTelefono.setBackgroundColor(Color.RED);
+            return false;
+        }
+
+        if(!(editTextPass.length() > 6) || !(editTextPass.getText().equals(editTextPassRepeat.getText()))){
+            editTextPass.setBackgroundColor(Color.RED);
+            editTextPassRepeat.setBackgroundColor(Color.RED);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void createUser(){
+        String url = "https://reseed-385107.ew.r.appspot.com/register";
+
+        JsonPostRequest saveTaskRequest = new JsonPostRequest(userToken, userJson, url, requestQueue);
+
+        saveTaskRequest.sendRequest(new VolleyResponseInterface() {
+            @Override
+            public void onError(String message) {
+                /**/
+                Log.e("Error login: ", message);
+
+                Toast toast = Toast.makeText(requireContext(), message, Toast.LENGTH_LONG);
+                toast.show();
+            }
+
+            @Override
+            public boolean onResponse(Object response) {
+                JSONObject jsResponse = (JSONObject) response;
+                Log.i("Respuesta user info", jsResponse.toString());
+
+                Toast toast = Toast.makeText(requireContext(), "Guardado parte 1 de 3", Toast.LENGTH_SHORT);
+                toast.show();
+
+                /*try {
+                    salvarUbicacionMapa(token,jsResponse.getInt("id"));
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }*/
+
+                return false;
+            }
+        });
+    }
+
 }

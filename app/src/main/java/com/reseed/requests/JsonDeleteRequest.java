@@ -28,13 +28,12 @@ public class JsonDeleteRequest {
 	private RequestQueue requestQueue;
 
 
-
 	/**
-	 * Constructor of the class.
+	 * Constructor de la clase.
 	 *
-	 * @param token
-	 * @param url
-	 * @param requestQueue   created on activity.
+	 * @param token token del usuario que hace la peticion.
+	 * @param url url de la peticion.
+	 * @param requestQueue requestQueue instanciada en la clase padre.
 	 */
 	public JsonDeleteRequest(String token, String url, RequestQueue requestQueue) {
 		setToken(token);

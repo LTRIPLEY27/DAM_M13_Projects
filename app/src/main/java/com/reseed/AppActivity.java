@@ -30,6 +30,7 @@ import com.reseed.fragments.FragmentTaskList;
 import com.reseed.fragments.FragmentTaskUpdateOne;
 import com.reseed.fragments.FragmentTaskUpdateTwo;
 import com.reseed.fragments.FragmentUserConfig;
+import com.reseed.fragments.FragmentUserStadistics;
 import com.reseed.fragments.FragmentUserUpdate;
 import com.reseed.fragments.FragmentUsersList;
 import com.reseed.fragments.FragmentTask;
@@ -132,7 +133,7 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
                     tasksFragmentCall(item);
                     return true;
                 } else if (R.id.menu_stadistics == menuId) {
-                    aboutMenuCall(item);
+                    stadisticsFragmentCall(item);
                     return true;
                 }
                 return true;
@@ -371,18 +372,19 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 
         bottomMenuSelected = 3;
 
-		/*FragmentUsersList fragmentUsersList = new FragmentUsersList();
+		FragmentUserStadistics fragmentUserStadistics = new FragmentUserStadistics();
 
 		Bundle bundleArgs = new Bundle();
 		//bundleArgs.putString("data", userJSONInfo.toString());
 		bundleArgs.putString("token", tokenUsuario);
-		fragmentUsersList.setArguments(bundleArgs);
+        bundleArgs.putString("typeUser", userObj.getTipoUsuario());
+        fragmentUserStadistics.setArguments(bundleArgs);
 
 		//fragmentContainerView.removeAllViewsInLayout();
 		fragmentManager.beginTransaction()
 				.setReorderingAllowed(true)
-				.add(R.id.fragmentContainerView, fragmentUsersList, null)
-				.commit();*/
+				.add(R.id.fragmentContainerView, fragmentUserStadistics, null)
+				.commit();
     }
 
     /**
