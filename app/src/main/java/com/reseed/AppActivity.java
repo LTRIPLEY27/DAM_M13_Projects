@@ -23,6 +23,7 @@ import com.android.volley.RequestQueue;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
+import com.reseed.fragments.FragmentCreateUser;
 import com.reseed.fragments.FragmentTaskCreationOne;
 import com.reseed.fragments.FragmentTaskCreationTwo;
 import com.reseed.fragments.FragmentTaskList;
@@ -158,7 +159,9 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
                 popUpEditMenu();
 
                 if (bottomMenuSelected == 2) {
-                    tasksCreateFragmentCall();
+                    createTasksFragmentCall();
+                } else if (bottomMenuSelected == 1) {
+                    createUserFragmentCall();
                 }
 
             }
@@ -385,7 +388,7 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
     /**
      * Metodo usado para llamar al fragmento de creación de tareas.
      */
-    public void tasksCreateFragmentCall() {
+    public void createTasksFragmentCall() {
 
         // activamos la seleccion neutra
         floatingMenuSelection = 0;
@@ -626,7 +629,11 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
      */
     public void userListOtions(UserObj userObj) {
 
-       if (floatingMenuSelection == 1) {
+        if (floatingMenuSelection == 1) {
+
+            // hacemos el reset de la posicion de menu flotante a neutro.
+            floatingMenuSelection = 0;
+
             // si el floatingMenuSelection es 1 lanza eliminar la tarea.
 
             AlertDialog.Builder builder1 = new AlertDialog.Builder(AppActivity.this);
@@ -652,6 +659,9 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
             builder1.show();
 
         } else if (floatingMenuSelection == 2) {
+
+            // hacemos el reset de la posicion de menu flotante a neutro.
+            floatingMenuSelection = 0;
 
             FragmentUserUpdate fragmentUserUpdate = new FragmentUserUpdate();
 
@@ -698,5 +708,22 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
                 return true;
             }
         });
+    }
+
+    private void createUserFragmentCall(){
+
+        FragmentCreateUser fragmentCreateUser = new FragmentCreateUser();
+
+        Bundle bundleArgs = new Bundle();
+
+        // Datos del item clicado, en este caso json pasado a String.
+        bundleArgs.putString("token", tokenUsuario);
+
+        fragmentCreateUser.setArguments(bundleArgs);
+
+        fragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.fragmentContainerView, fragmentCreateUser, null)
+                .commit();
     }
 }

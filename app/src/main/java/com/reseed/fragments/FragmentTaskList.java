@@ -214,9 +214,6 @@ public class FragmentTaskList extends Fragment implements RecyclerViewInterface 
 				String jresponseString = jsResponse.toString();
 				refreshAdminContent(jsResponse);
 				activateProgressBar(false);
-				//openAppActivity(jsResponse);
-
-				//refreshContent(jsResponse);
 				return true;
 			}
 		});

@@ -23,9 +23,7 @@ import java.util.Map;
 
 public class JsonDeleteRequest {
 
-	private String token, idTarea, urlPostLogin;
-
-	JSONObject data;
+	private String token, urlPostLogin;
 
 	private RequestQueue requestQueue;
 
@@ -41,8 +39,6 @@ public class JsonDeleteRequest {
 	public JsonDeleteRequest(String token, String url, RequestQueue requestQueue) {
 		setToken(token);
 		this.urlPostLogin = url;
-		setData(data);
-		setIdTarea(idTarea);
 		setRequestQueue(requestQueue);
 	}
 
@@ -126,22 +122,6 @@ public class JsonDeleteRequest {
 
 	public RequestQueue getRequestQueue() {
 		return requestQueue;
-	}
-
-	public JSONObject getData() {
-		return data;
-	}
-
-	public void setData(JSONObject data) {
-		this.data = data;
-	}
-
-	public String getIdTarea() {
-		return idTarea;
-	}
-
-	public void setIdTarea(String idTarea) {
-		this.idTarea = idTarea;
 	}
 
 }
