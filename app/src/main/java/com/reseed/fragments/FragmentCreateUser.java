@@ -144,9 +144,11 @@ public class FragmentCreateUser extends Fragment {
 
     private boolean validarDatos(View view) {
 
+        boolean noError = true;
+
         if(editTextNombre.getText().length() == 0) {
             editTextNombreError.setError("No puede estar vacio.");
-            return false;
+            noError = false;
         } else if (editTextNombre.getText().length() < 3) {
             editTextNombreError.setError("El nombre es muy corto.");
         }else{
@@ -155,7 +157,7 @@ public class FragmentCreateUser extends Fragment {
 
         if (editTextApellido.getText().length() == 0){
             editTextApellidoError.setError("No puede estar vacio.");
-            return false;
+            noError = false;
         } else if (editTextApellido.getText().length() < 3) {
             editTextApellidoError.setError("El apellido es muy corto.");
         }else{
@@ -165,23 +167,28 @@ public class FragmentCreateUser extends Fragment {
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(editTextEmail.getText().toString()).matches()){
             emailEditTextError.setError("Email invalido");
-            return false;
+            noError = false;
         }else {
             emailEditTextError.setError(null);
         }
 
         if (editTextTelefono.getText().length() == 0){
-            editTextTelefono.setBackgroundColor(Color.RED);
-            return false;
+            telefonoEditTextError.setError("Telefono invalido.");
+            noError = false;
+        }else{
+            emailEditTextError.setError(null);
         }
 
-        if(!(editTextPass.length() > 6) || !(editTextPass.getText().equals(editTextPassRepeat.getText()))){
-            editTextPass.setBackgroundColor(Color.RED);
-            editTextPassRepeat.setBackgroundColor(Color.RED);
-            return false;
+        if(!(editTextPass.getText().toString().length() > 6) || !(editTextPass.getText().toString().equals(editTextPassRepeat.getText().toString()))){
+            passwordEditTextError.setError("6 caracteres minimo.");
+            passwordRepEditTextError.setError("Error");
+            noError = false;
+        }else{
+            passwordEditTextError.setError(null);
+            passwordRepEditTextError.setError(null);
         }
 
-        return true;
+        return noError;
     }
 
     private void createUser(){
