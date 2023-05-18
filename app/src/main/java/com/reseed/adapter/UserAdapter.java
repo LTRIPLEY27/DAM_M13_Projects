@@ -100,7 +100,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 		//set the name text.
 		viewHolder.getNameText().setText(localDataSet.get(position).getNombre()
 				.concat(" ")
-				.concat(localDataSet.get(position).getNombre()));
+				.concat(localDataSet.get(position).getApellido()));
 
 		viewHolder.getEmailText().setText(localDataSet.get(position).getEmail());
 

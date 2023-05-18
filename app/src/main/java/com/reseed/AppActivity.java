@@ -29,9 +29,10 @@ import com.reseed.fragments.FragmentTaskCreationTwo;
 import com.reseed.fragments.FragmentTaskList;
 import com.reseed.fragments.FragmentTaskUpdateOne;
 import com.reseed.fragments.FragmentTaskUpdateTwo;
+import com.reseed.fragments.FragmentUser;
 import com.reseed.fragments.FragmentUserConfig;
-import com.reseed.fragments.FragmentUserStadistics;
-import com.reseed.fragments.FragmentUserUpdate;
+import com.reseed.fragments.FragmentAdminStadistics;
+import com.reseed.fragments.FragmentUpdateUser;
 import com.reseed.fragments.FragmentUsersList;
 import com.reseed.fragments.FragmentTask;
 import com.reseed.interfaces.FragmentCreateTaskInterface;
@@ -316,6 +317,9 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 
         // todo disable pop up menu
 
+        // ponemos la seleccion en neutro.
+        floatingMenuSelection = 0;
+
         bottomMenuSelected = 1;
 
         FragmentUsersList fragmentUsersList = new FragmentUsersList();
@@ -372,18 +376,17 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
 
         bottomMenuSelected = 3;
 
-		FragmentUserStadistics fragmentUserStadistics = new FragmentUserStadistics();
+		FragmentAdminStadistics fragmentAdminStadistics = new FragmentAdminStadistics();
 
 		Bundle bundleArgs = new Bundle();
 		//bundleArgs.putString("data", userJSONInfo.toString());
 		bundleArgs.putString("token", tokenUsuario);
         bundleArgs.putString("typeUser", userObj.getTipoUsuario());
-        fragmentUserStadistics.setArguments(bundleArgs);
+        fragmentAdminStadistics.setArguments(bundleArgs);
 
-		//fragmentContainerView.removeAllViewsInLayout();
 		fragmentManager.beginTransaction()
 				.setReorderingAllowed(true)
-				.add(R.id.fragmentContainerView, fragmentUserStadistics, null)
+				.add(R.id.fragmentContainerView, fragmentAdminStadistics, null)
 				.commit();
     }
 
@@ -631,12 +634,11 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
      */
     public void userListOtions(UserObj userObj) {
 
+        // si el floatingMenuSelection es 1 lanza eliminar la tarea.
         if (floatingMenuSelection == 1) {
 
             // hacemos el reset de la posicion de menu flotante a neutro.
             floatingMenuSelection = 0;
-
-            // si el floatingMenuSelection es 1 lanza eliminar la tarea.
 
             AlertDialog.Builder builder1 = new AlertDialog.Builder(AppActivity.this);
             builder1.setMessage("Queres eliminar el usuario?");
@@ -660,21 +662,47 @@ public class AppActivity extends AppCompatActivity implements FragmentTaskListIn
                     });
             builder1.show();
 
+            // Si el floatingMenuSelection es 2, llamamos a hacer el update del usuario.
         } else if (floatingMenuSelection == 2) {
 
             // hacemos el reset de la posicion de menu flotante a neutro.
             floatingMenuSelection = 0;
 
-            FragmentUserUpdate fragmentUserUpdate = new FragmentUserUpdate();
+            FragmentUpdateUser fragmentUpdateUser = new FragmentUpdateUser();
 
             Bundle bundleArgs = new Bundle();
-
-
-            fragmentUserUpdate.setArguments(bundleArgs);
+            bundleArgs.putString("token",tokenUsuario);
+            bundleArgs.putString("user",userObj.getUser());
+            bundleArgs.putString("tipoUser",userObj.getTipoUsuario());
+            bundleArgs.putString("nombre",userObj.getNombre());
+            bundleArgs.putString("apellido",userObj.getApellido());
+            bundleArgs.putString("userId",userObj.getId());
+            bundleArgs.putString("telefono",userObj.getTelefono());
+            bundleArgs.putString("email",userObj.getEmail());
+            fragmentUpdateUser.setArguments(bundleArgs);
 
             fragmentManager.beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.fragmentContainerView, fragmentUserUpdate, null)
+                    .add(R.id.fragmentContainerView, fragmentUpdateUser, null)
+                    .commit();
+        }else{
+
+            FragmentUser fragmentUser = new FragmentUser();
+
+            Bundle bundleArgs = new Bundle();
+            bundleArgs.putString("token",tokenUsuario);
+            bundleArgs.putString("user",userObj.getUser());
+            bundleArgs.putString("tipoUser",userObj.getTipoUsuario());
+            bundleArgs.putString("nombre",userObj.getNombre());
+            bundleArgs.putString("apellido",userObj.getApellido());
+            bundleArgs.putString("userId",userObj.getId());
+            bundleArgs.putString("telefono",userObj.getTelefono());
+            bundleArgs.putString("email",userObj.getEmail());
+            fragmentUser.setArguments(bundleArgs);
+
+            fragmentManager.beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragmentContainerView, fragmentUser, null)
                     .commit();
         }
 

@@ -22,15 +22,16 @@ import com.reseed.AppActivity;
 import com.reseed.R;
 import com.reseed.interfaces.VolleyResponseInterface;
 import com.reseed.requests.JsonPostRequest;
+import com.reseed.requests.JsonPutRequest;
 import com.reseed.requests.SingletonReqQueue;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class FragmentCreateUser extends Fragment {
+public class FragmentUpdateUser extends Fragment {
 
-    String nombre, apellido, user, email, telefono, rol, userToken;
+    String nombre, apellido, user, email, telefono, rol, userToken, userId;
 
     Boolean esAdmin;
 
@@ -38,7 +39,7 @@ public class FragmentCreateUser extends Fragment {
 
     TextInputEditText editTextNombre;
 
-    TextInputLayout editTextNombreError, editTextApellidoError, emailEditTextError,telefonoEditTextError,passwordEditTextError,passwordRepEditTextError;
+    TextInputLayout editTextNombreError, editTextApellidoError, emailEditTextError, telefonoEditTextError, passwordEditTextError, passwordRepEditTextError;
 
     Button buttonGuardar;
 
@@ -48,7 +49,7 @@ public class FragmentCreateUser extends Fragment {
 
     JSONObject userJson;
 
-    public FragmentCreateUser() {
+    public FragmentUpdateUser() {
         // Required empty public constructor
     }
 
@@ -61,6 +62,21 @@ public class FragmentCreateUser extends Fragment {
 
         if (getArguments() != null) {
             userToken = getArguments().getString("token");
+            this.user = getArguments().getString("user");
+            this.nombre = getArguments().getString("nombre");
+            this.apellido = getArguments().getString("apellido");
+            this.userId = getArguments().getString("userId");
+            this.telefono = getArguments().getString("telefono");
+            this.email = getArguments().getString("email");
+
+            if (getArguments().getString("tipoUser").equals("ADMIN")) {
+                rol = "ADMIN";
+            } else {
+                rol = "TECNIC";
+            }
+
+
+            this.user = getArguments().getString("tipoUser");
         }
     }
 
@@ -68,7 +84,7 @@ public class FragmentCreateUser extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_create_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_update_user, container, false);
 
         // preparamos los componentes.
 
@@ -77,17 +93,12 @@ public class FragmentCreateUser extends Fragment {
         editTextEmail = view.findViewById(R.id.emailEditText);
         editTextTelefono = view.findViewById(R.id.telefonoEditText);
         checkBoxAdmin = view.findViewById(R.id.checkAdministrador);
-        editTextPass = view.findViewById(R.id.passwordEditText);
-        editTextPassRepeat = view.findViewById(R.id.passwordRepEditText);
         buttonGuardar = view.findViewById(R.id.buttonSave);
 
         editTextNombreError = view.findViewById(R.id.nombreEditTextError);
         editTextApellidoError = view.findViewById(R.id.apellidoEditTextError);
         emailEditTextError = view.findViewById(R.id.emailEditTextError);
         telefonoEditTextError = view.findViewById(R.id.telefonoEditTextError);
-        passwordEditTextError = view.findViewById(R.id.passwordEditTextError);
-        passwordRepEditTextError = view.findViewById(R.id.passwordRepEditTextError);
-
 
         /**
          * Listeners de los botones.
@@ -96,7 +107,7 @@ public class FragmentCreateUser extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(validarDatos(view)){
+                if (validarDatos(view)) {
                     nombre = editTextNombre.getText().toString();
                     apellido = editTextApellido.getText().toString();
                     email = editTextEmail.getText().toString();
@@ -104,45 +115,48 @@ public class FragmentCreateUser extends Fragment {
                     esAdmin = checkBoxAdmin.isSelected();
 
                     // nombre de user, suma parte del nombre con el apellido.
-                    user = nombre.toLowerCase().substring(2,3).concat(apellido.toLowerCase());
+                    user = nombre.toLowerCase().substring(2, 3).concat(apellido.toLowerCase());
 
                     // cuando validamos los datos lanzamos el metodo para preparar el json.
-                    if(createUserJson(view)){
+                    if (createUserJson(view)) {
                         createUser();
                     }
                 }
             }
         });
 
+        // llenamos los componentes con la informacion del usuario.
+        popularComponentes();
+
         return view;
     }
 
     /**
      * Metodo para crear el json de la request.
+     *
      * @param view
      * @return Devuelve true si el json se crea correctamente, de lo contrario, devuelve false.
      */
-    private boolean createUserJson(View view){
+    private boolean createUserJson(View view) {
 
-        userJson = new JSONObject();
+        this.userJson = new JSONObject();
 
-        try{
+        try {
 
-            userJson.put("nombre",this.nombre);
-            userJson.put("apellido",this.apellido);
-            userJson.put("user",this.user);
-            userJson.put("password",editTextPass.getText().toString());
-            userJson.put("email",this.email);
-            userJson.put("telefono",this.telefono);
-            if(checkBoxAdmin.isSelected()){
-                userJson.put("rol","ADMIN");
-            }else {
-                userJson.put("rol","TECNIC");
+            userJson.put("nombre", this.nombre);
+            userJson.put("apellido", this.apellido);
+            userJson.put("user", this.user);
+            userJson.put("email", this.email);
+            userJson.put("telefono", this.telefono);
+            if (checkBoxAdmin.isSelected()) {
+                userJson.put("rol", "ADMIN");
+            } else {
+                userJson.put("rol", "TECNIC");
             }
 
 
-        }catch (JSONException exception){
-            Log.e("Erron en create user", exception.getMessage());
+        } catch (JSONException exception) {
+            Log.e("Error en create user", exception.getMessage());
             return false;
         }
 
@@ -152,6 +166,7 @@ public class FragmentCreateUser extends Fragment {
 
     /**
      * Metodo que comprueva los datos de los componentes,  antes de hacer el registro.
+     *
      * @param view
      * @return
      */
@@ -159,55 +174,37 @@ public class FragmentCreateUser extends Fragment {
 
         boolean noError = true;
 
-        if(editTextNombre.getText().length() == 0) {
+        if (editTextNombre.getText().length() == 0) {
             editTextNombreError.setError("No puede estar vacio.");
             noError = false;
         } else if (editTextNombre.getText().length() < 3) {
             editTextNombreError.setError("El nombre es muy corto.");
-        }else{
+        } else {
             editTextNombreError.setError(null);
         }
 
-        if (editTextApellido.getText().length() == 0){
+        if (editTextApellido.getText().length() == 0) {
             editTextApellidoError.setError("No puede estar vacio.");
             noError = false;
         } else if (editTextApellido.getText().length() < 3) {
             editTextApellidoError.setError("El apellido es muy corto.");
-        }else{
+        } else {
             editTextApellidoError.setError(null);
         }
 
 
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(editTextEmail.getText().toString()).matches()){
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(editTextEmail.getText().toString()).matches()) {
             emailEditTextError.setError("Email invalido");
             noError = false;
-        }else {
+        } else {
             emailEditTextError.setError(null);
         }
 
-        if (editTextTelefono.getText().length() < 9){
+        if (editTextTelefono.getText().length() < 9) {
             telefonoEditTextError.setError("Telefono invalido.");
             noError = false;
-        }else{
+        } else {
             telefonoEditTextError.setError(null);
-        }
-
-        if((editTextPass.length() < 6)){
-            passwordEditTextError.setError("6 caracteres minimo.");
-            passwordRepEditTextError.setError("Error");
-            noError = false;
-
-        }else{
-            if(!(editTextPass.getText().toString().equals(editTextPassRepeat.getText().toString()))){
-                passwordEditTextError.setError("El password debe ser igual.");
-                passwordRepEditTextError.setError("El password debe ser igual.");
-                noError = false;
-            }else{
-                passwordEditTextError.setError(null);
-                passwordRepEditTextError.setError(null);
-
-            }
-
         }
         return noError;
     }
@@ -215,12 +212,13 @@ public class FragmentCreateUser extends Fragment {
     /**
      * Metodo para realizar la request de creacion del usuario.
      */
-    private void createUser(){
-        String url = "https://reseed-385107.ew.r.appspot.com/register";
+    private void createUser() {
+        String url = "https://reseed-385107.ew.r.appspot.com/update/value/tecnico/id/";
+        url = url.concat(this.userId);
 
-        JsonPostRequest saveTaskRequest = new JsonPostRequest(this.userToken, this.userJson, url, requestQueue);
+        JsonPutRequest saveUserRequest = new JsonPutRequest(this.userToken, url, this.userJson, requestQueue);
 
-        saveTaskRequest.sendRequest(new VolleyResponseInterface() {
+        saveUserRequest.sendRequest(new VolleyResponseInterface() {
             @Override
             public void onError(String message) {
                 /**/
@@ -233,15 +231,31 @@ public class FragmentCreateUser extends Fragment {
             @Override
             public boolean onResponse(Object response) {
                 JSONObject jsResponse = (JSONObject) response;
-                Log.i("Respuesta user info", jsResponse.toString());
+                Log.i("Respuesta", jsResponse.toString());
 
-                Toast toast = Toast.makeText(requireContext(), "Usuario guardado.", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(requireContext(), "Usuario actualizado.", Toast.LENGTH_SHORT);
                 toast.show();
 
-                ((AppActivity)requireActivity()).usersFragmentCall(null);
+                ((AppActivity) requireActivity()).usersFragmentCall(null);
 
                 return false;
             }
         });
+    }
+
+    /**
+     * Metodo para llenar los componentes con informacion.
+     */
+    private void popularComponentes() {
+        editTextNombre.setText(this.nombre);
+        editTextApellido.setText(this.apellido);
+        editTextEmail.setText(this.email);
+        editTextTelefono.setText(this.telefono);
+
+        if (this.rol.equals("ADMIN")) {
+            checkBoxAdmin.setChecked(true);
+        } else {
+            checkBoxAdmin.setChecked(false);
+        }
     }
 }
