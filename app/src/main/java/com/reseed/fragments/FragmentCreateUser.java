@@ -37,7 +37,7 @@ public class FragmentCreateUser extends Fragment {
 
     TextInputEditText editTextNombre;
 
-    TextInputLayout editTextNombreError;
+    TextInputLayout editTextNombreError, editTextApellidoError, emailEditTextError,telefonoEditTextError,passwordEditTextError,passwordRepEditTextError;
 
     Button buttonGuardar;
 
@@ -87,6 +87,11 @@ public class FragmentCreateUser extends Fragment {
         buttonGuardar = view.findViewById(R.id.buttonSave);
 
         editTextNombreError = view.findViewById(R.id.nombreEditTextError);
+        editTextApellidoError = view.findViewById(R.id.apellidoEditTextError);
+        emailEditTextError = view.findViewById(R.id.emailEditTextError);
+        telefonoEditTextError = view.findViewById(R.id.telefonoEditTextError);
+        passwordEditTextError = view.findViewById(R.id.passwordEditTextError);
+        passwordRepEditTextError = view.findViewById(R.id.passwordRepEditTextError);
 
 
         /**
@@ -120,7 +125,7 @@ public class FragmentCreateUser extends Fragment {
     private boolean createUserJson(View view){
 
         userJson = new JSONObject();
-        
+
 
             /*userJson.put("nombre",this.nombre);
             userJson.put("apellido",this.apellido);
@@ -132,31 +137,37 @@ public class FragmentCreateUser extends Fragment {
             userJson.put("rol",);*/
 
 
-        
+
 
         return false;
     }
 
     private boolean validarDatos(View view) {
 
-        if(editTextNombre.getText().length() == 0){
-            editTextNombreError.setError("Nombre invalido");
+        if(editTextNombre.getText().length() == 0) {
+            editTextNombreError.setError("No puede estar vacio.");
             return false;
+        } else if (editTextNombre.getText().length() < 3) {
+            editTextNombreError.setError("El nombre es muy corto.");
         }else{
             editTextNombreError.setError(null);
         }
+
         if (editTextApellido.getText().length() == 0){
-            editTextApellido.setBackgroundColor(Color.RED);
+            editTextApellidoError.setError("No puede estar vacio.");
             return false;
+        } else if (editTextApellido.getText().length() < 3) {
+            editTextApellidoError.setError("El apellido es muy corto.");
+        }else{
+            editTextApellidoError.setError(null);
         }
+
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(editTextEmail.getText().toString()).matches()){
-            editTextEmail.setBackgroundColor(Color.RED);
+            emailEditTextError.setError("Email invalido");
             return false;
-        }
-
-        if (user.length() < 4){
-            return false;
+        }else {
+            emailEditTextError.setError(null);
         }
 
         if (editTextTelefono.getText().length() == 0){
@@ -206,5 +217,4 @@ public class FragmentCreateUser extends Fragment {
             }
         });
     }
-
 }
