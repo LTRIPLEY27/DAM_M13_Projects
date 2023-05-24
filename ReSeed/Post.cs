@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace ReSeed
         private String email;
         private String telefono;
         private String rol;
+        private Tarea tarea;
 
         //Constructor Usuario
         public Post(String id, String user, String password,String nombre, String apellido,String email, String telefono, String rol) 
@@ -31,6 +33,24 @@ namespace ReSeed
             this.rol = rol;
 
         }
+
+        
+        //Constructor Perfil
+        [JsonConstructor]
+        public Post(String id, String user, String password, String nombre, String apellido, String email, String telefono, String rol, Tarea tarea)
+        {
+            this.id = id;
+            this.nombre = nombre;
+            this.apellido = apellido;
+            this.user = user;
+            this.password = password;
+            this.email = email;
+            this.telefono = telefono;
+            this.rol = rol;
+            this.tarea = tarea;
+
+        }
+        
 
         //Getters i Setters
 
@@ -89,7 +109,14 @@ namespace ReSeed
             set { rol = value; }
 
         }
+        
+        public Tarea TArea//Propiedad Tarea
+        {
+            get { return tarea; }
+            set { tarea = value; }
 
-     
+        }
+        
+
     }
 }

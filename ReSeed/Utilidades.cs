@@ -135,11 +135,11 @@ namespace ReSeed
          * -Obtendremos de ese objeto usuario json el atributo pasado por parametro en formato String
          * El @return será el atributo de ese usuario logueado que hemos pasado por parámetro
          */
-        public String obtenerAtributoPerfil (JObject usuarioJson, String atributoPerfilDeseado)
+        public String obtenerAtributoPerfil(JObject usuarioJson, String atributoPerfilDeseado)
         {
 
             return (String)usuarioJson.GetValue(atributoPerfilDeseado);
-          
+
         }
 
         #endregion  
@@ -155,7 +155,7 @@ namespace ReSeed
          * Busca en la lista de usuarios al usuario pasado por parámetro y retorna el password.
          * @return password
          */
-        public String obtenerPassword (List <Post> listaUsuarios,String id)
+        public String obtenerPassword(List<Post> listaUsuarios, String id)
         {
             //Variable booleana para salida LOOP
             Boolean semaforo = false;
@@ -186,9 +186,9 @@ namespace ReSeed
         * Busca en la lista de usuarios al usuario pasado por parámetro y retorna el telefono.
         * @return password
         */
-        public String obtenerTelefono(List<Post> listaUsuarios,String id)
+        public String obtenerTelefono(List<Post> listaUsuarios, String id)
         {
-         
+
             //Variable rol que contendrá el rol del usuario pasado por parámetro
             String telefono = null;
 
@@ -213,11 +213,11 @@ namespace ReSeed
          * Pasamos tres parámetros: @URL,@token,@data
          * 
          */
-        public async void usuariosFiltoRolASYNC (String URL, String token, DataGridView data)
+        public async void usuariosFiltoRolASYNC(String URL, String token, DataGridView data)
         {
             JObject json = null;
 
-            HttpClient client = new HttpClient ();
+            HttpClient client = new HttpClient();
 
             //autentficar token
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -227,9 +227,9 @@ namespace ReSeed
             if (response.IsSuccessStatusCode)
             {
                 //leemos resutado
-                var res = response.Content.ReadAsStringAsync ().Result;
+                var res = response.Content.ReadAsStringAsync().Result;
                 //tranformamos el restultado en un array json
-                JArray  jArray = JArray.Parse (res);
+                JArray jArray = JArray.Parse(res);
                 //recorremos arry json
                 for (int i = 0; i < jArray.First.Count(); i++)
                 {
@@ -240,7 +240,7 @@ namespace ReSeed
                     String email = json.GetValue("email").ToString();//obtenemos mail
                     String telefono = json.GetValue("telefono").ToString();//obtenemos telefono
 
-                    data.Rows.Add(id,user,email,telefono);//añadimos los datos al datagrid
+                    data.Rows.Add(id, user, email, telefono);//añadimos los datos al datagrid
 
                 }
             }
@@ -264,11 +264,11 @@ namespace ReSeed
          * 
          * 
          */
-        public async void rellenarComboBox (String URL, String token, ComboBox listaTecnicos)
+        public async void rellenarComboBox(String URL, String token, ComboBox listaTecnicos)
         {
             List<Post> listaTecnics = null;
             JObject json;
-           
+
             HttpClient client = new HttpClient();
 
             //autorización TOKEN    
@@ -285,7 +285,7 @@ namespace ReSeed
                 JArray arrayTecnicsJson = JArray.Parse(content);
 
                 //recorremos LOOP
-                for ( int i = 0; i < arrayTecnicsJson.First.Count() ; i++ )
+                for (int i = 0; i < arrayTecnicsJson.First.Count(); i++)
                 {
                     String usuarioJson = arrayTecnicsJson[0][i].ToString();
                     json = JObject.Parse(usuarioJson);
@@ -293,7 +293,7 @@ namespace ReSeed
                     String user = json.GetValue("user").ToString();
 
                     listaTecnicos.Items.Add(id + "-" + user);
-                      
+
                 }
             }
         }
@@ -308,13 +308,13 @@ namespace ReSeed
          * 2-Recorremos la lista de usuarios, si encontramos un usuario con el @mail pasado por parametro, saldremos del bucle
          * con @encontrado (Boolean) y obtendremos su user, el cual devolveremos @return
          */
-        public async Task <String> mensajesRemitenteASYNC (String mail, String token,String URL)
+        public async Task<String> mensajesRemitenteASYNC(String mail, String token, String URL)
         {
             Boolean encontrado = false;
             String remitente = null;
-            List <Post> listaUsuarios = await conexion.ObtenerUsuarios(token,URL);
+            List<Post> listaUsuarios = await conexion.ObtenerUsuarios(token, URL);
 
-            for ( int i = 0;i<listaUsuarios.Count && !encontrado; i++ )
+            for (int i = 0; i < listaUsuarios.Count && !encontrado; i++)
             {
                 if (mail.Equals(listaUsuarios[i].Email))
                 {
@@ -353,7 +353,7 @@ namespace ReSeed
         /*
          * FILTRAR POR TIPO DE TAREAS-COMBOBOX
          */
-        public String filtrarTareas (ComboBox comboTareas,String tipoTarea)
+        public String filtrarTareas(ComboBox comboTareas, String tipoTarea)
         {
             int index = comboTareas.SelectedIndex;
 
@@ -363,15 +363,15 @@ namespace ReSeed
                     tipoTarea = "REPLANTAR";
                     break;
 
-                    case 1:
+                case 1:
                     tipoTarea = "LIMPIEZA";
                     break;
 
-                    case 2:
+                case 2:
                     tipoTarea = "ANALISIS";
                     break;
 
-                default : 
+                default:
                     break;
             }
 
@@ -381,7 +381,7 @@ namespace ReSeed
         /*
         * FILTRAR POR ESTADO DE TAREAS-COMBOBOX
         */
-        public String  filtrarEstado(ComboBox comboTareas, String estadoTarea)
+        public String filtrarEstado(ComboBox comboTareas, String estadoTarea)
         {
 
             int index = comboTareas.SelectedIndex;
@@ -415,9 +415,9 @@ namespace ReSeed
             return estadoTarea;
         }
 
-        public async void filtrarTareaPorTipoASYNC (String tipoTarea, String token, String URL, ListBox listadoTareas)
+        public async void filtrarTareaPorTipoASYNC(String tipoTarea, String token, String URL, ListBox listadoTareas)
         {
-            List<Tarea> listaTareas = await conexion.listaTareASYNC(token,URL);
+            List<Tarea> listaTareas = await conexion.listaTareASYNC(token, URL);
 
             foreach (Tarea tarea in listaTareas)
             {
@@ -429,6 +429,26 @@ namespace ReSeed
             }
         }
 
-        
+        public Coordenada[] ObtenerCoordenadasTecnico (List<Tarea>listaTareas,String idTarea)
+        {
+            Boolean encontradaIdTarea = false;
+
+            Coordenada [] mapa = null; 
+            //recorremos LOOP y en funcion de la posision, mostraremos las coordenadas
+            for (int i = 0; i < listaTareas.Count && !encontradaIdTarea; i++)
+            {
+                if (idTarea.Equals(listaTareas[i].Id))
+                {
+                    if (listaTareas[i].Ubicacion.Mapa != null)
+
+                    mapa = listaTareas[i].Ubicacion.Mapa;
+
+                    encontradaIdTarea = true;
+                    
+                } 
+            }
+
+            return mapa;
+        }
     }
 }

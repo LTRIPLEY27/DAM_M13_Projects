@@ -30,8 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Administrador));
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             panel1 = new Panel();
+            gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             boton_registroCoordenadas = new Button();
             panel2 = new Panel();
             label5 = new Label();
@@ -107,7 +108,6 @@
             label22 = new Label();
             comboBox_ListaTecnicos_GESTIONTAREAS = new ComboBox();
             label21 = new Label();
-            tabPage4 = new TabPage();
             tabPage5 = new TabPage();
             button_MIPERFIL_MODIFICA_PASSWORD = new Button();
             label18 = new Label();
@@ -133,7 +133,6 @@
             label15 = new Label();
             contextMenuStrip1 = new ContextMenuStrip(components);
             iD = new DataGridViewTextBoxColumn();
-            gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ConfigMapa.SuspendLayout();
@@ -164,6 +163,33 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(584, 622);
             panel1.TabIndex = 0;
+            // 
+            // gMapControl1
+            // 
+            gMapControl1.Bearing = 0F;
+            gMapControl1.CanDragMap = true;
+            gMapControl1.EmptyTileColor = Color.Navy;
+            gMapControl1.GrayScaleMode = false;
+            gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            gMapControl1.LevelsKeepInMemory = 5;
+            gMapControl1.Location = new Point(20, 22);
+            gMapControl1.MarkersEnabled = true;
+            gMapControl1.MaxZoom = 2;
+            gMapControl1.MinZoom = 2;
+            gMapControl1.MouseWheelZoomEnabled = true;
+            gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            gMapControl1.Name = "gMapControl1";
+            gMapControl1.NegativeMode = false;
+            gMapControl1.PolygonsEnabled = true;
+            gMapControl1.RetryLoadTile = 0;
+            gMapControl1.RoutesEnabled = true;
+            gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
+            gMapControl1.ShowTileGridLines = false;
+            gMapControl1.Size = new Size(548, 424);
+            gMapControl1.TabIndex = 3;
+            gMapControl1.Zoom = 0D;
+            gMapControl1.MouseDoubleClick += gMapControl1_MouseDoubleClick;
             // 
             // boton_registroCoordenadas
             // 
@@ -239,7 +265,6 @@
             ConfigMapa.Controls.Add(tabPage1);
             ConfigMapa.Controls.Add(tabPage2);
             ConfigMapa.Controls.Add(tabPage3);
-            ConfigMapa.Controls.Add(tabPage4);
             ConfigMapa.Controls.Add(tabPage5);
             ConfigMapa.Controls.Add(tabPage6);
             ConfigMapa.Font = new Font("Tahoma", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
@@ -570,14 +595,14 @@
             // 
             dataGridView_usuarios.AllowUserToAddRows = false;
             dataGridView_usuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.TopCenter;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Tahoma", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dataGridView_usuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Tahoma", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView_usuarios.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView_usuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView_usuarios.Columns.AddRange(new DataGridViewColumn[] { id_user, user_name, email });
             dataGridView_usuarios.Location = new Point(432, 57);
@@ -884,6 +909,7 @@
             button_ACTUALIZARTAREA.TabIndex = 5;
             button_ACTUALIZARTAREA.Text = "ACTUALIZAR TAREA";
             button_ACTUALIZARTAREA.UseVisualStyleBackColor = true;
+            button_ACTUALIZARTAREA.Click += button_ACTUALIZARTAREA_Click;
             // 
             // button_CARGARTAREA
             // 
@@ -930,16 +956,6 @@
             label21.Size = new Size(149, 16);
             label21.TabIndex = 0;
             label21.Text = "SELECCIONAR TÉCNICO";
-            // 
-            // tabPage4
-            // 
-            tabPage4.Location = new Point(4, 25);
-            tabPage4.Name = "tabPage4";
-            tabPage4.Padding = new Padding(3);
-            tabPage4.Size = new Size(1166, 765);
-            tabPage4.TabIndex = 3;
-            tabPage4.Text = "Comentarios";
-            tabPage4.UseVisualStyleBackColor = true;
             // 
             // tabPage5
             // 
@@ -1156,33 +1172,6 @@
             iD.HeaderText = "iD";
             iD.Name = "iD";
             // 
-            // gMapControl1
-            // 
-            gMapControl1.Bearing = 0F;
-            gMapControl1.CanDragMap = true;
-            gMapControl1.EmptyTileColor = Color.Navy;
-            gMapControl1.GrayScaleMode = false;
-            gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            gMapControl1.LevelsKeepInMemory = 5;
-            gMapControl1.Location = new Point(20, 22);
-            gMapControl1.MarkersEnabled = true;
-            gMapControl1.MaxZoom = 2;
-            gMapControl1.MinZoom = 2;
-            gMapControl1.MouseWheelZoomEnabled = true;
-            gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            gMapControl1.Name = "gMapControl1";
-            gMapControl1.NegativeMode = false;
-            gMapControl1.PolygonsEnabled = true;
-            gMapControl1.RetryLoadTile = 0;
-            gMapControl1.RoutesEnabled = true;
-            gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
-            gMapControl1.ShowTileGridLines = false;
-            gMapControl1.Size = new Size(548, 424);
-            gMapControl1.TabIndex = 3;
-            gMapControl1.Zoom = 0D;
-            gMapControl1.MouseDoubleClick += gMapControl1_MouseDoubleClick;
-            // 
             // Administrador
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1237,7 +1226,6 @@
         private Label label1;
         private TabPage tabPage2;
         private TabPage tabPage3;
-        private TabPage tabPage4;
         private Button btn_enviar;
         private Panel panel4;
         private TextBox textBox_MAIL;

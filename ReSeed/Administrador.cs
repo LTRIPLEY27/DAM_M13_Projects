@@ -87,6 +87,10 @@ namespace ReSeed
             //BOTÓN VALIDA_ACTUALIZACIÓN USUARIO ESTARA DESACTIVADO POR DEFECTO
             button_VALIDAMODIFICACION.Enabled = false;
 
+            //Botones de UPDATE TAREA Y ELIMINAR TAREA ESTARÁN DESACTIVADOS POR DEFECTO
+            button_ACTUALIZARTAREA.Enabled = false;
+            button_ELIMINARTAREA.Enabled = false;
+
         }
 
         //********************** GESTION MAPAS ************************************
@@ -408,7 +412,7 @@ namespace ReSeed
         #endregion
 
         #region CARGAR TAREAS
-        private void button_CARGARTAREA_Click(object sender, EventArgs e)
+        public void button_CARGARTAREA_Click(object sender, EventArgs e)
         {
             listBox_listadoTAREAS.Items.Clear();
             String idTecnicoCombo = comboBox_ListaTecnicos_GESTIONTAREAS.SelectedItem.ToString();
@@ -416,6 +420,11 @@ namespace ReSeed
             String nameUserTecnico = separar[1];
 
             conexion.cargarTareasASYNC(nameUserTecnico, TOKEN_form3, URL_obtenerTareas, listBox_listadoTAREAS);
+
+            //Al cargar los datos, se activan los botones de eliminar y actualizar
+            button_CARGARTAREA.Enabled = true;
+            button_ELIMINARTAREA.Enabled = true;
+
         }
 
         #endregion
@@ -429,12 +438,24 @@ namespace ReSeed
 
             String URLconIDtarea = eliminarTarea + idTarea;
 
-            conexion.eliminarTareaASYNC (TOKEN_form3, URLconIDtarea, idTarea);
+            conexion.eliminarTareaASYNC(TOKEN_form3, URLconIDtarea, idTarea);
 
-
-
+                    
         }
         #endregion
+
+        #region ACTUALIZAR TAREAS
+        private void button_ACTUALIZARTAREA_Click(object sender, EventArgs e)
+        {
+
+            String tareaSeleccionada = listBox_listadoTAREAS.SelectedItem.ToString();
+            String[] partesTarea = tareaSeleccionada.Split("--");
+            String idTarea = partesTarea[0];
+
+            //String URLconIDtarea = eliminarTarea + idTarea;
+
+        }
+        #endregion  
 
         //******************** GESTIÓN USUARIOS *********************************
 
@@ -920,6 +941,7 @@ namespace ReSeed
         }
 
         #endregion
+
 
 
 

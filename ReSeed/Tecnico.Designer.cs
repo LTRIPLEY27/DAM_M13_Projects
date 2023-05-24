@@ -31,18 +31,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Tecnico));
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
-            button2 = new Button();
             button1 = new Button();
-            textBox3 = new TextBox();
-            label4 = new Label();
-            label3 = new Label();
-            checkedListBox1 = new CheckedListBox();
-            textBox2 = new TextBox();
+            listBox1_TAREASTECNICO = new ListBox();
             label1 = new Label();
-            label2 = new Label();
-            textBox1 = new TextBox();
+            button2 = new Button();
             panel1 = new Panel();
-            gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             tabPage3 = new TabPage();
             panel2 = new Panel();
             button3 = new Button();
@@ -54,6 +47,8 @@
             label7 = new Label();
             label6 = new Label();
             label5 = new Label();
+            Descripción = new DataGridViewTextBoxColumn();
+            gMapControl2 = new GMap.NET.WindowsForms.GMapControl();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             panel1.SuspendLayout();
@@ -80,16 +75,10 @@
             // tabPage1
             // 
             tabPage1.BackColor = Color.DarkSeaGreen;
-            tabPage1.Controls.Add(button2);
             tabPage1.Controls.Add(button1);
-            tabPage1.Controls.Add(textBox3);
-            tabPage1.Controls.Add(label4);
-            tabPage1.Controls.Add(label3);
-            tabPage1.Controls.Add(checkedListBox1);
-            tabPage1.Controls.Add(textBox2);
+            tabPage1.Controls.Add(listBox1_TAREASTECNICO);
             tabPage1.Controls.Add(label1);
-            tabPage1.Controls.Add(label2);
-            tabPage1.Controls.Add(textBox1);
+            tabPage1.Controls.Add(button2);
             tabPage1.Controls.Add(panel1);
             tabPage1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             tabPage1.Location = new Point(4, 54);
@@ -99,130 +88,52 @@
             tabPage1.TabIndex = 0;
             tabPage1.Text = "TAREAS";
             // 
+            // button1
+            // 
+            button1.Location = new Point(546, 222);
+            button1.Name = "button1";
+            button1.Size = new Size(165, 43);
+            button1.TabIndex = 14;
+            button1.Text = "CARGAR COORDENADAS";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += btn_cargarCoordenadas;
+            // 
+            // listBox1_TAREASTECNICO
+            // 
+            listBox1_TAREASTECNICO.FormattingEnabled = true;
+            listBox1_TAREASTECNICO.ItemHeight = 15;
+            listBox1_TAREASTECNICO.Location = new Point(546, 43);
+            listBox1_TAREASTECNICO.Name = "listBox1_TAREASTECNICO";
+            listBox1_TAREASTECNICO.Size = new Size(445, 154);
+            listBox1_TAREASTECNICO.TabIndex = 13;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(732, 25);
+            label1.Name = "label1";
+            label1.Size = new Size(102, 15);
+            label1.TabIndex = 12;
+            label1.Text = "LISTA DE TAREAS";
+            // 
             // button2
             // 
-            button2.Location = new Point(20, 603);
+            button2.Location = new Point(20, 586);
             button2.Name = "button2";
-            button2.Size = new Size(95, 23);
+            button2.Size = new Size(115, 29);
             button2.TabIndex = 10;
             button2.Text = "SALIR";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
-            // button1
-            // 
-            button1.Location = new Point(766, 603);
-            button1.Name = "button1";
-            button1.Size = new Size(255, 23);
-            button1.TabIndex = 9;
-            button1.Text = "ENVIAR";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
-            // textBox3
-            // 
-            textBox3.Location = new Point(766, 467);
-            textBox3.Multiline = true;
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(255, 116);
-            textBox3.TabIndex = 8;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(766, 449);
-            label4.Name = "label4";
-            label4.Size = new Size(134, 15);
-            label4.TabIndex = 7;
-            label4.Text = "DEJA TU COMENTARIO";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(766, 360);
-            label3.Name = "label3";
-            label3.Size = new Size(187, 15);
-            label3.TabIndex = 6;
-            label3.Text = "MARCAR TAREA/S REALIZADA/S";
-            // 
-            // checkedListBox1
-            // 
-            checkedListBox1.FormattingEnabled = true;
-            checkedListBox1.Items.AddRange(new object[] { "REPLANTAR", "DESBROZAR", "LIMPIEZA" });
-            checkedListBox1.Location = new Point(766, 378);
-            checkedListBox1.Name = "checkedListBox1";
-            checkedListBox1.Size = new Size(255, 58);
-            checkedListBox1.TabIndex = 5;
-            // 
-            // textBox2
-            // 
-            textBox2.Location = new Point(766, 201);
-            textBox2.Multiline = true;
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(255, 108);
-            textBox2.TabIndex = 4;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(766, 183);
-            label1.Name = "label1";
-            label1.Size = new Size(195, 15);
-            label1.TabIndex = 3;
-            label1.Text = "COMENTARIOS ADMINISTRADOR";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.BackColor = Color.Transparent;
-            label2.Location = new Point(766, 32);
-            label2.Name = "label2";
-            label2.Size = new Size(122, 15);
-            label2.TabIndex = 1;
-            label2.Text = "TAREAS A REALIZAR:";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(766, 50);
-            textBox1.Multiline = true;
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(255, 108);
-            textBox1.TabIndex = 2;
-            // 
             // panel1
             // 
             panel1.BackgroundImage = (Image)resources.GetObject("panel1.BackgroundImage");
-            panel1.Controls.Add(gMapControl1);
+            panel1.Controls.Add(gMapControl2);
             panel1.Location = new Point(20, 32);
             panel1.Name = "panel1";
-            panel1.Size = new Size(679, 551);
+            panel1.Size = new Size(498, 460);
             panel1.TabIndex = 0;
-            // 
-            // gMapControl1
-            // 
-            gMapControl1.Bearing = 0F;
-            gMapControl1.CanDragMap = true;
-            gMapControl1.EmptyTileColor = Color.Navy;
-            gMapControl1.GrayScaleMode = false;
-            gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            gMapControl1.LevelsKeepInMemory = 5;
-            gMapControl1.Location = new Point(53, 57);
-            gMapControl1.MarkersEnabled = true;
-            gMapControl1.MaxZoom = 2;
-            gMapControl1.MinZoom = 2;
-            gMapControl1.MouseWheelZoomEnabled = true;
-            gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            gMapControl1.Name = "gMapControl1";
-            gMapControl1.NegativeMode = false;
-            gMapControl1.PolygonsEnabled = true;
-            gMapControl1.RetryLoadTile = 0;
-            gMapControl1.RoutesEnabled = true;
-            gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            gMapControl1.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
-            gMapControl1.ShowTileGridLines = false;
-            gMapControl1.Size = new Size(574, 445);
-            gMapControl1.TabIndex = 0;
-            gMapControl1.Zoom = 0D;
             // 
             // tabPage3
             // 
@@ -326,6 +237,37 @@
             label5.TabIndex = 0;
             label5.Text = "TELÉFONO";
             // 
+            // Descripción
+            // 
+            Descripción.HeaderText = "Descripción";
+            Descripción.Name = "Descripción";
+            // 
+            // gMapControl2
+            // 
+            gMapControl2.Bearing = 0F;
+            gMapControl2.CanDragMap = true;
+            gMapControl2.EmptyTileColor = Color.Navy;
+            gMapControl2.GrayScaleMode = false;
+            gMapControl2.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            gMapControl2.LevelsKeepInMemory = 5;
+            gMapControl2.Location = new Point(26, 31);
+            gMapControl2.MarkersEnabled = true;
+            gMapControl2.MaxZoom = 2;
+            gMapControl2.MinZoom = 2;
+            gMapControl2.MouseWheelZoomEnabled = true;
+            gMapControl2.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            gMapControl2.Name = "gMapControl2";
+            gMapControl2.NegativeMode = false;
+            gMapControl2.PolygonsEnabled = true;
+            gMapControl2.RetryLoadTile = 0;
+            gMapControl2.RoutesEnabled = true;
+            gMapControl2.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            gMapControl2.SelectedAreaFillColor = Color.FromArgb(33, 65, 105, 225);
+            gMapControl2.ShowTileGridLines = false;
+            gMapControl2.Size = new Size(441, 388);
+            gMapControl2.TabIndex = 0;
+            gMapControl2.Zoom = 0D;
+            // 
             // Tecnico
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -352,17 +294,8 @@
         private TabPage tabPage1;
         private TabPage tabPage3;
         private Panel panel1;
-        private Label label2;
         private GMap.NET.WindowsForms.GMapControl gMapControl1;
-        private TextBox textBox2;
-        private Label label1;
         private Button button2;
-        private Button button1;
-        private TextBox textBox3;
-        private Label label4;
-        private Label label3;
-        private CheckedListBox checkedListBox1;
-        private TextBox textBox1;
         private Panel panel2;
         private Label label7;
         private Label label6;
@@ -373,5 +306,12 @@
         private TextBox textBox6;
         private TextBox textBox5;
         private TextBox textBox4;
+        private Button button4;
+        private ComboBox comboBox1;
+        private Label label1;
+        private DataGridViewTextBoxColumn Descripción;
+        private ListBox listBox1_TAREASTECNICO;
+        private Button button1;
+        private GMap.NET.WindowsForms.GMapControl gMapControl2;
     }
 }

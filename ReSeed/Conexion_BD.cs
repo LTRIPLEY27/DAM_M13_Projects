@@ -22,6 +22,7 @@ using Xunit.Sdk;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using Newtonsoft.Json;
 using System.Net.Http.Json;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ReSeed
 {
@@ -30,7 +31,7 @@ namespace ReSeed
         //ATRIBUROS DE CONEXION
         private String usuario;
         private String password;
-        private String URL;
+        private String URLlistarTareasTecnicos = "https://reseed-385107.ew.r.appspot.com/results/tareas";
 
         HttpClient client;
         HttpContent content;
@@ -459,6 +460,7 @@ namespace ReSeed
          * -Transformaremos lada coordenda (latitud/longitud) en un objeto json que enviaremos al ENDPOINT URL_Coordenadas+idUbicacion.
          * -Esto lo que hará es añadir todos las coordendas de la lista (longitud,latitud) a variable (mapa []) de la base de datos.
          */
+        #region MÉTODO CREAR TAREA
         public async void crearTarea(String URL_tarea, String token, String json, String ubicacionJson,
             String URL_ubicacion, String URL_Coordenadas, List<Coordenada> coordenadas, String URL_mensajes, String mensaje,
             String remitente, String destinatario)
@@ -539,6 +541,8 @@ namespace ReSeed
             }
 
         }
+        #endregion
+
 
         /*--------------
          * @listaTareASYNC
@@ -548,6 +552,7 @@ namespace ReSeed
          * lo deserializaremos en objeto Tarea y lo añadiremos al list de tareas.
          * @return será el listado de objetos Tarea
          */
+        #region MÉTODO PARA OBTENER LISTADO TAREAS TECNICOS (COMO ADMINISTRADORES)
         public async Task<List<Tarea>> listaTareASYNC(String token, String URL)
         {
             List<Tarea> listaTareas = new List<Tarea>();
@@ -580,6 +585,8 @@ namespace ReSeed
             return listaTareas;
 
         }
+        #endregion
+
 
         /*
          * ------------------------
@@ -590,6 +597,7 @@ namespace ReSeed
          * tarea y la fecha fin de tarea.
          * Estos datos los mostraremos en el listBox pasado por parámetro.
          */
+        #region MÉTODO PARA MOSTRAR TAREAS
         public async void cargarTareasASYNC(String usuario, String token, String URL, ListBox listBoxTareas)
         {
 
@@ -613,6 +621,8 @@ namespace ReSeed
             }
 
         }
+        #endregion
+
 
         /*
          * ------------------
@@ -629,10 +639,11 @@ namespace ReSeed
          * pasada por parámetro.la eliminamos.
          * De esta forma, eliminamos la tarea de la base de datos y de la lista de tareas
          */
+        #region MÉTODO PARA ELIMINAR TAREAS
         public async void eliminarTareaASYNC(String token, String URLusuario, String idTarea)
         {
 
-            List <Tarea> listaTareas = await this.listaTareASYNC (token, URL);
+            List <Tarea> listaTareas = await this.listaTareASYNC (token, URLusuario);
 
             HttpClient client = new HttpClient();
 
@@ -643,6 +654,7 @@ namespace ReSeed
             if (response.IsSuccessStatusCode)
             {
                 MessageBox.Show("Tarea eliminada de la base de datos correctamente.", "INFORMACIÓN TAREAS", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             } else {
                 MessageBox.Show("No se ha podido eliminar la tarea de la base de datos", "INFORMACIÓN TAREAS", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -656,11 +668,57 @@ namespace ReSeed
                 }
             }
         }
+        #endregion
+
+        //*************************************TECNICOS*******************************************************//
+
+        /*
+         * ----------------------------------
+         * Método listaTareasTecnicoASYNC
+         * ----------------------------------
+         * Recibe como parámetros el @String token i  @String URL.
+         * Hacemos una petición GET al ENDPOINT y obtenemos un objeto que contiene todos los datos del técnico logueado.
+         * Parseamos la respuesta de la BD a objeto JSOn (caso que la respuesta de la BD sea correcta (200-true))
+         * Extraemos el JArray de tareas del Objeto JSOn.
+         * Recorremos el array json de tareas. Pos cada iteración del array deserializamos en objeto tarea y añadimos
+         * dicho objeto a un List <Tarea>.
+         * Esta lista de tareas la devolveremos  @return
+         */
+
+        #region Método @listaTareasTecnicoASYNC. Usaremos para obtener la lista de tareas del técnico logueado
+        public async Task <List<Tarea>> listaTareasTecnicoASYNC (String token,String URL)
+        {
+            Tarea tarea = null;
+            List<Tarea> listaTareasTecnico = new List<Tarea>();
+            HttpClient client = new HttpClient();
+
+            //autorización TOKEN    
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.GetAsync(URL);
+
+            if (response.IsSuccessStatusCode)
+            {
+
+                var resultado = response.Content.ReadAsStringAsync().Result;
+
+                JObject jsonUser = JObject.Parse(resultado);
+
+                JArray jsonUserTarea = (JArray)jsonUser.GetValue("tarea");
+
+                for (int i = 0; i < jsonUserTarea.Count; i++)
+                {
+                    tarea = JsonConvert.DeserializeObject<Tarea>(jsonUserTarea[i].ToString());
+                    listaTareasTecnico.Add(tarea);
+                }
+
+            }
+
+            return listaTareasTecnico;
+        }
+        #endregion
 
     }
-
-
-
 }
 
 
