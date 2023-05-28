@@ -10,6 +10,7 @@ using Xunit.Sdk;
 using System.Net.Http.Headers;
 using System.Security.Policy;
 using System.Net.Http.Json;
+using Microsoft.Extensions.Primitives;
 
 namespace ReSeed
 {
@@ -415,6 +416,11 @@ namespace ReSeed
             return estadoTarea;
         }
 
+        /*
+         * Metodo filtrarTareaPorTipoASYNC
+         * Recibe por parámetro un String tipoTarea, String token, String URL, ListBox listadoTareas
+         * Mostramos en el listado de tareas los datos que nos interesan
+         */
         public async void filtrarTareaPorTipoASYNC(String tipoTarea, String token, String URL, ListBox listadoTareas)
         {
             List<Tarea> listaTareas = await conexion.listaTareASYNC(token, URL);
@@ -429,6 +435,11 @@ namespace ReSeed
             }
         }
 
+        /*
+         * Método ObtenerCoordenadasTecnico
+         * Recibe por parámetro una lista de tareas y una id tarea.
+         * Recorre la lista de tareas y devolvemos el array de coordenadas de esa id tarea pasada por parametro
+         */
         public Coordenada[] ObtenerCoordenadasTecnico (List<Tarea>listaTareas,String idTarea)
         {
             Boolean encontradaIdTarea = false;
@@ -449,6 +460,113 @@ namespace ReSeed
             }
 
             return mapa;
+        }
+
+        /*
+         * Método datosPerfilTecnicoASYNC
+         * Recibe como parámetro el @token y la @URL END POINT
+         * Devolvemos el json del perfil
+         */
+        public async Task<String> datosPerfilTecnicoASYNC(String token, String URL)
+        {
+            String userPerfil = null;
+
+            HttpClient client = new HttpClient();
+
+            //necesitamos token
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.GetAsync(URL);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonRespuesta = response.Content.ReadAsStringAsync().Result;
+
+                userPerfil = jsonRespuesta.ToString();
+
+
+
+            }
+
+            return userPerfil;
+        }
+
+        /*
+         * Método atributosCambiadosPerfiltecnicoASYNC
+         * Parámetros que recibe: @String URL_GETPERFIL,@String URL_UPDATE ,@String token, @String nuevoTelefono
+         * Devolvemos el objeto usuario para poder gestionar si hay modificacion de contraseñas.
+         * El mismo método verifica si se modifica el telefono y guarda los cambios
+         */
+        public async Task <Post> atributosCambiadosPerfiltecnicoASYNC(String URL_GETPERFIL,String URL_UPDATE ,String token, String nuevoTelefono)
+        {
+
+            Post userUpdate = null;
+
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            String usuarioLogueado = await this.datosPerfilTecnicoASYNC(token,URL_GETPERFIL);
+
+            JObject usuario = JObject.Parse(usuarioLogueado);
+            String nombre = usuario.GetValue("nombre").ToString();
+            String apellido = usuario.GetValue("apellido").ToString();
+            String user = usuario.GetValue("user").ToString();
+            String email = usuario.GetValue("email").ToString();
+            String telefono = usuario.GetValue("telefono").ToString();
+            String rol = usuario.GetValue("rol").ToString();
+            
+
+            if (telefono.Equals(nuevoTelefono))
+            {
+                
+                JObject usuarioUpdate = new JObject();
+                usuarioUpdate.Add("nombre", nombre);
+                usuarioUpdate.Add("apellido", apellido);
+                usuarioUpdate.Add("user", user);
+                usuarioUpdate.Add("email", email);
+                usuarioUpdate.Add("telefono", telefono);
+                usuarioUpdate.Add("rol", rol);
+
+                var content = new StringContent(usuarioUpdate.ToString(), Encoding.UTF8, "application/json");
+                var response = client.PutAsync(URL_UPDATE, content).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultado = response.Content.ReadAsStringAsync().Result;
+
+                    userUpdate = JsonConvert.DeserializeObject<Post>(resultado);
+
+                }
+
+            } else
+            {
+                JObject usuarioUpdate = new JObject();
+                usuarioUpdate.Add("nombre", nombre);
+                usuarioUpdate.Add("apellido", apellido);
+                usuarioUpdate.Add("user", user);
+                usuarioUpdate.Add("email", email);
+                usuarioUpdate.Add("telefono", nuevoTelefono);
+                usuarioUpdate.Add("rol", rol);
+
+                var content = new StringContent(usuarioUpdate.ToString(),Encoding.UTF8,"application/json");
+                var response = client.PutAsync(URL_UPDATE, content).Result;
+
+                MessageBox.Show("Teléfono modificado correctamente.", "INFORMACION PERFIL",
+                   MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultado = response.Content.ReadAsStringAsync().Result;
+
+                    userUpdate = JsonConvert.DeserializeObject<Post>(resultado);
+
+                }
+
+
+            }
+
+            return userUpdate;
+
         }
     }
 }

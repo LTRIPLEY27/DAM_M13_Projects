@@ -35,7 +35,7 @@ namespace ReSeed
         }
 
         
-        //Constructor Perfil
+        //Constructor Perfil Administrador
         [JsonConstructor]
         public Post(String id, String user, String password, String nombre, String apellido, String email, String telefono, String rol, Tarea tarea)
         {

@@ -718,6 +718,24 @@ namespace ReSeed
         }
         #endregion
 
+        public async Task <String> obteneTareaUsuarioID (String token, String URL)
+        {
+            String respuesta = null;
+
+            HttpClient client = new HttpClient();
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.GetAsync(URL);
+
+            if (response.IsSuccessStatusCode)
+            {
+                respuesta = response.Content.ReadAsStringAsync().Result;
+            }
+
+            return respuesta;
+        }
+
     }
 }
 

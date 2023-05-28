@@ -41,6 +41,7 @@ namespace ReSeed
         private String URL_mensajes = "https://reseed-385107.ew.r.appspot.com/post-mensaje";
         private String URL_obtenerTareas = "https://reseed-385107.ew.r.appspot.com/results/tareas";
         private String eliminarTarea = "https://reseed-385107.ew.r.appspot.com/delete/typus/tarea/id/";//AÑADIR ID TAREA
+        private String URL_obtenerTareasID = "https://reseed-385107.ew.r.appspot.com/find/value/tarea/id/";//AÑADIR ID TAREA
 
 
         //VARIABLES GLOBALES MAPAS
@@ -422,7 +423,7 @@ namespace ReSeed
             conexion.cargarTareasASYNC(nameUserTecnico, TOKEN_form3, URL_obtenerTareas, listBox_listadoTAREAS);
 
             //Al cargar los datos, se activan los botones de eliminar y actualizar
-            button_CARGARTAREA.Enabled = true;
+            button_ACTUALIZARTAREA.Enabled = true;
             button_ELIMINARTAREA.Enabled = true;
 
         }
@@ -440,19 +441,31 @@ namespace ReSeed
 
             conexion.eliminarTareaASYNC(TOKEN_form3, URLconIDtarea, idTarea);
 
-                    
         }
         #endregion
 
         #region ACTUALIZAR TAREAS
-        private void button_ACTUALIZARTAREA_Click(object sender, EventArgs e)
+        private async void button_ACTUALIZARTAREA_Click(object sender, EventArgs e)
         {
 
             String tareaSeleccionada = listBox_listadoTAREAS.SelectedItem.ToString();
             String[] partesTarea = tareaSeleccionada.Split("--");
             String idTarea = partesTarea[0];
+            String URLconID = URL_obtenerTareasID + idTarea;
 
-            //String URLconIDtarea = eliminarTarea + idTarea;
+            tabPage1.Show();
+
+            String tareaTecnico = await conexion.obteneTareaUsuarioID(TOKEN_form3,URLconID);
+
+            //ANOTAMOS FECHA CULMINACION ANTERIOR
+            String[ ] partesTareaID = tareaTecnico.Split(",");
+            String fechaFin = partesTareaID[0];
+
+
+
+
+
+
 
         }
         #endregion  
